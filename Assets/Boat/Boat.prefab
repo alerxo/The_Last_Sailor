@@ -773,8 +773,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 607066503725585090}
-  - component: {fileID: 7778793631126884502}
+  - component: {fileID: 6265835260165897596}
   - component: {fileID: 5389780127521897786}
+  - component: {fileID: 7778793631126884502}
   m_Layer: 0
   m_Name: Boat
   m_TagString: Untagged
@@ -799,6 +800,41 @@ Transform:
   - {fileID: 9198920110698534271}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6265835260165897596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7565428663125270620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a286fcd7ae6b0374a84a8adc0f40e18f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5389780127521897786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7565428663125270620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fd6dcdf7c3acb645bdfce3181b3e4f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Strength: 2
+  Depth: 20
+  AerialDrag: 0.01
+  SubmergedDrag: 10
+  points:
+  - {fileID: 5179932702206960057}
+  - {fileID: 4864706367259737354}
+  - {fileID: 3580742273751253425}
+  - {fileID: 7985844669113616776}
+  - {fileID: 4263762305068226909}
+  - {fileID: 560443168679635331}
 --- !u!54 &7778793631126884502
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -808,7 +844,7 @@ Rigidbody:
   m_GameObject: {fileID: 7565428663125270620}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 10
+  m_Drag: 0
   m_AngularDrag: 35
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -826,27 +862,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5389780127521897786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7565428663125270620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fd6dcdf7c3acb645bdfce3181b3e4f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Strength: 5
-  Depth: 35
-  points:
-  - {fileID: 5179932702206960057}
-  - {fileID: 4864706367259737354}
-  - {fileID: 3580742273751253425}
-  - {fileID: 7985844669113616776}
-  - {fileID: 4263762305068226909}
-  - {fileID: 560443168679635331}
 --- !u!1 &8682542175427791349
 GameObject:
   m_ObjectHideFlags: 0
