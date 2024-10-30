@@ -195,11 +195,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff7a9fad963e1634096a967681ca8a06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: 0
-  force: 50000
+  force: 80000
   radius: 0.3
-  upwardsModifier: 0.05
-  fireCooldown: 1
+  upwardsModifier: 0.01
+  fireCooldown: 2
   cannonBallPrefab: {fileID: 8612655861259869101, guid: 4eb76afa5b9da714594904dcf4d6db47, type: 3}
   cannonBallSpawnPosition: {fileID: 9108033357701547695}
   explosionPosition: {fileID: 5561453162842683808}

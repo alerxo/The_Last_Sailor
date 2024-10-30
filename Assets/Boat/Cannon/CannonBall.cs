@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CannonBall : MonoBehaviour
 {
-    [SerializeField] private float lifeTime;
+    [SerializeField] private float lifeTime, damage;
 
     private void Start()
     {
@@ -17,7 +17,10 @@ public class CannonBall : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.name);
+        if (collision.gameObject.TryGetComponent(out Health health))
+        {
+            health.Damage(damage);
+        }
     }
 
     private IEnumerator LifeTimeTimer()
