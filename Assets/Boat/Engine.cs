@@ -1,19 +1,18 @@
 using UnityEngine;
-using UnityEngine.Rendering.HighDefinition;
 
 public class Engine : MonoBehaviour
 {
-    [SerializeField] private float acceleration, deceleration, maxSpeed, depth;
-    private float leftSpeed, rightSpeed;
-
     private InputSystem_Actions input;
 
-    [SerializeField] private Transform left, right;
+    [SerializeField] private EnginePosition position;
+    [SerializeField] private float acceleration, deceleration, maxSpeed, depth;
+    private float speed;
+
     private Rigidbody target;
 
     private void Awake()
     {
-        target = GetComponent<Rigidbody>();
+        target = GetComponentInParent<Rigidbody>();
 
         input = new InputSystem_Actions();
         input.Player.Enable();
@@ -23,20 +22,18 @@ public class Engine : MonoBehaviour
     {
         Vector2 direction = input.Player.Move.ReadValue<Vector2>();
 
-        leftSpeed = Mathf.Clamp(leftSpeed + ((direction.y > 0 || direction.x > 0) ? acceleration : -deceleration), 0, maxSpeed);
-        rightSpeed = Mathf.Clamp(rightSpeed + ((direction.y > 0 || direction.x < 0) ? acceleration : -deceleration), 0, maxSpeed);
+        bool isAcceleration = position == EnginePosition.Left ? direction.y > 0 || direction.x > 0 : direction.y > 0 || direction.x < 0;
 
-        if (leftSpeed > 0)
-        {
-            target.AddForceAtPosition(transform.forward * leftSpeed, left.position, ForceMode.Acceleration);
-        }
+        speed = Mathf.Clamp(speed + (isAcceleration ? acceleration : -deceleration), 0, maxSpeed);
 
-        if (rightSpeed > 0)
-        {
-            target.AddForceAtPosition(transform.forward * rightSpeed, right.position, ForceMode.Acceleration);
-        }
+        if (speed > 0) target.AddForceAtPosition(transform.forward * speed, transform.position, ForceMode.Acceleration);
 
-        Debug.DrawLine(left.position - transform.right, left.position - (transform.forward * leftSpeed) - transform.right, Color.yellow, Time.fixedDeltaTime);
-        Debug.DrawLine(right.position + transform.right, right.position - (transform.forward * rightSpeed) + transform.right, Color.yellow, Time.fixedDeltaTime);
+        Debug.DrawLine(transform.position + transform.right, transform.position - (transform.forward * speed) + transform.right, Color.yellow, Time.fixedDeltaTime);
     }
+}
+
+public enum EnginePosition
+{
+    Left,
+    Right
 }
