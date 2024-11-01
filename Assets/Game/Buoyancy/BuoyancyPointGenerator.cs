@@ -1,3 +1,6 @@
+#if UNITY_EDITOR
+
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,7 +11,7 @@ public class BouyancyPointGenerator : MonoBehaviour
 
     public void Generate()
     {
-        GameObject parent = new($"BouyancyPoints_{target.name}");
+        List<Vector3> points = new();
 
         for (float x = start.position.x; x <= end.position.x; x += Bouyancy.POINT_SIZE)
         {
@@ -20,22 +23,21 @@ public class BouyancyPointGenerator : MonoBehaviour
 
                     if (Physics.CheckBox(position, Bouyancy.POINT_SCALE / 2, Quaternion.identity))
                     {
-                        GameObject point = new($"BouyancyPoint {position}");
-                        point.transform.position = position;
-                        point.transform.SetParent(parent.transform);
+                        points.Add(position);
 
                         DebugUtil.DrawBox(position, Quaternion.identity, Bouyancy.POINT_SCALE * 0.99f, Color.green, 1);
-                    }
-
-                    else
-                    {
-                        DebugUtil.DrawBox(position, Quaternion.identity, Bouyancy.POINT_SCALE * 0.99f, Color.red, 1);
                     }
                 }
             }
         }
 
-        PrefabUtility.SaveAsPrefabAsset(parent, $"Assets/Game/Buoyancy/{parent.name}.prefab");
-        DestroyImmediate(parent);
+        BuoyancyPoints buoyancyPoints = ScriptableObject.CreateInstance<BuoyancyPoints>();
+        buoyancyPoints.Values = points.ToArray();
+
+        AssetDatabase.CreateAsset(buoyancyPoints, $"Assets/Game/Buoyancy/{$"BouyancyPoints_{target.name}"}.asset");
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 }
+
+#endif
