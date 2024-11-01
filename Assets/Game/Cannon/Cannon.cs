@@ -5,14 +5,24 @@ public class Cannon : MonoBehaviour
 {
     public CannonState State { get; private set; }
 
-    [SerializeField] private float force, radius, upwardsModifier, fireCooldown;
+    [SerializeField] private float force, fireCooldown;
     [SerializeField] private CannonBall cannonBallPrefab;
     [SerializeField] private Transform cannonBallSpawnPosition, explosionPosition;
+
+    private float angle;
+    private const float minAngle = 0f;
+    private const float maxAngle = 40f;
+
+    public void ChangeAngle(float _value)
+    {
+        angle = Mathf.Clamp(angle + _value, minAngle, maxAngle);
+        transform.rotation = Quaternion.Euler(angle, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+    }
 
     public void Fire()
     {
         CannonBall cannonBall = Instantiate(cannonBallPrefab, cannonBallSpawnPosition.position, Quaternion.identity);
-        cannonBall.GetComponent<Rigidbody>().AddExplosionForce(force, explosionPosition.position, radius, upwardsModifier);
+        cannonBall.GetComponent<Rigidbody>().AddExplosionForce(force, explosionPosition.position, 0, 0);
 
         State = CannonState.Reloading;
         StartCoroutine(ReloadTimer());

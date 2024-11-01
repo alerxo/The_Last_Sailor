@@ -36,7 +36,6 @@ public class BouyancyPointGenerator : MonoBehaviour
 
         AssetDatabase.CreateAsset(buoyancyPoints, $"Assets/Game/Buoyancy/{$"BouyancyPoints_{target.name}"}.asset");
         AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
     }
 }
 

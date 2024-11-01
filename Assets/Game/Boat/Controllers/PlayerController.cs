@@ -1,77 +1,36 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : BoatController
 {
     private InputSystem_Actions input;
-    [SerializeField] private Engine leftEngine, rightEngine;
-    [SerializeField] private Cannon[] leftCannons, rightCannons;
 
     private void Awake()
     {
         input = new InputSystem_Actions();
-        input.Player.LeftFire.performed += FireLeft;
-        input.Player.RightFire.performed += FireRight;
+        input.Player.LeftFire.performed += OnFireLeft;
+        input.Player.RightFire.performed += OnFireRight;
         input.Player.Enable();
     }
 
     private void OnDestroy()
     {
-        input.Player.LeftFire.performed -= FireLeft;
-        input.Player.RightFire.performed -= FireRight;
+        input.Player.LeftFire.performed -= OnFireLeft;
+        input.Player.RightFire.performed -= OnFireRight;
     }
 
     private void Update()
     {
-        Movement();
+        Movement(input.Player.Move.ReadValue<Vector2>());
+        ChangeCannonAngle(input.Player.CannonAngle.ReadValue<float>());
     }
 
-    private void Movement()
+    private void OnFireLeft(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        Vector2 direction = input.Player.Move.ReadValue<Vector2>();
-
-        if (direction.y > 0)
-        {
-            leftEngine.SetState(EngineState.Accelerating);
-            rightEngine.SetState(EngineState.Accelerating);
-        }
-
-        else if (direction.x > 0)
-        {
-            leftEngine.SetState(EngineState.Accelerating);
-            rightEngine.SetState(EngineState.Decelerating);
-        }
-
-        else if (direction.x < 0)
-        {
-            leftEngine.SetState(EngineState.Decelerating);
-            rightEngine.SetState(EngineState.Accelerating);
-        }
-
-        else
-        {
-            leftEngine.SetState(EngineState.Decelerating);
-            rightEngine.SetState(EngineState.Decelerating);
-        }
+        FireLeft();
     }
 
-    private void FireLeft(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    private void OnFireRight(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        Fire(leftCannons);
-    }
-
-    private void FireRight(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        Fire(rightCannons);
-    }
-
-    private void Fire(Cannon[] cannons)
-    {
-        foreach (Cannon cannon in cannons)
-        {
-            if (cannon.State == CannonState.Ready)
-            {
-                cannon.Fire();
-            }
-        }
+        FireRight();
     }
 }

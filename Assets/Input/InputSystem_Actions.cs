@@ -125,6 +125,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CannonAngle"",
+                    ""type"": ""Value"",
+                    ""id"": ""7d922129-f8f5-419d-bc69-d7d16e77a197"",
+                    ""expectedControlType"": ""Analog"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -534,6 +543,39 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""RightFire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""94abfa41-fb83-45bc-8816-735481d3f483"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CannonAngle"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""4233d825-5cf6-49c0-91e8-e56ba51d3532"",
+                    ""path"": ""<Mouse>/scroll/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""CannonAngle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""4ea5afff-8675-4498-8627-8d3b5c750529"",
+                    ""path"": ""<Mouse>/scroll/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""CannonAngle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1130,6 +1172,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_LeftFire = m_Player.FindAction("LeftFire", throwIfNotFound: true);
         m_Player_RightFire = m_Player.FindAction("RightFire", throwIfNotFound: true);
+        m_Player_CannonAngle = m_Player.FindAction("CannonAngle", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1220,6 +1263,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_LeftFire;
     private readonly InputAction m_Player_RightFire;
+    private readonly InputAction m_Player_CannonAngle;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1235,6 +1279,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @LeftFire => m_Wrapper.m_Player_LeftFire;
         public InputAction @RightFire => m_Wrapper.m_Player_RightFire;
+        public InputAction @CannonAngle => m_Wrapper.m_Player_CannonAngle;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1277,6 +1322,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @RightFire.started += instance.OnRightFire;
             @RightFire.performed += instance.OnRightFire;
             @RightFire.canceled += instance.OnRightFire;
+            @CannonAngle.started += instance.OnCannonAngle;
+            @CannonAngle.performed += instance.OnCannonAngle;
+            @CannonAngle.canceled += instance.OnCannonAngle;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1314,6 +1362,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @RightFire.started -= instance.OnRightFire;
             @RightFire.performed -= instance.OnRightFire;
             @RightFire.canceled -= instance.OnRightFire;
+            @CannonAngle.started -= instance.OnCannonAngle;
+            @CannonAngle.performed -= instance.OnCannonAngle;
+            @CannonAngle.canceled -= instance.OnCannonAngle;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1507,6 +1558,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnLeftFire(InputAction.CallbackContext context);
         void OnRightFire(InputAction.CallbackContext context);
+        void OnCannonAngle(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
