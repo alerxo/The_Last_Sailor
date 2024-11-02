@@ -1,0 +1,5 @@
+/* Font */
+
+.unity-text-element, .unity-text-field{
+	-unity-font-definition: url("project://database/Assets/UI/Fonts/UnifrakturCook/UnifrakturCook-Bold.ttf")
+}

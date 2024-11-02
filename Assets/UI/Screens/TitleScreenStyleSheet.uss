@@ -1,0 +1,53 @@
+.title-screen-background {
+	align-items: center;
+
+	margin-top: 12%;
+	margin-left: 7%;
+	margin-right: 65%;
+}
+
+.title-screen-title {
+	margin-top: 30px;
+	margin-bottom: 30px;
+
+	font-size: 45px;
+	-unity-text-align: middle-center;
+
+	color: white;
+}
+
+/* Button */
+
+.title-screen-button-container {
+	margin-bottom: 30px;
+}
+
+.title-screen-button {
+	margin: 0px;
+	width: 150px;
+	border-width: 0px;
+
+	background-color: rgba(0, 0, 0, 0.0);
+	color: white;
+	font-size: 30px;
+
+	transition-property: scale;
+    transition-duration: 50ms;
+	transition-timing-function: ease-in-out;
+}
+
+.title-screen-button:hover {
+	scale: 1.15;
+
+	transition-property: scale;
+    transition-duration: 200ms;
+	transition-timing-function: ease-in-out;
+}
+
+.title-screen-button:active {
+	scale: 1.30;
+
+	transition-property: scale;
+    transition-duration: 100ms;
+	transition-timing-function: ease-in-out;
+}
