@@ -9,9 +9,16 @@ public class Cannon : MonoBehaviour
     [SerializeField] private CannonBall cannonBallPrefab;
     [SerializeField] private Transform cannonBallSpawnPosition, explosionPosition;
 
+    private ParticleSystem[] particleSystems;
+
     private float angle;
     private const float minAngle = 0f;
-    private const float maxAngle = 40f;
+    private const float maxAngle = 35f;
+
+    private void Awake()
+    {
+        particleSystems = GetComponentsInChildren<ParticleSystem>();
+    }
 
     public void ChangeAngle(float _value)
     {
@@ -24,6 +31,11 @@ public class Cannon : MonoBehaviour
         CannonBall cannonBall = Instantiate(cannonBallPrefab, cannonBallSpawnPosition.position, Quaternion.identity);
         cannonBall.GetComponent<Rigidbody>().AddExplosionForce(force, explosionPosition.position, 0, 0);
         cannonBall.SetIgnore(GetComponentInParent<Health>());
+
+        foreach(ParticleSystem particleSystem in particleSystems)
+        {
+            particleSystem.Play();
+        }
 
         State = CannonState.Reloading;
         StartCoroutine(ReloadTimer());
