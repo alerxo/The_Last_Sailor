@@ -23,6 +23,7 @@ public class Cannon : MonoBehaviour
     {
         CannonBall cannonBall = Instantiate(cannonBallPrefab, cannonBallSpawnPosition.position, Quaternion.identity);
         cannonBall.GetComponent<Rigidbody>().AddExplosionForce(force, explosionPosition.position, 0, 0);
+        cannonBall.SetIgnore(GetComponentInParent<Health>());
 
         State = CannonState.Reloading;
         StartCoroutine(ReloadTimer());

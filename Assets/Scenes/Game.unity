@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cdff32de7654d54787916b6dabbcfab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsDebugMode: 0
+  IsDebugMode: 1
 --- !u!4 &937039643 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6511450991575843894, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}

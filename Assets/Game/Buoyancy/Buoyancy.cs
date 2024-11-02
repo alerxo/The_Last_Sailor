@@ -1,18 +1,15 @@
 using System;
 using UnityEngine;
 
-public class Bouyancy : MonoBehaviour
+public class Buoyancy : MonoBehaviour
 {
-    public const float POINT_SIZE = 2f;
-    public static readonly Vector3 POINT_SCALE = new(POINT_SIZE, POINT_SIZE, POINT_SIZE);
+    public static readonly Vector3 POINT_SCALE = new(2f, 2f, 4f);
 
-    public float bouyancy = 1f;
-    public int StartIndex { get; private set; }
-    public int EndIndex { get; private set; }
+    public float BuoyancyForce = 1f;
 
     public BuoyancyPoints Points;
     public float PointMass {  get; private set; }
-    public Rigidbody Target {  get; private set; }
+    public Rigidbody Rb {  get; private set; }
 
 #if UNITY_EDITOR
     public BuoyancyDebugInfo Info = new();
@@ -20,14 +17,18 @@ public class Bouyancy : MonoBehaviour
 
     private void Awake()
     {
-        Target = GetComponent<Rigidbody>();
-        PointMass = Target.mass / Points.Values.Length;
+        Rb = GetComponent<Rigidbody>();
+        PointMass = Rb.mass / Points.Values.Length;
     }
 
-    public void SetIndex(int start, int end)
+    private void Start()
     {
-        StartIndex = start;
-        EndIndex = end;
+        BuoyancyManager.Instance.SetBuffers();
+    }
+
+    private void OnDestroy()
+    {
+        BuoyancyManager.Instance.SetBuffers(this);
     }
 }
 
@@ -37,21 +38,29 @@ public struct BuoyancyDebugInfo
 {
     public float displacement;
     public float submergedPercentage;
+    public Vector3 buoancy;
 
     public void Reset()
     {
         displacement = 0;
         submergedPercentage = 0;
+        buoancy = Vector3.zero;
     }
 
-    public void AddDisplacement(float value)
+    public void AddDisplacement(float _value)
     {
-        displacement += value;
+        displacement += _value;
     }
 
-    public void CalculateSubmergedPercentage(float mass)
+    public void AddBuoancy(Vector3 _value)
     {
-        submergedPercentage = displacement / mass;
+        buoancy += _value;
+    }
+
+    public void MakeCalculations(float _Value)
+    {
+        submergedPercentage = displacement / _Value;
+        buoancy.Normalize();
     }
 }
 #endif

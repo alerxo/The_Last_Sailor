@@ -198,7 +198,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   start: {fileID: 184246396}
   end: {fileID: 1322351861}
-  target: {fileID: 1150281984}
+  source: {fileID: 1150281984}
+  target: {fileID: 11400000, guid: 472e3f1964620d04eb1b2c837096283c, type: 2}
 --- !u!1001 &1150281983
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -210,10 +211,6 @@ PrefabInstance:
     - target: {fileID: 2129983546931391339, guid: 654eb312873da964e98805534df8e8ac, type: 3}
       propertyPath: m_Name
       value: BoatModel
-      objectReference: {fileID: 0}
-    - target: {fileID: 2129983546931391339, guid: 654eb312873da964e98805534df8e8ac, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7026600934145529698, guid: 654eb312873da964e98805534df8e8ac, type: 3}
       propertyPath: m_LocalPosition.x
