@@ -4,6 +4,7 @@ using UnityEngine;
 public class CannonBall : MonoBehaviour
 {
     [SerializeField] private float lifeTime, damage;
+    private Health ignore;
 
     private void Start()
     {
@@ -15,9 +16,14 @@ public class CannonBall : MonoBehaviour
         StopAllCoroutines();
     }
 
+    public void SetIgnore(Health _ignore)
+    {
+        ignore = _ignore;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.TryGetComponent(out Health health))
+        if (collision.gameObject.TryGetComponent(out Health health) && health != ignore)
         {
             health.Damage(damage);
         }

@@ -7,36 +7,34 @@ using UnityEngine;
 public class BouyancyPointGenerator : MonoBehaviour
 {
     [SerializeField] private Transform start, end;
-    [SerializeField] private GameObject target;
+    [SerializeField] private GameObject source;
+    [SerializeField] private BuoyancyPoints target;
 
     public void Generate()
     {
         List<Vector3> points = new();
 
-        for (float x = start.position.x; x <= end.position.x; x += Bouyancy.POINT_SIZE)
+        for (float x = start.position.x; x <= end.position.x; x += Buoyancy.POINT_SCALE.x)
         {
-            for (float y = start.position.y; y <= end.position.y; y += Bouyancy.POINT_SIZE)
+            for (float y = start.position.y; y <= end.position.y; y += Buoyancy.POINT_SCALE.y)
             {
-                for (float z = start.position.z; z <= end.position.z; z += Bouyancy.POINT_SIZE)
+                for (float z = start.position.z; z <= end.position.z; z += Buoyancy.POINT_SCALE.z)
                 {
                     Vector3 position = new(x, y, z);
 
-                    if (Physics.CheckBox(position, Bouyancy.POINT_SCALE / 2, Quaternion.identity))
+                    if (Physics.CheckBox(position, Buoyancy.POINT_SCALE / 2, Quaternion.identity))
                     {
                         points.Add(position);
 
-                        DebugUtil.DrawBox(position, Quaternion.identity, Bouyancy.POINT_SCALE * 0.99f, Color.green, 1);
+                        DebugUtil.DrawBox(position, Quaternion.identity, Buoyancy.POINT_SCALE * 0.99f, Color.green, 1);
                     }
                 }
             }
         }
 
-        BuoyancyPoints buoyancyPoints = ScriptableObject.CreateInstance<BuoyancyPoints>();
-        buoyancyPoints.Values = points.ToArray();
-
-        AssetDatabase.CreateAsset(buoyancyPoints, $"Assets/Game/Buoyancy/{$"BouyancyPoints_{target.name}"}.asset");
+        target.Values = points.ToArray();
+        EditorUtility.SetDirty(target);
         AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
     }
 }
 

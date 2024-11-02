@@ -18,7 +18,7 @@ public class Engine : MonoBehaviour
     {
         throttle = Mathf.Clamp(throttle + (state == EngineState.Decelerating ? -deceleration : acceleration), 0, 1);
 
-        if (throttle > 0) target.AddForceAtPosition(transform.forward * throttle * power, transform.position, ForceMode.Force);
+        if (throttle > 0) target.AddForceAtPosition(power * throttle * transform.forward, transform.position, ForceMode.Force);
 
         Debug.DrawLine(transform.position + transform.right, transform.position - (transform.forward * throttle) + transform.right, Color.yellow, Time.fixedDeltaTime);
     }

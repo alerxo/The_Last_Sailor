@@ -3,12 +3,16 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Rendering.HighDefinition;
 
 public class BuoyancyManager : MonoBehaviour
 {
-    private Bouyancy[] targets;
+    public static BuoyancyManager Instance { get; private set; }
+
     private Vector3[] points;
+    private Buoyancy[] targets;
+    private int[] endIndexes;
 
     private WaterSurface waterSurface;
 
@@ -28,40 +32,16 @@ public class BuoyancyManager : MonoBehaviour
 
     private void Awake()
     {
+        Assert.IsNull(Instance);
+        Instance = this;
+
         waterSurface = FindFirstObjectByType<WaterSurface>();
-
-        SetBuffers();
-    }
-
-    private void SetBuffers()
-    {
-        List<Vector3> tempPoints = new();
-        List<Bouyancy> tempTargets = new();
-
-        foreach (Bouyancy bouyancy in FindObjectsByType<Bouyancy>(FindObjectsSortMode.None))
-        {
-            int start = tempPoints.Count;
-
-            tempTargets.Add(bouyancy);
-            tempPoints.AddRange(bouyancy.Points.Values);
-
-            bouyancy.SetIndex(start, tempPoints.Count);
-        }
-
-        targets = tempTargets.ToArray();
-        points = tempPoints.ToArray();
-
-        targetPositionBuffer = new(points.Length, Allocator.Persistent);
-        projectedPositionBuffer = new(points.Length, Allocator.Persistent);
-        errorBuffer = new(points.Length, Allocator.Persistent);
-        candidatePositionBuffer = new(points.Length, Allocator.Persistent);
-        stepCountBuffer = new(points.Length, Allocator.Persistent);
-        normalBuffer = new(points.Length, Allocator.Persistent);
-        directionBuffer = new(points.Length, Allocator.Persistent);
     }
 
     private void FixedUpdate()
     {
+        if (targets.Length == 0) return;
+
         GetData();
 
         if (IsDataSet)
@@ -79,10 +59,7 @@ public class BuoyancyManager : MonoBehaviour
 
         for (int i = 0; i < points.Length; i++)
         {
-            if (i >= targets[current].EndIndex)
-            {
-                current++;
-            }
+            if (i == endIndexes[current]) current++;
 
             targetPositionBuffer[i] = targets[current].transform.position + targets[current].transform.TransformVector(points[i]);
         }
@@ -116,46 +93,83 @@ public class BuoyancyManager : MonoBehaviour
 
         for (int i = 0; i < points.Length; i++)
         {
-            if (i >= targets[current].EndIndex)
-            {
-                current++;
-            }
+            if (i >= endIndexes[current]) current++;
 
-            if (targetPositionBuffer[i].y - projectedPositionBuffer[i].y < 0)
+            float depth = Mathf.Clamp(projectedPositionBuffer[i].y - targetPositionBuffer[i].y, 0, Buoyancy.POINT_SCALE.y) / Buoyancy.POINT_SCALE.y;
+
+            if (depth > 0)
             {
-                targets[current].Target.AddForceAtPosition(new Vector3(0f, targets[current].PointMass * targets[current].bouyancy, 0f), targetPositionBuffer[i], ForceMode.Force);
+                Vector3 force = new(0f, targets[current].PointMass * targets[current].BuoyancyForce * depth * -Physics.gravity.y, 0f);
+
+                targets[current].Rb.AddForceAtPosition(force, targetPositionBuffer[i], ForceMode.Force);
             }
         }
 
 #if UNITY_EDITOR
         if (!IsDebugMode) return;
 
-        current = 0;
+        foreach (Buoyancy target in targets)
+        {
+            target.Info.Reset();
+        }
 
-        targets[current].Info.Reset();
+        current = 0;
 
         for (int i = 0; i < points.Length; i++)
         {
-            if (i >= targets[current].EndIndex)
+            if (i >= endIndexes[current])
             {
-                targets[current].Info.CalculateSubmergedPercentage(targets[current].Target.mass);
                 current++;
-                targets[current].Info.Reset();
             }
 
-            if (targetPositionBuffer[i].y - projectedPositionBuffer[i].y < 0)
+            float depth = Mathf.Clamp(projectedPositionBuffer[i].y - targetPositionBuffer[i].y, 0, Buoyancy.POINT_SCALE.y) / Buoyancy.POINT_SCALE.y;
+
+            if (depth > 0)
             {
+                Vector3 force = new(0f, targets[current].PointMass * targets[current].BuoyancyForce * depth * -Physics.gravity.y, 0f);
+                targets[current].Info.AddBuoancy(force);
                 targets[current].Info.AddDisplacement(targets[current].PointMass);
-                DebugUtil.DrawBox(targetPositionBuffer[i], transform.rotation, Bouyancy.POINT_SCALE * 0.99f, Color.red, Time.fixedDeltaTime);
+                DebugUtil.DrawBox(targetPositionBuffer[i], targets[current].transform.rotation, Buoyancy.POINT_SCALE * depth, Color.green, Time.fixedDeltaTime);
             }
 
             else
             {
-                DebugUtil.DrawBox(targetPositionBuffer[i], transform.rotation, Bouyancy.POINT_SCALE * 0.99f, Color.green, Time.fixedDeltaTime);
+                DebugUtil.DrawBox(targetPositionBuffer[i], targets[current].transform.rotation, Buoyancy.POINT_SCALE * 0.05f, Color.red, Time.fixedDeltaTime);
             }
         }
 
-        targets[current].Info.CalculateSubmergedPercentage(targets[current].Target.mass);
+        foreach (Buoyancy target in targets)
+        {
+            target.Info.MakeCalculations(target.Rb.mass);
+        }
 #endif
+    }
+
+    public void SetBuffers(Buoyancy _ignore = null)
+    {
+        List<Vector3> tempPoints = new();
+        List<Buoyancy> tempTargets = new();
+        List<int> tempEndIndexes = new();
+
+        foreach (Buoyancy buoancy in FindObjectsByType<Buoyancy>(FindObjectsSortMode.None))
+        {
+            if (_ignore != null && buoancy == _ignore) continue;
+
+            tempPoints.AddRange(buoancy.Points.Values);
+            tempTargets.Add(buoancy);
+            tempEndIndexes.Add(tempPoints.Count);
+        }
+
+        targets = tempTargets.ToArray();
+        endIndexes = tempEndIndexes.ToArray();
+        points = tempPoints.ToArray();
+
+        targetPositionBuffer = new(points.Length, Allocator.Persistent);
+        projectedPositionBuffer = new(points.Length, Allocator.Persistent);
+        errorBuffer = new(points.Length, Allocator.Persistent);
+        candidatePositionBuffer = new(points.Length, Allocator.Persistent);
+        stepCountBuffer = new(points.Length, Allocator.Persistent);
+        normalBuffer = new(points.Length, Allocator.Persistent);
+        directionBuffer = new(points.Length, Allocator.Persistent);
     }
 }
