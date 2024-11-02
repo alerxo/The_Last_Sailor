@@ -6,10 +6,11 @@ public class Cannon : MonoBehaviour
     public CannonState State { get; private set; }
 
     [SerializeField] private float force, fireCooldown;
-    [SerializeField] private CannonBall cannonBallPrefab;
+    [SerializeField] private Cannonball cannonBallPrefab;
     [SerializeField] private Transform cannonBallSpawnPosition, explosionPosition;
 
     private ParticleSystem[] particleSystems;
+    private AudioSource audioSource;
 
     private float angle;
     private const float minAngle = 0f;
@@ -18,6 +19,7 @@ public class Cannon : MonoBehaviour
     private void Awake()
     {
         particleSystems = GetComponentsInChildren<ParticleSystem>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void ChangeAngle(float _value)
@@ -28,7 +30,7 @@ public class Cannon : MonoBehaviour
 
     public void Fire()
     {
-        CannonBall cannonBall = Instantiate(cannonBallPrefab, cannonBallSpawnPosition.position, Quaternion.identity);
+        Cannonball cannonBall = Instantiate(cannonBallPrefab, cannonBallSpawnPosition.position, Quaternion.identity);
         cannonBall.GetComponent<Rigidbody>().AddExplosionForce(force, explosionPosition.position, 0, 0);
         cannonBall.SetIgnore(GetComponentInParent<Health>());
 
@@ -36,6 +38,8 @@ public class Cannon : MonoBehaviour
         {
             particleSystem.Play();
         }
+
+        audioSource.Play();
 
         State = CannonState.Reloading;
         StartCoroutine(ReloadTimer());
