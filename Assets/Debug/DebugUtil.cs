@@ -2,10 +2,10 @@ using UnityEngine;
 
 public static class DebugUtil
 {
-    public static void DrawBox(Vector3 position, Quaternion rotation, Vector3 scale, Color color, float duration)
+    public static void DrawBox(Vector3 _position, Quaternion _rotation, Vector3 _scale, Color _color, float _duration)
     {
         Matrix4x4 transform = new();
-        transform.SetTRS(position, rotation, scale);
+        transform.SetTRS(_position, _rotation, _scale);
 
         Vector3 point1 = transform.MultiplyPoint(new Vector3(-0.5f, -0.5f, 0.5f));
         Vector3 point2 = transform.MultiplyPoint(new Vector3(0.5f, -0.5f, 0.5f));
@@ -17,19 +17,19 @@ public static class DebugUtil
         Vector3 point7 = transform.MultiplyPoint(new Vector3(0.5f, 0.5f, -0.5f));
         Vector3 point8 = transform.MultiplyPoint(new Vector3(-0.5f, 0.5f, -0.5f));
 
-        Debug.DrawLine(point1, point2, color, duration);
-        Debug.DrawLine(point2, point3, color, duration);
-        Debug.DrawLine(point3, point4, color, duration);
-        Debug.DrawLine(point4, point1, color, duration);
+        Debug.DrawLine(point1, point2, _color, _duration);
+        Debug.DrawLine(point2, point3, _color, _duration);
+        Debug.DrawLine(point3, point4, _color, _duration);
+        Debug.DrawLine(point4, point1, _color, _duration);
 
-        Debug.DrawLine(point5, point6, color, duration);
-        Debug.DrawLine(point6, point7, color, duration);
-        Debug.DrawLine(point7, point8, color, duration);
-        Debug.DrawLine(point8, point5, color, duration);
+        Debug.DrawLine(point5, point6, _color, _duration);
+        Debug.DrawLine(point6, point7, _color, _duration);
+        Debug.DrawLine(point7, point8, _color, _duration);
+        Debug.DrawLine(point8, point5, _color, _duration);
 
-        Debug.DrawLine(point1, point5, color, duration);
-        Debug.DrawLine(point2, point6, color, duration);
-        Debug.DrawLine(point3, point7, color, duration);
-        Debug.DrawLine(point4, point8, color, duration);
+        Debug.DrawLine(point1, point5, _color, _duration);
+        Debug.DrawLine(point2, point6, _color, _duration);
+        Debug.DrawLine(point3, point7, _color, _duration);
+        Debug.DrawLine(point4, point8, _color, _duration);
     }
 }

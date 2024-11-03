@@ -24,8 +24,8 @@ public class ObjectPoolManager : MonoBehaviour
 
     private void Start()
     {
-        aiBoatPool = new(CreateAIBoat, OnGetAIBoat, OnReleaseAIBoat);
-        cannonballBool = new(CreateCannonball, OnGetCannonball, OnReleaseCannonball);
+        aiBoatPool = new(CreateAIBoat);
+        cannonballBool = new(CreateCannonball);
     }
 
     #region AIBoat
@@ -42,16 +42,6 @@ public class ObjectPoolManager : MonoBehaviour
     private AIBoat CreateAIBoat()
     {
         return Instantiate(aiBoatPrefab, InactiveObjectPosition, Quaternion.identity, aiBoatParent);
-    }
-
-    private void OnGetAIBoat(AIBoat _aiBoat)
-    {
-        _aiBoat.gameObject.SetActive(true);
-    }
-
-    private void OnReleaseAIBoat(AIBoat _aiBoat)
-    {
-        _aiBoat.gameObject.SetActive(false);
     }
 
     public void ReleaseAIBoat(AIBoat _aiBoat)
@@ -77,16 +67,6 @@ public class ObjectPoolManager : MonoBehaviour
         return Instantiate(cannonballPrefab, InactiveObjectPosition, Quaternion.identity, cannonballParent);
     }
 
-    private void OnGetCannonball(Cannonball _cannonball)
-    {
-        _cannonball.gameObject.SetActive(true);
-    }
-
-    private void OnReleaseCannonball(Cannonball _cannonball)
-    {
-        _cannonball.gameObject.SetActive(false);
-    }
-
     public void ReleaseCannonball(Cannonball _cannonball)
     {
         cannonballBool.Release(_cannonball);
@@ -96,31 +76,27 @@ public class ObjectPoolManager : MonoBehaviour
 }
 
 
-public class ObjectPool<T>
+public class ObjectPool<T> where T : MonoBehaviour
 {
     private readonly Func<T> create;
-    private readonly Action<T> get;
-    private readonly Action<T> release;
     private readonly Queue pool = new();
 
-    public ObjectPool(Func<T> _create, Action<T> _get, Action<T> _release)
+    public ObjectPool(Func<T> _create)
     {
         create = _create;
-        get = _get;
-        release = _release;
     }
 
     public T Get()
     {
         T t = pool.Count == 0 ? create() : (T)pool.Dequeue();
-        get(t);
+        t.gameObject.SetActive(true);
 
         return t;
     }
 
     public void Release(T _t)
     {
-        release(_t);
+        _t.gameObject.SetActive(false);
         pool.Enqueue(_t);
     }
 }

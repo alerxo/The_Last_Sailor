@@ -17,13 +17,18 @@ public abstract class Boat : MonoBehaviour, IDamageable
 
     public void Damage(float _damage)
     {
-        health = Mathf.Clamp(health - _damage, 0, maxHealth);
-
-        if(health == 0)
+        if ((health -= _damage) == 0)
         {
             Destroyed();
         }
+
+        else
+        {
+            OnHit();
+        }
     }
+
+    protected virtual void OnHit() { }
 
     public abstract void Destroyed();
 
@@ -77,9 +82,9 @@ public abstract class Boat : MonoBehaviour, IDamageable
         Fire(rightCannons);
     }
 
-    private void Fire(Cannon[] cannons)
+    private void Fire(Cannon[] _cannons)
     {
-        foreach (Cannon cannon in cannons)
+        foreach (Cannon cannon in _cannons)
         {
             if (cannon.State == CannonState.Ready)
             {

@@ -1,35 +1,23 @@
 .title-screen-background {
+	justify-content: space-around;
 	align-items: center;
-
-	margin-top: 12%;
-	margin-left: 7%;
-	margin-right: 65%;
 }
 
 .title-screen-title {
-	margin-top: 30px;
-	margin-bottom: 30px;
-
-	font-size: 45px;
 	-unity-text-align: middle-center;
-
 	color: white;
 }
 
 /* Button */
 
-.title-screen-button-container {
-	margin-bottom: 30px;
-}
+.title-screen-button-container { }
 
 .title-screen-button {
 	margin: 0px;
-	width: 150px;
 	border-width: 0px;
 
 	background-color: rgba(0, 0, 0, 0.0);
 	color: white;
-	font-size: 30px;
 
 	transition-property: scale;
     transition-duration: 50ms;

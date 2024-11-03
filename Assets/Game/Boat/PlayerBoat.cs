@@ -22,6 +22,13 @@ public class PlayerBoat : Boat
         UIManager.OnStateChanged -= UIManager_OnStateChanged;
     }
 
+    protected override void OnHit()
+    {
+        base.OnHit();
+
+        CameraManager.Instance.ShakeCamera(5, 0.3f);
+    }
+
     private void UIManager_OnStateChanged(UIState _state)
     {
         if (_state == UIState.Game) input.Player.Enable();

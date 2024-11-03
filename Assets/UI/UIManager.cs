@@ -10,12 +10,18 @@ public class UIManager : MonoBehaviour
 
     public UIState State { get; private set; } = UIState.MainMenu;
 
+    public static float UIScale = 1f;
+    private const float UIScreenBaseWidth = 1920f;
+    private const float UIScreenBaseHeight = 1080f;
+
     private void Awake()
     {
         Assert.IsNull(Instance);
         Instance = this;
+
+        UIScale = Mathf.Min(Screen.width / UIScreenBaseWidth, Screen.height / UIScreenBaseHeight);
     }
-    
+
     private void Start()
     {
         SetState(UIState.MainMenu);

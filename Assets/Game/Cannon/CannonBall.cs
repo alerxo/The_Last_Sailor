@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class Cannonball : MonoBehaviour
@@ -34,8 +33,6 @@ public class Cannonball : MonoBehaviour
 
     private void OnCollisionEnter(Collision _collision)
     {
-        if (state == CannonballState.PendingDestruction) return;
-
         IDamageable _damageable = _collision.gameObject.GetComponentInParent<IDamageable>();
 
         if (_damageable != ignore && _damageable != null)
