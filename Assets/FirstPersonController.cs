@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public class FirstPersonController : MonoBehaviour
@@ -14,8 +15,24 @@ public class FirstPersonController : MonoBehaviour
     void Update()
     {
         PlayerMove();
-        PlayerRotation();
+        RotatePlayerTowardsCamera();
 
+        DontLetPlayerSink();//Endast ett test på en metod, kan ta bort
+    }
+
+    void DontLetPlayerSink()
+    {
+        float whenToFloat = -3;
+        if(transform.position.y<whenToFloat)
+        {
+            float f = whenToFloat-transform.position.y;
+            if(rb.linearVelocity.y<0)
+            {
+                f = math.clamp(f,30,2000);
+            }
+            rb.AddForce(0,f*Time.deltaTime,0,ForceMode.Impulse);
+
+        }
     }
 
     void FixedUpdate()
@@ -36,20 +53,26 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField]private float PlayerAcc;
 
 
-    private bool Grounded;
 
-    public float mouseSensitivity;
     public Transform camT;
-    private void PlayerRotation() 
+    private void RotatePlayerTowardsCamera()
     {
-        float yaw;
-        float pitch;
-		yaw = Input.GetAxisRaw ("Mouse X") *  mouseSensitivity*Time.deltaTime;
-		pitch = Input.GetAxisRaw ("Mouse Y") * mouseSensitivity*Time.deltaTime;
-        //transform.Rotate(0,yaw,0);
+        if (camT != null)
+        {
+            Vector3 cameraForward = camT.transform.forward;
+            cameraForward.y = 0f; 
+            if (cameraForward != Vector3.zero)
+            {
+                Quaternion newRotation = Quaternion.LookRotation(cameraForward);
+                transform.rotation = newRotation;
+            }
 
+        }
+        
     }
 
+
+    private bool Grounded;
     private float GroundForceTime;
     private void PlayerMove()
     {
