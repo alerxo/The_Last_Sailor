@@ -6,10 +6,10 @@ public class Cannon : MonoBehaviour
     public CannonState State { get; private set; }
 
     [SerializeField] private float force, fireCooldown;
-    [SerializeField] private CannonBall cannonBallPrefab;
-    [SerializeField] private Transform cannonBallSpawnPosition, explosionPosition;
+    [SerializeField] private Transform cannonballSpawnPosition, explosionPosition;
 
     private ParticleSystem[] particleSystems;
+    private AudioSource audioSource;
 
     private float angle;
     private const float minAngle = 0f;
@@ -18,6 +18,17 @@ public class Cannon : MonoBehaviour
     private void Awake()
     {
         particleSystems = GetComponentsInChildren<ParticleSystem>();
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    private void OnEnable()
+    {
+        State = CannonState.Ready;
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 
     public void ChangeAngle(float _value)
@@ -28,14 +39,16 @@ public class Cannon : MonoBehaviour
 
     public void Fire()
     {
-        CannonBall cannonBall = Instantiate(cannonBallPrefab, cannonBallSpawnPosition.position, Quaternion.identity);
-        cannonBall.GetComponent<Rigidbody>().AddExplosionForce(force, explosionPosition.position, 0, 0);
-        cannonBall.SetIgnore(GetComponentInParent<Health>());
+        Cannonball cannonball = ObjectPoolManager.Instance.SpawnCannonball(cannonballSpawnPosition.position, Quaternion.identity);
+        cannonball.GetComponent<Rigidbody>().AddExplosionForce(force, explosionPosition.position, 0, 0);
+        cannonball.SetIgnore(GetComponentInParent<IDamageable>());
 
         foreach(ParticleSystem particleSystem in particleSystems)
         {
             particleSystem.Play();
         }
+
+        audioSource.Play();
 
         State = CannonState.Reloading;
         StartCoroutine(ReloadTimer());

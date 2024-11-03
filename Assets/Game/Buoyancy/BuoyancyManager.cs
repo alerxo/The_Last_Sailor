@@ -36,6 +36,8 @@ public class BuoyancyManager : MonoBehaviour
         Instance = this;
 
         waterSurface = FindFirstObjectByType<WaterSurface>();
+
+        SetBuffers();
     }
 
     private void FixedUpdate()
@@ -127,7 +129,6 @@ public class BuoyancyManager : MonoBehaviour
             if (depth > 0)
             {
                 Vector3 force = new(0f, targets[current].PointMass * targets[current].BuoyancyForce * depth * -Physics.gravity.y, 0f);
-                targets[current].Info.AddBuoancy(force);
                 targets[current].Info.AddDisplacement(targets[current].PointMass);
                 DebugUtil.DrawBox(targetPositionBuffer[i], targets[current].transform.rotation, Buoyancy.POINT_SCALE * depth, Color.green, Time.fixedDeltaTime);
             }

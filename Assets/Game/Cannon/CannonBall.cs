@@ -1,37 +1,56 @@
-using System.Collections;
 using UnityEngine;
 
-public class CannonBall : MonoBehaviour
+public class Cannonball : MonoBehaviour
 {
-    [SerializeField] private float lifeTime, damage;
-    private Health ignore;
+    private CannonballState state;
+    private IDamageable ignore;
 
-    private void Start()
+    [SerializeField] private float damage;
+    [SerializeField] private AudioSource boatImpact, waterImpact;
+
+    private const float waterHeight = -5f;
+
+    private void OnEnable()
     {
-        StartCoroutine(LifeTimeTimer());
+        state = CannonballState.Flying;
+        GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }
 
-    private void OnDestroy()
+    public void Update()
     {
-        StopAllCoroutines();
-    }
-
-    public void SetIgnore(Health _ignore)
-    {
-        ignore = _ignore;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.TryGetComponent(out Health health) && health != ignore)
+        if (state == CannonballState.PendingDestruction && (!boatImpact.isPlaying && !waterImpact.isPlaying))
         {
-            health.Damage(damage);
+            ObjectPoolManager.Instance.ReleaseCannonball(this);
+        }
+
+        else if (state == CannonballState.Flying && transform.position.y < waterHeight)
+        {
+            waterImpact.Play();
+            state = CannonballState.PendingDestruction;
         }
     }
 
-    private IEnumerator LifeTimeTimer()
+    private void OnCollisionEnter(Collision _collision)
     {
-        yield return new WaitForSeconds(lifeTime);
-        Destroy(gameObject);
+        IDamageable _damageable = _collision.gameObject.GetComponentInParent<IDamageable>();
+
+        if (_damageable != ignore && _damageable != null)
+        {
+            _damageable.Damage(damage);
+            boatImpact.Play();
+            state = CannonballState.PendingDestruction;
+        }
     }
+
+    public void SetIgnore(IDamageable _ignore)
+    {
+        ignore = _ignore;
+    }
+}
+
+public enum CannonballState
+{
+    Flying,
+    PendingDestruction
 }
