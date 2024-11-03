@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7565428663125270620, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
       propertyPath: m_Name
-      value: EnemyBoat Variant
+      value: AIBoat
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -85,6 +85,7 @@ MonoBehaviour:
   rightCannons:
   - {fileID: 3213256709078927342}
   - {fileID: 5773223663802851442}
+  maxHealth: 10
 --- !u!114 &3213256709078927342 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5612057570067073539, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}

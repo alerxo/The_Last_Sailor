@@ -1,9 +1,31 @@
 using UnityEngine;
 
-public class BoatController : MonoBehaviour
+public abstract class Boat : MonoBehaviour, IDamageable
 {
     [SerializeField] private Engine leftEngine, rightEngine;
     [SerializeField] private Cannon[] leftCannons, rightCannons;
+
+    [SerializeField] private float maxHealth = 100;
+    private float health;
+
+    private void OnEnable()
+    {
+        health = maxHealth;
+        GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+    }
+
+    public void Damage(float _damage)
+    {
+        health = Mathf.Clamp(health - _damage, 0, maxHealth);
+
+        if(health == 0)
+        {
+            Destroyed();
+        }
+    }
+
+    public abstract void Destroyed();
 
     protected void Movement(Vector3 _direction)
     {

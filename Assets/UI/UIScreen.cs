@@ -21,6 +21,11 @@ public abstract class UIScreen : MonoBehaviour
         UIManager.OnStateChanged += UIManager_OnStateChanged;
     }
 
+    private void OnDestroy()
+    {
+        UIManager.OnStateChanged -= UIManager_OnStateChanged;
+    }
+
     protected abstract void Generate();
 
     private void UIManager_OnStateChanged(UIState _state)

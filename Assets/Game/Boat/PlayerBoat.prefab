@@ -10,11 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 607066503725585090, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 607066503725585090, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 607066503725585090, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -110,6 +110,7 @@ MonoBehaviour:
   rightCannons:
   - {fileID: 1945450048010522095}
   - {fileID: 7383364773489699443}
+  maxHealth: 100
 --- !u!114 &5696718915509902477 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1734844120871705441, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}

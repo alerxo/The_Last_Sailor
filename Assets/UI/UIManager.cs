@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
 
     public static event UnityAction<UIState> OnStateChanged;
 
-    public UIState State { get; private set; }
+    public UIState State { get; private set; } = UIState.MainMenu;
 
     private void Awake()
     {

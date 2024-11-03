@@ -8,8 +8,8 @@ public class Buoyancy : MonoBehaviour
     public float BuoyancyForce = 1f;
 
     public BuoyancyPoints Points;
-    public float PointMass {  get; private set; }
-    public Rigidbody Rb {  get; private set; }
+    public float PointMass { get; private set; }
+    public Rigidbody Rb { get; private set; }
 
 #if UNITY_EDITOR
     public BuoyancyDebugInfo Info = new();
@@ -21,14 +21,20 @@ public class Buoyancy : MonoBehaviour
         PointMass = Rb.mass / Points.Values.Length;
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        BuoyancyManager.Instance.SetBuffers();
+        if(BuoyancyManager.Instance != null)
+        {
+            BuoyancyManager.Instance.SetBuffers();
+        }   
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        BuoyancyManager.Instance.SetBuffers(this);
+        if (BuoyancyManager.Instance != null)
+        {
+            BuoyancyManager.Instance.SetBuffers(this);
+        }
     }
 }
 
@@ -38,13 +44,11 @@ public struct BuoyancyDebugInfo
 {
     public float displacement;
     public float submergedPercentage;
-    public Vector3 buoancy;
 
     public void Reset()
     {
         displacement = 0;
         submergedPercentage = 0;
-        buoancy = Vector3.zero;
     }
 
     public void AddDisplacement(float _value)
@@ -52,15 +56,9 @@ public struct BuoyancyDebugInfo
         displacement += _value;
     }
 
-    public void AddBuoancy(Vector3 _value)
-    {
-        buoancy += _value;
-    }
-
     public void MakeCalculations(float _Value)
     {
         submergedPercentage = displacement / _Value;
-        buoancy.Normalize();
     }
 }
 #endif

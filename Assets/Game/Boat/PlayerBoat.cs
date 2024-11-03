@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class PlayerController : BoatController
+public class PlayerBoat : Boat
 {
     private InputSystem_Actions input;
 
@@ -9,13 +10,27 @@ public class PlayerController : BoatController
         input = new InputSystem_Actions();
         input.Player.LeftFire.performed += OnFireLeft;
         input.Player.RightFire.performed += OnFireRight;
-        input.Player.Enable();
+
+        UIManager.OnStateChanged += UIManager_OnStateChanged;
     }
 
     private void OnDestroy()
     {
         input.Player.LeftFire.performed -= OnFireLeft;
         input.Player.RightFire.performed -= OnFireRight;
+
+        UIManager.OnStateChanged -= UIManager_OnStateChanged;
+    }
+
+    private void UIManager_OnStateChanged(UIState _state)
+    {
+        if (_state == UIState.Game) input.Player.Enable();
+        else input.Player.Disable();
+    }
+
+    public override void Destroyed()
+    {
+        SceneManager.LoadScene("Game");
     }
 
     private void Update()
@@ -24,12 +39,12 @@ public class PlayerController : BoatController
         ChangeCannonAngle(input.Player.CannonAngle.ReadValue<float>());
     }
 
-    private void OnFireLeft(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    private void OnFireLeft(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
         FireLeft();
     }
 
-    private void OnFireRight(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    private void OnFireRight(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
         FireRight();
     }
