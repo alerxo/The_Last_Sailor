@@ -140,8 +140,8 @@ MonoBehaviour:
   scriptInteractions: 1
   cpuEvaluateRipples: 0
   customMaterial: {fileID: 0}
-  startSmoothness: 0.95
-  endSmoothness: 0.85
+  startSmoothness: 0.8044788
+  endSmoothness: 0.70447886
   smoothnessFadeStart: 100
   smoothnessFadeDistance: 500
   tessellation: 1
@@ -150,11 +150,11 @@ MonoBehaviour:
   tessellationFactorFadeRange: 1850
   refractionColor: {r: 0.010022826, g: 0.21404114, b: 0.21404114, a: 1}
   maxRefractionDistance: 0.5
-  absorptionDistance: 1.5
-  scatteringColor: {r: 0, g: 0.13286833, b: 0.13286833, a: 1}
-  ambientScattering: 0.2
-  heightScattering: 0.2
-  displacementScattering: 0.1
+  absorptionDistance: 3.3
+  scatteringColor: {r: 0.02121901, g: 0.08982185, b: 0.13563335, a: 1}
+  ambientScattering: 0.513
+  heightScattering: 0.315
+  displacementScattering: 0.374
   directLightTipScattering: 0.6
   directLightBodyScattering: 0.5
   maximumHeightOverride: 0
@@ -173,7 +173,7 @@ MonoBehaviour:
   waterCurrentDebugMode: 0
   currentDebugMultiplier: 1
   waterFoamDebugMode: 0
-  underWater: 0
+  underWater: 1
   volumeBounds: {fileID: 0}
   volumeDepth: 50
   volumeHeight: 0
@@ -182,7 +182,7 @@ MonoBehaviour:
   underWaterAmbientProbeContribution: 1
   underWaterScatteringColorMode: 0
   underWaterScatteringColor: {r: 0, g: 0.27, b: 0.23, a: 1}
-  underWaterRefraction: 0
+  underWaterRefraction: 1
   decalRegionSize: {x: 200, y: 200}
   decalRegionAnchor: {fileID: 0}
   supportLargeCurrent: 0
@@ -258,7 +258,7 @@ MonoBehaviour:
   repetitionSize: 500
   largeOrientationValue: 0
   largeWindSpeed: 30
-  largeChaos: 0.85
+  largeChaos: 0.664
   largeBand0Multiplier: 1
   largeBand0FadeMode: 1
   largeBand0FadeStart: 1500
@@ -270,7 +270,7 @@ MonoBehaviour:
   ripples: 1
   ripplesMotionMode: 0
   ripplesOrientationValue: 0
-  ripplesWindSpeed: 8
+  ripplesWindSpeed: 15
   ripplesChaos: 0.8
   ripplesFadeMode: 1
   ripplesFadeStart: 50
@@ -307,13 +307,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8690881304057997260}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.37966055, y: -0, z: -0, w: 0.9251259}
+  m_LocalRotation: {x: 0.36091548, y: 0.28710014, z: 0.11782246, w: 0.8794495}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6511450991575843894}
-  m_LocalEulerAnglesHint: {x: 44.625, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 34.552, y: 45.758, z: 30.215}
 --- !u!108 &6282262493808743130
 Light:
   m_ObjectHideFlags: 0

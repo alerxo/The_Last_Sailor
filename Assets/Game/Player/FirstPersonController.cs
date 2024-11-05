@@ -3,121 +3,111 @@ using UnityEngine;
 
 public class FirstPersonController : MonoBehaviour
 {
+    private InputSystem_Actions input;
 
+    [SerializeField] private LayerMask GroundLayer;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float walkSpeed, sprintSpeed, jumpForce, acceleration;
+    [SerializeField] private Transform cameraTransform;
 
+    private float movementSpeed;
+    private Vector3 smoothedMoveDirection;
+    private bool IsGrounded;
+    private float TimeGroundedInSeconds;
 
-    void Start()
-    {
-        rb=GetComponent<Rigidbody>();
-        
-    }
     private Rigidbody rb;
+
+    private void Awake()
+    {
+        movementSpeed = walkSpeed;
+
+        rb = GetComponent<Rigidbody>();
+
+        input = new();
+        input.Player.Jump.performed += Jump_performed;
+        input.Player.Sprint.started += Sprint_started;
+        input.Player.Sprint.canceled += Sprint_canceled;
+
+        CameraManager.OnStateChanged += CameraManager_OnStateChanged;
+    }
+
+    private void OnDestroy()
+    {
+        input.Player.Jump.performed -= Jump_performed;
+        input.Player.Sprint.started -= Sprint_started;
+        input.Player.Sprint.canceled -= Sprint_canceled;
+
+        CameraManager.OnStateChanged += CameraManager_OnStateChanged;
+    }
+
     void Update()
     {
-        PlayerMove();
+        GetMoveDirection();
+        ApplyGravity();
         RotatePlayerTowardsCamera();
-
-        DontLetPlayerSink();//Endast ett test på en metod, kan ta bort
-    }
-
-    void DontLetPlayerSink()
-    {
-        float whenToFloat = -3;
-        if(transform.position.y<whenToFloat)
-        {
-            float f = whenToFloat-transform.position.y;
-            if(rb.linearVelocity.y<0)
-            {
-                f = math.clamp(f,30,2000);
-            }
-            rb.AddForce(0,f*Time.deltaTime,0,ForceMode.Impulse);
-
-        }
     }
 
     void FixedUpdate()
-    {   
-        rb.MovePosition(rb.position+smoothedMoveDir*Time.fixedDeltaTime);
-
+    {
+        ApplyMovement();
     }
-    private Vector3 smoothedMoveDir;
 
-    [SerializeField]private LayerMask PlayerLayer;
-    [SerializeField]private Transform GroundCheck;
+    private void CameraManager_OnStateChanged(CameraState _state)
+    {
+        if (_state == CameraState.Player) input.Player.Enable();
+        else input.Player.Disable();
+    }
 
-    [SerializeField]private float PlayerSpeed;
-    [SerializeField]private float SprintMult;
+    private void ApplyMovement()
+    {
+        rb.MovePosition(rb.position + smoothedMoveDirection * Time.fixedDeltaTime);
+    }
 
-    [SerializeField]private float JumpHeight;
-
-    [SerializeField]private float PlayerAcc;
-
-
-
-    public Transform camT;
     private void RotatePlayerTowardsCamera()
     {
-        if (camT != null)
-        {
-            Vector3 cameraForward = camT.transform.forward;
-            cameraForward.y = 0f; 
-            if (cameraForward != Vector3.zero)
-            {
-                Quaternion newRotation = Quaternion.LookRotation(cameraForward);
-                transform.rotation = newRotation;
-            }
+        Vector3 cameraForward = cameraTransform.transform.forward;
+        cameraForward.y = 0f;
 
+        if (cameraForward != Vector3.zero)
+        {
+            Quaternion newRotation = Quaternion.LookRotation(cameraForward);
+            transform.rotation = newRotation;
         }
-        
     }
 
-
-    private bool Grounded;
-    private float GroundForceTime;
-    private void PlayerMove()
+    private void GetMoveDirection()
     {
-        GroundForceTime +=Time.deltaTime;
-
-        if(Physics.CheckSphere(GroundCheck.position,0.1f,~PlayerLayer))
-        {
-            Grounded=true;
-        }
-        else
-        {
-            Grounded=false;
-        }
-
-        Vector3 keyBoardInput = new Vector3(Input.GetAxisRaw("Horizontal"),0,Input.GetAxisRaw("Vertical")); 
-        keyBoardInput=keyBoardInput.normalized;
-        if(Input.GetKey("left shift"))
-        {
-            keyBoardInput *= SprintMult;
-        }
-        Vector3 travelingDir = transform.TransformDirection(keyBoardInput*PlayerSpeed);
-        smoothedMoveDir = Vector3.Lerp(smoothedMoveDir,travelingDir,PlayerAcc*Time.deltaTime);
-
-        if(Grounded)
-        {
-            if(Input.GetKeyDown("space"))
-            {
-                rb.AddRelativeForce(0,JumpHeight,0,ForceMode.VelocityChange);
-                GroundForceTime=0;
-            }
-            else
-            {
-                if(GroundForceTime>0.3f)// detta görs för att man ska följa följa en slope neråt. ----!!!!!!--Det kanske kan påverka båtens flytkraft--!!!!!!!!!------
-                {
-                    rb.AddRelativeForce(0,-15f*Time.deltaTime,0,ForceMode.VelocityChange);
-                }
-                
-            }
-
-
-        }      
+        Vector2 inputDirection = input.Player.Move.ReadValue<Vector2>().normalized;
+        Vector3 moveDirection = transform.TransformDirection(new Vector3(inputDirection.x, 0, inputDirection.y) * movementSpeed);
+        smoothedMoveDirection = Vector3.Lerp(smoothedMoveDirection, moveDirection, acceleration * Time.deltaTime);
     }
 
+    private void ApplyGravity()
+    {
+        IsGrounded = Physics.CheckSphere(groundCheck.position, 0.1f, GroundLayer.value);
 
+        if (IsGrounded && (TimeGroundedInSeconds += Time.deltaTime) > 0.3)
+        {
+            rb.AddRelativeForce(0, -15f * Time.deltaTime, 0, ForceMode.VelocityChange);
+        }
+    }
+
+    private void Sprint_started(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    {
+        movementSpeed = sprintSpeed;
+    }
+
+    private void Sprint_canceled(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    {
+        movementSpeed = walkSpeed;
+    }
+
+    private void Jump_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    {
+        if (IsGrounded)
+        {
+            rb.AddRelativeForce(0, jumpForce, 0, ForceMode.VelocityChange);
+            TimeGroundedInSeconds = 0;
+        }
+    }
 }
-
-
-

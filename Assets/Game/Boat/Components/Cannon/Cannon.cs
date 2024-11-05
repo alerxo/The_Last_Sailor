@@ -1,8 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public class Cannon : MonoBehaviour
+public class Cannon : MonoBehaviour, IInteractable
 {
+    public Vector3 Position => transform.position;
+
     public CannonState State { get; private set; }
 
     [SerializeField] private float force, fireCooldown;
@@ -29,6 +31,11 @@ public class Cannon : MonoBehaviour
     private void OnDisable()
     {
         StopAllCoroutines();
+    }
+
+    public void Interact()
+    {
+        Fire();
     }
 
     public void ChangeAngle(float _value)
