@@ -11,7 +11,7 @@ public class PlayerBoat : Boat
         input.Player.LeftFire.performed += OnFireLeft;
         input.Player.RightFire.performed += OnFireRight;
 
-        UIManager.OnStateChanged += UIManager_OnStateChanged;
+        CameraManager.OnStateChanged += CameraManager_OnStateChanged;
     }
 
     private void OnDestroy()
@@ -19,19 +19,19 @@ public class PlayerBoat : Boat
         input.Player.LeftFire.performed -= OnFireLeft;
         input.Player.RightFire.performed -= OnFireRight;
 
-        UIManager.OnStateChanged -= UIManager_OnStateChanged;
+        CameraManager.OnStateChanged -= CameraManager_OnStateChanged;
     }
 
     protected override void OnHit()
     {
         base.OnHit();
 
-        CameraManager.Instance.ShakeCamera(5, 0.3f);
+        CameraManager.Instance.ShakeCamera(3, 0.6f);
     }
 
-    private void UIManager_OnStateChanged(UIState _state)
+    private void CameraManager_OnStateChanged(CameraState _state)
     {
-        if (_state == UIState.Game) input.Player.Enable();
+        if (_state == CameraState.Boat) input.Player.Enable();
         else input.Player.Disable();
     }
 

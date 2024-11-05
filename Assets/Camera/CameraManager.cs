@@ -2,15 +2,18 @@ using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 
 public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance { get; private set; }
+    public static event UnityAction<CameraState> OnStateChanged;
+    public static CameraState CameraState { get; private set; }
 
     public CameraState State { get; private set; }
 
-    [SerializeField] private CinemachineCamera mainMenuCamera, playerCamera;
-    [SerializeField] private CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin;
+    [SerializeField] private CinemachineCamera mainMenuCamera, playerCamera, boatCamera;
+    [SerializeField] private CinemachineBasicMultiChannelPerlin[] cinemachineBasicMultiChannelPerlins;
 
     private void Awake()
     {
@@ -32,12 +35,20 @@ public class CameraManager : MonoBehaviour
             case CameraState.Player:
                 playerCamera.ForceCameraPosition(playerCamera.transform.position, playerCamera.transform.rotation);
                 break;
+
+            case CameraState.Boat:
+                boatCamera.ForceCameraPosition(boatCamera.transform.position, boatCamera.transform.rotation);
+                break;
         }
 
         mainMenuCamera.enabled = State == CameraState.MainMenu;
         playerCamera.enabled = State == CameraState.Player;
-        Cursor.lockState = State == CameraState.Player ? CursorLockMode.Locked : CursorLockMode.None;
-        Cursor.visible = State != CameraState.Player;
+        boatCamera.enabled = State == CameraState.Boat;
+
+        Cursor.lockState = State == CameraState.MainMenu ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = State == CameraState.MainMenu;
+
+        OnStateChanged?.Invoke(State);
     }
 
     public void ShakeCamera(float _intensity, float _time)
@@ -48,18 +59,25 @@ public class CameraManager : MonoBehaviour
 
     private IEnumerator CameraShake(float _intensity, float _time)
     {
-        cinemachineBasicMultiChannelPerlin.AmplitudeGain = _intensity;
-        cinemachineBasicMultiChannelPerlin.FrequencyGain = _intensity;
+        foreach (CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin in cinemachineBasicMultiChannelPerlins)
+        {
+            cinemachineBasicMultiChannelPerlin.AmplitudeGain = _intensity;
+            cinemachineBasicMultiChannelPerlin.FrequencyGain = _intensity;
+        }
 
         yield return new WaitForSeconds(_time);
 
-        cinemachineBasicMultiChannelPerlin.AmplitudeGain = 0;
-        cinemachineBasicMultiChannelPerlin.FrequencyGain = 0;
+        foreach (CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin in cinemachineBasicMultiChannelPerlins)
+        {
+            cinemachineBasicMultiChannelPerlin.AmplitudeGain = 0;
+            cinemachineBasicMultiChannelPerlin.FrequencyGain = 0;
+        }
     }
 }
 
 public enum CameraState
 {
     MainMenu,
-    Player
+    Player,
+    Boat
 }
