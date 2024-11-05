@@ -80,15 +80,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4091a9ccbcf24c140ab377c843014fd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 0}
-  PlayerLayer:
+  GroundLayer:
     serializedVersion: 2
-    m_Bits: 8
-  GroundCheck: {fileID: 3697720967601191976}
-  walkSpeed: 7
+    m_Bits: 256
+  groundCheck: {fileID: 3697720967601191976}
+  walkSpeed: 6
   sprintSpeed: 10
-  jumpHeight: 10
-  acceleration: 1
+  jumpForce: 5
+  acceleration: 7
+  cameraTransform: {fileID: 0}
 --- !u!54 &6152616532844717180
 Rigidbody:
   m_ObjectHideFlags: 0
