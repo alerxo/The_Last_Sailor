@@ -1326,6 +1326,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2142894475}
     m_Modifications:
+    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
+      propertyPath: largeWindSpeed
+      value: 250
+      objectReference: {fileID: 0}
     - target: {fileID: 3924458489242471966, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
       propertyPath: m_Name
       value: Sun And Ocean Controller

@@ -116,7 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd6dcdf7c3acb645bdfce3181b3e4f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuoyancyForce: 5
+  BuoyancyForce: 7
   Points: {fileID: 11400000, guid: 472e3f1964620d04eb1b2c837096283c, type: 2}
   Info:
     displacement: 0
@@ -280,10 +280,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8262780048560509729}
     m_Modifications:
-    - target: {fileID: 1940036712897292052, guid: e60c44186a4124346bddd7d375b04edb, type: 3}
-      propertyPath: position
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3863041188724273540, guid: e60c44186a4124346bddd7d375b04edb, type: 3}
       propertyPath: m_Name
       value: Canon (3)
@@ -348,7 +344,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 344385479120080457, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10
+      value: -13
       objectReference: {fileID: 0}
     - target: {fileID: 344385479120080457, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
       propertyPath: m_LocalPosition.y
@@ -410,7 +406,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 344385479120080457, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 344385479120080457, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
       propertyPath: m_LocalPosition.y
@@ -452,10 +448,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Engine (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 8160458022112652082, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
-      propertyPath: position
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -474,10 +466,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8262780048560509729}
     m_Modifications:
-    - target: {fileID: 1940036712897292052, guid: e60c44186a4124346bddd7d375b04edb, type: 3}
-      propertyPath: position
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3863041188724273540, guid: e60c44186a4124346bddd7d375b04edb, type: 3}
       propertyPath: m_Name
       value: Canon (2)
