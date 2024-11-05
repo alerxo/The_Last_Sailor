@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1057c25e5077cd4aac596ddae8f3815, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 0.005
-  deceleration: 0.001
-  power: 700
+  acceleration: 0.02
+  deceleration: 0.004
+  power: 800
