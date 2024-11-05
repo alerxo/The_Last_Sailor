@@ -8,17 +8,12 @@ public class PlayerBoat : Boat
     private void Awake()
     {
         input = new InputSystem_Actions();
-        input.Player.LeftFire.performed += OnFireLeft;
-        input.Player.RightFire.performed += OnFireRight;
 
         CameraManager.OnStateChanged += CameraManager_OnStateChanged;
     }
 
     private void OnDestroy()
     {
-        input.Player.LeftFire.performed -= OnFireLeft;
-        input.Player.RightFire.performed -= OnFireRight;
-
         CameraManager.OnStateChanged -= CameraManager_OnStateChanged;
     }
 
@@ -42,17 +37,9 @@ public class PlayerBoat : Boat
 
     private void Update()
     {
-        Movement(input.Player.Move.ReadValue<Vector2>());
-        ChangeCannonAngle(input.Player.CannonAngle.ReadValue<float>());
-    }
-
-    private void OnFireLeft(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
-    {
-        FireLeft();
-    }
-
-    private void OnFireRight(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
-    {
-        FireRight();
+        if (input.Player.Move.ReadValue<Vector2>().magnitude > 0)
+        {
+            ChangeMovement(input.Player.Move.ReadValue<Vector2>());
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
@@ -8,17 +9,25 @@ public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance { get; private set; }
     public static event UnityAction<CameraState> OnStateChanged;
-    public static CameraState CameraState { get; private set; }
-
     public CameraState State { get; private set; }
 
     [SerializeField] private CinemachineCamera mainMenuCamera, playerCamera, boatCamera;
     [SerializeField] private CinemachineBasicMultiChannelPerlin[] cinemachineBasicMultiChannelPerlins;
 
+    private InputSystem_Actions input;
+
     private void Awake()
     {
         Assert.IsNull(Instance);
         Instance = this;
+
+        input = new();
+        input.Player.Escape.performed += Escape_performed;
+    }
+
+    private void OnDestroy()
+    {
+        input.Player.Escape.performed -= Escape_performed;
     }
 
     private void Start()
@@ -32,12 +41,18 @@ public class CameraManager : MonoBehaviour
 
         switch (State)
         {
+            case CameraState.MainMenu:
+                input.Player.Disable();
+                break;
+
             case CameraState.Player:
                 playerCamera.ForceCameraPosition(playerCamera.transform.position, playerCamera.transform.rotation);
+                input.Player.Disable();
                 break;
 
             case CameraState.Boat:
                 boatCamera.ForceCameraPosition(boatCamera.transform.position, boatCamera.transform.rotation);
+                input.Player.Enable();
                 break;
         }
 
@@ -71,6 +86,14 @@ public class CameraManager : MonoBehaviour
         {
             cinemachineBasicMultiChannelPerlin.AmplitudeGain = 0;
             cinemachineBasicMultiChannelPerlin.FrequencyGain = 0;
+        }
+    }
+
+    private void Escape_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    {
+        if (State == CameraState.Boat)
+        {
+            SetState(CameraState.Player);
         }
     }
 }

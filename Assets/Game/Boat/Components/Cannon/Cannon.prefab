@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1616625964483641390}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 3.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56,7 +56,7 @@ Transform:
   m_GameObject: {fileID: 3168496578893114697}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.05}
+  m_LocalPosition: {x: 0, y: 0, z: 4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -72,6 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5066895043485006966}
   - component: {fileID: 1940036712897292052}
+  - component: {fileID: 3226283572603753360}
   - component: {fileID: 1198445798081274420}
   m_Layer: 0
   m_Name: Cannon
@@ -114,6 +115,27 @@ MonoBehaviour:
   fireCooldown: 2
   cannonballSpawnPosition: {fileID: 9108033357701547695}
   explosionPosition: {fileID: 5561453162842683808}
+--- !u!135 &3226283572603753360
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3863041188724273540}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &1198445798081274420
 AudioSource:
   m_ObjectHideFlags: 0
