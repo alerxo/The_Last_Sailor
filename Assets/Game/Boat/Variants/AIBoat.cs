@@ -6,7 +6,7 @@ public class AIBoat : Boat
 
     public override void Destroyed()
     {
-        ObjectPoolManager.Instance.ReleaseAIBoat(this);
+        ObjectPoolManager.Instance.Release(this);
     }
 
     private void Update()

@@ -10,7 +10,7 @@ public class Cannonball : MonoBehaviour
 
     private const float waterHeight = -5f;
     private float destructionTimer;
-    private const float destructionCooldown = 5f;
+    private const float destructionCooldown = 3f;
 
     private void OnEnable()
     {
@@ -20,18 +20,15 @@ public class Cannonball : MonoBehaviour
     private void OnDisable()
     {
         SetState(CannonballState.Disabled);
-        destructionTimer = 0;
     }
 
     public void Update()
     {
-        DebugUtil.DrawBox(transform.position, Quaternion.identity, Vector3.one, Color.red, Time.deltaTime);
-
         switch (state)
         {
             case CannonballState.PendingDestruction:
 
-                if ((destructionTimer += Time.deltaTime) > destructionCooldown)
+                if ((destructionTimer -= Time.deltaTime) <= 0)
                 {
                     SetState(CannonballState.Destruction);
                 }
@@ -75,9 +72,24 @@ public class Cannonball : MonoBehaviour
 
         switch (state)
         {
-            case CannonballState.Destruction:
-                ObjectPoolManager.Instance.ReleaseCannonball(this);
+            case CannonballState.Flying:
+                GetComponent<Rigidbody>().useGravity = true;
                 break;
+
+            case CannonballState.PendingDestruction:
+                GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+                GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                GetComponent<Rigidbody>().useGravity = false;
+                break;
+
+            case CannonballState.Destruction:
+                ObjectPoolManager.Instance.Release(this);
+                break;
+
+            case CannonballState.Disabled:
+                destructionTimer = destructionCooldown;
+                break;
+
         }
     }
 }

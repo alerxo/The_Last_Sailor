@@ -21,7 +21,7 @@ public class AIBoatManager : MonoBehaviour
 
         Vector3 position = FindFirstObjectByType<PlayerBoat>().transform.position + new Vector3(GetRangomCoordinate(), -10, GetRangomCoordinate());
         Quaternion rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
-        current = ObjectPoolManager.Instance.SpawnAIBoat(position, rotation);
+        current = ObjectPoolManager.Instance.Spawn<AIBoat>(position, rotation);
         state = AIBoatManagerState.None;
     }
 

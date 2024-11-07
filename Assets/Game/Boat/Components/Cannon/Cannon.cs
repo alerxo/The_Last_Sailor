@@ -22,13 +22,13 @@ public class Cannon : MonoBehaviour
 
     private void OnEnable()
     {
+        State = CannonState.Reloading;
         StartCoroutine(ReloadTimer());
     }
 
     private void OnDisable()
     {
-        StopAllCoroutines();
-        State = CannonState.Reloading;
+        StopCoroutine(ReloadTimer());
     }
 
     public void Rotate(Vector2 _rotation)
@@ -40,7 +40,7 @@ public class Cannon : MonoBehaviour
 
     public void Fire()
     {
-        Cannonball cannonball = ObjectPoolManager.Instance.SpawnCannonball(cannonballSpawnPosition.position, Quaternion.identity);
+        Cannonball cannonball = ObjectPoolManager.Instance.Spawn<Cannonball>(cannonballSpawnPosition.position, Quaternion.identity);
         cannonball.GetComponent<Rigidbody>().AddExplosionForce(force, explosionPosition.position, 0, 0);
         cannonball.SetIgnore(GetComponentInParent<IDamageable>());
 

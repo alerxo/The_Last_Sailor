@@ -380,7 +380,7 @@ GameObject:
   m_Component:
   - component: {fileID: 354970143}
   m_Layer: 0
-  m_Name: Cannonballs
+  m_Name: ObjectPool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -393,37 +393,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 354970142}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2021998518}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &424112756
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 424112757}
-  m_Layer: 0
-  m_Name: AIBoats
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &424112757
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 424112756}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -654,10 +623,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b32c5cbdc5d2e448b3949b454588e07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aiBoatPrefab: {fileID: -44095940179408970, guid: 3bad0d0818fbf9e4b8125aa6dc3068de, type: 3}
-  cannonballPrefab: {fileID: 564866446082053032, guid: 4eb76afa5b9da714594904dcf4d6db47, type: 3}
-  aiBoatParent: {fileID: 424112757}
-  cannonballParent: {fileID: 354970143}
+  prefabs:
+  - {fileID: -44095940179408970, guid: 3bad0d0818fbf9e4b8125aa6dc3068de, type: 3}
+  - {fileID: 564866446082053032, guid: 4eb76afa5b9da714594904dcf4d6db47, type: 3}
+  parent: {fileID: 354970143}
 --- !u!114 &913297623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1443,7 +1412,6 @@ Transform:
   m_Children:
   - {fileID: 980153975}
   - {fileID: 290825282}
-  - {fileID: 424112757}
   - {fileID: 354970143}
   - {fileID: 825844289}
   m_Father: {fileID: 0}
