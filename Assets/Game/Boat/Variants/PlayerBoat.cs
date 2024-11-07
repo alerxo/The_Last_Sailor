@@ -14,6 +14,7 @@ public class PlayerBoat : Boat
 
     private void OnDestroy()
     {
+        input.Player.Disable();
         CameraManager.OnStateChanged -= CameraManager_OnStateChanged;
     }
 
@@ -21,7 +22,7 @@ public class PlayerBoat : Boat
     {
         base.OnHit();
 
-        CameraManager.Instance.ShakeCamera(3, 0.6f);
+        CameraManager.Instance.ShakeCamera(1f, 0.7f);
     }
 
     private void CameraManager_OnStateChanged(CameraState _state)

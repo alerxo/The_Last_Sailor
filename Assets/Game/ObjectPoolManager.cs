@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -7,14 +8,11 @@ public class ObjectPoolManager : MonoBehaviour
 {
     public static ObjectPoolManager Instance { get; private set; }
 
-    [SerializeField] private AIBoat aiBoatPrefab;
-    [SerializeField] private Cannonball cannonballPrefab;
-    [SerializeField] private Transform aiBoatParent;
-    [SerializeField] private Transform cannonballParent;
-    private ObjectPool<AIBoat> aiBoatPool;
-    private ObjectPool<Cannonball> cannonballBool;
+    public static readonly Vector3 InactiveObjectPosition = new(0f, 100f, 0f);
+    private readonly Dictionary<Type, ObjectPool<MonoBehaviour>> pools = new();
 
-    private static readonly Vector3 InactiveObjectPosition = new(0f, -100f, 0f);
+    [SerializeField] private List<MonoBehaviour> prefabs;
+    [SerializeField] private Transform parent;
 
     private void Awake()
     {
@@ -22,59 +20,27 @@ public class ObjectPoolManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
+    public T Spawn<T>(Vector3 _position, Quaternion _rotation) where T : MonoBehaviour
     {
-        aiBoatPool = new(CreateAIBoat);
-        cannonballBool = new(CreateCannonball);
+        if (!pools.ContainsKey(typeof(T)))
+        {
+            pools[typeof(T)] = new(() => Instantiate(prefabs.Find((m) => m is T), InactiveObjectPosition, Quaternion.identity, parent) as T);
+        }
+
+        T t = pools[typeof(T)].Get() as T;
+
+        Rigidbody rigidbody = t.GetComponent<Rigidbody>();
+        rigidbody.position = _position;
+        rigidbody.rotation = _rotation;
+
+        return t;
     }
 
-    #region AIBoat
-
-    public AIBoat SpawnAIBoat(Vector3 _position, Quaternion _rotation)
+    public void Release<T>(T _t) where T : MonoBehaviour
     {
-        AIBoat aiBoat = aiBoatPool.Get();
-        aiBoat.GetComponent<Rigidbody>().position = _position;
-        aiBoat.GetComponent<Rigidbody>().rotation = _rotation;
-
-        return aiBoat;
+        pools[typeof(T)].Release(_t);
     }
-
-    private AIBoat CreateAIBoat()
-    {
-        return Instantiate(aiBoatPrefab, InactiveObjectPosition, Quaternion.identity, aiBoatParent);
-    }
-
-    public void ReleaseAIBoat(AIBoat _aiBoat)
-    {
-        aiBoatPool.Release(_aiBoat);
-    }
-
-    #endregion
-
-    #region CannonBall
-
-    public Cannonball SpawnCannonball(Vector3 _position, Quaternion _rotation)
-    {
-        Cannonball cannonball = cannonballBool.Get();
-        cannonball.GetComponent<Rigidbody>().position = _position;
-        cannonball.GetComponent<Rigidbody>().rotation = _rotation;
-
-        return cannonball;
-    }
-
-    private Cannonball CreateCannonball()
-    {
-        return Instantiate(cannonballPrefab, InactiveObjectPosition, Quaternion.identity, cannonballParent);
-    }
-
-    public void ReleaseCannonball(Cannonball _cannonball)
-    {
-        cannonballBool.Release(_cannonball);
-    }
-
-    #endregion
 }
-
 
 public class ObjectPool<T> where T : MonoBehaviour
 {
@@ -97,6 +63,8 @@ public class ObjectPool<T> where T : MonoBehaviour
     public void Release(T _t)
     {
         _t.gameObject.SetActive(false);
+        _t.transform.position = ObjectPoolManager.InactiveObjectPosition;
+        _t.transform.rotation = Quaternion.identity;
         pool.Enqueue(_t);
     }
 }

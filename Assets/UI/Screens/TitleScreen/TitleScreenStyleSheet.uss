@@ -1,6 +1,11 @@
 .title-screen-background {
 	justify-content: space-around;
 	align-items: center;
+
+	width: 35%;
+	height: 50%;
+	margin-top: 7%;
+	margin-left: 5%;
 }
 
 .title-screen-title {

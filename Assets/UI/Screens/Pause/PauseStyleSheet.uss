@@ -1,0 +1,46 @@
+.pause-container {
+	justify-content: space-around;
+	align-items: center;
+
+	width: 100%;
+	height: 100%;
+}
+
+.pause-header {
+	margin-top: 13%;
+	margin-bottom: 7%;
+	
+	-unity-text-align: middle-center;
+}
+
+/* Button */
+
+.pause-button-container { 
+	margin-bottom: 18%;
+}
+
+.pause-button {
+	margin-bottom: 7%;
+	border-width: 5px;
+	border-radius: 10px;
+
+	transition-property: scale;
+    transition-duration: 50ms;
+	transition-timing-function: ease-in-out;
+}
+
+.pause-button:hover {
+	scale: 1.15;
+
+	transition-property: scale;
+    transition-duration: 200ms;
+	transition-timing-function: ease-in-out;
+}
+
+.pause-button:active {
+	scale: 1.30;
+
+	transition-property: scale;
+    transition-duration: 100ms;
+	transition-timing-function: ease-in-out;
+}

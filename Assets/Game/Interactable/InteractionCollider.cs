@@ -5,7 +5,7 @@ using UnityEngine.Events;
 public class InteractionCollider : MonoBehaviour
 {
     public static event UnityAction<IInteractable> OnInteractableChanged;
-    private List<IInteractable> interactablesInRange = new();
+    private readonly List<IInteractable> interactablesInRange = new();
     private IInteractable current;
 
     private InputSystem_Actions input;
@@ -20,6 +20,7 @@ public class InteractionCollider : MonoBehaviour
 
     private void OnDestroy()
     {
+        input.Player.Disable();
         input.Player.Interact.performed -= Interact_performed;
 
         CameraManager.OnStateChanged -= CameraManager_OnStateChanged;
@@ -27,9 +28,14 @@ public class InteractionCollider : MonoBehaviour
 
     private void Update()
     {
-        if (interactablesInRange.Count == 0)
+        if (interactablesInRange.Count == 0 || CameraManager.Instance.State != CameraState.Player)
         {
-            current = null;
+            if (current != null)
+            {
+                current = null;
+                OnInteractableChanged?.Invoke(current);
+            }
+
             return;
         }
 

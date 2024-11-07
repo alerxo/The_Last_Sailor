@@ -29,15 +29,19 @@ public class FirstPersonController : MonoBehaviour
         input.Player.Sprint.canceled += Sprint_canceled;
 
         CameraManager.OnStateChanged += CameraManager_OnStateChanged;
+        UIManager.OnStateChanged += UIManager_OnStateChanged;
     }
 
     private void OnDestroy()
     {
+        input.Player.Disable();
+
         input.Player.Jump.performed -= Jump_performed;
         input.Player.Sprint.started -= Sprint_started;
         input.Player.Sprint.canceled -= Sprint_canceled;
 
         CameraManager.OnStateChanged += CameraManager_OnStateChanged;
+        UIManager.OnStateChanged -= UIManager_OnStateChanged;
     }
 
     void Update()
@@ -52,9 +56,19 @@ public class FirstPersonController : MonoBehaviour
         ApplyMovement();
     }
 
+    private void UIManager_OnStateChanged(UIState _state)
+    {
+        EnableInput();
+    }
+
     private void CameraManager_OnStateChanged(CameraState _state)
     {
-        if (_state == CameraState.Player) input.Player.Enable();
+        EnableInput();
+    }
+
+    private void EnableInput()
+    {
+        if (UIManager.Instance.State == UIState.HUD && CameraManager.Instance.State == CameraState.Player) input.Player.Enable();
         else input.Player.Disable();
     }
 
