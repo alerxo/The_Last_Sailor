@@ -21,6 +21,7 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
 
     private void OnDestroy()
     {
+        input.Player.Disable();
         input.Player.Fire.performed -= Fire_performed;
         CameraManager.OnStateChanged -= CameraManager_OnStateChanged;
     }

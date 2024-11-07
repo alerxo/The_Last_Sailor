@@ -1,6 +1,5 @@
 using System.Collections;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
@@ -13,6 +12,7 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField] private CinemachineCamera mainMenuCamera, playerCamera, boatCamera, cannonCamera;
     [SerializeField] private CinemachineBasicMultiChannelPerlin[] cinemachineBasicMultiChannelPerlins;
+    [SerializeField] private CinemachineInputAxisController[] cinemachineInputAxisControllers;
 
     private InputSystem_Actions input;
 
@@ -22,12 +22,17 @@ public class CameraManager : MonoBehaviour
         Instance = this;
 
         input = new();
-        input.Player.Escape.performed += Escape_performed;
+        input.Player.Interact.performed += Interact_performed;
+
+        UIManager.OnStateChanged += UIManager_OnStateChanged;
     }
 
     private void OnDestroy()
     {
-        input.Player.Escape.performed -= Escape_performed;
+        input.Player.Disable();
+        input.Player.Interact.performed -= Interact_performed;
+
+        UIManager.OnStateChanged -= UIManager_OnStateChanged;
     }
 
     private void Start()
@@ -77,9 +82,6 @@ public class CameraManager : MonoBehaviour
         boatCamera.enabled = State == CameraState.Boat;
         cannonCamera.enabled = State == CameraState.Cannon;
 
-        Cursor.lockState = State == CameraState.MainMenu ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = State == CameraState.MainMenu;
-
         OnStateChanged?.Invoke(State);
     }
 
@@ -106,13 +108,38 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    private void Escape_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
         switch (State)
         {
             case CameraState.Boat:
             case CameraState.Cannon:
                 SetState(CameraState.Player);
+                break;
+        }
+    }
+
+    private void UIManager_OnStateChanged(UIState _state)
+    {
+        switch (_state)
+        {
+            case UIState.TitleScreen:
+            case UIState.Pause:
+
+                foreach (CinemachineInputAxisController cinemachineInputAxisController in cinemachineInputAxisControllers)
+                {
+                    cinemachineInputAxisController.enabled = false;
+                }
+
+                break;
+
+            case UIState.HUD:
+
+                foreach (CinemachineInputAxisController cinemachineInputAxisController in cinemachineInputAxisControllers)
+                {
+                    cinemachineInputAxisController.enabled = true;
+                }
+
                 break;
         }
     }

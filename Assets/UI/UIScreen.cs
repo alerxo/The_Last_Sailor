@@ -4,27 +4,24 @@ using UnityEngine.UIElements;
 public abstract class UIScreen : MonoBehaviour
 {
     protected abstract UIState ActiveState { get; }
-    protected UIDocument document;
+    protected VisualElement root;
     [SerializeField] private StyleSheet[] styleSheets;
 
-    private void Awake()
+    private void OnEnable()
     {
-        document = GetComponent<UIDocument>();
-    }
+        root = GetComponent<UIDocument>().rootVisualElement;
 
-    private void Start()
-    {
         Generate();
 
         foreach (StyleSheet styleSheet in styleSheets)
         {
-            document.rootVisualElement.styleSheets.Add(styleSheet);
+            root.styleSheets.Add(styleSheet);
         }
 
         UIManager.OnStateChanged += UIManager_OnStateChanged;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         UIManager.OnStateChanged -= UIManager_OnStateChanged;
     }
@@ -33,7 +30,7 @@ public abstract class UIScreen : MonoBehaviour
 
     private void UIManager_OnStateChanged(UIState _state)
     {
-        document.rootVisualElement.style.display = _state == ActiveState ? DisplayStyle.Flex : DisplayStyle.None;
+        root.style.display = _state == ActiveState ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
     protected void SetSize(VisualElement _target, float _width, float _height)

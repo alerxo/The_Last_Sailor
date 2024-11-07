@@ -14,6 +14,7 @@ public class PlayerBoat : Boat
 
     private void OnDestroy()
     {
+        input.Player.Disable();
         CameraManager.OnStateChanged -= CameraManager_OnStateChanged;
     }
 

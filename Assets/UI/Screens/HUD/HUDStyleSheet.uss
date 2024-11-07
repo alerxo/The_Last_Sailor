@@ -1,0 +1,18 @@
+.hud-container {
+	justify-content: flex-end;
+	align-items: center;
+
+	width: 100%;
+	height: 100%;
+}
+
+.hud-interaction-container {
+	justify-content: center;
+	align-items: center;
+
+	margin-bottom: 7%;
+	border-width: 5px;
+	border-radius: 10px;
+}
+
+.hud-interaction-text { }

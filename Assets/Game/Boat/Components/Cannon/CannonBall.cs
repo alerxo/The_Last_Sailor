@@ -12,6 +12,15 @@ public class Cannonball : MonoBehaviour
     private float destructionTimer;
     private const float destructionCooldown = 3f;
 
+    private Rigidbody rb;
+    private MeshRenderer meshRenderer;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        meshRenderer = rb.GetComponentInChildren<MeshRenderer>();
+    }
+
     private void OnEnable()
     {
         SetState(CannonballState.Flying);
@@ -73,13 +82,15 @@ public class Cannonball : MonoBehaviour
         switch (state)
         {
             case CannonballState.Flying:
-                GetComponent<Rigidbody>().useGravity = true;
+                rb.useGravity = true;
+                meshRenderer.enabled = true;
                 break;
 
             case CannonballState.PendingDestruction:
-                GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
-                GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-                GetComponent<Rigidbody>().useGravity = false;
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.useGravity = false;
+                meshRenderer.enabled = false;
                 break;
 
             case CannonballState.Destruction:

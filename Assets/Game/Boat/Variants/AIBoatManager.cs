@@ -8,7 +8,7 @@ public class AIBoatManager : MonoBehaviour
 
     private void Update()
     {
-        if (UIManager.Instance.State == UIState.Game && state == AIBoatManagerState.None && (current == null || current.gameObject.activeSelf == false))
+        if (UIManager.Instance.State == UIState.HUD && state == AIBoatManagerState.None && (current == null || current.gameObject.activeSelf == false))
         {
             state = AIBoatManagerState.Spawning;
             StartCoroutine(SpawnTimer());
