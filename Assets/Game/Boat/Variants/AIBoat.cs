@@ -12,21 +12,21 @@ public class AIBoat : Boat
     private void Update()
     {
         ChangeMovement(new Vector2(1, 1));
-        ChangeCannonAngle(1);
+        ChangeCannonAngle(new Vector2(0, 1));
         FireLeft();
         FireRight();
     }
 
-    protected void ChangeCannonAngle(float _value)
+    protected void ChangeCannonAngle(Vector2 _rotation)
     {
         foreach (Cannon cannon in leftCannons)
         {
-            cannon.ChangeAngle(_value);
+            cannon.Rotate(_rotation);
         }
 
         foreach (Cannon cannon in rightCannons)
         {
-            cannon.ChangeAngle(_value);
+            cannon.Rotate(_rotation);
         }
     }
 

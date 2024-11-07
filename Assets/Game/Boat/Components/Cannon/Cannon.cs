@@ -1,21 +1,18 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class Cannon : MonoBehaviour, IInteractable
+public class Cannon : MonoBehaviour
 {
-    public Vector3 Position => transform.position;
-
     public CannonState State { get; private set; }
 
-    [SerializeField] private float force, fireCooldown;
-    [SerializeField] private Transform cannonballSpawnPosition, explosionPosition;
+    [SerializeField] private float force, fireCooldown, rotationSpeed, minPitch, maxPitch, maxYaw;
+    [SerializeField] private Transform local, cannonballSpawnPosition, explosionPosition;
 
     private ParticleSystem[] particleSystems;
     private AudioSource audioSource;
 
-    private float angle;
-    private const float minAngle = 0f;
-    private const float maxAngle = 35f;
+    private Vector3 current;
 
     private void Awake()
     {
@@ -25,23 +22,20 @@ public class Cannon : MonoBehaviour, IInteractable
 
     private void OnEnable()
     {
-        State = CannonState.Ready;
+        StartCoroutine(ReloadTimer());
     }
 
     private void OnDisable()
     {
         StopAllCoroutines();
+        State = CannonState.Reloading;
     }
 
-    public void Interact()
+    public void Rotate(Vector2 _rotation)
     {
-        Fire();
-    }
-
-    public void ChangeAngle(float _value)
-    {
-        angle = Mathf.Clamp(angle + _value, minAngle, maxAngle);
-        transform.rotation = Quaternion.Euler(angle, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+        current.x = Mathf.Clamp(current.x + (-_rotation.y * rotationSpeed * Time.deltaTime), -maxPitch, -minPitch);
+        current.y = Mathf.Clamp(current.y + (_rotation.x * rotationSpeed * Time.deltaTime), -maxYaw, maxYaw);
+        local.localRotation = Quaternion.Euler(current);
     }
 
     public void Fire()
@@ -50,7 +44,7 @@ public class Cannon : MonoBehaviour, IInteractable
         cannonball.GetComponent<Rigidbody>().AddExplosionForce(force, explosionPosition.position, 0, 0);
         cannonball.SetIgnore(GetComponentInParent<IDamageable>());
 
-        foreach(ParticleSystem particleSystem in particleSystems)
+        foreach (ParticleSystem particleSystem in particleSystems)
         {
             particleSystem.Play();
         }

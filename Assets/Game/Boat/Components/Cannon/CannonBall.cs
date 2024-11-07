@@ -9,37 +9,58 @@ public class Cannonball : MonoBehaviour
     [SerializeField] private AudioSource boatImpact, waterImpact;
 
     private const float waterHeight = -5f;
+    private float destructionTimer;
+    private const float destructionCooldown = 5f;
 
     private void OnEnable()
     {
-        state = CannonballState.Flying;
-        GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
-        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        SetState(CannonballState.Flying);
+    }
+
+    private void OnDisable()
+    {
+        SetState(CannonballState.Disabled);
+        destructionTimer = 0;
     }
 
     public void Update()
     {
-        if (state == CannonballState.PendingDestruction && (!boatImpact.isPlaying && !waterImpact.isPlaying))
-        {
-            ObjectPoolManager.Instance.ReleaseCannonball(this);
-        }
+        DebugUtil.DrawBox(transform.position, Quaternion.identity, Vector3.one, Color.red, Time.deltaTime);
 
-        else if (state == CannonballState.Flying && transform.position.y < waterHeight)
+        switch (state)
         {
-            waterImpact.Play();
-            state = CannonballState.PendingDestruction;
+            case CannonballState.PendingDestruction:
+
+                if ((destructionTimer += Time.deltaTime) > destructionCooldown)
+                {
+                    SetState(CannonballState.Destruction);
+                }
+
+                break;
+
+            case CannonballState.Flying:
+
+                if (state == CannonballState.Flying && transform.position.y < waterHeight)
+                {
+                    waterImpact.Play();
+                    SetState(CannonballState.PendingDestruction);
+                }
+
+                break;
         }
     }
 
     private void OnCollisionEnter(Collision _collision)
     {
+        if (state == CannonballState.PendingDestruction) return;
+
         IDamageable _damageable = _collision.gameObject.GetComponentInParent<IDamageable>();
 
         if (_damageable != ignore && _damageable != null)
         {
             _damageable.Damage(damage);
             boatImpact.Play();
-            state = CannonballState.PendingDestruction;
+            SetState(CannonballState.PendingDestruction);
         }
     }
 
@@ -47,10 +68,24 @@ public class Cannonball : MonoBehaviour
     {
         ignore = _ignore;
     }
+
+    public void SetState(CannonballState _state)
+    {
+        state = _state;
+
+        switch (state)
+        {
+            case CannonballState.Destruction:
+                ObjectPoolManager.Instance.ReleaseCannonball(this);
+                break;
+        }
+    }
 }
 
 public enum CannonballState
 {
     Flying,
-    PendingDestruction
+    PendingDestruction,
+    Destruction,
+    Disabled
 }
