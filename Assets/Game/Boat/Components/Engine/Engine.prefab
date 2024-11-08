@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1057c25e5077cd4aac596ddae8f3815, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnRadius: 15
-  turnSpeed: 1
-  power: 800
-  acceleration: 1
+  power: 100000
+  acceleration: 0.1
+  turnRadius: 3
+  turnSpeed: 0.3
+  isDebugMode: 0
