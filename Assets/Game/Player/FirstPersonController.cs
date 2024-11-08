@@ -17,6 +17,10 @@ public class FirstPersonController : MonoBehaviour
 
     private Rigidbody rb;
 
+#if UNITY_EDITOR
+    [SerializeField] private bool isDebugMode;
+#endif
+
     private void Awake()
     {
         movementSpeed = walkSpeed;
@@ -27,6 +31,13 @@ public class FirstPersonController : MonoBehaviour
         input.Player.Jump.performed += Jump_performed;
         input.Player.Sprint.started += Sprint_started;
         input.Player.Sprint.canceled += Sprint_canceled;
+
+#if UNITY_EDITOR
+        if (isDebugMode)
+        {
+            input.Player.Enable();
+        }
+#endif
 
         CameraManager.OnStateChanged += CameraManager_OnStateChanged;
         UIManager.OnStateChanged += UIManager_OnStateChanged;
@@ -118,6 +129,14 @@ public class FirstPersonController : MonoBehaviour
 
     private void Jump_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
+#if UNITY_EDITOR
+        if (isDebugMode)
+        {
+            rb.AddRelativeForce(0, jumpForce, 0, ForceMode.VelocityChange);
+            TimeGroundedInSeconds = 0;
+        } 
+#endif
+
         if (IsGrounded)
         {
             rb.AddRelativeForce(0, jumpForce, 0, ForceMode.VelocityChange);
