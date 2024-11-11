@@ -38,9 +38,6 @@ public class PlayerBoat : Boat
 
     private void Update()
     {
-        if (input.Player.Move.ReadValue<Vector2>().magnitude > 0)
-        {
-            ChangeMovement(input.Player.Move.ReadValue<Vector2>());
-        }
+        ChangeMovement(input.Player.Move.ReadValue<Vector2>());
     }
 }

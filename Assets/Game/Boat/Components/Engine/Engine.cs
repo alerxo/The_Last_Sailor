@@ -11,6 +11,10 @@ public class Engine : MonoBehaviour
 
     private Rigidbody target;
 
+#if UNITY_EDITOR
+    [SerializeField] private bool isDebugMode;
+#endif
+
     private void Awake()
     {
         target = GetComponentInParent<Rigidbody>();
@@ -28,12 +32,17 @@ public class Engine : MonoBehaviour
             target.AddForceAtPosition(throttle * transform.forward, transform.position, ForceMode.Force);
         }
 
-        Debug.DrawLine(transform.position, transform.position - (transform.forward * movement.y * 5), Color.yellow, Time.fixedDeltaTime);
+#if UNITY_EDITOR
+        if (isDebugMode)
+        {
+            Debug.DrawLine(transform.position + (Vector3.up * 4), transform.position + (Vector3.up * 4) - (transform.forward * movement.y * 5), Color.yellow, Time.fixedDeltaTime);
+        }
+#endif
     }
 
     public void ChangeMovement(Vector2 _movement)
     {
-        movement.x = Mathf.Lerp(movement.x, -_movement.x, turnSpeed * Time.deltaTime);
-        movement.y = Mathf.Lerp(movement.y, _movement.y, acceleration * Time.deltaTime);
+        if (_movement.x != 0) movement.x = Mathf.Lerp(movement.x, -_movement.x, turnSpeed * Time.deltaTime);
+        if (_movement.y != 0) movement.y = Mathf.Lerp(movement.y, _movement.y, acceleration * Time.deltaTime);
     }
 }
