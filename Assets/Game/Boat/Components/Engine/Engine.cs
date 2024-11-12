@@ -53,13 +53,18 @@ public class Engine : MonoBehaviour
     {
         if (_movement.x != 0)
         {
-            movement.x = Mathf.Lerp(movement.x, -_movement.x, turnSpeed * Time.deltaTime);
-            steeringWheel.transform.Rotate(new Vector3(movement.x * 100 * Time.deltaTime, 0, 0));
+            float xPreLerp = movement.x;
+            movement.x = Mathf.Clamp(Mathf.Lerp(movement.x, -_movement.x * 1.2f, turnSpeed * Time.deltaTime), -1, 1);
+
+            if (movement.x != xPreLerp)
+            {
+                steeringWheel.transform.Rotate(new Vector3(0, -_movement.x * 100 * Time.deltaTime, 0));
+            }
         }
 
         if (_movement.y != 0)
         {
-            movement.y = Mathf.Lerp(movement.y, _movement.y, acceleration * Time.deltaTime);
+            movement.y = Mathf.Clamp(Mathf.Lerp(movement.y, _movement.y * 1.2f, acceleration * Time.deltaTime), 0, 1);
         }
     }
 }
