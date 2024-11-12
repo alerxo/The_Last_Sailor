@@ -12,7 +12,16 @@ public class Cannon : MonoBehaviour
 
     public CannonState State { get; private set; }
 
-    [SerializeField] private Transform local, barrelParent, barrel, cannonballSpawnPosition, explosionPosition;
+    [Tooltip("The empty transform at the base of the cannon")]
+    [SerializeField] private Transform local;
+    [Tooltip("The empty transfrom at the barrel")]
+    [SerializeField] private Transform barrelParent;
+    [Tooltip("The barrel mesh")]
+    [SerializeField] private Transform barrel;
+    [Tooltip("The explosion point, should be place in front of barrel and not colliding with it")]
+    [SerializeField] private Transform explosionPosition;
+    [Tooltip("The cannonbal spawn point, should be place in 0.1 units in front of explosion point")]
+    [SerializeField] private Transform cannonballSpawnPosition;
 
     private ParticleSystem[] particleSystems;
     private AudioSource audioSource;

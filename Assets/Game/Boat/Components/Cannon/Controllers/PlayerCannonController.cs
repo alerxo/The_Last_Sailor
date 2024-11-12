@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class PlayerCannonController : MonoBehaviour, IInteractable
 {
-    public Vector3 Position => transform.position;
-
-    private InputSystem_Actions input;
-
+    [Tooltip("Target for the cannon camera")]
     [SerializeField] private Transform cameraTarget;
+
+    public Vector3 Position => transform.position;
+    private InputSystem_Actions input;
     private Cannon cannon;
 
     private void Awake()

@@ -1,20 +1,36 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AIBoat : Boat
 {
-    [SerializeField] private Cannon[] leftCannons, rightCannons;
-    private Vector3? destination;
-
     private const float APROACH_DISTANCE = 10f;
     private const float ENGAGEMENT_RANGE = 50f;
+    protected override float MaxHealth => 10;
 
+    private Vector3? destination;
     public Boat Target { get; private set; }
     private float distance;
     private Vector3 cross;
 
+    private List<Cannon> leftCannons, rightCannons;
+
 #if UNITY_EDITOR
     [SerializeField] protected bool isDebugMode;
 #endif
+
+    public override void Awake()
+    {
+        base.Awake();
+
+        leftCannons = new();
+        rightCannons = new();
+
+        foreach (Cannon cannon in GetComponentsInChildren<Cannon>())
+        {
+            if (cannon.transform.localPosition.x > 0) rightCannons.Add(cannon);
+            else leftCannons.Add(cannon);
+        }
+    }
 
     public override void Destroyed()
     {
@@ -87,7 +103,7 @@ public class AIBoat : Boat
         }
     }
 
-    private void Fire(Cannon[] _cannons)
+    private void Fire(List<Cannon> _cannons)
     {
         foreach (Cannon cannon in _cannons)
         {

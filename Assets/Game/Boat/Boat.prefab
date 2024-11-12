@@ -327,6 +327,10 @@ PrefabInstance:
       value: Engine
       objectReference: {fileID: 0}
     - target: {fileID: 8160458022112652082, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
+      propertyPath: wheel
+      value: 
+      objectReference: {fileID: 6833625260960867900}
+    - target: {fileID: 8160458022112652082, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
       propertyPath: leftWheel
       value: 
       objectReference: {fileID: 6833625260960867900}
@@ -336,7 +340,7 @@ PrefabInstance:
       objectReference: {fileID: 6833625260960867900}
     - target: {fileID: 8160458022112652082, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
       propertyPath: isDebugMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8160458022112652082, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
       propertyPath: steeringWheel
@@ -422,6 +426,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 607066503725585090}
     m_Modifications:
+    - target: {fileID: 6212035584758067149, guid: ea2039f890abc5e4c9dc8ddbe3e7b3a5, type: 3}
+      propertyPath: rotatingPart
+      value: 
+      objectReference: {fileID: 7201203989804881663}
     - target: {fileID: 6934040351366515465, guid: ea2039f890abc5e4c9dc8ddbe3e7b3a5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.959
@@ -670,6 +678,11 @@ Transform:
 --- !u!4 &6833625260960867900 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4031565418218099306, guid: dfe3b8e33c793924fbb32f787aafec35, type: 3}
+  m_PrefabInstance: {fileID: 7577049726174295126}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7201203989804881663 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 777089140350313129, guid: dfe3b8e33c793924fbb32f787aafec35, type: 3}
   m_PrefabInstance: {fileID: 7577049726174295126}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8550864442377236729

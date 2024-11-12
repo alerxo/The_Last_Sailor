@@ -2,13 +2,18 @@ using UnityEngine;
 
 public abstract class Boat : MonoBehaviour, IDamageable
 {
-    [SerializeField] private Engine engine;
-    [SerializeField] private float maxHealth;
+    protected abstract float MaxHealth { get; }
     private float health;
+    private Engine engine;
+
+    public virtual void Awake()
+    {
+        engine = GetComponentInChildren<Engine>();
+    }
 
     private void OnEnable()
     {
-        health = maxHealth;
+        health = MaxHealth;
         GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }

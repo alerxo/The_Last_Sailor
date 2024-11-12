@@ -3,10 +3,14 @@ using UnityEngine.SceneManagement;
 
 public class PlayerBoat : Boat
 {
+    protected override float MaxHealth => 100;
+
     private InputSystem_Actions input;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
+
         input = new InputSystem_Actions();
 
         CameraManager.OnStateChanged += CameraManager_OnStateChanged;

@@ -6,9 +6,12 @@ public class Engine : MonoBehaviour
     private const float ACCELERATION = 0.1f;
     private const float TURN_RADIUS = 3;
     private const float TURN_SPEEd = 0.3f;
+    private const float STEERING_WHEEL_SPEED = 0.002f;
+    private const float WHEELSPEED = 100;
 
-    [SerializeField] private Transform steeringWheel, leftWheel, rightWheel;
+    [SerializeField] private Transform wheel;
 
+    private SteeringWheel steeringWheel;
     private Vector2 movement;
     private Rigidbody target;
 
@@ -19,6 +22,7 @@ public class Engine : MonoBehaviour
     private void Awake()
     {
         target = GetComponentInParent<Rigidbody>();
+        steeringWheel = transform.parent.GetComponentInChildren<SteeringWheel>();
     }
 
     private void FixedUpdate()
@@ -31,7 +35,7 @@ public class Engine : MonoBehaviour
         if (throttle > 0)
         {
             target.AddForceAtPosition(throttle * transform.forward, transform.position, ForceMode.Force);
-            RotateWheel(leftWheel, throttle, 0.002f);
+            wheel.Rotate(new Vector3(throttle * STEERING_WHEEL_SPEED * Time.deltaTime, 0, 0));
         }
 
 #if UNITY_EDITOR
@@ -40,11 +44,6 @@ public class Engine : MonoBehaviour
             Debug.DrawLine(transform.position + (Vector3.up * 4), transform.position + (Vector3.up * 4) - (transform.forward * movement.y * 5), Color.yellow, Time.fixedDeltaTime);
         }
 #endif
-    }
-
-    private void RotateWheel(Transform wheel, float throttle, float degree)
-    {
-        wheel.transform.Rotate(new Vector3(throttle * degree * Time.deltaTime, 0, 0));
     }
 
     public void ChangeMovement(Vector2 _movement)
@@ -56,7 +55,7 @@ public class Engine : MonoBehaviour
 
             if (movement.x != xPreLerp)
             {
-                steeringWheel.transform.Rotate(new Vector3(0, -_movement.x * 100 * Time.deltaTime, 0));
+                steeringWheel.rotatingPart.transform.Rotate(new Vector3(0, -_movement.x * WHEELSPEED * Time.deltaTime, 0));
             }
         }
 
