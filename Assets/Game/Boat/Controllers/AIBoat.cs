@@ -8,7 +8,7 @@ public class AIBoat : Boat
     private const float APROACH_DISTANCE = 10f;
     private const float ENGAGEMENT_RANGE = 50f;
 
-    private Boat target;
+    public Boat Target { get; private set; }
     private float distance;
     private Vector3 cross;
 
@@ -23,13 +23,11 @@ public class AIBoat : Boat
 
     private void Update()
     {
-        if(target == null) return;
+        if (Target == null) return;
 
         SetDestination();
         ChangeMovement(GetMovementDirection());
-
-        FireLeft();
-        FireRight();
+        Fire();
 
 #if UNITY_EDITOR
         if (isDebugMode)
@@ -59,44 +57,34 @@ public class AIBoat : Boat
 
     public void SetDestination()
     {
-        if(Vector3.Distance(target.transform.position + (target.transform.right * ENGAGEMENT_RANGE), transform.position) < 
-            Vector3.Distance(target.transform.position - (target.transform.right * ENGAGEMENT_RANGE), transform.position))
+        if (Vector3.Distance(Target.transform.position + (Target.transform.right * ENGAGEMENT_RANGE), transform.position) <
+            Vector3.Distance(Target.transform.position - (Target.transform.right * ENGAGEMENT_RANGE), transform.position))
         {
-            destination = target.transform.position + (target.transform.right * ENGAGEMENT_RANGE);
+            destination = Target.transform.position + (Target.transform.right * ENGAGEMENT_RANGE);
         }
 
         else
         {
-            destination = target.transform.position - (target.transform.right * ENGAGEMENT_RANGE);
+            destination = Target.transform.position - (Target.transform.right * ENGAGEMENT_RANGE);
         }
     }
 
     public void SetTarget(Boat _target)
     {
-        target = _target;
+        Target = _target;
     }
 
-    protected void ChangeCannonAngle(Vector2 _rotation)
+    private void Fire()
     {
-        foreach (Cannon cannon in leftCannons)
+        if (Vector3.Cross((transform.position - Target.transform.position).normalized, transform.forward).y < 0)
         {
-            cannon.Rotate(_rotation);
+            Fire(leftCannons);
         }
 
-        foreach (Cannon cannon in rightCannons)
+        else
         {
-            cannon.Rotate(_rotation);
+            Fire(rightCannons);
         }
-    }
-
-    protected void FireLeft()
-    {
-        Fire(leftCannons);
-    }
-
-    protected void FireRight()
-    {
-        Fire(rightCannons);
     }
 
     private void Fire(Cannon[] _cannons)

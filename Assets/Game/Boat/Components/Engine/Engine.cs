@@ -1,17 +1,15 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Engine : MonoBehaviour
 {
-    private Vector2 movement;
-
-    [SerializeField] private float power;
-    [SerializeField] private float acceleration;
-    [SerializeField] private float turnRadius;
-    [SerializeField] private float turnSpeed;
+    private const float POWER = 100000;
+    private const float ACCELERATION = 0.1f;
+    private const float TURN_RADIUS = 3;
+    private const float TURN_SPEEd = 0.3f;
 
     [SerializeField] private Transform steeringWheel, leftWheel, rightWheel;
 
+    private Vector2 movement;
     private Rigidbody target;
 
 #if UNITY_EDITOR
@@ -25,10 +23,10 @@ public class Engine : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float x = Mathf.Clamp(movement.x * turnRadius, -turnRadius, turnRadius);
+        float x = Mathf.Clamp(movement.x * TURN_RADIUS, -TURN_RADIUS, TURN_RADIUS);
         transform.localPosition = new Vector3(x, transform.localPosition.y, transform.localPosition.z);
 
-        float throttle = Mathf.Clamp(movement.y * power, 0, power);
+        float throttle = Mathf.Clamp(movement.y * POWER, 0, POWER);
 
         if (throttle > 0)
         {
@@ -54,7 +52,7 @@ public class Engine : MonoBehaviour
         if (_movement.x != 0)
         {
             float xPreLerp = movement.x;
-            movement.x = Mathf.Clamp(Mathf.Lerp(movement.x, -_movement.x * 1.2f, turnSpeed * Time.deltaTime), -1, 1);
+            movement.x = Mathf.Clamp(Mathf.Lerp(movement.x, -_movement.x * 1.2f, TURN_SPEEd * Time.deltaTime), -1, 1);
 
             if (movement.x != xPreLerp)
             {
@@ -64,7 +62,7 @@ public class Engine : MonoBehaviour
 
         if (_movement.y != 0)
         {
-            movement.y = Mathf.Clamp(Mathf.Lerp(movement.y, _movement.y * 1.2f, acceleration * Time.deltaTime), 0, 1);
+            movement.y = Mathf.Clamp(Mathf.Lerp(movement.y, _movement.y * 1.2f, ACCELERATION * Time.deltaTime), 0, 1);
         }
     }
 }

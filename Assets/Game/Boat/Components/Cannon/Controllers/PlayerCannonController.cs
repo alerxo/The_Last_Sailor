@@ -7,12 +7,11 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
     private InputSystem_Actions input;
 
     [SerializeField] private Transform cameraTarget;
-
     private Cannon cannon;
 
     private void Awake()
     {
-        cannon = GetComponent<Cannon>();
+        cannon = GetComponentInParent<Cannon>();
 
         input = new();
         input.Player.Fire.performed += Fire_performed;
@@ -30,7 +29,18 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
     {
         if (input.Player.Move.ReadValue<Vector2>().magnitude > 0)
         {
-            cannon.Rotate(input.Player.Move.ReadValue<Vector2>());
+            Vector2 rotation = input.Player.Move.ReadValue<Vector2>();
+
+            if(rotation.x != 0)
+            {
+                cannon.SetYaw(rotation.x);
+            }
+
+            if(rotation.y != 0)
+            {
+                cannon.SetPitch(rotation.y);
+            }
+
             CameraManager.Instance.SetCannonCameraPosition(cameraTarget);
         }
     }

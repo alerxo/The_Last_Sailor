@@ -2,15 +2,16 @@ using UnityEngine;
 
 public class Cannonball : MonoBehaviour
 {
+    private const float DAMAGE = 10;
+    private const float waterHeight = -5f;
+    private const float destructionCooldown = 3f;
+
     private CannonballState state;
     private IDamageable ignore;
 
-    [SerializeField] private float damage;
-    [SerializeField] private AudioSource boatImpact, waterImpact;
-
-    private const float waterHeight = -5f;
     private float destructionTimer;
-    private const float destructionCooldown = 3f;
+
+    [SerializeField] private AudioSource boatImpact, waterImpact;
 
     private Rigidbody rb;
     private MeshRenderer meshRenderer;
@@ -64,7 +65,7 @@ public class Cannonball : MonoBehaviour
 
         if (_damageable != ignore && _damageable != null)
         {
-            _damageable.Damage(damage);
+            _damageable.Damage(DAMAGE);
             boatImpact.Play();
             SetState(CannonballState.PendingDestruction);
         }
