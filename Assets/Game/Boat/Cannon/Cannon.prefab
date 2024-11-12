@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7361179214610117608}
   m_Layer: 0
-  m_Name: Local
+  m_Name: Mount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5561453162842683808}
   m_Layer: 0
-  m_Name: ExplosionPosition
+  m_Name: ExplosionPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,10 +57,11 @@ Transform:
   m_GameObject: {fileID: 1616625964483641390}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -1.534, z: 0.042}
+  m_LocalPosition: {x: 0, y: -1.688, z: 0.042}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 9108033357701547695}
   - {fileID: 5735612683697129518}
   m_Father: {fileID: 8757596919709427184}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -74,7 +75,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9108033357701547695}
   m_Layer: 0
-  m_Name: CannonBallSpawnPosition
+  m_Name: CannonBallSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,12 +89,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3168496578893114697}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -1.5770004, z: 0.0339998}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8757596919709427184}
+  m_Father: {fileID: 5561453162842683808}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3863041188724273540
 GameObject:
@@ -143,16 +144,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff7a9fad963e1634096a967681ca8a06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 150000
-  fireCooldown: 2
-  rotationSpeed: 15
-  minPitch: -5
-  maxPitch: 15
-  maxYaw: 20
-  local: {fileID: 7361179214610117608}
+  mount: {fileID: 7361179214610117608}
   barrel: {fileID: 8757596919709427184}
-  cannonballSpawnPosition: {fileID: 9108033357701547695}
-  explosionPosition: {fileID: 5561453162842683808}
+  explosionPoint: {fileID: 5561453162842683808}
+  cannonballSpawnPoint: {fileID: 9108033357701547695}
 --- !u!114 &4988635767359330143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -542,9 +537,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 800497119294798035, guid: 32ad10bf13aeea04ea40fd2381bb3dd5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5561453162842683808}
-    - targetCorrespondingSourceObject: {fileID: 800497119294798035, guid: 32ad10bf13aeea04ea40fd2381bb3dd5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 9108033357701547695}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32ad10bf13aeea04ea40fd2381bb3dd5, type: 3}
 --- !u!4 &4232631885984210956 stripped

@@ -4,7 +4,7 @@ public class AICannonController : MonoBehaviour
 {
     private const float MAX_RANGE = 200f;
 
-    private AIBoat owner;
+    private AIBoatController owner;
     private Cannon cannon;
 
     private float distance;
@@ -13,7 +13,7 @@ public class AICannonController : MonoBehaviour
     private void Awake()
     {
         cannon = GetComponentInParent<Cannon>();
-        owner = GetComponentInParent<AIBoat>();
+        owner = GetComponentInParent<AIBoatController>();
     }
 
     private void Update()

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerBoat : Boat
+public class PlayerBoatController : Boat
 {
     protected override float MaxHealth => 100;
 

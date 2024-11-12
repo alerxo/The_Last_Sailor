@@ -160,7 +160,6 @@ Transform:
   - {fileID: 8262780048560509729}
   - {fileID: 8359556541195642451}
   - {fileID: 76462270942638929}
-  - {fileID: 2601816146253496241}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5389780127521897786
@@ -475,22 +474,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Engine
       objectReference: {fileID: 0}
-    - target: {fileID: 8160458022112652082, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
-      propertyPath: leftWheel
-      value: 
-      objectReference: {fileID: 2844582196866456739}
-    - target: {fileID: 8160458022112652082, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
-      propertyPath: rightWheel
-      value: 
-      objectReference: {fileID: 2844582196866456739}
-    - target: {fileID: 8160458022112652082, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
-      propertyPath: isDebugMode
-      value: 1
+    - target: {fileID: 6344930705134792944, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8160458022112652082, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
-      propertyPath: steeringWheel
+      propertyPath: wheel
       value: 
-      objectReference: {fileID: 2601816146253496241}
+      objectReference: {fileID: 2844582196866456739}
+    - target: {fileID: 8160458022112652082, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
+      propertyPath: paddleWheel
+      value: 
+      objectReference: {fileID: 2844582196866456739}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -500,68 +495,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 344385479120080457, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
   m_PrefabInstance: {fileID: 4424927075330351638}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &4531805322706046518
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 607066503725585090}
-    m_Modifications:
-    - target: {fileID: 632118008803954475, guid: 1f26c67c6945dbe40a4616b6e8f952b5, type: 3}
-      propertyPath: m_Name
-      value: Steering Wheel (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945474698226626951, guid: 1f26c67c6945dbe40a4616b6e8f952b5, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.91901207
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945474698226626951, guid: 1f26c67c6945dbe40a4616b6e8f952b5, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6.704014
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945474698226626951, guid: 1f26c67c6945dbe40a4616b6e8f952b5, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -8.533108
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945474698226626951, guid: 1f26c67c6945dbe40a4616b6e8f952b5, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945474698226626951, guid: 1f26c67c6945dbe40a4616b6e8f952b5, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945474698226626951, guid: 1f26c67c6945dbe40a4616b6e8f952b5, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945474698226626951, guid: 1f26c67c6945dbe40a4616b6e8f952b5, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945474698226626951, guid: 1f26c67c6945dbe40a4616b6e8f952b5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945474698226626951, guid: 1f26c67c6945dbe40a4616b6e8f952b5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1945474698226626951, guid: 1f26c67c6945dbe40a4616b6e8f952b5, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1f26c67c6945dbe40a4616b6e8f952b5, type: 3}
---- !u!4 &2601816146253496241 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1945474698226626951, guid: 1f26c67c6945dbe40a4616b6e8f952b5, type: 3}
-  m_PrefabInstance: {fileID: 4531805322706046518}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4679140155859266859
 PrefabInstance:
@@ -633,17 +566,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 607066503725585090}
     m_Modifications:
+    - target: {fileID: 6212035584758067149, guid: ea2039f890abc5e4c9dc8ddbe3e7b3a5, type: 3}
+      propertyPath: rotatingPart
+      value: 
+      objectReference: {fileID: 3905468275321892014}
     - target: {fileID: 6934040351366515465, guid: ea2039f890abc5e4c9dc8ddbe3e7b3a5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.959
       objectReference: {fileID: 0}
     - target: {fileID: 6934040351366515465, guid: ea2039f890abc5e4c9dc8ddbe3e7b3a5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.113
+      value: 5.838
       objectReference: {fileID: 0}
     - target: {fileID: 6934040351366515465, guid: ea2039f890abc5e4c9dc8ddbe3e7b3a5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.739
+      value: -8.955
       objectReference: {fileID: 0}
     - target: {fileID: 6934040351366515465, guid: ea2039f890abc5e4c9dc8ddbe3e7b3a5, type: 3}
       propertyPath: m_LocalRotation.w
@@ -685,6 +622,11 @@ PrefabInstance:
 --- !u!4 &2643226638445391550 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6934040351366515465, guid: ea2039f890abc5e4c9dc8ddbe3e7b3a5, type: 3}
+  m_PrefabInstance: {fileID: 4941583941083473335}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3905468275321892014 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8261583989967440153, guid: ea2039f890abc5e4c9dc8ddbe3e7b3a5, type: 3}
   m_PrefabInstance: {fileID: 4941583941083473335}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5185631001729992165

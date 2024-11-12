@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIBoat : Boat
+public class AIBoatController : Boat
 {
     private const float APROACH_DISTANCE = 10f;
     private const float ENGAGEMENT_RANGE = 50f;

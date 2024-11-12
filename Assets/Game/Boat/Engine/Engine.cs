@@ -9,7 +9,8 @@ public class Engine : MonoBehaviour
     private const float STEERING_WHEEL_SPEED = 0.002f;
     private const float WHEELSPEED = 100;
 
-    [SerializeField] private Transform wheel;
+    [Tooltip("The rotating paddlewheel")]
+    [SerializeField] private Transform paddleWheel;
 
     private SteeringWheel steeringWheel;
     private Vector2 movement;
@@ -35,7 +36,7 @@ public class Engine : MonoBehaviour
         if (throttle > 0)
         {
             target.AddForceAtPosition(throttle * transform.forward, transform.position, ForceMode.Force);
-            wheel.Rotate(new Vector3(throttle * STEERING_WHEEL_SPEED * Time.deltaTime, 0, 0));
+            paddleWheel.Rotate(new Vector3(throttle * STEERING_WHEEL_SPEED * Time.deltaTime, 0, 0));
         }
 
 #if UNITY_EDITOR
@@ -55,7 +56,7 @@ public class Engine : MonoBehaviour
 
             if (movement.x != xPreLerp)
             {
-                steeringWheel.rotatingPart.transform.Rotate(new Vector3(0, -_movement.x * WHEELSPEED * Time.deltaTime, 0));
+                steeringWheel.rotatingPart.transform.Rotate(new Vector3(0, 0, -_movement.x * WHEELSPEED * Time.deltaTime));
             }
         }
 
