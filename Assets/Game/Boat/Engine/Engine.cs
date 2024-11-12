@@ -1,17 +1,19 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Engine : MonoBehaviour
 {
+    private const float POWER = 100000;
+    private const float ACCELERATION = 0.1f;
+    private const float TURN_RADIUS = 3;
+    private const float TURN_SPEEd = 0.3f;
+    private const float STEERING_WHEEL_SPEED = 0.002f;
+    private const float WHEELSPEED = 100;
+
+    [Tooltip("The rotating paddlewheel")]
+    [SerializeField] private Transform paddleWheel;
+
+    private SteeringWheel steeringWheel;
     private Vector2 movement;
-
-    [SerializeField] private float power;
-    [SerializeField] private float acceleration;
-    [SerializeField] private float turnRadius;
-    [SerializeField] private float turnSpeed;
-
-    [SerializeField] private Transform steeringWheel, leftWheel, rightWheel;
-
     private Rigidbody target;
 
 #if UNITY_EDITOR
@@ -21,19 +23,20 @@ public class Engine : MonoBehaviour
     private void Awake()
     {
         target = GetComponentInParent<Rigidbody>();
+        steeringWheel = transform.parent.GetComponentInChildren<SteeringWheel>();
     }
 
     private void FixedUpdate()
     {
-        float x = Mathf.Clamp(movement.x * turnRadius, -turnRadius, turnRadius);
+        float x = Mathf.Clamp(movement.x * TURN_RADIUS, -TURN_RADIUS, TURN_RADIUS);
         transform.localPosition = new Vector3(x, transform.localPosition.y, transform.localPosition.z);
 
-        float throttle = Mathf.Clamp(movement.y * power, 0, power);
+        float throttle = Mathf.Clamp(movement.y * POWER, 0, POWER);
 
         if (throttle > 0)
         {
             target.AddForceAtPosition(throttle * transform.forward, transform.position, ForceMode.Force);
-            RotateWheel(leftWheel, throttle, 0.002f);
+            paddleWheel.Rotate(new Vector3(throttle * STEERING_WHEEL_SPEED * Time.deltaTime, 0, 0));
         }
 
 #if UNITY_EDITOR
@@ -44,27 +47,22 @@ public class Engine : MonoBehaviour
 #endif
     }
 
-    private void RotateWheel(Transform wheel, float throttle, float degree)
-    {
-        wheel.transform.Rotate(new Vector3(throttle * degree * Time.deltaTime, 0, 0));
-    }
-
     public void ChangeMovement(Vector2 _movement)
     {
         if (_movement.x != 0)
         {
             float xPreLerp = movement.x;
-            movement.x = Mathf.Clamp(Mathf.Lerp(movement.x, -_movement.x * 1.2f, turnSpeed * Time.deltaTime), -1, 1);
+            movement.x = Mathf.Clamp(Mathf.Lerp(movement.x, -_movement.x * 1.2f, TURN_SPEEd * Time.deltaTime), -1, 1);
 
             if (movement.x != xPreLerp)
             {
-                steeringWheel.transform.Rotate(new Vector3(0, -_movement.x * 100 * Time.deltaTime, 0));
+                steeringWheel.rotatingPart.transform.Rotate(new Vector3(0, 0, -_movement.x * WHEELSPEED * Time.deltaTime));
             }
         }
 
         if (_movement.y != 0)
         {
-            movement.y = Mathf.Clamp(Mathf.Lerp(movement.y, _movement.y * 1.2f, acceleration * Time.deltaTime), 0, 1);
+            movement.y = Mathf.Clamp(Mathf.Lerp(movement.y, _movement.y * 1.2f, ACCELERATION * Time.deltaTime), 0, 1);
         }
     }
 }

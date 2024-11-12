@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class AIBoatManager : MonoBehaviour
 {
+    private const float SPAWN_DISTANCE = 300f;
     private AIBoatManagerState state;
-    private AIBoat current;
+    private AIBoatController current;
 
     private void Update()
     {
@@ -19,15 +20,13 @@ public class AIBoatManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
 
-        Vector3 position = FindFirstObjectByType<PlayerBoat>().transform.position + new Vector3(GetRangomCoordinate(), -10, GetRangomCoordinate());
+        Vector3 position = FindFirstObjectByType<PlayerBoatController>().transform.position;
+        Vector3 random = (new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * SPAWN_DISTANCE);
         Quaternion rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
-        current = ObjectPoolManager.Instance.Spawn<AIBoat>(position, rotation);
-        state = AIBoatManagerState.None;
-    }
 
-    private float GetRangomCoordinate()
-    {
-        return Random.Range(50, 75) * (Random.Range(0, 2) == 0 ? 1 : -1);
+        current = ObjectPoolManager.Instance.Spawn<AIBoatController>(position + random, rotation);
+        current.SetTarget(FindFirstObjectByType<PlayerBoatController>());
+        state = AIBoatManagerState.None;
     }
 }
 
