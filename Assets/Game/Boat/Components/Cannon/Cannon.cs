@@ -7,12 +7,12 @@ public class Cannon : MonoBehaviour
     public CannonState State { get; private set; }
 
     [SerializeField] private float force, fireCooldown, rotationSpeed, minPitch, maxPitch, maxYaw;
-    [SerializeField] private Transform local, cannonballSpawnPosition, explosionPosition;
+    [SerializeField] private Transform local, barrel, cannonballSpawnPosition, explosionPosition;
 
     private ParticleSystem[] particleSystems;
     private AudioSource audioSource;
 
-    private Vector3 current;
+    private Vector3 localRotation, barrelRoation;
 
     private void Awake()
     {
@@ -33,9 +33,11 @@ public class Cannon : MonoBehaviour
 
     public void Rotate(Vector2 _rotation)
     {
-        current.x = Mathf.Clamp(current.x + (-_rotation.y * rotationSpeed * Time.deltaTime), -maxPitch, -minPitch);
-        current.y = Mathf.Clamp(current.y + (_rotation.x * rotationSpeed * Time.deltaTime), -maxYaw, maxYaw);
-        local.localRotation = Quaternion.Euler(current);
+        barrelRoation.x = Mathf.Clamp(barrelRoation.x + (-_rotation.y * rotationSpeed * Time.deltaTime), -maxPitch, -minPitch);
+        localRotation.y = Mathf.Clamp(localRotation.y + (_rotation.x * rotationSpeed * Time.deltaTime), -maxYaw, maxYaw);
+
+        local.localRotation = Quaternion.Euler(localRotation);
+        barrel.localRotation = Quaternion.Euler(barrelRoation);
     }
 
     public void Fire()
