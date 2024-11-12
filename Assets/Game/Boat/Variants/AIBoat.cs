@@ -4,10 +4,17 @@ public class AIBoat : Boat
 {
     [SerializeField] private Cannon[] leftCannons, rightCannons;
     private Vector3? destination;
-    private const float APROACH_DISTANCE = 20f;
 
+    private const float APROACH_DISTANCE = 10f;
+    private const float ENGAGEMENT_RANGE = 50f;
+
+    private Boat target;
     private float distance;
     private Vector3 cross;
+
+#if UNITY_EDITOR
+    [SerializeField] protected bool isDebugMode;
+#endif
 
     public override void Destroyed()
     {
@@ -16,10 +23,20 @@ public class AIBoat : Boat
 
     private void Update()
     {
-        SetDestination(FindFirstObjectByType<PlayerBoat>().transform.position);
+        if(target == null) return;
+
+        SetDestination();
         ChangeMovement(GetMovementDirection());
+
         FireLeft();
         FireRight();
+
+#if UNITY_EDITOR
+        if (isDebugMode)
+        {
+            DebugUtil.DrawBox(destination.Value, Quaternion.identity, Vector3.one, Color.green, Time.deltaTime);
+        }
+#endif
     }
 
     private Vector2 GetMovementDirection()
@@ -32,7 +49,7 @@ public class AIBoat : Boat
         }
 
         distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(destination.Value.x, destination.Value.z));
-        movement.y = distance < APROACH_DISTANCE ? distance / APROACH_DISTANCE : 1;
+        movement.y = distance < APROACH_DISTANCE ? distance / (APROACH_DISTANCE * 0.25f) : 1;
 
         cross = Vector3.Cross((transform.position - destination.Value).normalized, transform.forward);
         movement.x = cross.y;
@@ -40,9 +57,23 @@ public class AIBoat : Boat
         return movement;
     }
 
-    public void SetDestination(Vector3 _destination)
+    public void SetDestination()
     {
-        destination = _destination;
+        if(Vector3.Distance(target.transform.position + (target.transform.right * ENGAGEMENT_RANGE), transform.position) < 
+            Vector3.Distance(target.transform.position - (target.transform.right * ENGAGEMENT_RANGE), transform.position))
+        {
+            destination = target.transform.position + (target.transform.right * ENGAGEMENT_RANGE);
+        }
+
+        else
+        {
+            destination = target.transform.position - (target.transform.right * ENGAGEMENT_RANGE);
+        }
+    }
+
+    public void SetTarget(Boat _target)
+    {
+        target = _target;
     }
 
     protected void ChangeCannonAngle(Vector2 _rotation)
