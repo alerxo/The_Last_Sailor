@@ -14,7 +14,7 @@ public class TitleScreen : UIScreen
         background.image = backgroundImage;
         root.Add(background);
 
-        Label title = new("Steamboat\nFleet Builder");
+        Label title = new("The Last Sailor");
         title.AddToClassList("title-screen-title");
         SetMargin(title, 20, 0, 0, 0);
         SetFontSize(title, 50);
@@ -34,6 +34,7 @@ public class TitleScreen : UIScreen
     {
         UIManager.Instance.SetState(UIState.HUD);
         CameraManager.Instance.SetState(CameraState.Player);
+        FirstPersonController.instance.SetState(PlayerState.FirstPerson);
     }
 
     private void CreateButton(VisualElement _parent, string _text, Action _action)

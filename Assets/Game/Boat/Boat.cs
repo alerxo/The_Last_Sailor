@@ -35,7 +35,7 @@ public abstract class Boat : MonoBehaviour, IDamageable
 
     public abstract void Destroyed();
 
-    protected void ChangeMovement(Vector2 _direction)
+    public void ChangeMovement(Vector2 _direction)
     {
         engine.ChangeMovement(_direction);
     }

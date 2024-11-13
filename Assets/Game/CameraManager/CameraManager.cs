@@ -10,28 +10,22 @@ public class CameraManager : MonoBehaviour
     public static event UnityAction<CameraState> OnStateChanged;
     public CameraState State { get; private set; }
 
-    [SerializeField] private CinemachineCamera mainMenuCamera, playerCamera, boatCamera, cannonCamera;
+    [SerializeField] private CinemachineCamera mainMenuCamera, playerCamera, steeringWheelCamera, interactionCamera;
     [SerializeField] private CinemachineBasicMultiChannelPerlin[] cinemachineBasicMultiChannelPerlins;
     [SerializeField] private CinemachineInputAxisController[] cinemachineInputAxisControllers;
 
-    private InputSystem_Actions input;
+    private Transform interactionTarget;
 
     private void Awake()
     {
         Assert.IsNull(Instance);
         Instance = this;
 
-        input = new();
-        input.Player.Interact.performed += Interact_performed;
-
         UIManager.OnStateChanged += UIManager_OnStateChanged;
     }
 
     private void OnDestroy()
     {
-        input.Player.Disable();
-        input.Player.Interact.performed -= Interact_performed;
-
         UIManager.OnStateChanged -= UIManager_OnStateChanged;
     }
 
@@ -40,16 +34,25 @@ public class CameraManager : MonoBehaviour
         SetState(CameraState.MainMenu);
     }
 
-    public void SetCannonCamera(Transform _target)
+    private void Update()
     {
-        cannonCamera.Target.TrackingTarget = _target;
-        SetCannonCameraPosition(_target);
-        SetState(CameraState.Cannon);
+        if (interactionTarget != null)
+        {
+            SetInteractionCameraPosition();
+        }
     }
 
-    public void SetCannonCameraPosition(Transform _target)
+    public void SetInteractionCamera(Transform _target)
     {
-        cannonCamera.ForceCameraPosition(_target.position, _target.rotation);
+        interactionCamera.Target.TrackingTarget = _target;
+        interactionTarget = _target;
+        SetInteractionCameraPosition();
+        SetState(CameraState.Interaction);
+    }
+
+    public void SetInteractionCameraPosition()
+    {
+        interactionCamera.ForceCameraPosition(interactionTarget.position, interactionTarget.rotation);
     }
 
     public void SetState(CameraState _state)
@@ -59,28 +62,24 @@ public class CameraManager : MonoBehaviour
         switch (State)
         {
             case CameraState.MainMenu:
-                input.Player.Disable();
+                interactionTarget = null;
                 break;
 
             case CameraState.Player:
                 playerCamera.ForceCameraPosition(playerCamera.transform.position, playerCamera.transform.rotation);
-                input.Player.Disable();
+                interactionTarget = null;
                 break;
 
-            case CameraState.Boat:
-                boatCamera.ForceCameraPosition(boatCamera.transform.position, boatCamera.transform.rotation);
-                input.Player.Enable();
-                break;
-
-            case CameraState.Cannon:
-                input.Player.Enable();
+            case CameraState.SteeringWheel:
+                steeringWheelCamera.ForceCameraPosition(steeringWheelCamera.transform.position, steeringWheelCamera.transform.rotation);
+                interactionTarget = null;
                 break;
         }
 
         mainMenuCamera.enabled = State == CameraState.MainMenu;
         playerCamera.enabled = State == CameraState.Player;
-        boatCamera.enabled = State == CameraState.Boat;
-        cannonCamera.enabled = State == CameraState.Cannon;
+        steeringWheelCamera.enabled = State == CameraState.SteeringWheel;
+        interactionCamera.enabled = State == CameraState.Interaction;
 
         OnStateChanged?.Invoke(State);
     }
@@ -105,17 +104,6 @@ public class CameraManager : MonoBehaviour
         {
             cinemachineBasicMultiChannelPerlin.AmplitudeGain = 0;
             cinemachineBasicMultiChannelPerlin.FrequencyGain = 0;
-        }
-    }
-
-    private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
-    {
-        switch (State)
-        {
-            case CameraState.Boat:
-            case CameraState.Cannon:
-                SetState(CameraState.Player);
-                break;
         }
     }
 
@@ -149,6 +137,6 @@ public enum CameraState
 {
     MainMenu,
     Player,
-    Boat,
-    Cannon
+    SteeringWheel,
+    Interaction
 }
