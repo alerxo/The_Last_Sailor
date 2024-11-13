@@ -15,14 +15,14 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
 
         input = new();
         input.Player.Fire.performed += Fire_performed;
-        CameraManager.OnStateChanged += CameraManager_OnStateChanged;
+        FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
     }
 
     private void OnDestroy()
     {
         input.Player.Disable();
         input.Player.Fire.performed -= Fire_performed;
-        CameraManager.OnStateChanged -= CameraManager_OnStateChanged;
+        FirstPersonController.OnPlayerStateChanged -= FirstPersonController_OnPlayerStateChanged;
     }
 
     private void Update()
@@ -31,17 +31,15 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
         {
             Vector2 rotation = input.Player.Move.ReadValue<Vector2>();
 
-            if(rotation.x != 0)
+            if (rotation.x != 0)
             {
                 cannon.SetYaw(rotation.x);
             }
 
-            if(rotation.y != 0)
+            if (rotation.y != 0)
             {
                 cannon.SetPitch(rotation.y);
             }
-
-            CameraManager.Instance.SetCannonCameraPosition(cameraTarget);
         }
     }
 
@@ -53,14 +51,18 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
         }
     }
 
-    private void CameraManager_OnStateChanged(CameraState _state)
+    private void FirstPersonController_OnPlayerStateChanged(PlayerState _state)
     {
-        input.Player.Disable();
+        if (_state != PlayerState.Cannon)
+        {
+            input.Player.Disable();
+        }
     }
 
     public void Interact()
     {
-        CameraManager.Instance.SetCannonCamera(cameraTarget);
+        CameraManager.Instance.SetInteractionCamera(cameraTarget);
+        FirstPersonController.instance.SetState(PlayerState.Cannon);
         input.Player.Enable();
     }
 }

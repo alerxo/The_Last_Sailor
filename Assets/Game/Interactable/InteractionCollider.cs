@@ -13,9 +13,10 @@ public class InteractionCollider : MonoBehaviour
     private void Awake()
     {
         input = new();
+        input.Player.Enable();
         input.Player.Interact.performed += Interact_performed;
 
-        CameraManager.OnStateChanged += CameraManager_OnStateChanged;
+        FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
     }
 
     private void OnDestroy()
@@ -23,7 +24,7 @@ public class InteractionCollider : MonoBehaviour
         input.Player.Disable();
         input.Player.Interact.performed -= Interact_performed;
 
-        CameraManager.OnStateChanged -= CameraManager_OnStateChanged;
+        FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
     }
 
     private void Update()
@@ -83,12 +84,24 @@ public class InteractionCollider : MonoBehaviour
 
     private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        current?.Interact();
+        switch (FirstPersonController.instance.State)
+        {
+            case PlayerState.FirstPerson:
+                current?.Interact();
+                break;
+
+            case PlayerState.Cannon:
+            case PlayerState.SteeringWheel:
+            case PlayerState.Throttle:
+                CameraManager.Instance.SetState(CameraState.Player);
+                FirstPersonController.instance.SetState(PlayerState.FirstPerson);
+                break;
+        }
     }
 
-    private void CameraManager_OnStateChanged(CameraState _state)
+    private void FirstPersonController_OnPlayerStateChanged(PlayerState _state)
     {
-        if (_state == CameraState.Player) input.Player.Enable();
+        if (_state != PlayerState.Inactive) input.Player.Enable();
         else input.Player.Disable();
     }
 }

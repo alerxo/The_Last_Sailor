@@ -1,9 +1,15 @@
-using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Assertions;
+using UnityEngine.Events;
 
 public class FirstPersonController : MonoBehaviour
 {
+    public static FirstPersonController instance;
+
     private InputSystem_Actions input;
+
+    public static event UnityAction<PlayerState> OnPlayerStateChanged;
+    public PlayerState State {  get; private set; }
 
     [SerializeField] private LayerMask GroundLayer;
     [SerializeField] private Transform groundCheck;
@@ -23,6 +29,9 @@ public class FirstPersonController : MonoBehaviour
 
     private void Awake()
     {
+        Assert.IsNull(instance); 
+        instance = this;
+
         movementSpeed = walkSpeed;
 
         rb = GetComponent<Rigidbody>();
@@ -38,9 +47,6 @@ public class FirstPersonController : MonoBehaviour
             input.Player.Enable();
         }
 #endif
-
-        CameraManager.OnStateChanged += CameraManager_OnStateChanged;
-        UIManager.OnStateChanged += UIManager_OnStateChanged;
     }
 
     private void OnDestroy()
@@ -50,9 +56,6 @@ public class FirstPersonController : MonoBehaviour
         input.Player.Jump.performed -= Jump_performed;
         input.Player.Sprint.started -= Sprint_started;
         input.Player.Sprint.canceled -= Sprint_canceled;
-
-        CameraManager.OnStateChanged += CameraManager_OnStateChanged;
-        UIManager.OnStateChanged -= UIManager_OnStateChanged;
     }
 
     void Update()
@@ -67,13 +70,10 @@ public class FirstPersonController : MonoBehaviour
         ApplyMovement();
     }
 
-    private void UIManager_OnStateChanged(UIState _state)
+    public void SetState(PlayerState _state)
     {
-        EnableInput();
-    }
-
-    private void CameraManager_OnStateChanged(CameraState _state)
-    {
+        State = _state;
+        OnPlayerStateChanged?.Invoke(State);
         EnableInput();
     }
 
@@ -143,4 +143,13 @@ public class FirstPersonController : MonoBehaviour
             TimeGroundedInSeconds = 0;
         }
     }
+}
+
+public enum PlayerState
+{
+    Inactive,
+    FirstPerson,
+    SteeringWheel,
+    Cannon,
+    Throttle
 }
