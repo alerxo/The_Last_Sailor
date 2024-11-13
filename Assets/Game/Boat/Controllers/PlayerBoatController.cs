@@ -43,5 +43,6 @@ public class PlayerBoatController : Boat
     private void Update()
     {
         ChangeMovement(input.Player.Move.ReadValue<Vector2>());
+        
     }
 }
