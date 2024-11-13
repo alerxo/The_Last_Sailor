@@ -296,10 +296,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 1888060009}
     m_Modifications:
     - target: {fileID: 1405679543623433316, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1405679543623433316, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
       propertyPath: Target.TrackingTarget
       value: 
       objectReference: {fileID: 1556519651}
@@ -307,21 +303,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCamera
       objectReference: {fileID: 0}
-    - target: {fileID: 3358513668011473414, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8017346286965035214, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8017346286965035214, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.5950003
+      value: 7.2250004
       objectReference: {fileID: 0}
     - target: {fileID: 8017346286965035214, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -10.167
       objectReference: {fileID: 0}
     - target: {fileID: 8017346286965035214, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -617,8 +609,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMenuCamera: {fileID: 1711792733}
   playerCamera: {fileID: 321220907}
-  boatCamera: {fileID: 1335631650}
-  cannonCamera: {fileID: 4143653934340279374}
+  steeringWheelCamera: {fileID: 1335631650}
+  interactionCamera: {fileID: 4143653934340279374}
   cinemachineBasicMultiChannelPerlins:
   - {fileID: 2038791549}
   - {fileID: 1335631656}
@@ -674,7 +666,7 @@ GameObject:
   - component: {fileID: 1335631656}
   - component: {fileID: 1335631653}
   m_Layer: 0
-  m_Name: BoatCamera
+  m_Name: SteeringWheelCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -706,8 +698,8 @@ MonoBehaviour:
   Lens:
     FieldOfView: 60
     OrthographicSize: 5
-    NearClipPlane: 0.3
-    FarClipPlane: 1000
+    NearClipPlane: 0.1
+    FarClipPlane: 5000
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -968,8 +960,8 @@ MonoBehaviour:
   Lens:
     FieldOfView: 60
     OrthographicSize: 5
-    NearClipPlane: 0.3
-    FarClipPlane: 1000
+    NearClipPlane: 0.1
+    FarClipPlane: 5000
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -1044,8 +1036,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0.1
+  far clip plane: 5000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1249,7 +1241,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  CustomBlends: {fileID: 0}
+  CustomBlends: {fileID: 11400000, guid: 78302b27d1417d54999a18d03ef83514, type: 2}
 --- !u!1 &1843471714
 GameObject:
   m_ObjectHideFlags: 0
@@ -1535,9 +1527,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2021998518}
     m_Modifications:
+    - target: {fileID: 3304957383089596742, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 3686825542040714063, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.55
+      objectReference: {fileID: 0}
     - target: {fileID: 4602790332532205488, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
       propertyPath: m_Name
       value: PlayerBoat
+      objectReference: {fileID: 0}
+    - target: {fileID: 4888963947303386337, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.55
       objectReference: {fileID: 0}
     - target: {fileID: 6877299985886926126, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1630,7 +1634,7 @@ GameObject:
   - component: {fileID: 3903659264940295230}
   - component: {fileID: 1291700380083066613}
   m_Layer: 0
-  m_Name: CannonCamera
+  m_Name: InteractionCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1692,8 +1696,8 @@ MonoBehaviour:
   Lens:
     FieldOfView: 60.000004
     OrthographicSize: 5
-    NearClipPlane: 0.3
-    FarClipPlane: 1000
+    NearClipPlane: 0.1
+    FarClipPlane: 5000
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:

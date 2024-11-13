@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class Engine : MonoBehaviour
 {
-    private const float POWER = 100000;
-    private const float ACCELERATION = 0.1f;
-    private const float TURN_RADIUS = 3;
-    private const float TURN_SPEEd = 0.3f;
-    private const float STEERING_WHEEL_SPEED = 0.002f;
-    private const float WHEELSPEED = 100;
+    private const float POWER = 100000f;
+    private const float ACCELERATION = 1f;
+    private const float TURN_RADIUS = 3f;
+    private const float TURN_SPEEd = 1f;
+    private const float PADDLE_WHEEL_SPEED = 0.002f;
 
     [Tooltip("The rotating paddlewheel")]
     [SerializeField] private Transform paddleWheel;
 
     private SteeringWheel steeringWheel;
+    private Throttle throttle;
     private Vector2 movement;
     private Rigidbody target;
 
@@ -24,6 +24,7 @@ public class Engine : MonoBehaviour
     {
         target = GetComponentInParent<Rigidbody>();
         steeringWheel = transform.parent.GetComponentInChildren<SteeringWheel>();
+        throttle = transform.parent.GetComponentInChildren<Throttle>();
     }
 
     private void FixedUpdate()
@@ -36,7 +37,7 @@ public class Engine : MonoBehaviour
         if (throttle > 0)
         {
             target.AddForceAtPosition(throttle * transform.forward, transform.position, ForceMode.Force);
-            paddleWheel.Rotate(new Vector3(throttle * STEERING_WHEEL_SPEED * Time.deltaTime, 0, 0));
+            paddleWheel.Rotate(new Vector3(throttle * PADDLE_WHEEL_SPEED * Time.deltaTime, 0, 0));
         }
 
 #if UNITY_EDITOR
@@ -51,18 +52,14 @@ public class Engine : MonoBehaviour
     {
         if (_movement.x != 0)
         {
-            float xPreLerp = movement.x;
             movement.x = Mathf.Clamp(Mathf.Lerp(movement.x, -_movement.x * 1.2f, TURN_SPEEd * Time.deltaTime), -1, 1);
-
-            if (movement.x != xPreLerp)
-            {
-                steeringWheel.rotatingPart.transform.Rotate(new Vector3(0, 0, -_movement.x * WHEELSPEED * Time.deltaTime));
-            }
+            steeringWheel.SetRotation(movement.x);
         }
 
         if (_movement.y != 0)
         {
             movement.y = Mathf.Clamp(Mathf.Lerp(movement.y, _movement.y * 1.2f, ACCELERATION * Time.deltaTime), 0, 1);
+            throttle.SetRotation(movement.y);
         }
     }
 }

@@ -1,13 +1,14 @@
 using UnityEngine;
 
-public class SteeringWheel : MonoBehaviour, IInteractable
+public class Throttle : MonoBehaviour, IInteractable
 {
-    private const float MAX_ROTATION = 170;
+    private const float MAX_ROTATION = 30;
 
     public Vector3 Position => transform.position;
 
     [Tooltip("The rotating part of the mesh")]
     [SerializeField] private Transform rotatingPart;
+    [SerializeField] private Transform cameraTarget;
 
     private InputSystem_Actions input;
     private Boat Boat;
@@ -19,6 +20,8 @@ public class SteeringWheel : MonoBehaviour, IInteractable
         input = new InputSystem_Actions();
 
         FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
+
+        SetRotation(0);
     }
 
     private void OnDestroy()
@@ -29,23 +32,23 @@ public class SteeringWheel : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        Boat.ChangeMovement(new Vector2(input.Player.Move.ReadValue<Vector2>().x, 0));
+        Boat.ChangeMovement(new Vector2(0, input.Player.Move.ReadValue<Vector2>().x));
     }
 
     public void SetRotation(float rotation)
     {
-        rotatingPart.localRotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Lerp(-MAX_ROTATION, MAX_ROTATION, (rotation + 1) / 2)));
+        rotatingPart.localRotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Lerp(-MAX_ROTATION, MAX_ROTATION, (rotation + 1) / 2) - MAX_ROTATION / 2));
     }
 
     public void Interact()
     {
-        CameraManager.Instance.SetState(CameraState.SteeringWheel);
-        FirstPersonController.instance.SetState(PlayerState.SteeringWheel);
+        CameraManager.Instance.SetInteractionCamera(cameraTarget);
+        FirstPersonController.instance.SetState(PlayerState.Throttle);
     }
 
     private void FirstPersonController_OnPlayerStateChanged(PlayerState _state)
     {
-        if (_state == PlayerState.SteeringWheel) input.Player.Enable();
+        if (_state == PlayerState.Throttle) input.Player.Enable();
         else input.Player.Disable();
     }
 }
