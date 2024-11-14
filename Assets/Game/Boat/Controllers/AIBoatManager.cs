@@ -25,7 +25,7 @@ public class AIBoatManager : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
 
         current = ObjectPoolManager.Instance.Spawn<AIBoatController>(position + random, rotation);
-        current.SetTarget(FindFirstObjectByType<PlayerBoatController>());
+        current.SetTarget(FindFirstObjectByType<PlayerBoatController>().GetComponent<Boat>());
         state = AIBoatManagerState.None;
     }
 }
