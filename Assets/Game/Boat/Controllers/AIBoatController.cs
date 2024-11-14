@@ -1,26 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIBoatController : Boat
+public class AIBoatController : MonoBehaviour
 {
     private const float APROACH_DISTANCE = 10f;
     private const float ENGAGEMENT_RANGE = 50f;
-    protected override float MaxHealth => 10;
 
-    private Vector3? destination;
+    private Boat boat;
+    private List<Cannon> leftCannons, rightCannons;
+
     public Boat Target { get; private set; }
+    private Vector3? destination;
     private float distance;
     private Vector3 cross;
-
-    private List<Cannon> leftCannons, rightCannons;
 
 #if UNITY_EDITOR
     [SerializeField] protected bool isDebugMode;
 #endif
 
-    public override void Awake()
+    public void Awake()
     {
-        base.Awake();
+        boat = GetComponent<Boat>();
 
         leftCannons = new();
         rightCannons = new();
@@ -30,9 +30,11 @@ public class AIBoatController : Boat
             if (cannon.transform.localPosition.x > 0) rightCannons.Add(cannon);
             else leftCannons.Add(cannon);
         }
+
+        boat.OnDestroyed += Boat_OnDestroyed;
     }
 
-    public override void Destroyed()
+    private void Boat_OnDestroyed()
     {
         ObjectPoolManager.Instance.Release(this);
     }
@@ -42,7 +44,7 @@ public class AIBoatController : Boat
         if (Target == null) return;
 
         SetDestination();
-        ChangeMovement(GetMovementDirection());
+        boat.ChangeMovement(GetMovementDirection());
         Fire();
 
 #if UNITY_EDITOR
