@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
@@ -18,7 +19,6 @@ public class FirstPersonController : MonoBehaviour
     public PlayerState State { get; private set; }
 
     [SerializeField] private LayerMask GroundLayer;
-    [SerializeField] private Transform groundCheck;
     [SerializeField] private Transform cameraTransform;
 
     private float movementSpeed;
@@ -29,7 +29,8 @@ public class FirstPersonController : MonoBehaviour
     private InputSystem_Actions input;
     private Rigidbody rb;
 
-    private Collider[] collisionResult = new Collider[1];
+    private RaycastHit slopeHit;
+    private readonly Collider[] collisionResult = new Collider[1];
 
 #if UNITY_EDITOR
     [SerializeField] private bool isDebugMode;
@@ -74,8 +75,9 @@ public class FirstPersonController : MonoBehaviour
 
     void FixedUpdate()
     {
-        ApplyMovement();
+        CheckSlope();
         ApplyGravity();
+        ApplyMovement();
     }
 
     public void SetState(PlayerState _state)
@@ -110,24 +112,55 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-    private void ApplyMovement()
+    private void CheckSlope()
     {
-        Vector3 half = new(0, CAPSULE_HEIGHT / 2 * CAPSULE_MARGIN, 0);
-        Vector3 target = rb.position + smoothedMoveDirection * Time.fixedDeltaTime;
+        Physics.Raycast(transform.position, -transform.up, out slopeHit, 2f, GroundLayer, QueryTriggerInteraction.Ignore);
 
-        if (Physics.OverlapCapsuleNonAlloc(target - half, target + half, CAPSULE_RADIUS * CAPSULE_MARGIN, collisionResult, GroundLayer, QueryTriggerInteraction.Ignore) == 0)
+#if UNITY_EDITOR
+        if (isDebugMode)
         {
-            rb.MovePosition(target);
+            Debug.DrawLine(transform.position, transform.position - transform.up, Color.red, Time.fixedDeltaTime);
         }
+#endif
     }
 
     private void ApplyGravity()
     {
-        IsGrounded = Physics.CheckSphere(groundCheck.position, 0.1f, GroundLayer.value);
+        IsGrounded = Physics.CheckBox(transform.position + new Vector3(0, -1.05f, 0), new Vector3(0.5f, 0.05f, 0.5f), Quaternion.identity, GroundLayer, QueryTriggerInteraction.Ignore);
 
-        if (IsGrounded && (TimeGroundedInSeconds += Time.deltaTime) > 0.3)
+        Vector3 gravity = new(0, Physics.gravity.y * Time.fixedDeltaTime, 0);
+
+        if (IsGrounded && (TimeGroundedInSeconds += Time.fixedDeltaTime) > 0.3)
         {
-            rb.AddRelativeForce(0, -15f * Time.deltaTime, 0, ForceMode.VelocityChange);
+            gravity *= 2;
+            //gravity = Vector3.ProjectOnPlane(gravity, slopeHit.normal);
+        }
+
+        rb.AddRelativeForce(gravity, ForceMode.VelocityChange);
+
+#if UNITY_EDITOR
+        if (isDebugMode)
+        {
+            DebugUtil.DrawBox(transform.position + new Vector3(0, -1.05f, 0), Quaternion.identity, new Vector3(1, 0.1f, 1), Color.red, Time.fixedDeltaTime);
+        }
+#endif
+    }
+
+    private void ApplyMovement()
+    {
+        Vector3 moveDirection = smoothedMoveDirection;
+
+        if (IsGrounded)
+        {
+            moveDirection = Vector3.ProjectOnPlane(smoothedMoveDirection, slopeHit.normal);
+        }
+
+        Vector3 half = new(0, CAPSULE_HEIGHT / 2 * CAPSULE_MARGIN, 0);
+        Vector3 target = rb.position + moveDirection * Time.fixedDeltaTime;
+
+        if (Physics.OverlapCapsuleNonAlloc(target - half, target + half, CAPSULE_RADIUS * CAPSULE_MARGIN, collisionResult, GroundLayer, QueryTriggerInteraction.Ignore) == 0)
+        {
+            rb.MovePosition(target);
         }
     }
 
