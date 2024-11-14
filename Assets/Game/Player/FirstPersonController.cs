@@ -127,15 +127,7 @@ public class FirstPersonController : MonoBehaviour
     private void ApplyGravity()
     {
         IsGrounded = Physics.CheckBox(transform.position + new Vector3(0, -1.05f, 0), new Vector3(0.5f, 0.05f, 0.5f), Quaternion.identity, GroundLayer, QueryTriggerInteraction.Ignore);
-
-        Vector3 gravity = new(0, Physics.gravity.y * Time.fixedDeltaTime, 0);
-
-        if (IsGrounded && (TimeGroundedInSeconds += Time.fixedDeltaTime) > 0.3)
-        {
-            gravity *= 2;
-            //gravity = Vector3.ProjectOnPlane(gravity, slopeHit.normal);
-        }
-
+        Vector3 gravity = new(0, Physics.gravity.y * (IsGrounded && (TimeGroundedInSeconds += Time.fixedDeltaTime) > 0.3 ? 2 : 1) * Time.fixedDeltaTime, 0);
         rb.AddRelativeForce(gravity, ForceMode.VelocityChange);
 
 #if UNITY_EDITOR
