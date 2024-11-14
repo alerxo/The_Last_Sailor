@@ -189,7 +189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd6dcdf7c3acb645bdfce3181b3e4f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuoyancyForce: 4
+  BuoyancyForce: 4.3
   Points: {fileID: 11400000, guid: 472e3f1964620d04eb1b2c837096283c, type: 2}
   Info:
     displacement: 0
@@ -204,8 +204,8 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 10000
   m_Drag: 1
-  m_AngularDrag: 3
-  m_CenterOfMass: {x: 0, y: -3, z: 0}
+  m_AngularDrag: 4
+  m_CenterOfMass: {x: 0, y: -3, z: 2.4}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
