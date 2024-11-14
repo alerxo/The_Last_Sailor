@@ -16,9 +16,4 @@ public class PlayerBoatController : Boat
     {
         SceneManager.LoadScene("Game");
     }
-
-    private void Update()
-    {
-        ChangeMovement(input.Player.Move.ReadValue<Vector2>());  
-    }
 }
