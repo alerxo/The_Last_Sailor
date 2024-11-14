@@ -1,19 +1,24 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
 
 public class FirstPersonController : MonoBehaviour
 {
+    private const float WALK_SPEED = 6f;
+    private const float SPRINT_SPEED = 10f;
+    private const float JUMP_FORCE = 5f;
+    private const float ACCELERATION = 7f;
+    private const float CAPSULE_HEIGHT = 1f;
+    private const float CAPSULE_RADIUS = 0.5f;
+    private const float CAPSULE_MARGIN = 0.9f;
+
     public static FirstPersonController instance;
 
-    private InputSystem_Actions input;
-
     public static event UnityAction<PlayerState> OnPlayerStateChanged;
-    public PlayerState State {  get; private set; }
+    public PlayerState State { get; private set; }
 
     [SerializeField] private LayerMask GroundLayer;
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private float walkSpeed, sprintSpeed, jumpForce, acceleration;
     [SerializeField] private Transform cameraTransform;
 
     private float movementSpeed;
@@ -21,7 +26,11 @@ public class FirstPersonController : MonoBehaviour
     private bool IsGrounded;
     private float TimeGroundedInSeconds;
 
+    private InputSystem_Actions input;
     private Rigidbody rb;
+
+    private RaycastHit slopeHit;
+    private readonly Collider[] collisionResult = new Collider[1];
 
 #if UNITY_EDITOR
     [SerializeField] private bool isDebugMode;
@@ -29,10 +38,10 @@ public class FirstPersonController : MonoBehaviour
 
     private void Awake()
     {
-        Assert.IsNull(instance); 
+        Assert.IsNull(instance);
         instance = this;
 
-        movementSpeed = walkSpeed;
+        movementSpeed = WALK_SPEED;
 
         rb = GetComponent<Rigidbody>();
 
@@ -61,12 +70,13 @@ public class FirstPersonController : MonoBehaviour
     void Update()
     {
         GetMoveDirection();
-        ApplyGravity();
         RotatePlayerTowardsCamera();
     }
 
     void FixedUpdate()
     {
+        CheckSlope();
+        ApplyGravity();
         ApplyMovement();
     }
 
@@ -83,9 +93,11 @@ public class FirstPersonController : MonoBehaviour
         else input.Player.Disable();
     }
 
-    private void ApplyMovement()
+    private void GetMoveDirection()
     {
-        rb.MovePosition(rb.position + smoothedMoveDirection * Time.fixedDeltaTime);
+        Vector2 inputDirection = input.Player.Move.ReadValue<Vector2>().normalized;
+        Vector3 moveDirection = transform.TransformDirection(new Vector3(inputDirection.x, 0, inputDirection.y) * movementSpeed);
+        smoothedMoveDirection = Vector3.Lerp(smoothedMoveDirection, moveDirection, ACCELERATION * Time.deltaTime);
     }
 
     private void RotatePlayerTowardsCamera()
@@ -100,31 +112,58 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-    private void GetMoveDirection()
+    private void CheckSlope()
     {
-        Vector2 inputDirection = input.Player.Move.ReadValue<Vector2>().normalized;
-        Vector3 moveDirection = transform.TransformDirection(new Vector3(inputDirection.x, 0, inputDirection.y) * movementSpeed);
-        smoothedMoveDirection = Vector3.Lerp(smoothedMoveDirection, moveDirection, acceleration * Time.deltaTime);
+        Physics.Raycast(transform.position, -transform.up, out slopeHit, 2f, GroundLayer, QueryTriggerInteraction.Ignore);
+
+#if UNITY_EDITOR
+        if (isDebugMode)
+        {
+            Debug.DrawLine(transform.position, transform.position - transform.up, Color.red, Time.fixedDeltaTime);
+        }
+#endif
     }
 
     private void ApplyGravity()
     {
-        IsGrounded = Physics.CheckSphere(groundCheck.position, 0.1f, GroundLayer.value);
+        IsGrounded = Physics.CheckBox(transform.position + new Vector3(0, -1.05f, 0), new Vector3(0.5f, 0.05f, 0.5f), Quaternion.identity, GroundLayer, QueryTriggerInteraction.Ignore);
+        Vector3 gravity = new(0, Physics.gravity.y * (IsGrounded && (TimeGroundedInSeconds += Time.fixedDeltaTime) > 0.3 ? 2 : 1) * Time.fixedDeltaTime, 0);
+        rb.AddRelativeForce(gravity, ForceMode.VelocityChange);
 
-        if (IsGrounded && (TimeGroundedInSeconds += Time.deltaTime) > 0.3)
+#if UNITY_EDITOR
+        if (isDebugMode)
         {
-            rb.AddRelativeForce(0, -15f * Time.deltaTime, 0, ForceMode.VelocityChange);
+            DebugUtil.DrawBox(transform.position + new Vector3(0, -1.05f, 0), Quaternion.identity, new Vector3(1, 0.1f, 1), Color.red, Time.fixedDeltaTime);
+        }
+#endif
+    }
+
+    private void ApplyMovement()
+    {
+        Vector3 moveDirection = smoothedMoveDirection;
+
+        if (IsGrounded)
+        {
+            moveDirection = Vector3.ProjectOnPlane(smoothedMoveDirection, slopeHit.normal);
+        }
+
+        Vector3 half = new(0, CAPSULE_HEIGHT / 2 * CAPSULE_MARGIN, 0);
+        Vector3 target = rb.position + moveDirection * Time.fixedDeltaTime;
+
+        if (Physics.OverlapCapsuleNonAlloc(target - half, target + half, CAPSULE_RADIUS * CAPSULE_MARGIN, collisionResult, GroundLayer, QueryTriggerInteraction.Ignore) == 0)
+        {
+            rb.MovePosition(target);
         }
     }
 
     private void Sprint_started(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        movementSpeed = sprintSpeed;
+        movementSpeed = SPRINT_SPEED;
     }
 
     private void Sprint_canceled(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        movementSpeed = walkSpeed;
+        movementSpeed = WALK_SPEED;
     }
 
     private void Jump_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
@@ -132,14 +171,14 @@ public class FirstPersonController : MonoBehaviour
 #if UNITY_EDITOR
         if (isDebugMode)
         {
-            rb.AddRelativeForce(0, jumpForce, 0, ForceMode.VelocityChange);
+            rb.AddRelativeForce(0, JUMP_FORCE, 0, ForceMode.VelocityChange);
             TimeGroundedInSeconds = 0;
-        } 
+        }
 #endif
 
         if (IsGrounded)
         {
-            rb.AddRelativeForce(0, jumpForce, 0, ForceMode.VelocityChange);
+            rb.AddRelativeForce(0, JUMP_FORCE, 0, ForceMode.VelocityChange);
             TimeGroundedInSeconds = 0;
         }
     }
