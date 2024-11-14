@@ -1,8 +1,12 @@
 using UnityEngine;
+using UnityEngine.Events;
 
-public abstract class Boat : MonoBehaviour, IDamageable
+public class Boat : MonoBehaviour, IDamageable
 {
-    protected abstract float MaxHealth { get; }
+    public event UnityAction OnDestroyed;
+    public event UnityAction OnDamaged;
+
+    [SerializeField] private float MaxHealth;
     private float health;
     private Engine engine;
 
@@ -22,18 +26,14 @@ public abstract class Boat : MonoBehaviour, IDamageable
     {
         if ((health -= _damage) == 0)
         {
-            Destroyed();
+            OnDestroyed?.Invoke();
         }
 
         else
         {
-            OnHit();
+            OnDamaged?.Invoke();
         }
     }
-
-    protected virtual void OnHit() { }
-
-    public abstract void Destroyed();
 
     public void ChangeMovement(Vector2 _direction)
     {

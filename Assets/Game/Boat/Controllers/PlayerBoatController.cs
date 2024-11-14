@@ -1,19 +1,25 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerBoatController : Boat
+public class PlayerBoatController : MonoBehaviour
 {
-    protected override float MaxHealth => 100;
+    private Boat boat;
 
-    protected override void OnHit()
+    private void Awake()
     {
-        base.OnHit();
+        boat = GetComponent<Boat>();
 
-        CameraManager.Instance.ShakeCamera(1f, 0.7f);
+        boat.OnDestroyed += Boat_OnDestroyed;
+        boat.OnDamaged += Boat_OnDamaged;
     }
 
-    public override void Destroyed()
+    private void Boat_OnDestroyed()
     {
         SceneManager.LoadScene("Game");
+    }
+
+    private void Boat_OnDamaged()
+    {
+        CameraManager.Instance.ShakeCamera(1.5f, 0.7f);
     }
 }
