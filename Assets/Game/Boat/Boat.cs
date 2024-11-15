@@ -7,12 +7,19 @@ public class Boat : MonoBehaviour, IDamageable
     public event UnityAction OnDamaged;
 
     [SerializeField] private float MaxHealth;
+    [SerializeField] Transform COM;
     private float health;
     private Engine engine;
 
     public virtual void Awake()
     {
         engine = GetComponentInChildren<Engine>();
+        GetComponent<Rigidbody>().centerOfMass = COM.localPosition;
+        engine.transform.localPosition = new Vector3(engine.transform.localPosition.x,COM.localPosition.y,engine.transform.localPosition.z);
+    }
+    void Update()// ta bort efter 20/11
+    {
+        GetComponent<Rigidbody>().centerOfMass = COM.localPosition; 
     }
 
     private void OnEnable()
