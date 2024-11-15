@@ -10,8 +10,8 @@ public class CombatManager : MonoBehaviour
     private const float SPAWN_DISTANCE = 1000f;
     private const float DESPAWN_DISTANCE = 1000f;
     private const float RING_OF_FIRE = 1000f;
-    private const int MAX_BOAT_COUNT = 100;
-    private const float SPAWN_COOLDOWN = 60f;
+    private const int MAX_BOAT_COUNT = 5;
+    private const float SPAWN_COOLDOWN = 30f;
 
     private readonly List<AIBoatController> boats = new();
 
