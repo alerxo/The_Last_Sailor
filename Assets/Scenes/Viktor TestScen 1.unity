@@ -11721,12 +11721,12 @@ Camera:
   m_ShutterSpeed: 0.005
   m_Aperture: 16
   m_FocusDistance: 10
-  m_FocalLength: 50
+  m_FocalLength: 13.858139
   m_BladeCount: 5
   m_Curvature: {x: 2, y: 11}
   m_BarrelClipping: 0.25
   m_Anamorphism: 0
-  m_SensorSize: {x: 36, y: 24}
+  m_SensorSize: {x: 21.946, y: 16.002}
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
@@ -14590,105 +14590,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2142894475}
     m_Modifications:
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: ripples
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: largeChaos
-      value: 0.664
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: underWater
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: causticsBand
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: tessellation
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: endSmoothness
-      value: 0.70447886
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: startSmoothness
-      value: 0.8044788
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: heightScattering
-      value: 0.315
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: ripplesWindSpeed
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: ambientScattering
-      value: 0.513
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: scatteringColor.b
-      value: 0.13563335
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: scatteringColor.g
-      value: 0.08982185
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: scatteringColor.r
-      value: 0.02121901
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: absorptionDistance
-      value: 3.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: underWaterRefraction
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: displacementScattering
-      value: 0.374
-      objectReference: {fileID: 0}
     - target: {fileID: 3924458489242471966, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
       propertyPath: m_Name
       value: Sun And Ocean Controller
-      objectReference: {fileID: 0}
-    - target: {fileID: 3924458489242471966, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686294435663309846, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.8794495
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686294435663309846, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.36091548
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686294435663309846, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.28710014
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686294435663309846, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.11782246
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686294435663309846, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 34.552
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686294435663309846, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 45.758
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686294435663309846, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 30.215
       objectReference: {fileID: 0}
     - target: {fileID: 6511450991575843894, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14729,10 +14633,6 @@ PrefabInstance:
     - target: {fileID: 6511450991575843894, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7768106205998226639, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: m_Layer
-      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
