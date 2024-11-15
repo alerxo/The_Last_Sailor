@@ -3,8 +3,8 @@ using UnityEngine;
 public class Cannonball : MonoBehaviour
 {
     private const float DAMAGE = 10;
-    private const float waterHeight = -5f;
-    private const float destructionCooldown = 3f;
+    private const float WATER_HEIGHT = -5f;
+    private const float DESTRUCTION_COOLDOWN = 3f;
 
     private CannonballState state;
     private IDamageable ignore;
@@ -24,7 +24,7 @@ public class Cannonball : MonoBehaviour
 
     private void OnEnable()
     {
-        SetState(CannonballState.Flying);
+        SetState(CannonballState.Active);
     }
 
     private void OnDisable()
@@ -36,24 +36,30 @@ public class Cannonball : MonoBehaviour
     {
         switch (state)
         {
+            case CannonballState.Active:
+                ActiveState();
+                break;
+
             case CannonballState.PendingDestruction:
-
-                if ((destructionTimer -= Time.deltaTime) <= 0)
-                {
-                    SetState(CannonballState.Destruction);
-                }
-
+                PendingDestructionState();
                 break;
+        }
+    }
 
-            case CannonballState.Flying:
+    private void PendingDestructionState()
+    {
+        if ((destructionTimer -= Time.deltaTime) <= 0)
+        {
+            SetState(CannonballState.Destruction);
+        }
+    }
 
-                if (state == CannonballState.Flying && transform.position.y < waterHeight)
-                {
-                    waterImpact.Play();
-                    SetState(CannonballState.PendingDestruction);
-                }
-
-                break;
+    private void ActiveState()
+    {
+        if (state == CannonballState.Active && transform.position.y < WATER_HEIGHT)
+        {
+            waterImpact.Play();
+            SetState(CannonballState.PendingDestruction);
         }
     }
 
@@ -82,7 +88,11 @@ public class Cannonball : MonoBehaviour
 
         switch (state)
         {
-            case CannonballState.Flying:
+            case CannonballState.Disabled:
+                destructionTimer = DESTRUCTION_COOLDOWN;
+                break;
+
+            case CannonballState.Active:
                 rb.useGravity = true;
                 meshRenderer.enabled = true;
                 break;
@@ -97,19 +107,14 @@ public class Cannonball : MonoBehaviour
             case CannonballState.Destruction:
                 ObjectPoolManager.Instance.Release(this);
                 break;
-
-            case CannonballState.Disabled:
-                destructionTimer = destructionCooldown;
-                break;
-
         }
     }
 }
 
 public enum CannonballState
 {
-    Flying,
+    Disabled,
+    Active,
     PendingDestruction,
-    Destruction,
-    Disabled
+    Destruction
 }

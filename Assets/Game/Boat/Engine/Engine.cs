@@ -48,18 +48,15 @@ public class Engine : MonoBehaviour
 #endif
     }
 
-    public void ChangeMovement(Vector2 _movement)
+    public void ChangeRudder(float _rudder)
     {
-        if (_movement.x != 0)
-        {
-            movement.x = Mathf.Clamp(Mathf.Lerp(movement.x, -_movement.x * 1.2f, TURN_SPEEd * Time.deltaTime), -1, 1);
-            steeringWheel.SetRotation(movement.x);
-        }
+        movement.x = Mathf.Clamp(Mathf.Lerp(movement.x, -_rudder * 1.2f, TURN_SPEEd * Time.deltaTime), -1, 1);
+        steeringWheel.SetRotation(movement.x);
+    }
 
-        if (_movement.y != 0)
-        {
-            movement.y = Mathf.Clamp(Mathf.Lerp(movement.y, _movement.y * 1.2f, ACCELERATION * Time.deltaTime), 0, 1);
-            throttle.SetRotation(movement.y);
-        }
+    public void ChangeThrottle(float _throttle)
+    {
+        movement.y = Mathf.Clamp(Mathf.Lerp(movement.y, _throttle * 1.2f, ACCELERATION * Time.deltaTime), 0, 1);
+        throttle.SetRotation(movement.y);
     }
 }
