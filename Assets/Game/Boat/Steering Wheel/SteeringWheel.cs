@@ -29,7 +29,10 @@ public class SteeringWheel : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        Boat.ChangeMovement(new Vector2(input.Player.Move.ReadValue<Vector2>().x, 0));
+        if (input.Player.Move.ReadValue<Vector2>().x != 0)
+        {
+            Boat.Engine.ChangeRudder(input.Player.Move.ReadValue<Vector2>().x);
+        }
     }
 
     public void SetRotation(float rotation)

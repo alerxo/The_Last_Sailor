@@ -6,6 +6,7 @@ public class Buoyancy : MonoBehaviour
     public static readonly Vector3 POINT_SCALE = new(2f, 2f, 4f);
 
     public float BuoyancyForce = 1f;
+    private float startBuoyancy;
 
     public BuoyancyPoints Points;
     public float PointMass { get; private set; }
@@ -19,6 +20,9 @@ public class Buoyancy : MonoBehaviour
     {
         Rb = GetComponent<Rigidbody>();
         PointMass = Rb.mass / Points.Values.Length;
+        startBuoyancy = BuoyancyForce;
+
+        SetDefault();
     }
 
     private void OnEnable()
@@ -35,6 +39,11 @@ public class Buoyancy : MonoBehaviour
         {
             BuoyancyManager.Instance.SetBuffers(this);
         }
+    }
+
+    public void SetDefault()
+    {
+        BuoyancyForce = startBuoyancy;
     }
 }
 

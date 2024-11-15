@@ -399,12 +399,12 @@ GameObject:
   - component: {fileID: 564866446082053032}
   - component: {fileID: 7300662342679320267}
   m_Layer: 0
-  m_Name: CannonBall
+  m_Name: Cannonball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5463521244612067422
 Transform:
   m_ObjectHideFlags: 0
@@ -436,7 +436,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb5f5352e47feab4a9be85a4db41a824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
   boatImpact: {fileID: 3700719852418523581}
   waterImpact: {fileID: 6710568974709871637}
 --- !u!54 &7300662342679320267

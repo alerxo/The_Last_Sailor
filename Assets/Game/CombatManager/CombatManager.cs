@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -11,8 +10,8 @@ public class CombatManager : MonoBehaviour
     private const float SPAWN_DISTANCE = 1000f;
     private const float DESPAWN_DISTANCE = 1000f;
     private const float RING_OF_FIRE = 1000f;
-    private const int MAX_BOAT_COUNT = 5;
-    private const float SPAWN_COOLDOWN = 30f;
+    private const int MAX_BOAT_COUNT = 100;
+    private const float SPAWN_COOLDOWN = 60f;
 
     private readonly List<AIBoatController> boats = new();
 
@@ -73,14 +72,20 @@ public class CombatManager : MonoBehaviour
 
     private void InCombatState()
     {
+        bool isInCombat = false;
+
         foreach (AIBoatController boat in boats)
         {
             if (boat.Target != null)
             {
-                if(Vector3.Distance(boat.transform.position, boat.Target.transform.position) > RING_OF_FIRE)
+                if (Vector3.Distance(boat.transform.position, boat.Target.transform.position) > RING_OF_FIRE)
                 {
                     boat.SetTarget(null);
-                    combatState = CombatState.OutOfCombat;
+                }
+
+                else
+                {
+                    isInCombat = true;
                 }
 
                 continue;
@@ -101,6 +106,11 @@ public class CombatManager : MonoBehaviour
                 boat.SetDestination(GetPositionOutSideRingOfFire());
             }
         }
+
+        if (!isInCombat)
+        {
+            combatState = CombatState.OutOfCombat;
+        }
     }
 
     private void SpawnBoat()
@@ -114,7 +124,7 @@ public class CombatManager : MonoBehaviour
 
     private IEnumerator SpawnTimer()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
 
         Vector3 position = playerBoatController.transform.position + GetPositionOutSideRingOfFire();
         Quaternion rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
@@ -142,12 +152,18 @@ public class CombatManager : MonoBehaviour
 
     public void AddBoat(AIBoatController _boat)
     {
-        boats.Add(_boat);
+        if (!boats.Contains(_boat))
+        {
+            boats.Add(_boat);
+        }
     }
 
     public void RemoveBoat(AIBoatController _boat)
     {
-        boats.Remove(_boat);
+        if (boats.Contains(_boat))
+        {
+            boats.Remove(_boat);
+        }
     }
 }
 

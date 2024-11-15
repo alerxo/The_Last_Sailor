@@ -32,7 +32,10 @@ public class Throttle : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        Boat.ChangeMovement(new Vector2(0, input.Player.Move.ReadValue<Vector2>().x));
+        if (input.Player.Move.ReadValue<Vector2>().x != 0)
+        {
+            Boat.Engine.ChangeThrottle(input.Player.Move.ReadValue<Vector2>().x);
+        }
     }
 
     public void SetRotation(float rotation)

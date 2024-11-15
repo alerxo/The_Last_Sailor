@@ -6,6 +6,9 @@ public class AIBoatController : MonoBehaviour
     private const float APROACH_DISTANCE = 10f;
     private const float ENGAGEMENT_RANGE = 50f;
     private const float ARRIVAL_RANGE = 10f;
+    private const float DESTRUCTION_COOLDOWN = 1f;
+
+    private AIBoatControllerState state;
 
     private Boat boat;
     private List<Cannon> leftCannons, rightCannons;
@@ -14,6 +17,8 @@ public class AIBoatController : MonoBehaviour
     public Vector3? Destination { get; private set; }
     private float distance;
     private Vector3 cross;
+
+    private float destructionTimer;
 
 #if UNITY_EDITOR
     [SerializeField] protected bool isDebugMode;
@@ -37,33 +42,50 @@ public class AIBoatController : MonoBehaviour
 
     public void OnEnable()
     {
-        CombatManager.Instance.AddBoat(this);
+        SetState(AIBoatControllerState.Active);
     }
 
     public void OnDisable()
     {
-        CombatManager.Instance.RemoveBoat(this);
-    }
-
-    private void Boat_OnDestroyed()
-    {
-        ObjectPoolManager.Instance.Release(this);
+        SetState(AIBoatControllerState.Disabled);
     }
 
     private void Update()
     {
-        boat.ChangeMovement(GetMovementDirection());
-
-        if (Target == null)
+        switch (state)
         {
-            CheckIfArrived();
-        }
+            case AIBoatControllerState.Active:
+                ActiveState();
+                break;
 
-        else
+            case AIBoatControllerState.PendingDestruction:
+                PendingDestructionState();
+                break;
+        }
+    }
+
+    private void PendingDestructionState()
+    {
+        if ((destructionTimer -= Time.deltaTime) <= 0)
+        {
+            SetState(AIBoatControllerState.Destruction);
+        }
+    }
+
+    private void ActiveState()
+    {
+        if (Target != null)
         {
             SetDestinationAtTarget();
             Fire();
         }
+
+        else if (Destination != null)
+        {
+            CheckIfArrived();
+        }
+
+        SetMovement();
 
 #if UNITY_EDITOR
         if (isDebugMode && Destination != null)
@@ -74,22 +96,22 @@ public class AIBoatController : MonoBehaviour
 #endif
     }
 
-    private Vector2 GetMovementDirection()
+    private void SetMovement()
     {
-        Vector2 movement = Vector2.zero;
-
         if (Destination == null)
         {
-            return movement;
+            distance = 0;
+            cross = Vector3.zero;
+            boat.Engine.ChangeThrottle(0);
         }
 
-        distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(Destination.Value.x, Destination.Value.z));
-        movement.y = distance < APROACH_DISTANCE ? distance / (APROACH_DISTANCE * 0.25f) : 1;
-
-        cross = Vector3.Cross((transform.position - Destination.Value).normalized, transform.forward);
-        movement.x = cross.y;
-
-        return movement;
+        else
+        {
+            distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(Destination.Value.x, Destination.Value.z));
+            boat.Engine.ChangeThrottle(distance < APROACH_DISTANCE ? distance / (APROACH_DISTANCE * 0.25f) : 1);
+            cross = Vector3.Cross((transform.position - Destination.Value).normalized, transform.forward);
+            boat.Engine.ChangeRudder(cross.y);
+        }
     }
 
     public void SetDestinationAtTarget()
@@ -147,4 +169,61 @@ public class AIBoatController : MonoBehaviour
     {
         Target = _target;
     }
+
+    private void Boat_OnDestroyed()
+    {
+        CombatManager.Instance.RemoveBoat(this);
+        Target = null;
+        Destination = null;
+
+        StartCoroutine(boat.SinkAtSurface(OnSunkAtSurface));
+    }
+
+    private void OnSunkAtSurface()
+    {
+        StartCoroutine(boat.SinkToBottom(OnSunkAtBottom));
+    }
+
+    private void OnSunkAtBottom()
+    {
+        SetState(AIBoatControllerState.PendingDestruction);
+    }
+
+    private void SetState(AIBoatControllerState _state)
+    {
+        state = _state;
+
+        switch (state)
+        {
+            case AIBoatControllerState.Disabled:
+                destructionTimer = DESTRUCTION_COOLDOWN;
+                break;
+
+            case AIBoatControllerState.Active:
+                CombatManager.Instance.AddBoat(this);
+                break;
+
+            case AIBoatControllerState.PendingDestruction:
+                CombatManager.Instance.RemoveBoat(this);
+                boat.SetDefault();
+                boat.Buoyancy.SetDefault();
+                boat.RigidBody.linearVelocity = Vector3.zero;
+                boat.RigidBody.angularVelocity = Vector3.zero;
+                Target = null;
+                Destination = null;
+                break;
+
+            case AIBoatControllerState.Destruction:
+                ObjectPoolManager.Instance.Release(this);
+                break;
+        }
+    }
+}
+
+public enum AIBoatControllerState
+{
+    Disabled,
+    Active,
+    PendingDestruction,
+    Destruction
 }

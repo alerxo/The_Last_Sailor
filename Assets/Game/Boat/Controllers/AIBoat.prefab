@@ -360,11 +360,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 630431310281460194, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
       propertyPath: MaxHealth
-      value: 50
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7565428663125270620, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
       propertyPath: m_Name
       value: AIBoat
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565428663125270620, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
