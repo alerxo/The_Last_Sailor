@@ -547,7 +547,7 @@ GameObject:
   - component: {fileID: 913297620}
   - component: {fileID: 913297618}
   - component: {fileID: 913297622}
-  - component: {fileID: 913297623}
+  - component: {fileID: 913297624}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -631,10 +631,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabs:
-  - {fileID: 5960112200911159277, guid: 3bad0d0818fbf9e4b8125aa6dc3068de, type: 3}
+  - {fileID: 0}
   - {fileID: 564866446082053032, guid: 4eb76afa5b9da714594904dcf4d6db47, type: 3}
   parent: {fileID: 354970143}
---- !u!114 &913297623
+--- !u!114 &913297624
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -643,7 +643,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 913297616}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20b256e8c1e6eba42a4f4c2165887b82, type: 3}
+  m_Script: {fileID: 11500000, guid: 75996c0e1ae757e489a7e39414d9e795, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &937039643 stripped

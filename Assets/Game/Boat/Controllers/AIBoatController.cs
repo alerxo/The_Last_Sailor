@@ -5,12 +5,13 @@ public class AIBoatController : MonoBehaviour
 {
     private const float APROACH_DISTANCE = 10f;
     private const float ENGAGEMENT_RANGE = 50f;
+    private const float ARRIVAL_RANGE = 10f;
 
     private Boat boat;
     private List<Cannon> leftCannons, rightCannons;
 
     public Boat Target { get; private set; }
-    private Vector3? destination;
+    public Vector3? Destination { get; private set; }
     private float distance;
     private Vector3 cross;
 
@@ -34,6 +35,16 @@ public class AIBoatController : MonoBehaviour
         boat.OnDestroyed += Boat_OnDestroyed;
     }
 
+    public void OnEnable()
+    {
+        CombatManager.Instance.AddBoat(this);
+    }
+
+    public void OnDisable()
+    {
+        CombatManager.Instance.RemoveBoat(this);
+    }
+
     private void Boat_OnDestroyed()
     {
         ObjectPoolManager.Instance.Release(this);
@@ -41,16 +52,24 @@ public class AIBoatController : MonoBehaviour
 
     private void Update()
     {
-        if (Target == null) return;
-
-        SetDestination();
         boat.ChangeMovement(GetMovementDirection());
-        Fire();
+
+        if (Target == null)
+        {
+            CheckIfArrived();
+        }
+
+        else
+        {
+            SetDestinationAtTarget();
+            Fire();
+        }
 
 #if UNITY_EDITOR
-        if (isDebugMode)
+        if (isDebugMode && Destination != null)
         {
-            DebugUtil.DrawBox(destination.Value, Quaternion.identity, Vector3.one, Color.green, Time.deltaTime);
+            DebugUtil.DrawBox(Destination.Value, Quaternion.identity, Vector3.one, Target == null ? Color.green : Color.red, Time.deltaTime);
+            Debug.DrawLine(transform.position, Destination.Value, Target == null ? Color.green : Color.red, Time.deltaTime);
         }
 #endif
     }
@@ -59,37 +78,32 @@ public class AIBoatController : MonoBehaviour
     {
         Vector2 movement = Vector2.zero;
 
-        if (destination == null)
+        if (Destination == null)
         {
             return movement;
         }
 
-        distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(destination.Value.x, destination.Value.z));
+        distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(Destination.Value.x, Destination.Value.z));
         movement.y = distance < APROACH_DISTANCE ? distance / (APROACH_DISTANCE * 0.25f) : 1;
 
-        cross = Vector3.Cross((transform.position - destination.Value).normalized, transform.forward);
+        cross = Vector3.Cross((transform.position - Destination.Value).normalized, transform.forward);
         movement.x = cross.y;
 
         return movement;
     }
 
-    public void SetDestination()
+    public void SetDestinationAtTarget()
     {
         if (Vector3.Distance(Target.transform.position + (Target.transform.right * ENGAGEMENT_RANGE), transform.position) <
             Vector3.Distance(Target.transform.position - (Target.transform.right * ENGAGEMENT_RANGE), transform.position))
         {
-            destination = Target.transform.position + (Target.transform.right * ENGAGEMENT_RANGE);
+            SetDestination(Target.transform.position + (Target.transform.right * ENGAGEMENT_RANGE));
         }
 
         else
         {
-            destination = Target.transform.position - (Target.transform.right * ENGAGEMENT_RANGE);
+            SetDestination(Target.transform.position - (Target.transform.right * ENGAGEMENT_RANGE));
         }
-    }
-
-    public void SetTarget(Boat _target)
-    {
-        Target = _target;
     }
 
     private void Fire()
@@ -114,5 +128,23 @@ public class AIBoatController : MonoBehaviour
                 cannon.Fire();
             }
         }
+    }
+
+    private void CheckIfArrived()
+    {
+        if (Vector3.Distance(transform.position, Destination.Value) < ARRIVAL_RANGE)
+        {
+            Destination = null;
+        }
+    }
+
+    public void SetDestination(Vector3 _destination)
+    {
+        Destination = _destination;
+    }
+
+    public void SetTarget(Boat _target)
+    {
+        Target = _target;
     }
 }

@@ -360,7 +360,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 630431310281460194, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
       propertyPath: MaxHealth
-      value: 10
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7565428663125270620, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
       propertyPath: m_Name
@@ -390,14 +390,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7565428663125270620, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5960112200911159277}
+      addedObject: {fileID: 1304222455834577700}
   m_SourcePrefab: {fileID: 100100000, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
 --- !u!1 &686801256702438833 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7565428663125270620, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
   m_PrefabInstance: {fileID: 7022747151728479725}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5960112200911159277
+--- !u!114 &1304222455834577700
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
