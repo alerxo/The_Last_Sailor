@@ -15,6 +15,7 @@ public class Boat : MonoBehaviour, IDamageable
     {
         engine = GetComponentInChildren<Engine>();
         GetComponent<Rigidbody>().centerOfMass = COM.localPosition;
+        engine.transform.localPosition = new Vector3(engine.transform.localPosition.x,COM.localPosition.y,engine.transform.localPosition.z);
     }
     void Update()// ta bort efter 20/11
     {
