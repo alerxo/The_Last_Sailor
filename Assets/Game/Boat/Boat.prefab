@@ -274,7 +274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scaleMode: 1
   regionSize: {x: 10, y: 30.19}
-  amplitude: 83.87
+  amplitude: 0
   surfaceFoamDimmer: 1
   deepFoamDimmer: 0.664
   resolution: {x: 256, y: 256}
