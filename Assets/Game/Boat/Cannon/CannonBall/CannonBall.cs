@@ -12,6 +12,7 @@ public class Cannonball : MonoBehaviour
     private float destructionTimer;
 
     [SerializeField] private AudioSource boatImpact, waterImpact;
+    [SerializeField] private GameObject explosion;
 
     private Rigidbody rb;
     private MeshRenderer meshRenderer;
@@ -71,6 +72,8 @@ public class Cannonball : MonoBehaviour
 
         if (_damageable != ignore && _damageable != null)
         {
+            Destroy(Instantiate(explosion,transform.position,transform.rotation),5); // lär behöva enablas / disablas med canon kulan så det poolas. Jag vet inte riktigt hur jag gör det med din kod /viktor
+
             _damageable.Damage(DAMAGE);
             boatImpact.Play();
             SetState(CannonballState.PendingDestruction);
