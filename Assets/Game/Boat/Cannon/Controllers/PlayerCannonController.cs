@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerCannonController : MonoBehaviour, IInteractable
 {
+    private const float ROTATION_SPEED = 2.5f;
+
     [Tooltip("Target for the cannon camera")]
     [SerializeField] private Transform cameraTarget;
 
@@ -29,18 +31,23 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        Vector2 rotation = input.Player.Move.ReadValue<Vector2>();
+        Vector2 rotation = input.Player.Look.ReadValue<Vector2>();
+
+        if (rotation.magnitude == 0)
+        {
+            rotation = input.Player.Move.ReadValue<Vector2>();
+        }
 
         if (rotation.magnitude > 0)
         {
             if (rotation.x != 0)
             {
-                cannon.SetYaw(rotation.x);
+                cannon.SetYaw(Mathf.Clamp(rotation.x, -ROTATION_SPEED, ROTATION_SPEED));
             }
 
             if (rotation.y != 0)
             {
-                cannon.SetPitch(rotation.y);
+                cannon.SetPitch(Mathf.Clamp(rotation.y, -ROTATION_SPEED, ROTATION_SPEED));
             }
         }
     }
