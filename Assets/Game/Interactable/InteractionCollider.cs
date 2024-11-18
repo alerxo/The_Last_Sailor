@@ -35,7 +35,7 @@ public class InteractionCollider : MonoBehaviour
 
     private void Update()
     {
-        if (interactablesInRange.Count == 0 || CameraManager.Instance.State != CameraState.Player)
+        if (player.State != PlayerState.FirstPerson || interactablesInRange.Count == 0 || CameraManager.Instance.State != CameraState.Player)
         {
             if (current != null)
             {

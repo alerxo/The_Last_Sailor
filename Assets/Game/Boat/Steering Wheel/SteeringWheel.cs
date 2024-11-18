@@ -18,6 +18,7 @@ public class SteeringWheel : MonoBehaviour, IInteractable
         Boat = GetComponentInParent<Boat>();
 
         input = new InputSystem_Actions();
+        input.Player.ChangeCamera.performed += ChangeCamera_performed;
 
         FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
     }
@@ -25,6 +26,7 @@ public class SteeringWheel : MonoBehaviour, IInteractable
     private void OnDestroy()
     {
         input.Player.Disable();
+        input.Player.ChangeCamera.performed -= ChangeCamera_performed;
         FirstPersonController.OnPlayerStateChanged -= FirstPersonController_OnPlayerStateChanged;
     }
 
@@ -43,8 +45,25 @@ public class SteeringWheel : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        CameraManager.Instance.SetState(CameraState.SteeringWheel);
         FirstPersonController.instance.SetState(PlayerState.SteeringWheel);
+    }
+
+    private void ChangeCamera_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    {
+        switch (CameraManager.Instance.State)
+        {
+            case CameraState.Player:
+                CameraManager.Instance.SetState(CameraState.SteeringWheel);
+                break;
+
+            case CameraState.SteeringWheel:
+                CameraManager.Instance.SetState(CameraState.Player);
+                break;
+
+            default:
+                Debug.Log($"Defaulted with state: {CameraManager.Instance.State}");
+                break;
+        }
     }
 
     private void FirstPersonController_OnPlayerStateChanged(PlayerState _state)

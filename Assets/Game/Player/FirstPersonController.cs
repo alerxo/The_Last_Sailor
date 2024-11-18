@@ -89,7 +89,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void EnableInput()
     {
-        if (UIManager.Instance.State == UIState.HUD && CameraManager.Instance.State == CameraState.Player) input.Player.Enable();
+        if (UIManager.Instance.State == UIState.HUD && State == PlayerState.FirstPerson) input.Player.Enable();
         else input.Player.Disable();
     }
 
