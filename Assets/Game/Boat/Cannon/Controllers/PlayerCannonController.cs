@@ -5,17 +5,15 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
     [Tooltip("Target for the cannon camera")]
     [SerializeField] private Transform cameraTarget;
 
-    public Vector3 Position => transform.position + sphereCollider.center;
+    public Vector3 Position => transform.position;
     public bool CanInteract => cannon.State == CannonState.Ready;
 
     private InputSystem_Actions input;
     private Cannon cannon;
-    private SphereCollider sphereCollider;
 
     private void Awake()
     {
         cannon = GetComponentInParent<Cannon>();
-        sphereCollider = GetComponent<SphereCollider>();
 
         input = new();
         input.Player.Fire.performed += Fire_performed;
