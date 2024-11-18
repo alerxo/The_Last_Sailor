@@ -5,13 +5,17 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
     [Tooltip("Target for the cannon camera")]
     [SerializeField] private Transform cameraTarget;
 
-    public Vector3 Position => transform.position;
+    public Vector3 Position => transform.position + sphereCollider.center;
+    public bool CanInteract => cannon.State == CannonState.Ready;
+
     private InputSystem_Actions input;
     private Cannon cannon;
+    private SphereCollider sphereCollider;
 
     private void Awake()
     {
         cannon = GetComponentInParent<Cannon>();
+        sphereCollider = GetComponent<SphereCollider>();
 
         input = new();
         input.Player.Fire.performed += Fire_performed;
@@ -27,10 +31,10 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (input.Player.Move.ReadValue<Vector2>().magnitude > 0)
-        {
-            Vector2 rotation = input.Player.Move.ReadValue<Vector2>();
+        Vector2 rotation = input.Player.Move.ReadValue<Vector2>();
 
+        if (rotation.magnitude > 0)
+        {
             if (rotation.x != 0)
             {
                 cannon.SetYaw(rotation.x);
@@ -48,6 +52,8 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
         if (cannon.State == CannonState.Ready)
         {
             cannon.Fire();
+            CameraManager.Instance.SetState(CameraState.Player);
+            FirstPersonController.instance.SetState(PlayerState.FirstPerson);
         }
     }
 
@@ -61,8 +67,11 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        CameraManager.Instance.SetInteractionCamera(cameraTarget);
-        FirstPersonController.instance.SetState(PlayerState.Cannon);
-        input.Player.Enable();
+        if (cannon.State == CannonState.Ready)
+        {
+            CameraManager.Instance.SetInteractionCamera(cameraTarget);
+            FirstPersonController.instance.SetState(PlayerState.Cannon);
+            input.Player.Enable();
+        }
     }
 }

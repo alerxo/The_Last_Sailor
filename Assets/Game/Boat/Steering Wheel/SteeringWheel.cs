@@ -5,6 +5,7 @@ public class SteeringWheel : MonoBehaviour, IInteractable
     private const float MAX_ROTATION = 170;
 
     public Vector3 Position => transform.position;
+    public bool CanInteract => true;
 
     [Tooltip("The rotating part of the mesh")]
     [SerializeField] private Transform rotatingPart;
