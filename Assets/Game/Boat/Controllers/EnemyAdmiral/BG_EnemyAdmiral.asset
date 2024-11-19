@@ -16,40 +16,40 @@ MonoBehaviour:
   m_Description: 
   m_Nodes:
   - rid: 3155635099074822813
-  - rid: 3155635099074822857
+  - rid: 3155635102034165760
   - rid: 3155635099541700643
-  - rid: 3155635099541700860
-  - rid: 3155635099541701191
-  - rid: 3155635099770290281
-  - rid: 3155635099770290382
-  - rid: 3155635099770290921
-  - rid: 3155635099770291057
-  - rid: 3155635099770291134
+  - rid: 3155635102034165761
+  - rid: 3155635102034165762
+  - rid: 3155635102034165763
+  - rid: 3155635102034165764
+  - rid: 3155635102034165765
+  - rid: 3155635102034165766
+  - rid: 3155635102034165767
   - rid: 3155635099770291184
-  - rid: 3155635100194963456
+  - rid: 3155635102034165768
   - rid: 3155635100194963463
   - rid: 3155635100194963466
-  - rid: 3155635100194963469
+  - rid: 3155635102034165769
   - rid: 3155635100194963477
-  - rid: 3155635100194963480
+  - rid: 3155635102034165770
   - rid: 3155635100194963491
-  - rid: 3155635100194963543
-  - rid: 3155635100194963749
-  - rid: 3155635100194964415
+  - rid: 3155635102034165771
+  - rid: 3155635102034165772
+  - rid: 3155635102034165773
   - rid: 3155635100462874923
   - rid: 3155635100462874932
   - rid: 3155635100462875044
-  - rid: 3155635100462875046
+  - rid: 3155635102034165774
   - rid: 3155635100462875048
-  - rid: 3155635100872868013
+  - rid: 3155635102034165775
   - rid: 3155635100872868018
-  - rid: 3155635100872868021
+  - rid: 3155635102034165776
   - rid: 3155635100872868026
-  - rid: 3155635101124788812
+  - rid: 3155635102034165777
   - rid: 3155635101124788820
-  - rid: 3155635101124788823
+  - rid: 3155635102034165778
   - rid: 3155635101124788831
-  - rid: 3155635101124788834
+  - rid: 3155635102034165779
   - rid: 3155635101292823017
   - rid: 3155635101292823022
   - rid: 3155635101292823025
@@ -72,150 +72,12 @@ MonoBehaviour:
       m_Value1: 11549843281177505721
     Variables: []
     NamedChildren: []
-  - Name: Has Enemy
-    Story: '[Agent] has an enemy [IsInverted] Invert'
-    RuntimeTypeID:
-      m_Value0: 15270395857330650991
-      m_Value1: 16075848770363368691
-    Variables:
-    - Name: Agent
-      Type:
-        m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      Tooltip: 
-    - Name: IsInverted
-      Type:
-        m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
-          PublicKeyToken=b77a5c561934e089
-      Tooltip: 
-    NamedChildren: []
   - Name: Try In Order
     Story: 
     RuntimeTypeID:
       m_Value0: 11477120919463386923
       m_Value1: 7730102824742023565
     Variables: []
-    NamedChildren: []
-  - Name: IsInRingOfFire
-    Story: '[Agent] is in ring of fire [IsInverted] Invert'
-    RuntimeTypeID:
-      m_Value0: 8352455553269530629
-      m_Value1: 13773776050843212736
-    Variables:
-    - Name: Agent
-      Type:
-        m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      Tooltip: 
-    - Name: IsInverted
-      Type:
-        m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
-          PublicKeyToken=b77a5c561934e089
-      Tooltip: 
-    NamedChildren: []
-  - Name: CanEnterCombat
-    Story: '[Agent] can enter combat [IsInverted] Invert'
-    RuntimeTypeID:
-      m_Value0: 7409711352466302549
-      m_Value1: 13741384720823573109
-    Variables:
-    - Name: Agent
-      Type:
-        m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      Tooltip: 
-    - Name: IsInverted
-      Type:
-        m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
-          PublicKeyToken=b77a5c561934e089
-      Tooltip: 
-    NamedChildren: []
-  - Name: ForceSink
-    Story: '[Agent] is forced to sink'
-    RuntimeTypeID:
-      m_Value0: 5176311821152229230
-      m_Value1: 3349533071741665495
-    Variables:
-    - Name: Agent
-      Type:
-        m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      Tooltip: 
-    NamedChildren: []
-  - Name: IsInsideMap
-    Story: '[Agent] is inside map [IsInverted] Invert'
-    RuntimeTypeID:
-      m_Value0: 11203010479097185258
-      m_Value1: 13745028730469038411
-    Variables:
-    - Name: Agent
-      Type:
-        m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      Tooltip: 
-    - Name: IsInverted
-      Type:
-        m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
-          PublicKeyToken=b77a5c561934e089
-      Tooltip: 
-    NamedChildren: []
-  - Name: MoveToClosestPositionOutsideRingOfFire
-    Story: '[Agent] moves towards the closest position outside the ring of fire'
-    RuntimeTypeID:
-      m_Value0: 666478026614701899
-      m_Value1: 8840006248677426788
-    Variables:
-    - Name: Agent
-      Type:
-        m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      Tooltip: 
-    NamedChildren: []
-  - Name: EnterCombat
-    Story: '[Agent] enters combat [IsInverted] Invert'
-    RuntimeTypeID:
-      m_Value0: 6128844150840276964
-      m_Value1: 3533854820858860941
-    Variables:
-    - Name: Agent
-      Type:
-        m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      Tooltip: 
-    - Name: IsInverted
-      Type:
-        m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
-          PublicKeyToken=b77a5c561934e089
-      Tooltip: 
-    NamedChildren: []
-  - Name: MoveTowardsEnemy
-    Story: '[Agent] moves towards enemy'
-    RuntimeTypeID:
-      m_Value0: 985860402075198710
-      m_Value1: 15264530534384674026
-    Variables:
-    - Name: Agent
-      Type:
-        m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      Tooltip: 
-    NamedChildren: []
-  - Name: AdmiralHasDestination
-    Story: '[Agent] has a destination [IsInverted] Invert'
-    RuntimeTypeID:
-      m_Value0: 6770958716607516456
-      m_Value1: 16166967968747452737
-    Variables:
-    - Name: Agent
-      Type:
-        m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      Tooltip: 
-    - Name: IsInverted
-      Type:
-        m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
-          PublicKeyToken=b77a5c561934e089
-      Tooltip: 
     NamedChildren: []
   - Name: Wait
     Story: Wait for [SecondsToWait] seconds
@@ -227,30 +89,6 @@ MonoBehaviour:
       Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      Tooltip: 
-    NamedChildren: []
-  - Name: SetDestinationInsideRingOfFire
-    Story: '[Agent] sets its destination inside ring of fire'
-    RuntimeTypeID:
-      m_Value0: 9622994319745155500
-      m_Value1: 10215485568664522716
-    Variables:
-    - Name: Agent
-      Type:
-        m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      Tooltip: 
-    NamedChildren: []
-  - Name: SetDestinationOutsideRingOfFire
-    Story: '[Agent] sets its destination outside ring of fire'
-    RuntimeTypeID:
-      m_Value0: 13885379438496881171
-      m_Value1: 4108390106804213018
-    Variables:
-    - Name: Agent
-      Type:
-        m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
       Tooltip: 
     NamedChildren: []
   m_Blackboards: []
@@ -289,26 +127,6 @@ MonoBehaviour:
           rid: 3155635099074822813
         m_Connections:
         - rid: 3155635099541700644
-    - rid: 3155635099074822857
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: -1335.5, y: 191}
-        ID:
-          m_Value0: 1860137080018888619
-          m_Value1: 12847547375042532710
-        Parents: []
-        PortModels:
-        - rid: 3155635099074822858
-        - rid: 3155635099074822859
-        NodeType:
-          m_SerializableType: HasEnemyAction, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 15270395857330650991
-          m_Value1: 16075848770363368691
-        m_FieldValues:
-        - rid: 3155635099074822860
-        - rid: 3155635099074823039
     - rid: 3155635099074822858
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -316,7 +134,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099074822857
+          rid: 3155635102034165760
         m_Connections:
         - rid: 3155635099541700645
     - rid: 3155635099074822859
@@ -326,7 +144,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099074822857
+          rid: 3155635102034165760
         m_Connections:
         - rid: 3155635099770291185
     - rid: 3155635099074822860
@@ -406,27 +224,6 @@ MonoBehaviour:
         m_Connections:
         - rid: 3155635099074822858
         - rid: 3155635100194963457
-    - rid: 3155635099541700860
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: -1502, y: 367}
-        ID:
-          m_Value0: 4329157945809416277
-          m_Value1: 6380762595407671269
-        Parents:
-        - rid: 3155635101292823022
-        PortModels:
-        - rid: 3155635099541700861
-        - rid: 3155635099541700862
-        NodeType:
-          m_SerializableType: IsInRingOfFireAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 8352455553269530629
-          m_Value1: 13773776050843212736
-        m_FieldValues:
-        - rid: 3155635099541700863
-        - rid: 3155635099541700989
     - rid: 3155635099541700861
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -434,7 +231,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099541700860
+          rid: 3155635102034165761
         m_Connections: []
     - rid: 3155635099541700862
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -443,7 +240,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099541700860
+          rid: 3155635102034165761
         m_Connections: []
     - rid: 3155635099541700863
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -483,27 +280,6 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 1
-    - rid: 3155635099541701191
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: -161.68382, y: 795.803}
-        ID:
-          m_Value0: 8215422003420381465
-          m_Value1: 3596065097294823881
-        Parents:
-        - rid: 3155635100194963491
-        PortModels:
-        - rid: 3155635099541701192
-        - rid: 3155635099541701193
-        NodeType:
-          m_SerializableType: CanEnterCombatAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 7409711352466302549
-          m_Value1: 13741384720823573109
-        m_FieldValues:
-        - rid: 3155635099541701310
-        - rid: 3155635099541701194
     - rid: 3155635099541701192
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -511,7 +287,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099541701191
+          rid: 3155635102034165762
         m_Connections: []
     - rid: 3155635099541701193
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -520,7 +296,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099541701191
+          rid: 3155635102034165762
         m_Connections: []
     - rid: 3155635099541701194
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -560,25 +336,6 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: {fileID: 0}
-    - rid: 3155635099770290281
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: 1600, y: 367}
-        ID:
-          m_Value0: 410476253511534792
-          m_Value1: 6868947524312879630
-        Parents: []
-        PortModels:
-        - rid: 3155635099770290282
-        - rid: 3155635099770290283
-        NodeType:
-          m_SerializableType: ForceSinkAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 5176311821152229230
-          m_Value1: 3349533071741665495
-        m_FieldValues:
-        - rid: 3155635099770290284
     - rid: 3155635099770290282
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -586,7 +343,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099770290281
+          rid: 3155635102034165763
         m_Connections:
         - rid: 3155635100194963465
     - rid: 3155635099770290283
@@ -596,7 +353,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099770290281
+          rid: 3155635102034165763
         m_Connections: []
     - rid: 3155635099770290284
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -617,26 +374,6 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: {fileID: 0}
-    - rid: 3155635099770290382
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: 264.5, y: 367}
-        ID:
-          m_Value0: 1434920277893491186
-          m_Value1: 13507505393801664850
-        Parents: []
-        PortModels:
-        - rid: 3155635099770290383
-        - rid: 3155635099770290384
-        NodeType:
-          m_SerializableType: IsInsideMapAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 11203010479097185258
-          m_Value1: 13745028730469038411
-        m_FieldValues:
-        - rid: 3155635099770290385
-        - rid: 3155635099770290386
     - rid: 3155635099770290383
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -644,7 +381,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099770290382
+          rid: 3155635102034165764
         m_Connections:
         - rid: 3155635100194963465
     - rid: 3155635099770290384
@@ -654,7 +391,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099770290382
+          rid: 3155635102034165764
         m_Connections:
         - rid: 3155635100194963467
     - rid: 3155635099770290385
@@ -695,26 +432,6 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 0
-    - rid: 3155635099770290921
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: -181, y: 937}
-        ID:
-          m_Value0: 1073324161233599767
-          m_Value1: 18107810272375925346
-        Parents:
-        - rid: 3155635101292823456
-        PortModels:
-        - rid: 3155635099770290922
-        - rid: 3155635099770290923
-        NodeType:
-          m_SerializableType: MoveToClosestPositionOutsideRingOfFireAction, Assembly-CSharp,
-            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 666478026614701899
-          m_Value1: 8840006248677426788
-        m_FieldValues:
-        - rid: 3155635099770290924
     - rid: 3155635099770290922
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -722,7 +439,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099770290921
+          rid: 3155635102034165765
         m_Connections: []
     - rid: 3155635099770290923
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -731,7 +448,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099770290921
+          rid: 3155635102034165765
         m_Connections: []
     - rid: 3155635099770290924
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -752,27 +469,6 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: {fileID: 0}
-    - rid: 3155635099770291057
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: -1424.7396, y: 376.34976}
-        ID:
-          m_Value0: 13756051865221958239
-          m_Value1: 3398947793138200950
-        Parents:
-        - rid: 3155635101292823022
-        PortModels:
-        - rid: 3155635099770291058
-        - rid: 3155635099770291059
-        NodeType:
-          m_SerializableType: EnterCombatAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 6128844150840276964
-          m_Value1: 3533854820858860941
-        m_FieldValues:
-        - rid: 3155635099770291060
-        - rid: 3155635099770291061
     - rid: 3155635099770291058
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -780,7 +476,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099770291057
+          rid: 3155635102034165766
         m_Connections: []
     - rid: 3155635099770291059
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -789,7 +485,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099770291057
+          rid: 3155635102034165766
         m_Connections: []
     - rid: 3155635099770291060
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -829,26 +525,6 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 1
-    - rid: 3155635099770291134
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: -1117.8718, y: 400.32468}
-        ID:
-          m_Value0: 12730474355003521581
-          m_Value1: 12103836588989886621
-        Parents:
-        - rid: 3155635101292823025
-        PortModels:
-        - rid: 3155635099770291135
-        - rid: 3155635099770291136
-        NodeType:
-          m_SerializableType: MoveTowardsEnemyAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 985860402075198710
-          m_Value1: 15264530534384674026
-        m_FieldValues:
-        - rid: 3155635099770291137
     - rid: 3155635099770291135
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -856,7 +532,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099770291134
+          rid: 3155635102034165767
         m_Connections: []
     - rid: 3155635099770291136
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -865,7 +541,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635099770291134
+          rid: 3155635102034165767
         m_Connections: []
     - rid: 3155635099770291137
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -925,26 +601,6 @@ MonoBehaviour:
         m_Connections:
         - rid: 3155635101292823023
         - rid: 3155635101292823026
-    - rid: 3155635100194963456
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: 409.5, y: 191}
-        ID:
-          m_Value0: 5915258951363921896
-          m_Value1: 11378999450690602869
-        Parents: []
-        PortModels:
-        - rid: 3155635100194963457
-        - rid: 3155635100194963458
-        NodeType:
-          m_SerializableType: HasEnemyAction, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-            PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 15270395857330650991
-          m_Value1: 16075848770363368691
-        m_FieldValues:
-        - rid: 3155635100194963459
-        - rid: 3155635100194963461
     - rid: 3155635100194963457
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -952,7 +608,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100194963456
+          rid: 3155635102034165768
         m_Connections:
         - rid: 3155635099541700645
     - rid: 3155635100194963458
@@ -962,7 +618,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100194963456
+          rid: 3155635102034165768
         m_Connections:
         - rid: 3155635100194963464
     - rid: 3155635100194963459
@@ -1081,26 +737,6 @@ MonoBehaviour:
         - rid: 3155635100194963470
         - rid: 3155635101124788821
         - rid: 3155635101124788832
-    - rid: 3155635100194963469
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: -408, y: 633}
-        ID:
-          m_Value0: 17969560258159575150
-          m_Value1: 6544706804236211051
-        Parents: []
-        PortModels:
-        - rid: 3155635100194963470
-        - rid: 3155635100194963471
-        NodeType:
-          m_SerializableType: IsInRingOfFireAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 8352455553269530629
-          m_Value1: 13773776050843212736
-        m_FieldValues:
-        - rid: 3155635100194963472
-        - rid: 3155635100194963475
     - rid: 3155635100194963470
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1108,7 +744,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100194963469
+          rid: 3155635102034165769
         m_Connections:
         - rid: 3155635100194963468
     - rid: 3155635100194963471
@@ -1118,7 +754,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100194963469
+          rid: 3155635102034165769
         m_Connections:
         - rid: 3155635100194963478
     - rid: 3155635100194963472
@@ -1197,27 +833,6 @@ MonoBehaviour:
         m_Connections:
         - rid: 3155635100194963492
         - rid: 3155635101292823457
-    - rid: 3155635100194963480
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: -157.63948, y: 810.59894}
-        ID:
-          m_Value0: 10461177576300620186
-          m_Value1: 15174235820212281679
-        Parents:
-        - rid: 3155635100194963491
-        PortModels:
-        - rid: 3155635100194963481
-        - rid: 3155635100194963482
-        NodeType:
-          m_SerializableType: EnterCombatAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 6128844150840276964
-          m_Value1: 3533854820858860941
-        m_FieldValues:
-        - rid: 3155635100194963483
-        - rid: 3155635100194963486
     - rid: 3155635100194963481
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1225,7 +840,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100194963480
+          rid: 3155635102034165770
         m_Connections: []
     - rid: 3155635100194963482
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -1234,7 +849,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100194963480
+          rid: 3155635102034165770
         m_Connections: []
     - rid: 3155635100194963483
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -1285,8 +900,8 @@ MonoBehaviour:
         - rid: 3155635100194963492
         - rid: 3155635100194963493
         Nodes:
-        - rid: 3155635099541701191
-        - rid: 3155635100194963480
+        - rid: 3155635102034165762
+        - rid: 3155635102034165770
     - rid: 3155635100194963492
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1306,27 +921,6 @@ MonoBehaviour:
         m_NodeModel:
           rid: 3155635100194963491
         m_Connections: []
-    - rid: 3155635100194963543
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: 300.5, y: 633}
-        ID:
-          m_Value0: 3470651484233415518
-          m_Value1: 5278310230924925461
-        Parents:
-        - rid: 3155635101124788820
-        PortModels:
-        - rid: 3155635100194963544
-        - rid: 3155635100194963545
-        NodeType:
-          m_SerializableType: CanEnterCombatAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 7409711352466302549
-          m_Value1: 13741384720823573109
-        m_FieldValues:
-        - rid: 3155635100194963546
-        - rid: 3155635100194963549
     - rid: 3155635100194963544
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1334,7 +928,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100194963543
+          rid: 3155635102034165771
         m_Connections: []
     - rid: 3155635100194963545
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -1343,7 +937,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100194963543
+          rid: 3155635102034165771
         m_Connections: []
     - rid: 3155635100194963546
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -1382,27 +976,6 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 0
-    - rid: 3155635100194963749
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: 1213, y: 633}
-        ID:
-          m_Value0: 800640698445176834
-          m_Value1: 6871836836353045205
-        Parents:
-        - rid: 3155635101124788831
-        PortModels:
-        - rid: 3155635100194963750
-        - rid: 3155635100194963751
-        NodeType:
-          m_SerializableType: CanEnterCombatAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 7409711352466302549
-          m_Value1: 13741384720823573109
-        m_FieldValues:
-        - rid: 3155635100194963752
-        - rid: 3155635100194963755
     - rid: 3155635100194963750
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1410,7 +983,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100194963749
+          rid: 3155635102034165772
         m_Connections: []
     - rid: 3155635100194963751
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -1419,7 +992,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100194963749
+          rid: 3155635102034165772
         m_Connections: []
     - rid: 3155635100194963752
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -1458,27 +1031,6 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 1
-    - rid: 3155635100194964415
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: 75, y: 809}
-        ID:
-          m_Value0: 3758418806144779347
-          m_Value1: 10233805237731457164
-        Parents:
-        - rid: 3155635100872868018
-        PortModels:
-        - rid: 3155635100194964416
-        - rid: 3155635100194964417
-        NodeType:
-          m_SerializableType: AdmiralHasDestinationAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 6770958716607516456
-          m_Value1: 16166967968747452737
-        m_FieldValues:
-        - rid: 3155635100194964418
-        - rid: 3155635100462874738
     - rid: 3155635100194964416
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1486,7 +1038,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100194964415
+          rid: 3155635102034165773
         m_Connections: []
     - rid: 3155635100194964417
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -1495,7 +1047,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100194964415
+          rid: 3155635102034165773
         m_Connections: []
     - rid: 3155635100194964418
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -1650,27 +1202,6 @@ MonoBehaviour:
           m_Value1: 8820302366443624372
         m_FieldValues:
         - rid: 3155635100462875072
-    - rid: 3155635100462875046
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: 987.5, y: 809}
-        ID:
-          m_Value0: 13651116926235724292
-          m_Value1: 7723220547116345488
-        Parents:
-        - rid: 3155635100872868026
-        PortModels:
-        - rid: 3155635100462875058
-        - rid: 3155635100462875059
-        NodeType:
-          m_SerializableType: AdmiralHasDestinationAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 6770958716607516456
-          m_Value1: 16166967968747452737
-        m_FieldValues:
-        - rid: 3155635100462875060
-        - rid: 3155635100462875073
     - rid: 3155635100462875048
       type: {class: CompositeNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
@@ -1715,7 +1246,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100462875046
+          rid: 3155635102034165774
         m_Connections: []
     - rid: 3155635100462875059
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -1724,7 +1255,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100462875046
+          rid: 3155635102034165774
         m_Connections: []
     - rid: 3155635100462875060
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -1803,26 +1334,6 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 1
-    - rid: 3155635100872868013
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: 76.93622, y: 831.4805}
-        ID:
-          m_Value0: 8213879013874867184
-          m_Value1: 242881788270442593
-        Parents:
-        - rid: 3155635100872868018
-        PortModels:
-        - rid: 3155635100872868014
-        - rid: 3155635100872868015
-        NodeType:
-          m_SerializableType: SetDestinationInsideRingOfFireAction, Assembly-CSharp,
-            Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 9622994319745155500
-          m_Value1: 10215485568664522716
-        m_FieldValues:
-        - rid: 3155635100872868016
     - rid: 3155635100872868014
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1830,7 +1341,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100872868013
+          rid: 3155635102034165775
         m_Connections: []
     - rid: 3155635100872868015
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -1839,7 +1350,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100872868013
+          rid: 3155635102034165775
         m_Connections: []
     - rid: 3155635100872868016
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -1872,8 +1383,8 @@ MonoBehaviour:
         - rid: 3155635100872868019
         - rid: 3155635100872868020
         Nodes:
-        - rid: 3155635100194964415
-        - rid: 3155635100872868013
+        - rid: 3155635102034165773
+        - rid: 3155635102034165775
     - rid: 3155635100872868019
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1893,26 +1404,6 @@ MonoBehaviour:
         m_NodeModel:
           rid: 3155635100872868018
         m_Connections: []
-    - rid: 3155635100872868021
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: 972.936, y: 829.8804}
-        ID:
-          m_Value0: 12353980126826571051
-          m_Value1: 17153478822915492396
-        Parents:
-        - rid: 3155635100872868026
-        PortModels:
-        - rid: 3155635100872868022
-        - rid: 3155635100872868023
-        NodeType:
-          m_SerializableType: SetDestinationOutsideRingOfFire, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 13885379438496881171
-          m_Value1: 4108390106804213018
-        m_FieldValues:
-        - rid: 3155635100872868024
     - rid: 3155635100872868022
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1920,7 +1411,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100872868021
+          rid: 3155635102034165776
         m_Connections: []
     - rid: 3155635100872868023
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -1929,7 +1420,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635100872868021
+          rid: 3155635102034165776
         m_Connections: []
     - rid: 3155635100872868024
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -1962,8 +1453,8 @@ MonoBehaviour:
         - rid: 3155635100872868027
         - rid: 3155635100872868028
         Nodes:
-        - rid: 3155635100462875046
-        - rid: 3155635100872868021
+        - rid: 3155635102034165774
+        - rid: 3155635102034165776
     - rid: 3155635100872868027
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -1983,27 +1474,6 @@ MonoBehaviour:
         m_NodeModel:
           rid: 3155635100872868026
         m_Connections: []
-    - rid: 3155635101124788812
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: 282.29993, y: 611.1174}
-        ID:
-          m_Value0: 11202402024452040775
-          m_Value1: 10912664976542880693
-        Parents:
-        - rid: 3155635101124788820
-        PortModels:
-        - rid: 3155635101124788813
-        - rid: 3155635101124788814
-        NodeType:
-          m_SerializableType: IsInRingOfFireAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 8352455553269530629
-          m_Value1: 13773776050843212736
-        m_FieldValues:
-        - rid: 3155635101124788815
-        - rid: 3155635101124788818
     - rid: 3155635101124788813
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -2011,7 +1481,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635101124788812
+          rid: 3155635102034165777
         m_Connections: []
     - rid: 3155635101124788814
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -2020,7 +1490,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635101124788812
+          rid: 3155635102034165777
         m_Connections: []
     - rid: 3155635101124788815
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -2071,8 +1541,8 @@ MonoBehaviour:
         - rid: 3155635101124788821
         - rid: 3155635101124788822
         Nodes:
-        - rid: 3155635101124788812
-        - rid: 3155635100194963543
+        - rid: 3155635102034165777
+        - rid: 3155635102034165771
     - rid: 3155635101124788821
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -2093,27 +1563,6 @@ MonoBehaviour:
           rid: 3155635101124788820
         m_Connections:
         - rid: 3155635100462874924
-    - rid: 3155635101124788823
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: 1220.008, y: 615.7385}
-        ID:
-          m_Value0: 4865520967655295673
-          m_Value1: 17701820413870550575
-        Parents:
-        - rid: 3155635101124788831
-        PortModels:
-        - rid: 3155635101124788824
-        - rid: 3155635101124788825
-        NodeType:
-          m_SerializableType: IsInRingOfFireAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 8352455553269530629
-          m_Value1: 13773776050843212736
-        m_FieldValues:
-        - rid: 3155635101124788826
-        - rid: 3155635101124788829
     - rid: 3155635101124788824
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -2121,7 +1570,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635101124788823
+          rid: 3155635102034165778
         m_Connections: []
     - rid: 3155635101124788825
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -2130,7 +1579,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635101124788823
+          rid: 3155635102034165778
         m_Connections: []
     - rid: 3155635101124788826
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -2181,9 +1630,9 @@ MonoBehaviour:
         - rid: 3155635101124788832
         - rid: 3155635101124788833
         Nodes:
-        - rid: 3155635101124788823
-        - rid: 3155635100194963749
-        - rid: 3155635101124788834
+        - rid: 3155635102034165778
+        - rid: 3155635102034165772
+        - rid: 3155635102034165779
     - rid: 3155635101124788832
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -2204,27 +1653,6 @@ MonoBehaviour:
           rid: 3155635101124788831
         m_Connections:
         - rid: 3155635100462875064
-    - rid: 3155635101124788834
-      type: {class: ActionNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        Position: {x: 1210.8059, y: 719.5755}
-        ID:
-          m_Value0: 6372028026035597795
-          m_Value1: 16009514221744269170
-        Parents:
-        - rid: 3155635101124788831
-        PortModels:
-        - rid: 3155635101124788835
-        - rid: 3155635101124788836
-        NodeType:
-          m_SerializableType: CanEnterCombatAction, Assembly-CSharp, Version=0.0.0.0,
-            Culture=neutral, PublicKeyToken=null
-        NodeTypeID:
-          m_Value0: 7409711352466302549
-          m_Value1: 13741384720823573109
-        m_FieldValues:
-        - rid: 3155635101124788837
-        - rid: 3155635101124788840
     - rid: 3155635101124788835
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -2232,7 +1660,7 @@ MonoBehaviour:
         m_PortDataFlowType: 0
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635101124788834
+          rid: 3155635102034165779
         m_Connections: []
     - rid: 3155635101124788836
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -2241,7 +1669,7 @@ MonoBehaviour:
         m_PortDataFlowType: 1
         m_IsFloating: 0
         m_NodeModel:
-          rid: 3155635101124788834
+          rid: 3155635102034165779
         m_Connections: []
     - rid: 3155635101124788837
       type: {class: BehaviorGraphNodeModel/FieldModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
@@ -2349,8 +1777,8 @@ MonoBehaviour:
         - rid: 3155635101292823023
         - rid: 3155635101292823024
         Nodes:
-        - rid: 3155635099541700860
-        - rid: 3155635099770291057
+        - rid: 3155635102034165761
+        - rid: 3155635102034165766
     - rid: 3155635101292823023
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
       data:
@@ -2382,7 +1810,7 @@ MonoBehaviour:
         - rid: 3155635101292823026
         - rid: 3155635101292823027
         Nodes:
-        - rid: 3155635099770291134
+        - rid: 3155635102034165767
         - rid: 3155635101292823017
     - rid: 3155635101292823026
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -2472,7 +1900,7 @@ MonoBehaviour:
         - rid: 3155635101292823457
         - rid: 3155635101292823458
         Nodes:
-        - rid: 3155635099770290921
+        - rid: 3155635102034165765
         - rid: 3155635101292823451
     - rid: 3155635101292823457
       type: {class: PortModel, ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
@@ -2503,6 +1931,672 @@ MonoBehaviour:
         IsExposed: 1
         m_IsShared: 0
         m_Value: {fileID: 0}
+    - rid: 3155635102034165760
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -1335.5, y: 191}
+        ID:
+          m_Value0: 1860137080018888619
+          m_Value1: 12847547375042532710
+        Parents: []
+        PortModels:
+        - rid: 3155635099074822858
+        - rid: 3155635099074822859
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635099074822860
+        - rid: 3155635099074823039
+        m_Name: Has Enemy
+        m_Story: '[Agent] has an enemy [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165761
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -1502, y: 367}
+        ID:
+          m_Value0: 4329157945809416277
+          m_Value1: 6380762595407671269
+        Parents:
+        - rid: 3155635101292823022
+        PortModels:
+        - rid: 3155635099541700861
+        - rid: 3155635099541700862
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635099541700863
+        - rid: 3155635099541700989
+        m_Name: IsInRingOfFire
+        m_Story: '[Agent] is in ring of fire [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165762
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -161.68382, y: 795.803}
+        ID:
+          m_Value0: 8215422003420381465
+          m_Value1: 3596065097294823881
+        Parents:
+        - rid: 3155635100194963491
+        PortModels:
+        - rid: 3155635099541701192
+        - rid: 3155635099541701193
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635099541701310
+        - rid: 3155635099541701194
+        m_Name: CanEnterCombat
+        m_Story: '[Agent] can enter combat [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165763
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 1600, y: 367}
+        ID:
+          m_Value0: 410476253511534792
+          m_Value1: 6868947524312879630
+        Parents: []
+        PortModels:
+        - rid: 3155635099770290282
+        - rid: 3155635099770290283
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635099770290284
+        m_Name: ForceSink
+        m_Story: '[Agent] is forced to sink'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165764
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 264.5, y: 367}
+        ID:
+          m_Value0: 1434920277893491186
+          m_Value1: 13507505393801664850
+        Parents: []
+        PortModels:
+        - rid: 3155635099770290383
+        - rid: 3155635099770290384
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635099770290385
+        - rid: 3155635099770290386
+        m_Name: IsInsideMap
+        m_Story: '[Agent] is inside map [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165765
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -181, y: 937}
+        ID:
+          m_Value0: 1073324161233599767
+          m_Value1: 18107810272375925346
+        Parents:
+        - rid: 3155635101292823456
+        PortModels:
+        - rid: 3155635099770290922
+        - rid: 3155635099770290923
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635099770290924
+        m_Name: MoveToClosestPositionOutsideRingOfFire
+        m_Story: '[Agent] moves towards the closest position outside the ring of
+          fire'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165766
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -1424.7396, y: 376.34976}
+        ID:
+          m_Value0: 13756051865221958239
+          m_Value1: 3398947793138200950
+        Parents:
+        - rid: 3155635101292823022
+        PortModels:
+        - rid: 3155635099770291058
+        - rid: 3155635099770291059
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635099770291060
+        - rid: 3155635099770291061
+        m_Name: EnterCombat
+        m_Story: '[Agent] enters combat [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165767
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -1117.8718, y: 400.32468}
+        ID:
+          m_Value0: 12730474355003521581
+          m_Value1: 12103836588989886621
+        Parents:
+        - rid: 3155635101292823025
+        PortModels:
+        - rid: 3155635099770291135
+        - rid: 3155635099770291136
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635099770291137
+        m_Name: MoveTowardsEnemy
+        m_Story: '[Agent] moves towards enemy'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165768
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 409.5, y: 191}
+        ID:
+          m_Value0: 5915258951363921896
+          m_Value1: 11378999450690602869
+        Parents: []
+        PortModels:
+        - rid: 3155635100194963457
+        - rid: 3155635100194963458
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635100194963459
+        - rid: 3155635100194963461
+        m_Name: Has Enemy
+        m_Story: '[Agent] has an enemy [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165769
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -408, y: 633}
+        ID:
+          m_Value0: 17969560258159575150
+          m_Value1: 6544706804236211051
+        Parents: []
+        PortModels:
+        - rid: 3155635100194963470
+        - rid: 3155635100194963471
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635100194963472
+        - rid: 3155635100194963475
+        m_Name: IsInRingOfFire
+        m_Story: '[Agent] is in ring of fire [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165770
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: -157.63948, y: 810.59894}
+        ID:
+          m_Value0: 10461177576300620186
+          m_Value1: 15174235820212281679
+        Parents:
+        - rid: 3155635100194963491
+        PortModels:
+        - rid: 3155635100194963481
+        - rid: 3155635100194963482
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635100194963483
+        - rid: 3155635100194963486
+        m_Name: EnterCombat
+        m_Story: '[Agent] enters combat [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165771
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 300.5, y: 633}
+        ID:
+          m_Value0: 3470651484233415518
+          m_Value1: 5278310230924925461
+        Parents:
+        - rid: 3155635101124788820
+        PortModels:
+        - rid: 3155635100194963544
+        - rid: 3155635100194963545
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635100194963546
+        - rid: 3155635100194963549
+        m_Name: CanEnterCombat
+        m_Story: '[Agent] can enter combat [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165772
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 1213, y: 633}
+        ID:
+          m_Value0: 800640698445176834
+          m_Value1: 6871836836353045205
+        Parents:
+        - rid: 3155635101124788831
+        PortModels:
+        - rid: 3155635100194963750
+        - rid: 3155635100194963751
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635100194963752
+        - rid: 3155635100194963755
+        m_Name: CanEnterCombat
+        m_Story: '[Agent] can enter combat [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165773
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 75, y: 809}
+        ID:
+          m_Value0: 3758418806144779347
+          m_Value1: 10233805237731457164
+        Parents:
+        - rid: 3155635100872868018
+        PortModels:
+        - rid: 3155635100194964416
+        - rid: 3155635100194964417
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635100194964418
+        - rid: 3155635100462874738
+        m_Name: AdmiralHasDestination
+        m_Story: '[Agent] has a destination [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165774
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 987.5, y: 809}
+        ID:
+          m_Value0: 13651116926235724292
+          m_Value1: 7723220547116345488
+        Parents:
+        - rid: 3155635100872868026
+        PortModels:
+        - rid: 3155635100462875058
+        - rid: 3155635100462875059
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635100462875060
+        - rid: 3155635100462875073
+        m_Name: AdmiralHasDestination
+        m_Story: '[Agent] has a destination [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165775
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 76.93622, y: 831.4805}
+        ID:
+          m_Value0: 8213879013874867184
+          m_Value1: 242881788270442593
+        Parents:
+        - rid: 3155635100872868018
+        PortModels:
+        - rid: 3155635100872868014
+        - rid: 3155635100872868015
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635100872868016
+        m_Name: SetDestinationInsideRingOfFire
+        m_Story: '[Agent] sets its destination inside ring of fire'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165776
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 972.936, y: 829.8804}
+        ID:
+          m_Value0: 12353980126826571051
+          m_Value1: 17153478822915492396
+        Parents:
+        - rid: 3155635100872868026
+        PortModels:
+        - rid: 3155635100872868022
+        - rid: 3155635100872868023
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635100872868024
+        m_Name: SetDestinationOutsideRingOfFire
+        m_Story: '[Agent] sets its destination outside ring of fire'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165777
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 282.29993, y: 611.1174}
+        ID:
+          m_Value0: 11202402024452040775
+          m_Value1: 10912664976542880693
+        Parents:
+        - rid: 3155635101124788820
+        PortModels:
+        - rid: 3155635101124788813
+        - rid: 3155635101124788814
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635101124788815
+        - rid: 3155635101124788818
+        m_Name: IsInRingOfFire
+        m_Story: '[Agent] is in ring of fire [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165778
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 1220.008, y: 615.7385}
+        ID:
+          m_Value0: 4865520967655295673
+          m_Value1: 17701820413870550575
+        Parents:
+        - rid: 3155635101124788831
+        PortModels:
+        - rid: 3155635101124788824
+        - rid: 3155635101124788825
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635101124788826
+        - rid: 3155635101124788829
+        m_Name: IsInRingOfFire
+        m_Story: '[Agent] is in ring of fire [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
+    - rid: 3155635102034165779
+      type: {class: PlaceholderNodeModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
+      data:
+        Position: {x: 1210.8059, y: 719.5755}
+        ID:
+          m_Value0: 6372028026035597795
+          m_Value1: 16009514221744269170
+        Parents:
+        - rid: 3155635101124788831
+        PortModels:
+        - rid: 3155635101124788835
+        - rid: 3155635101124788836
+        NodeType:
+          m_SerializableType: 
+        NodeTypeID:
+          m_Value0: 0
+          m_Value1: 0
+        m_FieldValues:
+        - rid: 3155635101124788837
+        - rid: 3155635101124788840
+        m_Name: CanEnterCombat
+        m_Story: '[Agent] can enter combat [IsInverted] Invert'
+        m_Variables:
+        - Name: Agent
+          Type:
+            m_SerializableType: EnemyAdmiralController, Assembly-CSharp, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+          Tooltip: 
+        - Name: IsInverted
+          Type:
+            m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+              PublicKeyToken=b77a5c561934e089
+          Tooltip: 
+        m_PlaceholderType: 0
+        m_NamedChildren: []
 --- !u!114 &1042384782434072339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2516,93 +2610,90 @@ MonoBehaviour:
   m_Name: BG_EnemyAdmiral
   m_EditorClassIdentifier: 
   Graphs:
-  - rid: 3155635101764682488
+  - rid: 3155635102092099584
   RootGraph:
-    rid: 3155635101764682488
+    rid: 3155635102092099584
   m_DebugInfo: {fileID: 1171284730401198522}
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 3155635101764682488
+    - rid: 3155635102092099584
       type: {class: BehaviorGraphModule, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         AuthoringAssetID:
           m_Value0: 17583887413016398891
           m_Value1: 7180103102995291626
-        m_DebugInfo: {fileID: 0}
+        m_DebugInfo: {fileID: 1171284730401198522}
         Root:
-          rid: 3155635101764682489
+          rid: 3155635102092099585
         BlackboardReference:
-          rid: 3155635101764682490
+          rid: 3155635102092099586
         BlackboardGroupReferences: []
         m_VersionTimestamp: 638676342375404610
-    - rid: 3155635101764682489
+    - rid: 3155635102092099585
       type: {class: Start, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 8395260107697413888
           m_Value1: 6585055457150620115
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
           rid: -2
         m_Child:
-          rid: 3155635101764682491
+          rid: 3155635102092099587
         Repeat: 1
-    - rid: 3155635101764682490
+    - rid: 3155635102092099586
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         m_Blackboard:
-          rid: 3155635101764682492
+          rid: 3155635102092099588
         m_Source: {fileID: 4760587552473273264}
-    - rid: 3155635101764682491
+    - rid: 3155635102092099587
       type: {class: SelectorComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 1183566910088078862
           m_Value1: 4941559935200720263
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682489
+          rid: 3155635102092099585
         m_Children:
-        - rid: 3155635101764682493
-        - rid: 3155635101764682494
-    - rid: 3155635101764682492
+        - rid: 3155635102092099589
+        - rid: 3155635102092099590
+    - rid: 3155635102092099588
       type: {class: Blackboard, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         m_Variables:
-        - rid: 3155635101764682495
-        - rid: 3155635101764682496
-    - rid: 3155635101764682493
+        - rid: 3155635102092099591
+    - rid: 3155635102092099589
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 1860137080018888619
           m_Value1: 12847547375042532710
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682491
+          rid: 3155635102092099587
         m_Children:
-        - rid: 3155635101764682497
-        - rid: 3155635101764682498
-    - rid: 3155635101764682494
+        - rid: 3155635102092099592
+    - rid: 3155635102092099590
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 5915258951363921896
           m_Value1: 11378999450690602869
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682491
+          rid: 3155635102092099587
         m_Children:
-        - rid: 3155635101764682499
-        - rid: 3155635101764682500
-    - rid: 3155635101764682495
+        - rid: 3155635102092099593
+    - rid: 3155635102092099591
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -2610,232 +2701,93 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 0}
-    - rid: 3155635101764682496
-      type: {class: 'BlackboardVariable`1[[EnemyAdmiralController, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 9203700042524225099
-          m_Value1: 15427060480327061668
-        Name: EnemyAdmiralController
-        m_Value: {fileID: 0}
-    - rid: 3155635101764682497
-      type: {class: HasEnemyAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 1860137080018888619
-          m_Value1: 12847547375042532710
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682493
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682501
-    - rid: 3155635101764682498
+    - rid: 3155635102092099592
       type: {class: SelectorComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 4571025914211204777
           m_Value1: 8897828148726930409
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682493
+          rid: 3155635102092099589
         m_Children:
-        - rid: 3155635101764682502
-        - rid: 3155635101764682503
-    - rid: 3155635101764682499
-      type: {class: HasEnemyAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 5915258951363921896
-          m_Value1: 11378999450690602869
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682494
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682504
-    - rid: 3155635101764682500
+        - rid: 3155635102092099594
+        - rid: 3155635102092099595
+    - rid: 3155635102092099593
       type: {class: SelectorComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 8094943435800015773
           m_Value1: 11693050653092229380
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682494
+          rid: 3155635102092099590
         m_Children:
-        - rid: 3155635101764682505
-        - rid: 3155635101764682506
-    - rid: 3155635101764682501
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 0
-    - rid: 3155635101764682502
+        - rid: 3155635102092099596
+    - rid: 3155635102092099594
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 10109751519612918739
           m_Value1: 10096814781979254657
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682498
-        m_Children:
-        - rid: 3155635101764682507
-        - rid: 3155635101764682508
-    - rid: 3155635101764682503
+          rid: 3155635102092099592
+        m_Children: []
+    - rid: 3155635102092099595
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 8595981024108952301
           m_Value1: 12351231592600776182
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682498
+          rid: 3155635102092099592
         m_Children:
-        - rid: 3155635101764682509
-        - rid: 3155635101764682510
-    - rid: 3155635101764682504
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 1
-    - rid: 3155635101764682505
+        - rid: 3155635102092099597
+    - rid: 3155635102092099596
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 1434920277893491186
           m_Value1: 13507505393801664850
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682500
+          rid: 3155635102092099593
         m_Children:
-        - rid: 3155635101764682511
-        - rid: 3155635101764682512
-    - rid: 3155635101764682506
-      type: {class: ForceSinkAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 410476253511534792
-          m_Value1: 6868947524312879630
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682500
-        Agent:
-          rid: 3155635101764682496
-    - rid: 3155635101764682507
-      type: {class: IsInRingOfFireAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 4329157945809416277
-          m_Value1: 6380762595407671269
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682502
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682513
-    - rid: 3155635101764682508
-      type: {class: EnterCombatAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 13756051865221958239
-          m_Value1: 3398947793138200950
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682502
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682514
-    - rid: 3155635101764682509
-      type: {class: MoveTowardsEnemyAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 12730474355003521581
-          m_Value1: 12103836588989886621
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682503
-        Agent:
-          rid: 3155635101764682496
-    - rid: 3155635101764682510
+        - rid: 3155635102092099598
+    - rid: 3155635102092099597
       type: {class: WaitAction, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 8667641707969464475
           m_Value1: 11571923934908297508
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682503
+          rid: 3155635102092099595
         SecondsToWait:
-          rid: 3155635101764682515
-    - rid: 3155635101764682511
-      type: {class: IsInsideMapAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 1434920277893491186
-          m_Value1: 13507505393801664850
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682505
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682516
-    - rid: 3155635101764682512
+          rid: 3155635102092099599
+    - rid: 3155635102092099598
       type: {class: SelectorComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 1540718713199484747
           m_Value1: 7538995040036106426
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682505
+          rid: 3155635102092099596
         m_Children:
-        - rid: 3155635101764682517
-        - rid: 3155635101764682518
-        - rid: 3155635101764682519
-    - rid: 3155635101764682513
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 1
-    - rid: 3155635101764682514
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 1
-    - rid: 3155635101764682515
+        - rid: 3155635102092099600
+        - rid: 3155635102092099601
+        - rid: 3155635102092099602
+    - rid: 3155635102092099599
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -2843,382 +2795,163 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 1
-    - rid: 3155635101764682516
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 0
-    - rid: 3155635101764682517
+    - rid: 3155635102092099600
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 17969560258159575150
           m_Value1: 6544706804236211051
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682512
+          rid: 3155635102092099598
         m_Children:
-        - rid: 3155635101764682520
-        - rid: 3155635101764682521
-    - rid: 3155635101764682518
+        - rid: 3155635102092099603
+    - rid: 3155635102092099601
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 17047421898400344799
           m_Value1: 15954513402908292908
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682512
+          rid: 3155635102092099598
         m_Children:
-        - rid: 3155635101764682522
-        - rid: 3155635101764682523
-        - rid: 3155635101764682524
-    - rid: 3155635101764682519
+        - rid: 3155635102092099604
+    - rid: 3155635102092099602
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 15284544939974390721
           m_Value1: 11941454353971545305
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682512
+          rid: 3155635102092099598
         m_Children:
-        - rid: 3155635101764682525
-        - rid: 3155635101764682526
-        - rid: 3155635101764682527
-        - rid: 3155635101764682528
-    - rid: 3155635101764682520
-      type: {class: IsInRingOfFireAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 17969560258159575150
-          m_Value1: 6544706804236211051
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682517
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682529
-    - rid: 3155635101764682521
+        - rid: 3155635102092099605
+    - rid: 3155635102092099603
       type: {class: SelectorComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 9139439238523760118
           m_Value1: 14522534715114769079
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682517
+          rid: 3155635102092099600
         m_Children:
-        - rid: 3155635101764682530
-        - rid: 3155635101764682531
-    - rid: 3155635101764682522
-      type: {class: IsInRingOfFireAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 11202402024452040775
-          m_Value1: 10912664976542880693
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682518
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682532
-    - rid: 3155635101764682523
-      type: {class: CanEnterCombatAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 3470651484233415518
-          m_Value1: 5278310230924925461
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682518
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682533
-    - rid: 3155635101764682524
+        - rid: 3155635102092099606
+        - rid: 3155635102092099607
+    - rid: 3155635102092099604
       type: {class: SelectorComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 11408871663510205328
           m_Value1: 1150173385177338261
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682518
+          rid: 3155635102092099601
         m_Children:
-        - rid: 3155635101764682534
-        - rid: 3155635101764682535
-    - rid: 3155635101764682525
-      type: {class: IsInRingOfFireAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 4865520967655295673
-          m_Value1: 17701820413870550575
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682519
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682536
-    - rid: 3155635101764682526
-      type: {class: CanEnterCombatAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 800640698445176834
-          m_Value1: 6871836836353045205
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682519
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682537
-    - rid: 3155635101764682527
-      type: {class: CanEnterCombatAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 6372028026035597795
-          m_Value1: 16009514221744269170
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682519
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682538
-    - rid: 3155635101764682528
+        - rid: 3155635102092099608
+        - rid: 3155635102092099609
+    - rid: 3155635102092099605
       type: {class: SelectorComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 6440516078594885216
           m_Value1: 392971123194436304
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682519
+          rid: 3155635102092099602
         m_Children:
-        - rid: 3155635101764682539
-        - rid: 3155635101764682540
-    - rid: 3155635101764682529
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 0
-    - rid: 3155635101764682530
+        - rid: 3155635102092099610
+        - rid: 3155635102092099611
+    - rid: 3155635102092099606
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 1887242516721007008
           m_Value1: 7052088503426089208
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682521
-        m_Children:
-        - rid: 3155635101764682541
-        - rid: 3155635101764682542
-    - rid: 3155635101764682531
+          rid: 3155635102092099603
+        m_Children: []
+    - rid: 3155635102092099607
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 13677772009545340341
           m_Value1: 4873475982371342923
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682521
+          rid: 3155635102092099603
         m_Children:
-        - rid: 3155635101764682543
-        - rid: 3155635101764682544
-    - rid: 3155635101764682532
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 1
-    - rid: 3155635101764682533
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 0
-    - rid: 3155635101764682534
+        - rid: 3155635102092099612
+    - rid: 3155635102092099608
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 4451030630732435132
           m_Value1: 17948984120180100475
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682524
-        m_Children:
-        - rid: 3155635101764682545
-        - rid: 3155635101764682546
-    - rid: 3155635101764682535
+          rid: 3155635102092099604
+        m_Children: []
+    - rid: 3155635102092099609
       type: {class: WaitAction, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 8960598889002230984
           m_Value1: 10571084799761172976
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682524
+          rid: 3155635102092099604
         SecondsToWait:
-          rid: 3155635101764682547
-    - rid: 3155635101764682536
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 1
-    - rid: 3155635101764682537
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 1
-    - rid: 3155635101764682538
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 1
-    - rid: 3155635101764682539
+          rid: 3155635102092099613
+    - rid: 3155635102092099610
       type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 1392276835666587897
           m_Value1: 7241805905932159733
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682528
-        m_Children:
-        - rid: 3155635101764682548
-        - rid: 3155635101764682549
-    - rid: 3155635101764682540
+          rid: 3155635102092099605
+        m_Children: []
+    - rid: 3155635102092099611
       type: {class: WaitAction, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 1084640999743102820
           m_Value1: 15920510872048562191
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682528
+          rid: 3155635102092099605
         SecondsToWait:
-          rid: 3155635101764682550
-    - rid: 3155635101764682541
-      type: {class: CanEnterCombatAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 8215422003420381465
-          m_Value1: 3596065097294823881
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682530
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682551
-    - rid: 3155635101764682542
-      type: {class: EnterCombatAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 10461177576300620186
-          m_Value1: 15174235820212281679
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682530
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682552
-    - rid: 3155635101764682543
-      type: {class: MoveToClosestPositionOutsideRingOfFireAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 1073324161233599767
-          m_Value1: 18107810272375925346
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682531
-        Agent:
-          rid: 3155635101764682496
-    - rid: 3155635101764682544
+          rid: 3155635102092099614
+    - rid: 3155635102092099612
       type: {class: WaitAction, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
           m_Value0: 13807034302219811819
           m_Value1: 5230754794619203807
         Graph:
-          rid: 3155635101764682488
+          rid: 3155635102092099584
         m_Parent:
-          rid: 3155635101764682531
+          rid: 3155635102092099607
         SecondsToWait:
-          rid: 3155635101764682553
-    - rid: 3155635101764682545
-      type: {class: AdmiralHasDestinationAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 3758418806144779347
-          m_Value1: 10233805237731457164
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682534
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682554
-    - rid: 3155635101764682546
-      type: {class: SetDestinationInsideRingOfFireAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 8213879013874867184
-          m_Value1: 242881788270442593
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682534
-        Agent:
-          rid: 3155635101764682496
-    - rid: 3155635101764682547
+          rid: 3155635102092099615
+    - rid: 3155635102092099613
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -3226,33 +2959,7 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 1
-    - rid: 3155635101764682548
-      type: {class: AdmiralHasDestinationAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 13651116926235724292
-          m_Value1: 7723220547116345488
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682539
-        Agent:
-          rid: 3155635101764682496
-        IsInverted:
-          rid: 3155635101764682555
-    - rid: 3155635101764682549
-      type: {class: SetDestinationOutsideRingOfFire, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 12353980126826571051
-          m_Value1: 17153478822915492396
-        Graph:
-          rid: 3155635101764682488
-        m_Parent:
-          rid: 3155635101764682539
-        Agent:
-          rid: 3155635101764682496
-    - rid: 3155635101764682550
+    - rid: 3155635102092099614
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -3260,40 +2967,8 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: 1
-    - rid: 3155635101764682551
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 0
-    - rid: 3155635101764682552
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 0
-    - rid: 3155635101764682553
+    - rid: 3155635102092099615
       type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 1
-    - rid: 3155635101764682554
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 0
-          m_Value1: 0
-        Name: 
-        m_Value: 1
-    - rid: 3155635101764682555
-      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
           m_Value0: 0
@@ -3330,7 +3005,6 @@ MonoBehaviour:
     m_Value1: 7180103102995291626
   m_Variables:
   - rid: 3155635099074822815
-  - rid: 3155635099074823145
   m_VersionTimestamp: 638676342180157647
   m_CommandBuffer:
     m_Commands: []
@@ -3345,16 +3019,6 @@ MonoBehaviour:
           m_Value0: 1
           m_Value1: 0
         Name: Self
-        IsExposed: 1
-        m_IsShared: 0
-        m_Value: {fileID: 0}
-    - rid: 3155635099074823145
-      type: {class: 'TypedVariableModel`1[[EnemyAdmiralController, Assembly-CSharp]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
-      data:
-        ID:
-          m_Value0: 9203700042524225099
-          m_Value1: 15427060480327061668
-        Name: EnemyAdmiralController
         IsExposed: 1
         m_IsShared: 0
         m_Value: {fileID: 0}
@@ -3377,7 +3041,6 @@ MonoBehaviour:
   m_Blackboard:
     m_Variables:
     - rid: 3155635101764682556
-    - rid: 3155635101764682557
   m_SharedBlackboardVariableGuids: []
   references:
     version: 2
@@ -3389,12 +3052,4 @@ MonoBehaviour:
           m_Value0: 1
           m_Value1: 0
         Name: Self
-        m_Value: {fileID: 0}
-    - rid: 3155635101764682557
-      type: {class: 'BlackboardVariable`1[[EnemyAdmiralController, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 9203700042524225099
-          m_Value1: 15427060480327061668
-        Name: EnemyAdmiralController
         m_Value: {fileID: 0}

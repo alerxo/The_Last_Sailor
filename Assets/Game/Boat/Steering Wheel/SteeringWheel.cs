@@ -25,9 +25,14 @@ public class SteeringWheel : MonoBehaviour
             audioSource.PlayOneShot(audioClip);
         }
 
-        if (rotatingPart.localRotation.eulerAngles.z > 20 || rotatingPart.localRotation.eulerAngles.z < -20) 
+        if (rotatingPart.localRotation.eulerAngles.z > 20 || rotatingPart.localRotation.eulerAngles.z < -20)
         {
-            allowedPlaying = true;   
+            allowedPlaying = true;
         }
+    }
+
+    public void SetRotation(float rotation)
+    {
+        rotatingPart.localRotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Lerp(-MAX_ROTATION, MAX_ROTATION, (rotation + 1) / 2)));
     }
 }
