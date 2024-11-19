@@ -13,7 +13,9 @@ public class Engine : MonoBehaviour
 
     private SteeringWheel steeringWheel;
     private Throttle throttle;
-    private Vector2 movement;
+    public float Rudder { get; private set; }
+    public float Throttle { get; private set; }
+
     private Rigidbody target;
 
 #if UNITY_EDITOR
@@ -29,10 +31,10 @@ public class Engine : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float x = Mathf.Clamp(movement.x * TURN_RADIUS, -TURN_RADIUS, TURN_RADIUS);
+        float x = Mathf.Clamp(Rudder * TURN_RADIUS, -TURN_RADIUS, TURN_RADIUS);
         transform.localPosition = new Vector3(x, transform.localPosition.y, transform.localPosition.z);
 
-        float throttle = Mathf.Clamp(movement.y * POWER, 0, POWER);
+        float throttle = Mathf.Clamp(Throttle * POWER, 0, POWER);
 
         if (throttle > 0)
         {
@@ -43,20 +45,20 @@ public class Engine : MonoBehaviour
 #if UNITY_EDITOR
         if (isDebugMode)
         {
-            Debug.DrawLine(transform.position + (Vector3.up * 4), transform.position + (Vector3.up * 4) - (transform.forward * movement.y * 5), Color.yellow, Time.fixedDeltaTime);
+            Debug.DrawLine(transform.position + (Vector3.up * 4), transform.position + (Vector3.up * 4) - (transform.forward * Rudder * 5), Color.yellow, Time.fixedDeltaTime);
         }
 #endif
     }
 
     public void ChangeRudder(float _rudder)
     {
-        movement.x = Mathf.Clamp(Mathf.Lerp(movement.x, -_rudder * 1.2f, TURN_SPEEd * Time.deltaTime), -1, 1);
-        steeringWheel.SetRotation(movement.x);
+        Rudder = Mathf.Clamp(Mathf.Lerp(Rudder, -_rudder * 1.2f, TURN_SPEEd * Time.deltaTime), -1, 1);
+        steeringWheel.SetRotation(Rudder);
     }
 
     public void ChangeThrottle(float _throttle)
     {
-        movement.y = Mathf.Clamp(Mathf.Lerp(movement.y, _throttle * 1.2f, ACCELERATION * Time.deltaTime), 0, 1);
-        throttle.SetRotation(movement.y);
+        Throttle = Mathf.Clamp(Mathf.Lerp(Throttle, _throttle * 1.2f, ACCELERATION * Time.deltaTime), 0, 1);
+        throttle.SetRotation(Throttle);
     }
 }

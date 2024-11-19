@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
 {
-    private const float FORCE_PLAYER_POSITION_DURATION = 0.2f;
+    private const float FORCE_PLAYER_POSITION_DURATION = 0.1f;
+    private const float FORCE_STRAIGHTEN_UP_MARGIN = 0.1f;
     private static readonly Vector3 playerPosition = new(0, 0, -1);
 
     public Vector3 Position => transform.position;
@@ -37,6 +38,11 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
         if (input.Player.Move.ReadValue<Vector2>().x != 0)
         {
             Boat.Engine.ChangeRudder(input.Player.Move.ReadValue<Vector2>().x);
+        }
+
+        else if (Mathf.Abs(Boat.Engine.Rudder) < FORCE_STRAIGHTEN_UP_MARGIN)
+        {
+            Boat.Engine.ChangeRudder(0);
         }
     }
 
