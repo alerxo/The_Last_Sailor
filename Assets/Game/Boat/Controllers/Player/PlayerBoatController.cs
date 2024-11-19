@@ -1,12 +1,20 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 
 public class PlayerBoatController : MonoBehaviour
 {
+    public static PlayerBoatController instance;
+
+    public PlayerAdmiralController AdmiralController { get; private set; }
     private Boat boat;
 
     private void Awake()
     {
+        Assert.IsNull(instance);
+        instance = this;
+
+        AdmiralController = GetComponent<PlayerAdmiralController>();
         boat = GetComponent<Boat>();
 
         boat.OnDamaged += Boat_OnDamaged;

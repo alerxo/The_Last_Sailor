@@ -3,20 +3,17 @@ using UnityEngine;
 
 public class AIBoatController : MonoBehaviour
 {
-    private const float APROACH_DISTANCE = 10f;
-    private const float ENGAGEMENT_RANGE = 50f;
-    private const float ARRIVAL_RANGE = 10f;
     private const float DESTRUCTION_COOLDOWN = 1f;
 
     private AIBoatControllerState state;
 
-    private Boat boat;
+    public Boat Boat { get; private set; }
     private List<Cannon> leftCannons, rightCannons;
 
     public Boat Target { get; private set; }
     public Vector3? Destination { get; private set; }
-    private float distance;
-    private Vector3 cross;
+    public float distance;
+    public Vector3 cross;
 
     private float destructionTimer;
 
@@ -26,7 +23,7 @@ public class AIBoatController : MonoBehaviour
 
     public void Awake()
     {
-        boat = GetComponent<Boat>();
+        Boat = GetComponent<Boat>();
 
         leftCannons = new();
         rightCannons = new();
@@ -37,7 +34,7 @@ public class AIBoatController : MonoBehaviour
             else leftCannons.Add(cannon);
         }
 
-        boat.OnDestroyed += Boat_OnDestroyed;
+        Boat.OnDestroyed += Boat_OnDestroyed;
     }
 
     public void OnEnable()
@@ -64,28 +61,20 @@ public class AIBoatController : MonoBehaviour
         }
     }
 
-    private void PendingDestructionState()
-    {
-        if ((destructionTimer -= Time.deltaTime) <= 0)
-        {
-            SetState(AIBoatControllerState.Destruction);
-        }
-    }
-
     private void ActiveState()
     {
-        if (Target != null)
+        if (Target != null && Boat.Health > 0)
         {
-            SetDestinationAtTarget();
-            Fire();
-        }
+            if (Vector3.Cross((transform.position - Target.transform.position).normalized, transform.forward).y < 0)
+            {
+                Fire(leftCannons);
+            }
 
-        else if (Destination != null)
-        {
-            CheckIfArrived();
+            else
+            {
+                Fire(rightCannons);
+            }
         }
-
-        SetMovement();
 
 #if UNITY_EDITOR
         if (isDebugMode && Destination != null)
@@ -94,51 +83,6 @@ public class AIBoatController : MonoBehaviour
             Debug.DrawLine(transform.position, Destination.Value, Target == null ? Color.green : Color.red, Time.deltaTime);
         }
 #endif
-    }
-
-    private void SetMovement()
-    {
-        if (Destination == null)
-        {
-            distance = 0;
-            cross = Vector3.zero;
-            boat.Engine.ChangeThrottle(0);
-        }
-
-        else
-        {
-            distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(Destination.Value.x, Destination.Value.z));
-            boat.Engine.ChangeThrottle(distance < APROACH_DISTANCE ? distance / (APROACH_DISTANCE * 0.25f) : 1);
-            cross = Vector3.Cross((transform.position - Destination.Value).normalized, transform.forward);
-            boat.Engine.ChangeRudder(cross.y);
-        }
-    }
-
-    public void SetDestinationAtTarget()
-    {
-        if (Vector3.Distance(Target.transform.position + (Target.transform.right * ENGAGEMENT_RANGE), transform.position) <
-            Vector3.Distance(Target.transform.position - (Target.transform.right * ENGAGEMENT_RANGE), transform.position))
-        {
-            SetDestination(Target.transform.position + (Target.transform.right * ENGAGEMENT_RANGE));
-        }
-
-        else
-        {
-            SetDestination(Target.transform.position - (Target.transform.right * ENGAGEMENT_RANGE));
-        }
-    }
-
-    private void Fire()
-    {
-        if (Vector3.Cross((transform.position - Target.transform.position).normalized, transform.forward).y < 0)
-        {
-            Fire(leftCannons);
-        }
-
-        else
-        {
-            Fire(rightCannons);
-        }
     }
 
     private void Fire(List<Cannon> _cannons)
@@ -152,14 +96,6 @@ public class AIBoatController : MonoBehaviour
         }
     }
 
-    private void CheckIfArrived()
-    {
-        if (Vector3.Distance(transform.position, Destination.Value) < ARRIVAL_RANGE)
-        {
-            Destination = null;
-        }
-    }
-
     public void SetDestination(Vector3 _destination)
     {
         Destination = _destination;
@@ -170,18 +106,26 @@ public class AIBoatController : MonoBehaviour
         Target = _target;
     }
 
+    private void PendingDestructionState()
+    {
+        if ((destructionTimer -= Time.deltaTime) <= 0)
+        {
+            SetState(AIBoatControllerState.Destruction);
+        }
+    }
+
     private void Boat_OnDestroyed()
     {
         CombatManager.Instance.RemoveBoat(this);
         Target = null;
         Destination = null;
 
-        StartCoroutine(boat.SinkAtSurface(OnSunkAtSurface));
+        StartCoroutine(Boat.SinkAtSurface(OnSunkAtSurface));
     }
 
     private void OnSunkAtSurface()
     {
-        StartCoroutine(boat.SinkToBottom(OnSunkAtBottom));
+        StartCoroutine(Boat.SinkToBottom(OnSunkAtBottom));
     }
 
     private void OnSunkAtBottom()
@@ -205,16 +149,26 @@ public class AIBoatController : MonoBehaviour
 
             case AIBoatControllerState.PendingDestruction:
                 CombatManager.Instance.RemoveBoat(this);
-                boat.SetDefault();
-                boat.Buoyancy.SetDefault();
-                boat.RigidBody.linearVelocity = Vector3.zero;
-                boat.RigidBody.angularVelocity = Vector3.zero;
+                Boat.SetDefault();
+                Boat.Buoyancy.SetDefault();
+                Boat.RigidBody.linearVelocity = Vector3.zero;
+                Boat.RigidBody.angularVelocity = Vector3.zero;
                 Target = null;
                 Destination = null;
                 break;
 
             case AIBoatControllerState.Destruction:
-                ObjectPoolManager.Instance.Release(this);
+
+                if (TryGetComponent(out EnemyAdmiralController enemyAdmiralController))
+                {
+                    ObjectPoolManager.Instance.Release(enemyAdmiralController);
+                }
+
+                else
+                {
+                    ObjectPoolManager.Instance.Release(this);
+                }
+
                 break;
         }
     }
