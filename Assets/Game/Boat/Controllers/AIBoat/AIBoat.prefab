@@ -434,7 +434,7 @@ MonoBehaviour:
   m_Graph: {fileID: -7968278389330763975, guid: 89fff35121841094da52682d2155bd46, type: 2}
   m_BlackboardVariableOverridesList:
   - rid: 3155635094182690951
-  - rid: 3155635096556142820
+  - rid: 3155635102553211091
   references:
     version: 2
     RefIds:
@@ -446,13 +446,13 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 686801256702438833}
-    - rid: 3155635096556142820
+    - rid: 3155635102553211091
       type: {class: 'BlackboardVariable`1[[AIBoatController, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
-          m_Value0: 3758662080464479505
-          m_Value1: 8203986819131573641
-        Name: AIBoatController
+          m_Value0: 14051357310429121
+          m_Value1: 4229098009221567482
+        Name: Agent
         m_Value: {fileID: 1304222455834577700}
 --- !u!4 &996366773861597307 stripped
 Transform:

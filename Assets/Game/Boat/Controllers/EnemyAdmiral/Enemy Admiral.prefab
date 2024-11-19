@@ -134,7 +134,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distance: 0
   cross: {x: 0, y: 0, z: 0}
-  Dest: 
   isDebugMode: 1
 --- !u!114 &1368736775509713997
 MonoBehaviour:
@@ -151,7 +150,7 @@ MonoBehaviour:
   m_Graph: {fileID: -7968278389330763975, guid: 89fff35121841094da52682d2155bd46, type: 2}
   m_BlackboardVariableOverridesList:
   - rid: 3155635096556142821
-  - rid: 3155635096556142822
+  - rid: 3155635102553211092
   references:
     version: 2
     RefIds:
@@ -163,13 +162,13 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 7547554189261504318}
-    - rid: 3155635096556142822
+    - rid: 3155635102553211092
       type: {class: 'BlackboardVariable`1[[AIBoatController, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
-          m_Value0: 3758662080464479505
-          m_Value1: 8203986819131573641
-        Name: AIBoatController
+          m_Value0: 14051357310429121
+          m_Value1: 4229098009221567482
+        Name: Agent
         m_Value: {fileID: 6267792974589687061}
 --- !u!114 &-9044174118299729711
 MonoBehaviour:
@@ -198,7 +197,7 @@ MonoBehaviour:
   m_Graph: {fileID: 1042384782434072339, guid: 2b0c4e4f708406f4eaddb6f8bad9a463, type: 2}
   m_BlackboardVariableOverridesList:
   - rid: 3155635100872868567
-  - rid: 3155635100872868568
+  - rid: 3155635102553211093
   references:
     version: 2
     RefIds:
@@ -210,13 +209,13 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 7547554189261504318}
-    - rid: 3155635100872868568
+    - rid: 3155635102553211093
       type: {class: 'BlackboardVariable`1[[EnemyAdmiralController, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
-          m_Value0: 9203700042524225099
-          m_Value1: 15427060480327061668
-        Name: EnemyAdmiralController
+          m_Value0: 13061634700665492224
+          m_Value1: 15854936636965355964
+        Name: Agent
         m_Value: {fileID: -9044174118299729711}
 --- !u!4 &7846819608328590068 stripped
 Transform:
