@@ -134,7 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distance: 0
   cross: {x: 0, y: 0, z: 0}
-  isDebugMode: 1
+  isDebugMode: 0
 --- !u!114 &1368736775509713997
 MonoBehaviour:
   m_ObjectHideFlags: 0

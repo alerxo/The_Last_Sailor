@@ -14,6 +14,11 @@ public partial class MoveTowardsDestination : Action
 
     protected override Status OnStart()
     {
+        if (Agent.Value.Destination == null)
+        {
+            return Status.Failure;
+        }
+
         Agent.Value.Boat.Engine.ChangeThrottle(Agent.Value.distance < APROACH_DISTANCE ? Agent.Value.distance / (APROACH_DISTANCE * 0.25f) : 1);
         Agent.Value.cross = Vector3.Cross((Agent.Value.transform.position - Agent.Value.Destination.Value).normalized, Agent.Value.transform.forward);
         Agent.Value.Boat.Engine.ChangeRudder(Agent.Value.cross.y);
