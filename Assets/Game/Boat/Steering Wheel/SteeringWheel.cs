@@ -12,6 +12,13 @@ public class SteeringWheel : MonoBehaviour
     private AudioSource audioSource;
     private bool allowedPlaying;
 
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        allowedPlaying = false;
+        PlayBellSound();
+    }
+
     private void Update()
     {
         PlayBellSound();
