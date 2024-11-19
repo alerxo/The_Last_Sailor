@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SteeringWheel : MonoBehaviour
@@ -6,9 +7,27 @@ public class SteeringWheel : MonoBehaviour
 
     [Tooltip("The rotating part of the mesh")]
     [SerializeField] private Transform rotatingPart;
+    [SerializeField] private AudioClip audioClip;
 
-    public void SetRotation(float rotation)
+    private AudioSource audioSource;
+    private bool allowedPlaying;
+
+    private void Update()
     {
-        rotatingPart.localRotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Lerp(-MAX_ROTATION, MAX_ROTATION, (rotation + 1) / 2)));
+        PlayBellSound();
+    }
+
+    private void PlayBellSound()
+    {
+        if (rotatingPart.localRotation.eulerAngles.z <= 20 && rotatingPart.localRotation.eulerAngles.z >= -20 && allowedPlaying == true)
+        {
+            allowedPlaying = false;
+            audioSource.PlayOneShot(audioClip);
+        }
+
+        if (rotatingPart.localRotation.eulerAngles.z > 20 || rotatingPart.localRotation.eulerAngles.z < -20) 
+        {
+            allowedPlaying = true;   
+        }
     }
 }
