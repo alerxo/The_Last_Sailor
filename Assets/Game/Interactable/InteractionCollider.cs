@@ -1,17 +1,23 @@
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class InteractionCollider : MonoBehaviour
 {
     public static event UnityAction<IInteractable> OnInteractableChanged;
+
+    private const int LOOK_ANGLE = 45;
     private readonly List<IInteractable> interactablesInRange = new();
     private IInteractable current;
+    private FirstPersonController player;
 
     private InputSystem_Actions input;
 
     private void Awake()
     {
+        player = GetComponent<FirstPersonController>();
+
         input = new();
         input.Player.Enable();
         input.Player.Interact.performed += Interact_performed;
@@ -29,7 +35,7 @@ public class InteractionCollider : MonoBehaviour
 
     private void Update()
     {
-        if (interactablesInRange.Count == 0 || CameraManager.Instance.State != CameraState.Player)
+        if (player.State != PlayerState.FirstPerson || interactablesInRange.Count == 0 || CameraManager.Instance.State != CameraState.Player)
         {
             if (current != null)
             {
@@ -40,11 +46,24 @@ public class InteractionCollider : MonoBehaviour
             return;
         }
 
-        IInteractable closest = interactablesInRange[0];
-        float closestDistance = GetDistance(closest);
+        IInteractable closest = null;
+        float closestDistance = float.MaxValue;
 
-        for (int i = 1; i < interactablesInRange.Count; i++)
+        for (int i = 0; i < interactablesInRange.Count; i++)
         {
+            if (!interactablesInRange[i].CanInteract || !IsPlayerFacing(interactablesInRange[i]))
+            {
+                continue;
+            }
+
+            if (closest == null)
+            {
+                closest = interactablesInRange[i];
+                closestDistance = GetDistance(interactablesInRange[i]);
+
+                continue;
+            }
+
             float distance = GetDistance(interactablesInRange[i]);
 
             if (distance < closestDistance)
@@ -59,6 +78,11 @@ public class InteractionCollider : MonoBehaviour
             current = closest;
             OnInteractableChanged?.Invoke(current);
         }
+    }
+
+    private bool IsPlayerFacing(IInteractable interactable)
+    {
+        return Vector3.Angle(interactable.Position - player.transform.position, player.transform.forward) < LOOK_ANGLE;
     }
 
     private float GetDistance(IInteractable interactable)

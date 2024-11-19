@@ -395,6 +395,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7565428663125270620, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1304222455834577700}
+    - targetCorrespondingSourceObject: {fileID: 7565428663125270620, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3960747803573023257}
   m_SourcePrefab: {fileID: 100100000, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
 --- !u!1 &686801256702438833 stripped
 GameObject:
@@ -413,7 +416,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9aefac43a7bee04ea7dc50f1e6a518d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distance: 0
+  cross: {x: 0, y: 0, z: 0}
   isDebugMode: 0
+--- !u!114 &3960747803573023257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686801256702438833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Graph: {fileID: -7968278389330763975, guid: 89fff35121841094da52682d2155bd46, type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 3155635094182690951
+  - rid: 3155635096556142820
+  references:
+    version: 2
+    RefIds:
+    - rid: 3155635094182690951
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 686801256702438833}
+    - rid: 3155635096556142820
+      type: {class: 'BlackboardVariable`1[[AIBoatController, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 3758662080464479505
+          m_Value1: 8203986819131573641
+        Name: AIBoatController
+        m_Value: {fileID: 1304222455834577700}
 --- !u!4 &996366773861597307 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7828946233949179286, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}

@@ -6,8 +6,8 @@ public class Cannon : MonoBehaviour
     private const float FORCE = 150000;
     private const float COOLDOWN = 5;
     private const float ROTATION_SPEED = 0.7f;
-    private const float PITCH_OFFSET = -5;
-    private const float MAX_PITCH = 10;
+    private const float PITCH_OFFSET = -4;
+    private const float MAX_PITCH = 7.5f;
     private const float MAX_YAW = 20;
 
     public CannonState State { get; private set; }

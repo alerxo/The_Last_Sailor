@@ -17,7 +17,7 @@ public class Boat : MonoBehaviour, IDamageable
     [SerializeField] Transform COM;
 
     private Vector3 startCOM;
-    private float health;
+    public float Health { get; private set; }
     public Engine Engine { get; private set; }
     public Buoyancy Buoyancy { get; private set; }
     public Rigidbody RigidBody { get; private set; }
@@ -42,7 +42,9 @@ public class Boat : MonoBehaviour, IDamageable
 
     public void Damage(float _damage)
     {
-        if ((health -= _damage) == 0)
+        if (Health == 0) return;
+
+        if (Mathf.Clamp(Health -= _damage, 0, MaxHealth) <= 0)
         {
             OnDestroyed?.Invoke();
         }
@@ -91,7 +93,7 @@ public class Boat : MonoBehaviour, IDamageable
 
     public void SetDefault()
     {
-        health = MaxHealth;
+        Health = MaxHealth;
         COM.localPosition = startCOM;
     }
 }

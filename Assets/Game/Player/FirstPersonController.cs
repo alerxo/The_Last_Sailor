@@ -11,7 +11,7 @@ public class FirstPersonController : MonoBehaviour
     private const float ACCELERATION = 7f;
     private const float CAPSULE_HEIGHT = 1f;
     private const float CAPSULE_RADIUS = 0.5f;
-    private const float CAPSULE_MARGIN = 0.9f;
+    private const float CAPSULE_MARGIN = 0.6f;
 
     public static FirstPersonController instance;
 
@@ -89,7 +89,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void EnableInput()
     {
-        if (UIManager.Instance.State == UIState.HUD && CameraManager.Instance.State == CameraState.Player) input.Player.Enable();
+        if (UIManager.Instance.State == UIState.HUD && State == PlayerState.FirstPerson) input.Player.Enable();
         else input.Player.Disable();
     }
 

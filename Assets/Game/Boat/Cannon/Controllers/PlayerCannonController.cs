@@ -2,10 +2,14 @@ using UnityEngine;
 
 public class PlayerCannonController : MonoBehaviour, IInteractable
 {
+    private const float ROTATION_SPEED = 2.5f;
+
     [Tooltip("Target for the cannon camera")]
     [SerializeField] private Transform cameraTarget;
 
     public Vector3 Position => transform.position;
+    public bool CanInteract => cannon.State == CannonState.Ready;
+
     private InputSystem_Actions input;
     private Cannon cannon;
 
@@ -27,18 +31,23 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (input.Player.Move.ReadValue<Vector2>().magnitude > 0)
-        {
-            Vector2 rotation = input.Player.Move.ReadValue<Vector2>();
+        Vector2 rotation = input.Player.Look.ReadValue<Vector2>();
 
+        if (rotation.magnitude == 0)
+        {
+            rotation = input.Player.Move.ReadValue<Vector2>();
+        }
+
+        if (rotation.magnitude > 0)
+        {
             if (rotation.x != 0)
             {
-                cannon.SetYaw(rotation.x);
+                cannon.SetYaw(Mathf.Clamp(rotation.x, -ROTATION_SPEED, ROTATION_SPEED));
             }
 
             if (rotation.y != 0)
             {
-                cannon.SetPitch(rotation.y);
+                cannon.SetPitch(Mathf.Clamp(rotation.y, -ROTATION_SPEED, ROTATION_SPEED));
             }
         }
     }
@@ -48,6 +57,8 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
         if (cannon.State == CannonState.Ready)
         {
             cannon.Fire();
+            CameraManager.Instance.SetState(CameraState.Player);
+            FirstPersonController.instance.SetState(PlayerState.FirstPerson);
         }
     }
 
@@ -61,8 +72,11 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        CameraManager.Instance.SetInteractionCamera(cameraTarget);
-        FirstPersonController.instance.SetState(PlayerState.Cannon);
-        input.Player.Enable();
+        if (cannon.State == CannonState.Ready)
+        {
+            CameraManager.Instance.SetInteractionCamera(cameraTarget);
+            FirstPersonController.instance.SetState(PlayerState.Cannon);
+            input.Player.Enable();
+        }
     }
 }
