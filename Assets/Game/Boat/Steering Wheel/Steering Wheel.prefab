@@ -388,7 +388,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6934040351366515465}
   - component: {fileID: 6212035584758067149}
-  - component: {fileID: 3197372191702461136}
   m_Layer: 0
   m_Name: Steering Wheel
   m_TagString: Untagged
@@ -426,25 +425,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1452507a48c73594aacec7cb36828284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotatingPart: {fileID: 0}
---- !u!135 &3197372191702461136
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8214748113773065637}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.7
-  m_Center: {x: 0, y: 0, z: -0.7}
+  rotatingPart: {fileID: 8261583989967440153}
