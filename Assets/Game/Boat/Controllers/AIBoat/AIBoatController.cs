@@ -8,12 +8,11 @@ public class AIBoatController : MonoBehaviour
     private AIBoatControllerState state;
 
     public Boat Boat { get; private set; }
-    private List<Cannon> leftCannons, rightCannons;
+    public Admiral Admiral { get; private set; }
 
-    public Boat Target { get; private set; }
     public Vector3? Destination { get; private set; }
-    public float distance;
-    public Vector3 cross;
+    public float Distance { get; private set; }
+    public Vector3 Cross { get; private set; }
 
     private float destructionTimer;
 
@@ -24,15 +23,6 @@ public class AIBoatController : MonoBehaviour
     public void Awake()
     {
         Boat = GetComponent<Boat>();
-
-        leftCannons = new();
-        rightCannons = new();
-
-        foreach (Cannon cannon in GetComponentsInChildren<Cannon>())
-        {
-            if (cannon.transform.localPosition.x > 0) rightCannons.Add(cannon);
-            else leftCannons.Add(cannon);
-        }
 
         Boat.OnDestroyed += Boat_OnDestroyed;
     }
@@ -52,7 +42,7 @@ public class AIBoatController : MonoBehaviour
         switch (state)
         {
             case AIBoatControllerState.Active:
-                ActiveState();
+                DrawDebug();
                 break;
 
             case AIBoatControllerState.PendingDestruction:
@@ -61,39 +51,9 @@ public class AIBoatController : MonoBehaviour
         }
     }
 
-    private void ActiveState()
+    public void SetAdmiral(Admiral _admiral)
     {
-        if (Target != null && Boat.Health > 0)
-        {
-            if (Vector3.Cross((transform.position - Target.transform.position).normalized, transform.forward).y < 0)
-            {
-                Fire(leftCannons);
-            }
-
-            else
-            {
-                Fire(rightCannons);
-            }
-        }
-
-#if UNITY_EDITOR
-        if (isDebugMode && Destination != null)
-        {
-            DebugUtil.DrawBox(Destination.Value, Quaternion.identity, Vector3.one, Target == null ? Color.green : Color.red, Time.deltaTime);
-            Debug.DrawLine(transform.position, Destination.Value, Target == null ? Color.green : Color.red, Time.deltaTime);
-        }
-#endif
-    }
-
-    private void Fire(List<Cannon> _cannons)
-    {
-        foreach (Cannon cannon in _cannons)
-        {
-            if (cannon.State == CannonState.Ready)
-            {
-                cannon.Fire();
-            }
-        }
+        Admiral = _admiral;
     }
 
     public void SetDestination(Vector3 _destination)
@@ -101,23 +61,19 @@ public class AIBoatController : MonoBehaviour
         Destination = _destination;
     }
 
-    public void SetTarget(Boat _target)
+    public void SetDistance(float _distance)
     {
-        Target = _target;
+        Distance = _distance;
     }
 
-    private void PendingDestructionState()
+    public void SetCross(Vector3 _cross)
     {
-        if ((destructionTimer -= Time.deltaTime) <= 0)
-        {
-            SetState(AIBoatControllerState.Destruction);
-        }
+        Cross = _cross;
     }
 
     private void Boat_OnDestroyed()
     {
         CombatManager.Instance.RemoveBoat(this);
-        Target = null;
         Destination = null;
 
         StartCoroutine(Boat.SinkAtSurface(OnSunkAtSurface));
@@ -131,6 +87,14 @@ public class AIBoatController : MonoBehaviour
     private void OnSunkAtBottom()
     {
         SetState(AIBoatControllerState.PendingDestruction);
+    }
+
+    private void PendingDestructionState()
+    {
+        if ((destructionTimer -= Time.deltaTime) <= 0)
+        {
+            SetState(AIBoatControllerState.Destruction);
+        }
     }
 
     private void SetState(AIBoatControllerState _state)
@@ -153,7 +117,6 @@ public class AIBoatController : MonoBehaviour
                 Boat.Buoyancy.SetDefault();
                 Boat.RigidBody.linearVelocity = Vector3.zero;
                 Boat.RigidBody.angularVelocity = Vector3.zero;
-                Target = null;
                 Destination = null;
                 break;
 
@@ -171,6 +134,17 @@ public class AIBoatController : MonoBehaviour
 
                 break;
         }
+    }
+
+    private void DrawDebug()
+    {
+#if UNITY_EDITOR
+        if (isDebugMode && Destination != null)
+        {
+            DebugUtil.DrawBox(Destination.Value, Quaternion.identity, Vector3.one, Admiral.Enemy == null ? Color.green : Color.red, Time.deltaTime);
+            Debug.DrawLine(transform.position, Destination.Value, Admiral.Enemy == null ? Color.green : Color.red, Time.deltaTime);
+        }
+#endif
     }
 }
 

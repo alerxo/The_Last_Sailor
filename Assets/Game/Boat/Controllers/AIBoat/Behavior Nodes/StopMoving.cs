@@ -11,8 +11,8 @@ public partial class StopMovingAction : Action
     [SerializeReference] public BlackboardVariable<AIBoatController> Agent;
     protected override Status OnStart()
     {
-        Agent.Value.distance = 0;
-        Agent.Value.cross = Vector3.zero;
+        Agent.Value.SetDistance(0);
+        Agent.Value.SetCross(Vector3.zero);
         Agent.Value.Boat.Engine.ChangeThrottle(0);
 
         return Status.Success;

@@ -9,12 +9,10 @@ using Unity.Properties;
 public partial class MoveTowardsEnemyAction : Action
 {
     [SerializeReference] public BlackboardVariable<EnemyAdmiralController> Agent;
-    private const float ENGAGEMENT_RANGE = 50f;
+    private const float ENGAGEMENT_RANGE = 150f;
 
     protected override Status OnStart()
     {
-        Agent.Value.BoatController.SetTarget(Agent.Value.Enemy.Owner);
-
         if (Vector3.Distance(Agent.Value.Enemy.transform.position + (Agent.Value.Enemy.transform.right * ENGAGEMENT_RANGE), Agent.Value.transform.position) <
             Vector3.Distance(Agent.Value.Enemy.transform.position - (Agent.Value.Enemy.transform.right * ENGAGEMENT_RANGE), Agent.Value.transform.position))
         {
