@@ -13,6 +13,8 @@ public class FirstPersonController : MonoBehaviour
     private const float CAPSULE_RADIUS = 0.5f;
     private const float CAPSULE_MARGIN = 0.6f;
 
+    private WalkFoleyScript walkFoleyScript;
+
     public static FirstPersonController instance;
 
     public static event UnityAction<PlayerState> OnPlayerStateChanged;
@@ -25,6 +27,9 @@ public class FirstPersonController : MonoBehaviour
     private Vector3 smoothedMoveDirection;
     private bool IsGrounded;
     private float TimeGroundedInSeconds;
+    private bool canWalk;
+    private bool isStandingStill;
+
 
     private InputSystem_Actions input;
     private Rigidbody rb;
@@ -40,6 +45,8 @@ public class FirstPersonController : MonoBehaviour
     {
         Assert.IsNull(instance);
         instance = this;
+        canWalk = false;
+        isStandingStill = true;
 
         movementSpeed = WALK_SPEED;
 
@@ -49,6 +56,8 @@ public class FirstPersonController : MonoBehaviour
         input.Player.Jump.performed += Jump_performed;
         input.Player.Sprint.started += Sprint_started;
         input.Player.Sprint.canceled += Sprint_canceled;
+
+        walkFoleyScript = GetComponentInChildren<WalkFoleyScript>();
 
 #if UNITY_EDITOR
         if (isDebugMode)
@@ -71,6 +80,21 @@ public class FirstPersonController : MonoBehaviour
     {
         GetMoveDirection();
         RotatePlayerTowardsCamera();
+        if (State == PlayerState.FirstPerson && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && IsGrounded)
+        {
+            canWalk = true;
+        }
+        else {
+            canWalk = false;
+        }
+        if (canWalk)
+        {
+            walkFoleyScript.StartWalking();
+        }
+        else
+        {
+            walkFoleyScript.StopWalking();
+        }
     }
 
     void FixedUpdate()
@@ -159,11 +183,15 @@ public class FirstPersonController : MonoBehaviour
     private void Sprint_started(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
         movementSpeed = SPRINT_SPEED;
+        walkFoleyScript.maxTimeBetweenFootsteps = walkFoleyScript.maxTimeBetweenFootstepsSprint;
+        walkFoleyScript.minTimeBetweenFootsteps = walkFoleyScript.minTimeBetweenFootstepsSprint;
     }
 
     private void Sprint_canceled(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
         movementSpeed = WALK_SPEED;
+        walkFoleyScript.maxTimeBetweenFootsteps = 0.6f;
+        walkFoleyScript.minTimeBetweenFootsteps = 0.3f;
     }
 
     private void Jump_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
