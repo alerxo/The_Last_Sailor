@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class Cannon : MonoBehaviour
 {
-    private const float FORCE = 150000;
+    private const float FORCE = 300;
+
     private const float COOLDOWN = 5;
     private const float ROTATION_SPEED = 0.7f;
     private const float PITCH_OFFSET = -4;
@@ -18,8 +19,6 @@ public class Cannon : MonoBehaviour
     [SerializeField] private Transform barrel;
     [Tooltip("The explosion point, should be place in front of barrel and not colliding with it")]
     [SerializeField] private Transform explosionPoint;
-    [Tooltip("The cannonbal spawn point, should be place in 0.1 units in front of explosion point")]
-    [SerializeField] private Transform cannonballSpawnPoint;
 
     private ParticleSystem[] particleSystems;
     private AudioSource audioSource;
@@ -60,8 +59,8 @@ public class Cannon : MonoBehaviour
 
     public void Fire()
     {
-        Cannonball cannonball = ObjectPoolManager.Instance.Spawn<Cannonball>(cannonballSpawnPoint.position, Quaternion.identity);
-        cannonball.GetComponent<Rigidbody>().AddExplosionForce(FORCE, explosionPoint.position, 0, 0);
+        Cannonball cannonball = ObjectPoolManager.Instance.Spawn<Cannonball>(explosionPoint.position, Quaternion.identity);
+        cannonball.GetComponent<Rigidbody>().AddForce(-barrel.up * FORCE, ForceMode.Impulse);
         cannonball.SetIgnore(GetComponentInParent<IDamageable>());
 
         foreach (ParticleSystem particleSystem in particleSystems)

@@ -9,7 +9,7 @@ using Unity.Properties;
 public partial class MoveTowardsEnemyAction : Action
 {
     [SerializeReference] public BlackboardVariable<EnemyAdmiralController> Agent;
-    private const float ENGAGEMENT_RANGE = 50f;
+    private const float ENGAGEMENT_RANGE = 150f;
 
     protected override Status OnStart()
     {

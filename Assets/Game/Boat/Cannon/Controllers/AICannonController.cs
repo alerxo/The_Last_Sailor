@@ -2,19 +2,16 @@ using UnityEngine;
 
 public class AICannonController : MonoBehaviour
 {
-    private const float MAX_RANGE = 200f;
-    private const float MAX_AIM_ANGLE = 45f;
-    private const float MAX_FIRE_ANGLE = 1f;
-    private const float BOAT_LENGTH = 7.5f;
+    private const float MAX_RANGE = 300f;
+    private const float MAX_AIM_ANGLE = 160f;
+    private const float MAX_FIRE_ANGLE = 3f;
+    private const float BOAT_LENGTH = 6f;
 
     private AICannonControllerState state;
 
     private AIBoatController owner;
     private Cannon cannon;
     private Boat target;
-
-    private float distance;
-    private Vector3 cross;
 
 #if UNITY_EDITOR
     [SerializeField] private bool isDebugMode;
@@ -37,7 +34,7 @@ public class AICannonController : MonoBehaviour
 
         if (state == AICannonControllerState.Aiming)
         {
-            RotateTowardsTarget();
+            AimAtTarget();
         }
 
         if (state == AICannonControllerState.Shooting)
@@ -48,14 +45,14 @@ public class AICannonController : MonoBehaviour
 
     private void CheckIfReady()
     {
-        if (cannon.State != CannonState.Ready || owner.Admiral.Enemy == null || owner.Boat.Health > 0)
+        if (cannon.State != CannonState.Ready || owner.Admiral.Enemy == null || owner.Boat.Health <= 0)
         {
             SetState(AICannonControllerState.Inactive);
         }
 
         else
         {
-            SetState(AICannonControllerState.Aiming);
+            SetState(AICannonControllerState.Targeting);
         }
     }
 
@@ -75,31 +72,37 @@ public class AICannonController : MonoBehaviour
             }
         }
 
-        SetState(target == null ? AICannonControllerState.Inactive : AICannonControllerState.Aiming);
+        if (target != null)
+        {
+            SetState(AICannonControllerState.Aiming);
+        }
     }
 
     private bool IsValidTarget(Boat _boat, float _distance)
     {
-        return _distance < MAX_RANGE && GetCurrentAngle(_boat) <= GetAimWindowAngle(_boat) + Cannon.MAX_YAW + MAX_AIM_ANGLE;
+        return _distance < MAX_RANGE && GetCurrentAngle(_boat) <= MAX_AIM_ANGLE;
     }
 
-    private void RotateTowardsTarget()
+    private void AimAtTarget()
     {
-        distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.transform.position.x, target.transform.position.z));
-        cannon.SetPitch(Mathf.Lerp(-1, 1, distance / MAX_RANGE));
+        RotatePitch();
+        RotateYaw();
 
-        cross = Vector3.Cross((transform.position - target.transform.position).normalized, transform.forward);
-        cannon.SetYaw(cross.y);
-
-        if (CanFire())
+        if (GetCurrentAngle(target) < GetAimWindowAngle(target) + MAX_FIRE_ANGLE)
         {
             SetState(AICannonControllerState.Shooting);
         }
     }
 
-    private bool CanFire()
+    private void RotatePitch()
     {
-        return GetCurrentAngle(target) < GetAimWindowAngle(target) + MAX_FIRE_ANGLE;
+        float distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.transform.position.x, target.transform.position.z));
+        cannon.SetPitch(Mathf.Lerp(-1, 1, distance / MAX_RANGE));
+    }
+
+    private void RotateYaw()
+    {
+        cannon.SetYaw(Vector3.Cross((transform.position - target.transform.position).normalized, transform.forward).y);
     }
 
     private void FireAtTarget()

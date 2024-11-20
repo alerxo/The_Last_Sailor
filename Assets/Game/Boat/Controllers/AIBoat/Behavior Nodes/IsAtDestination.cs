@@ -14,6 +14,11 @@ public partial class IsAtDestinationAction : Action
 
     protected override Status OnStart()
     {
+        if(Agent.Value.Destination == null)
+        {
+            return Status.Failure;
+        }
+
         Agent.Value.SetDistance(Vector2.Distance(new Vector2(Agent.Value.transform.position.x, Agent.Value.transform.position.z), new Vector2(Agent.Value.Destination.Value.x, Agent.Value.Destination.Value.z)));
 
         if (IsInverted)
