@@ -14,18 +14,23 @@ public partial class IsAtDestinationAction : Action
 
     protected override Status OnStart()
     {
-        Agent.Value.distance = Vector2.Distance(new Vector2(Agent.Value.transform.position.x, Agent.Value.transform.position.z), new Vector2(Agent.Value.Destination.Value.x, Agent.Value.Destination.Value.z));
+        if(Agent.Value.Destination == null)
+        {
+            return Status.Failure;
+        }
+
+        Agent.Value.SetDistance(Vector2.Distance(new Vector2(Agent.Value.transform.position.x, Agent.Value.transform.position.z), new Vector2(Agent.Value.Destination.Value.x, Agent.Value.Destination.Value.z)));
 
         if (IsInverted)
         {
             return !IsAtDestination() ? Status.Success : Status.Failure;
         }
 
-        return  IsAtDestination() ? Status.Success : Status.Failure;
+        return IsAtDestination() ? Status.Success : Status.Failure;
     }
 
     private bool IsAtDestination()
     {
-        return Agent.Value.distance <= ARRIVAL_RANGE;
+        return Agent.Value.Distance <= ARRIVAL_RANGE;
     }
 }
