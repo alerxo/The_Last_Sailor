@@ -5,11 +5,14 @@ public abstract class Admiral : MonoBehaviour
 {
     public Boat Owner { get; private set; }
 
-    public Admiral Enemy {  get; protected set; }
+    public Admiral Enemy { get; protected set; }
+
+    public readonly List<Boat> Fleet = new();
 
     public virtual void Awake()
     {
         Owner = GetComponent<Boat>();
+        Fleet.Add(Owner);
     }
 
     public void SetEnemy(Admiral _enemy)

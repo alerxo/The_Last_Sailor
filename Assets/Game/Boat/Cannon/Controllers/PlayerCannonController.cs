@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerCannonController : MonoBehaviour, IInteractable
 {
-    private const float ROTATION_SPEED = 2.5f;
+    private const float ROTATION_SPEED = 1f;
 
     [Tooltip("Target for the cannon camera")]
     [SerializeField] private Transform cameraTarget;

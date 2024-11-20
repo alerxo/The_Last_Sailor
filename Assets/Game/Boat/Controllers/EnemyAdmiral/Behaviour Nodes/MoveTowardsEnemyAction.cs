@@ -13,8 +13,6 @@ public partial class MoveTowardsEnemyAction : Action
 
     protected override Status OnStart()
     {
-        Agent.Value.BoatController.SetTarget(Agent.Value.Enemy.Owner);
-
         if (Vector3.Distance(Agent.Value.Enemy.transform.position + (Agent.Value.Enemy.transform.right * ENGAGEMENT_RANGE), Agent.Value.transform.position) <
             Vector3.Distance(Agent.Value.Enemy.transform.position - (Agent.Value.Enemy.transform.right * ENGAGEMENT_RANGE), Agent.Value.transform.position))
         {

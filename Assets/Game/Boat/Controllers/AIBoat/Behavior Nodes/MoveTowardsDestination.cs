@@ -19,9 +19,9 @@ public partial class MoveTowardsDestination : Action
             return Status.Failure;
         }
 
-        Agent.Value.Boat.Engine.ChangeThrottle(Agent.Value.distance < APROACH_DISTANCE ? Agent.Value.distance / (APROACH_DISTANCE * 0.25f) : 1);
-        Agent.Value.cross = Vector3.Cross((Agent.Value.transform.position - Agent.Value.Destination.Value).normalized, Agent.Value.transform.forward);
-        Agent.Value.Boat.Engine.ChangeRudder(Agent.Value.cross.y);
+        Agent.Value.Boat.Engine.ChangeThrottle(Agent.Value.Distance < APROACH_DISTANCE ? Agent.Value.Distance / (APROACH_DISTANCE * 0.25f) : 1);
+        Agent.Value.SetCross(Vector3.Cross((Agent.Value.transform.position - Agent.Value.Destination.Value).normalized, Agent.Value.transform.forward));
+        Agent.Value.Boat.Engine.ChangeRudder(Agent.Value.Cross.y);
 
         return Status.Success;
     }

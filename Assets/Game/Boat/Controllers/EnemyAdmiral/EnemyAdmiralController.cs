@@ -9,5 +9,6 @@ public class EnemyAdmiralController : Admiral
         base.Awake();
 
         BoatController = GetComponent<AIBoatController>();
+        BoatController.SetAdmiral(this);
     }
 }
