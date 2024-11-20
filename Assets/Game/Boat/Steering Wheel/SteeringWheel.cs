@@ -7,36 +7,16 @@ public class SteeringWheel : MonoBehaviour
 
     [Tooltip("The rotating part of the mesh")]
     [SerializeField] private Transform rotatingPart;
-    [SerializeField] private AudioClip audioClip;
-
-    private AudioSource audioSource;
-    private bool allowedPlaying;
 
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-        allowedPlaying = false;
-        PlayBellSound();
     }
 
     private void Update()
     {
-        PlayBellSound();
+
     }
 
-    private void PlayBellSound()
-    {
-        if (rotatingPart.localRotation.eulerAngles.z <= 20 && rotatingPart.localRotation.eulerAngles.z >= -20 && allowedPlaying == true)
-        {
-            allowedPlaying = false;
-            audioSource.PlayOneShot(audioClip);
-        }
-
-        if (rotatingPart.localRotation.eulerAngles.z > 20 || rotatingPart.localRotation.eulerAngles.z < -20)
-        {
-            allowedPlaying = true;
-        }
-    }
 
     public void SetRotation(float rotation)
     {
