@@ -300,6 +300,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6f04b201fecb8b1409fd2bb35bb2520f, type: 3}
   minTimeBetweenFootsteps: 0.3
   maxTimeBetweenFootsteps: 0.6
+  minTimeBetweenFootstepsNormal: 0.3
+  maxTimeBetweenFootstepsNormal: 0.6
+  minTimeBetweenFootstepsSprint: 0.2
+  maxTimeBetweenFootstepsSprint: 0.4
 --- !u!1 &8029780014959713654
 GameObject:
   m_ObjectHideFlags: 0
