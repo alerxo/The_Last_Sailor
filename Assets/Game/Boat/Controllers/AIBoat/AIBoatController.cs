@@ -10,8 +10,6 @@ public class AIBoatController : MonoBehaviour
     public Boat Boat { get; private set; }
     public Admiral Admiral { get; private set; }
 
-    private List<Cannon> leftCannons, rightCannons;
-
     public Vector3? Destination { get; private set; }
     public float Distance { get; private set; }
     public Vector3 Cross { get; private set; }
@@ -25,15 +23,6 @@ public class AIBoatController : MonoBehaviour
     public void Awake()
     {
         Boat = GetComponent<Boat>();
-
-        leftCannons = new();
-        rightCannons = new();
-
-        foreach (Cannon cannon in GetComponentsInChildren<Cannon>())
-        {
-            if (cannon.transform.localPosition.x > 0) rightCannons.Add(cannon);
-            else leftCannons.Add(cannon);
-        }
 
         Boat.OnDestroyed += Boat_OnDestroyed;
     }

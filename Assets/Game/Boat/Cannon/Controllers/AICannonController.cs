@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class AICannonController : MonoBehaviour
 {
-    private const float MAX_RANGE = 300f;
-    private const float MAX_AIM_ANGLE = 160f;
-    private const float MAX_FIRE_ANGLE = 3f;
-    private const float BOAT_LENGTH = 6f;
+    private const float MAX_RANGE = 500f;
+    private const float MAX_TARGET_ANGLE = 100f;
+    private const float MAX_FIRE_PITCH_DIFFERENCE = 0.50f;
+    private const float MAX_FIRE_YAW_DIFFERENCE = 1f;
+    private const float BOAT_LENGTH = 15f;
 
     private AICannonControllerState state;
 
@@ -25,7 +26,7 @@ public class AICannonController : MonoBehaviour
 
     private void Update()
     {
-        CheckIfReady();
+        CheckIfActive();
 
         if (state == AICannonControllerState.Targeting)
         {
@@ -43,9 +44,9 @@ public class AICannonController : MonoBehaviour
         }
     }
 
-    private void CheckIfReady()
+    private void CheckIfActive()
     {
-        if (cannon.State != CannonState.Ready || owner.Admiral.Enemy == null || owner.Boat.Health <= 0)
+        if (owner.Admiral.Enemy == null || owner.Boat.Health <= 0)
         {
             SetState(AICannonControllerState.Inactive);
         }
@@ -80,65 +81,82 @@ public class AICannonController : MonoBehaviour
 
     private bool IsValidTarget(Boat _boat, float _distance)
     {
-        return _distance < MAX_RANGE && GetCurrentAngle(_boat) <= MAX_AIM_ANGLE;
+        return _distance < MAX_RANGE && GetCurrentAngle(_boat.transform.position) <= MAX_TARGET_ANGLE;
     }
 
     private void AimAtTarget()
     {
-        RotatePitch();
-        RotateYaw();
+        Vector3 targetPredictedPosition = GetPredictedPosition();
 
-        if (GetCurrentAngle(target) < GetAimWindowAngle(target) + MAX_FIRE_ANGLE)
+        bool pitch = RotatePitch(targetPredictedPosition);
+        bool yaw = RotateYaw(targetPredictedPosition);
+
+        if (cannon.State == CannonState.Ready && pitch && yaw)
         {
             SetState(AICannonControllerState.Shooting);
         }
+
+#if UNITY_EDITOR
+        if (isDebugMode)
+        {
+            float distance = Vector3.Distance(transform.position, target.transform.position) + (BOAT_LENGTH / 2);
+
+            cannon.GetHitPrediction_IsDebugMode(target.transform.position.y);
+            DebugUtil.DrawBox(targetPredictedPosition, target.transform.rotation, new Vector3(7, 7, BOAT_LENGTH), Color.red, Time.deltaTime);
+        }
+#endif
     }
 
-    private void RotatePitch()
+    private Vector3 GetPredictedPosition()
     {
-        float distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(target.transform.position.x, target.transform.position.z));
-        cannon.SetPitch(Mathf.Lerp(-1, 1, distance / MAX_RANGE));
+        float speed = Cannon.CANNONBALL_FORCE / Cannon.CANNONBALL_MASS;
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+        float estimatedTime = distance / speed;
+
+        Vector3 velocity = target.RigidBody.linearVelocity;
+        velocity.y = 0;
+
+        return target.transform.position + (velocity * estimatedTime);
     }
 
-    private void RotateYaw()
+    private bool RotatePitch(Vector3 predictedPosition)
     {
-        cannon.SetYaw(Vector3.Cross((transform.position - target.transform.position).normalized, transform.forward).y);
+        float actual = Vector3.Distance(transform.position, predictedPosition);
+        float prediction = Vector3.Distance(transform.position, cannon.GetHitPrediction(predictedPosition.y));
+        float difference = 1 - Mathf.Clamp(prediction / actual, 0, 2);
+        cannon.SetPitch(difference);
+
+        return Mathf.Abs(difference) < MAX_FIRE_PITCH_DIFFERENCE;
+    }
+
+    private bool RotateYaw(Vector3 predictedPosition)
+    {
+        cannon.SetYaw(Vector3.Cross((transform.position - predictedPosition).normalized, transform.forward).y);
+
+        return GetCurrentAngle(predictedPosition) < GetAcceptableFireAngle(target, predictedPosition);
+    }
+
+    private float GetCurrentAngle(Vector3 position)
+    {
+        return Vector3.Angle(transform.forward, (position - transform.position).normalized);
+    }
+
+    private float GetAcceptableFireAngle(Boat _boat, Vector3 position)
+    {
+        Vector3 front = (GetOffsetPosition(_boat, position, BOAT_LENGTH / 2) - transform.position).normalized;
+        Vector3 rear = (GetOffsetPosition(_boat, position, -BOAT_LENGTH / 2) - transform.position).normalized;
+
+        return (Vector3.Angle(front, rear) / 2) + MAX_FIRE_YAW_DIFFERENCE;
+    }
+
+    private Vector3 GetOffsetPosition(Boat _boat, Vector3 position, float _offset)
+    {
+        return position + _boat.transform.TransformVector(new Vector3(0, 0, _offset));
     }
 
     private void FireAtTarget()
     {
         cannon.Fire();
-    }
-
-    private float GetCurrentAngle(Boat _boat)
-    {
-#if UNITY_EDITOR
-        if (isDebugMode)
-        {
-            float distance = Vector3.Distance(transform.position, _boat.transform.position) + BOAT_LENGTH;
-            Debug.DrawLine(transform.position, transform.position + (transform.forward * distance), Color.yellow, Time.deltaTime);
-            Debug.DrawLine(transform.position, transform.position + (_boat.transform.position - transform.position).normalized * distance, Color.green, Time.deltaTime);
-        }
-#endif
-        return Vector3.Angle(transform.forward, (_boat.transform.position - transform.position).normalized);
-    }
-
-    private float GetAimWindowAngle(Boat _boat)
-    {
-#if UNITY_EDITOR
-        if (isDebugMode)
-        {
-            float distance = Vector3.Distance(transform.position, _boat.transform.position) + BOAT_LENGTH;
-            Debug.DrawLine(transform.position, transform.position + ((GetOffsetPosition(_boat, BOAT_LENGTH) - transform.position).normalized * distance), Color.red, Time.deltaTime);
-            Debug.DrawLine(transform.position, transform.position + ((GetOffsetPosition(_boat, -BOAT_LENGTH) - transform.position).normalized * distance), Color.red, Time.deltaTime);
-        }
-#endif
-        return Vector3.Angle((GetOffsetPosition(_boat, BOAT_LENGTH) - transform.position).normalized, (GetOffsetPosition(_boat, -BOAT_LENGTH) - transform.position).normalized) / 2;
-    }
-
-    private Vector3 GetOffsetPosition(Boat _boat, float _offset)
-    {
-        return _boat.transform.position + _boat.transform.TransformVector(new Vector3(0, 0, _offset));
     }
 
     private void SetState(AICannonControllerState _state)

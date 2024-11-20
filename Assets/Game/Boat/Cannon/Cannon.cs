@@ -3,13 +3,18 @@ using UnityEngine;
 
 public class Cannon : MonoBehaviour
 {
-    private const float FORCE = 300;
+    public const float CANNONBALL_FORCE = 300;
+    public const float CANNONBALL_MASS = 3;
+    public const float CANNONBALL_DRAG = 0.05f;
 
     private const float COOLDOWN = 5;
     private const float ROTATION_SPEED = 0.7f;
     private const float PITCH_OFFSET = -4;
     private const float MAX_PITCH = 7.5f;
     public const float MAX_YAW = 20;
+
+    private const int PREDICTION_ITERATIONS = 1000;
+    private const float PREDICTION_INCREMENT = 0.025f;
 
     public CannonState State { get; private set; }
 
@@ -60,7 +65,7 @@ public class Cannon : MonoBehaviour
     public void Fire()
     {
         Cannonball cannonball = ObjectPoolManager.Instance.Spawn<Cannonball>(explosionPoint.position, Quaternion.identity);
-        cannonball.GetComponent<Rigidbody>().AddForce(-barrel.up * FORCE, ForceMode.Impulse);
+        cannonball.GetComponent<Rigidbody>().AddForce(-barrel.up * CANNONBALL_FORCE, ForceMode.Impulse);
         cannonball.SetIgnore(GetComponentInParent<IDamageable>());
 
         foreach (ParticleSystem particleSystem in particleSystems)
@@ -78,6 +83,74 @@ public class Cannon : MonoBehaviour
     {
         yield return new WaitForSeconds(COOLDOWN);
         State = CannonState.Ready;
+    }
+
+    public Vector3 GetHitPrediction(float minYPos)
+    {
+        Vector3 directon = -barrel.up;
+        Vector3 startPosition = explosionPoint.position;
+        float speed = CANNONBALL_FORCE;
+        float mass = CANNONBALL_MASS;
+        float drag = CANNONBALL_DRAG;
+
+        Vector3 velocity = directon * (speed / mass);
+        Vector3 position = startPosition;
+        Vector3 nextPosition;
+
+        for (int i = 0; i < PREDICTION_ITERATIONS; i++)
+        {
+            velocity = GetNextVelocity(velocity, drag, PREDICTION_INCREMENT);
+            nextPosition = position + velocity * PREDICTION_INCREMENT;
+
+            if (nextPosition.y < minYPos)
+            {
+                return nextPosition;
+            }
+
+            position = nextPosition;
+        }
+
+        Debug.LogWarning("Reached end of prediction iterations");
+
+        return position;
+    }
+
+#if UNITY_EDITOR
+    public void GetHitPrediction_IsDebugMode(float minYPos)
+    {
+        Vector3 directon = -barrel.up;
+        Vector3 startPosition = explosionPoint.position;
+        float speed = CANNONBALL_FORCE;
+        float mass = CANNONBALL_MASS;
+        float drag = CANNONBALL_DRAG;
+
+        Vector3 velocity = directon * (speed / mass);
+        Vector3 position = startPosition;
+        Vector3 nextPosition;
+
+        for (int i = 0; i < PREDICTION_ITERATIONS; i++)
+        {
+            velocity = GetNextVelocity(velocity, drag, PREDICTION_INCREMENT);
+            nextPosition = position + velocity * PREDICTION_INCREMENT;
+
+            Debug.DrawLine(position, nextPosition, Color.yellow, Time.deltaTime);
+
+            if (nextPosition.y < minYPos)
+            {
+                return;
+            }
+
+            position = nextPosition;
+        }
+    }
+#endif
+
+    private Vector3 GetNextVelocity(Vector3 velocity, float drag, float increment)
+    {
+        velocity += Physics.gravity * increment;
+        velocity *= Mathf.Clamp01(1f - (drag * increment));
+
+        return velocity;
     }
 }
 
