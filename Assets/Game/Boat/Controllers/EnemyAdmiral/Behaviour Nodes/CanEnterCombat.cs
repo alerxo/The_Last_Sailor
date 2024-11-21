@@ -22,7 +22,7 @@ public partial class CanEnterCombatAction : Action
 
     private bool CanEnterCombat()
     {
-        return CombatManager.Instance.CanEnterCombat();
+        return CombatManager.Instance.CanEnterRingOfFire();
     }
 }
 

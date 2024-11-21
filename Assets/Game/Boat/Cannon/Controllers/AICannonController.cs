@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class AICannonController : MonoBehaviour
 {
-    private const float MAX_RANGE = 500f;
     private const float MAX_TARGET_ANGLE = 100f;
     private const float MAX_FIRE_PITCH_DIFFERENCE = 0.50f;
     private const float MAX_FIRE_YAW_DIFFERENCE = 1f;
@@ -81,7 +80,7 @@ public class AICannonController : MonoBehaviour
 
     private bool IsValidTarget(Boat _boat, float _distance)
     {
-        return _distance < MAX_RANGE && GetCurrentAngle(_boat.transform.position) <= MAX_TARGET_ANGLE;
+        return _distance < CombatManager.RING_OF_FIRE_SIZE && GetCurrentAngle(_boat.transform.position) <= MAX_TARGET_ANGLE;
     }
 
     private void AimAtTarget()

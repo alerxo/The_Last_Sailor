@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AIBoatController : MonoBehaviour
@@ -73,7 +72,6 @@ public class AIBoatController : MonoBehaviour
 
     private void Boat_OnDestroyed()
     {
-        CombatManager.Instance.RemoveBoat(this);
         Destination = null;
 
         StartCoroutine(Boat.SinkAtSurface(OnSunkAtSurface));
@@ -108,11 +106,9 @@ public class AIBoatController : MonoBehaviour
                 break;
 
             case AIBoatControllerState.Active:
-                CombatManager.Instance.AddBoat(this);
                 break;
 
             case AIBoatControllerState.PendingDestruction:
-                CombatManager.Instance.RemoveBoat(this);
                 Boat.SetDefault();
                 Boat.Buoyancy.SetDefault();
                 Boat.RigidBody.linearVelocity = Vector3.zero;

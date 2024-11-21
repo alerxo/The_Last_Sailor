@@ -29,13 +29,13 @@ public class HUDScreen : UIScreen
     private void Awake()
     {
         InteractionCollider.OnInteractableChanged += InteractionCollider_OnInteractableChanged;
-        CombatManager.OnAdmiralChanged += CombatManager_OnAdmiralChanged;
+        CombatManager.OnAdmiralInCombatChanged += CombatManager_OnAdmiralInCombatChanged;
     }
 
     private void OnDestroy()
     {
         InteractionCollider.OnInteractableChanged -= InteractionCollider_OnInteractableChanged;
-        CombatManager.OnAdmiralChanged -= CombatManager_OnAdmiralChanged;
+        CombatManager.OnAdmiralInCombatChanged -= CombatManager_OnAdmiralInCombatChanged;
     }
 
     private void InteractionCollider_OnInteractableChanged(IInteractable _interactable)
@@ -57,7 +57,7 @@ public class HUDScreen : UIScreen
         }
     }
 
-    private void CombatManager_OnAdmiralChanged(Admiral _admiral)
+    private void CombatManager_OnAdmiralInCombatChanged(Admiral _admiral)
     {
         if (admiralContainer == null) return;
 

@@ -11,4 +11,14 @@ public class EnemyAdmiralController : Admiral
         BoatController = GetComponent<AIBoatController>();
         BoatController.SetAdmiral(this);
     }
+
+    private void OnEnable()
+    {
+        CombatManager.Instance.AddAdmiral(this);
+    }
+
+    private void OnDisable()
+    {
+        CombatManager.Instance.RemoveAdmiral(this);
+    }
 }
