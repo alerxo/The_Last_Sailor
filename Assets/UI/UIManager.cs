@@ -35,6 +35,11 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        foreach (UIScreen screen in FindObjectsByType<UIScreen>(FindObjectsSortMode.None))
+        {
+            screen.Generate();
+        }
+
         SetState(UIState.TitleScreen);
     }
 

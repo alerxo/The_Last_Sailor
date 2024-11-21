@@ -16,7 +16,7 @@ public partial class EnterCombatAction : Action
         if (IsInverted)
         {
             Agent.Value.SetEnemy(null);
-            CombatManager.Instance.ExitCombat(Agent.Value);
+            CombatManager.Instance.ExitCombat();
 
             return Status.Success;
         }

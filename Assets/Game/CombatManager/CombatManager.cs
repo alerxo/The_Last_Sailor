@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 
 public class CombatManager : MonoBehaviour
 {
     public static CombatManager Instance { get; private set; }
+    public static event UnityAction<Admiral> OnAdmiralChanged;
 
     public const float RING_OF_FIRE = 1000f;
     public const float SPAWN_DISTANCE = 1000f;
@@ -73,7 +75,6 @@ public class CombatManager : MonoBehaviour
         return new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * Random.Range(0, RING_OF_FIRE);
     }
 
-
     public bool CanEnterCombat()
     {
         return admiralInCombat == null;
@@ -82,13 +83,14 @@ public class CombatManager : MonoBehaviour
     public void EnterCombat(EnemyAdmiralController _admiral)
     {
         admiralInCombat = _admiral;
+        OnAdmiralChanged?.Invoke(admiralInCombat);
     }
 
-    public void ExitCombat(EnemyAdmiralController _admiral)
+    public void ExitCombat()
     {
         admiralInCombat = null;
+        OnAdmiralChanged?.Invoke(admiralInCombat);
     }
-
 
     public void AddBoat(AIBoatController _boat)
     {
