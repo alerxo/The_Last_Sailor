@@ -48,7 +48,7 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        FirstPersonController.instance.SetState(PlayerState.SteeringWheel);
+        FirstPersonController.Instance.SetState(PlayerState.SteeringWheel);
     }
 
     private void ChangeCamera_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)

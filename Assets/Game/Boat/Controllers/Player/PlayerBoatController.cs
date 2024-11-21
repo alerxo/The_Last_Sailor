@@ -4,21 +4,21 @@ using UnityEngine.SceneManagement;
 
 public class PlayerBoatController : MonoBehaviour
 {
-    public static PlayerBoatController instance;
+    public static PlayerBoatController Instance;
 
     public PlayerAdmiralController AdmiralController { get; private set; }
-    private Boat boat;
+    public Boat Boat { get; private set; }
 
     private void Awake()
     {
-        Assert.IsNull(instance);
-        instance = this;
+        Assert.IsNull(Instance);
+        Instance = this;
 
         AdmiralController = GetComponent<PlayerAdmiralController>();
-        boat = GetComponent<Boat>();
+        Boat = GetComponent<Boat>();
 
-        boat.OnDamaged += Boat_OnDamaged;
-        boat.OnDestroyed += Boat_OnDestroyed;
+        Boat.OnDamaged += Boat_OnDamaged;
+        Boat.OnDestroyed += Boat_OnDestroyed;
     }
 
     private void Boat_OnDamaged()
@@ -28,7 +28,7 @@ public class PlayerBoatController : MonoBehaviour
 
     private void Boat_OnDestroyed()
     {
-        StartCoroutine(boat.SinkAtSurface(OnSunk));
+        StartCoroutine(Boat.SinkAtSurface(OnSunk));
     }
 
     private void OnSunk()

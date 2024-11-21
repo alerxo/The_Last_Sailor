@@ -15,13 +15,13 @@ public class FirstPersonController : MonoBehaviour
 
     private WalkFoleyScript walkFoleyScript;
 
-    public static FirstPersonController instance;
+    public static FirstPersonController Instance { get; private set; }
 
     public static event UnityAction<PlayerState> OnPlayerStateChanged;
     public PlayerState State { get; private set; }
 
     [SerializeField] private LayerMask GroundLayer;
-    [SerializeField] private Transform cameraTransform;
+    private Transform cameraTransform;
 
     private float movementSpeed;
     private Vector3 smoothedMoveDirection;
@@ -43,8 +43,8 @@ public class FirstPersonController : MonoBehaviour
 
     private void Awake()
     {
-        Assert.IsNull(instance);
-        instance = this;
+        Assert.IsNull(Instance);
+        Instance = this;
         canWalk = false;
         isStandingStill = true;
 
@@ -67,6 +67,11 @@ public class FirstPersonController : MonoBehaviour
 #endif
     }
 
+    private void Start()
+    {
+        cameraTransform = CameraManager.Instance.PlayerCamera.gameObject.transform;
+    }
+
     private void OnDestroy()
     {
         input.Player.Disable();
@@ -84,7 +89,8 @@ public class FirstPersonController : MonoBehaviour
         {
             canWalk = true;
         }
-        else {
+        else
+        {
             canWalk = false;
         }
         if (canWalk)

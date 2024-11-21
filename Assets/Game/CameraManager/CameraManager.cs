@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -10,9 +11,13 @@ public class CameraManager : MonoBehaviour
     public static event UnityAction<CameraState> OnStateChanged;
     public CameraState State { get; private set; }
 
-    [SerializeField] private CinemachineCamera mainMenuCamera, playerCamera, steeringWheelCamera, interactionCamera;
-    [SerializeField] private CinemachineBasicMultiChannelPerlin[] cinemachineBasicMultiChannelPerlins;
-    [SerializeField] private CinemachineInputAxisController[] cinemachineInputAxisControllers;
+    private CinemachineCamera mainMenuCamera;
+    public CinemachineCamera PlayerCamera { get; private set; }
+    private CinemachineCamera steeringWheelCamera;
+    private CinemachineCamera interactionCamera;
+
+    private CinemachineBasicMultiChannelPerlin[] cinemachineBasicMultiChannelPerlins;
+    private CinemachineInputAxisController[] cinemachineInputAxisControllers;
 
     private Transform interactionTarget;
 
@@ -20,6 +25,16 @@ public class CameraManager : MonoBehaviour
     {
         Assert.IsNull(Instance);
         Instance = this;
+
+        mainMenuCamera = GameObject.FindWithTag("MainMenuCamera").GetComponent<CinemachineCamera>();
+        PlayerCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CinemachineCamera>();
+        PlayerCamera.Target.TrackingTarget = GameObject.FindWithTag("PlayerCameraTarget").transform;
+        steeringWheelCamera = GameObject.FindWithTag("SteeringWheelCamera").GetComponent<CinemachineCamera>();
+        steeringWheelCamera.Target.TrackingTarget = GameObject.FindWithTag("BoatCameraTarget").transform;
+        interactionCamera = GameObject.FindWithTag("InteractionCamera").GetComponent<CinemachineCamera>();
+
+        cinemachineBasicMultiChannelPerlins = FindObjectsByType<CinemachineBasicMultiChannelPerlin>(FindObjectsSortMode.None);
+        cinemachineInputAxisControllers = FindObjectsByType<CinemachineInputAxisController>(FindObjectsSortMode.None);
 
         UIManager.OnStateChanged += UIManager_OnStateChanged;
     }
@@ -66,7 +81,7 @@ public class CameraManager : MonoBehaviour
                 break;
 
             case CameraState.Player:
-                playerCamera.ForceCameraPosition(playerCamera.transform.position, playerCamera.transform.rotation);
+                PlayerCamera.ForceCameraPosition(PlayerCamera.transform.position, PlayerCamera.transform.rotation);
                 interactionTarget = null;
                 break;
 
@@ -77,7 +92,7 @@ public class CameraManager : MonoBehaviour
         }
 
         mainMenuCamera.enabled = State == CameraState.MainMenu;
-        playerCamera.enabled = State == CameraState.Player;
+        PlayerCamera.enabled = State == CameraState.Player;
         steeringWheelCamera.enabled = State == CameraState.SteeringWheel;
         interactionCamera.enabled = State == CameraState.Interaction;
 

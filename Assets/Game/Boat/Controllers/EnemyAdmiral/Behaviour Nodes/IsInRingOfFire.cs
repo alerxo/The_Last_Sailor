@@ -22,7 +22,7 @@ public partial class IsInRingOfFireAction : Action
 
     private bool IsInRingOfFire()
     {
-        return Vector3.Distance(PlayerBoatController.instance.transform.position, Agent.Value.transform.position) < CombatManager.RING_OF_FIRE;
+        return Vector3.Distance(PlayerBoatController.Instance.transform.position, Agent.Value.transform.position) < CombatManager.RING_OF_FIRE;
     }
 }
 

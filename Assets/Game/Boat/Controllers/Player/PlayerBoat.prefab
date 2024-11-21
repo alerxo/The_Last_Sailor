@@ -669,6 +669,10 @@ PrefabInstance:
       propertyPath: useVolumetric
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5890579831499005131, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
+      propertyPath: m_TagString
+      value: BoatCameraTarget
+      objectReference: {fileID: 0}
     - target: {fileID: 5895214396493071934, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 

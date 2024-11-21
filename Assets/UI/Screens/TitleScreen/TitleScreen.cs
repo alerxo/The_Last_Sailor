@@ -34,7 +34,7 @@ public class TitleScreen : UIScreen
     {
         UIManager.Instance.SetState(UIState.HUD);
         CameraManager.Instance.SetState(CameraState.Player);
-        FirstPersonController.instance.SetState(PlayerState.FirstPerson);
+        FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
     }
 
     private void CreateButton(VisualElement _parent, string _text, Action _action)

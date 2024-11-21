@@ -12,12 +12,14 @@ public class ObjectPoolManager : MonoBehaviour
     private readonly Dictionary<Type, ObjectPool<MonoBehaviour>> pools = new();
 
     [SerializeField] private List<MonoBehaviour> prefabs;
-    [SerializeField] private Transform parent;
+    private Transform parent;
 
     private void Awake()
     {
         Assert.IsNull(Instance);
         Instance = this;
+
+        parent = GameObject.FindWithTag("ObjectPool").transform;
     }
 
     public T Spawn<T>(Vector3 _position, Quaternion _rotation) where T : MonoBehaviour

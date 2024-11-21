@@ -21,7 +21,7 @@ public partial class EnterCombatAction : Action
             return Status.Success;
         }
 
-        Agent.Value.SetEnemy(PlayerBoatController.instance.AdmiralController);
+        Agent.Value.SetEnemy(PlayerBoatController.Instance.AdmiralController);
         CombatManager.Instance.EnterCombat(Agent.Value);
 
         return Status.Success;

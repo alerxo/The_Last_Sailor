@@ -65,7 +65,7 @@ public class CombatManager : MonoBehaviour
 
     public static Vector3 GetClosestPositionOutSideRingOfFire(Vector3 position)
     {
-        return position + ((position - PlayerBoatController.instance.transform.position).normalized * RING_OF_FIRE);
+        return position + ((position - PlayerBoatController.Instance.transform.position).normalized * RING_OF_FIRE);
     }
 
     public static Vector3 GetPositionInSideRingOfFire()
