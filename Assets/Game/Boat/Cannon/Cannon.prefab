@@ -114,6 +114,8 @@ MonoBehaviour:
   mount: {fileID: 7361179214610117608}
   barrel: {fileID: 8757596919709427184}
   explosionPoint: {fileID: 5561453162842683808}
+  reloadClip: {fileID: 8300000, guid: ecf7e9df405b08840a4d932fb520270e, type: 3}
+  sizzlingClip: {fileID: 8300000, guid: 72526fdc511c036418bbd220868bab0c, type: 3}
 --- !u!114 &4988635767359330143
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -18,6 +18,8 @@ public class Cannon : MonoBehaviour
     private const int PREDICTION_ITERATIONS = 1000;
     private const float PREDICTION_INCREMENT = 0.025f;
 
+    private bool firstReload;
+
     public CannonState State { get; private set; }
 
     [Tooltip("The empty transform at the base of the cannon")]
@@ -26,6 +28,8 @@ public class Cannon : MonoBehaviour
     [SerializeField] private Transform barrel;
     [Tooltip("The explosion point, should be place in front of barrel and not colliding with it")]
     [SerializeField] private Transform explosionPoint;
+    [SerializeField] private AudioClip reloadClip;
+    [SerializeField] private AudioClip sizzlingClip;
 
     private ParticleSystem[] particleSystems;
     private AudioSource audioSource;
@@ -36,6 +40,7 @@ public class Cannon : MonoBehaviour
     {
         particleSystems = GetComponentsInChildren<ParticleSystem>();
         audioSource = GetComponent<AudioSource>();
+        firstReload = true;
 
         ChangePitchTowards(0);
         ChangeYawTowards(0);
@@ -95,7 +100,20 @@ public class Cannon : MonoBehaviour
 
     private IEnumerator ReloadTimer()
     {
-        yield return new WaitForSeconds(COOLDOWN);
+        if (firstReload == false)
+        {
+            yield return new WaitForSeconds(COOLDOWN - 3);
+            audioSource.PlayOneShot(sizzlingClip);
+            yield return new WaitForSeconds(1);
+            audioSource.PlayOneShot(reloadClip);
+            yield return new WaitForSeconds(2);
+        }
+        else 
+        {
+            yield return new WaitForSeconds(COOLDOWN);
+            firstReload = false;
+        }
+
         State = CannonState.Ready;
     }
 

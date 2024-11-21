@@ -373,17 +373,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8017346286965035214, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
   m_PrefabInstance: {fileID: 321220905}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &321220907 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1405679543623433316, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
-  m_PrefabInstance: {fileID: 321220905}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &354970142
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,17 +616,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff09da281c87194a87fc0f32b102ec3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenuCamera: {fileID: 1711792733}
-  playerCamera: {fileID: 321220907}
-  steeringWheelCamera: {fileID: 1335631650}
-  interactionCamera: {fileID: 4143653934340279374}
-  cinemachineBasicMultiChannelPerlins:
-  - {fileID: 2038791549}
-  - {fileID: 1335631656}
-  - {fileID: 1291700380083066613}
-  cinemachineInputAxisControllers:
-  - {fileID: 2038791550}
-  - {fileID: 1335631653}
 --- !u!114 &913297622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,7 +632,6 @@ MonoBehaviour:
   - {fileID: -9044174118299729711, guid: 7368a15327c26b545887268cd6410741, type: 3}
   - {fileID: 1304222455834577700, guid: 3bad0d0818fbf9e4b8125aa6dc3068de, type: 3}
   - {fileID: 564866446082053032, guid: 4eb76afa5b9da714594904dcf4d6db47, type: 3}
-  parent: {fileID: 354970143}
 --- !u!114 &913297624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1379,6 +1356,7 @@ MonoBehaviour:
   styleSheets:
   - {fileID: 7433441132597879392, guid: 70606d5d2321ebe4c8d2b8ac80ee0bf0, type: 3}
   - {fileID: 7433441132597879392, guid: 2eea058eec792e1418957970c535f167, type: 3}
+  backgroundImage: {fileID: 0}
 --- !u!114 &1885865378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1518,28 +1496,6 @@ Transform:
   - {fileID: 825844289}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2038791549 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4318327462365963999, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
-  m_PrefabInstance: {fileID: 321220905}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2038791550 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1553766234126592090, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
-  m_PrefabInstance: {fileID: 321220905}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89875cdc57c54474a8a74efd9b2a3b5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2142180984
 PrefabInstance:
   m_ObjectHideFlags: 0
