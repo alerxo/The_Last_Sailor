@@ -10,6 +10,8 @@ public class Engine : MonoBehaviour
 
     [Tooltip("The rotating paddlewheel")]
     [SerializeField] private Transform paddleWheel;
+    [SerializeField] private AudioSource paddleAudioSource;
+    [SerializeField] private AudioClip paddleAudioClip;
 
     private SteeringWheel steeringWheel;
     private Throttle throttle;
@@ -40,6 +42,19 @@ public class Engine : MonoBehaviour
         {
             target.AddForceAtPosition(throttle * transform.forward, transform.position, ForceMode.Force);
             paddleWheel.Rotate(new Vector3(throttle * PADDLE_WHEEL_SPEED * Time.deltaTime, 0, 0));
+            if(paddleAudioSource.isPlaying == false) 
+            {
+                paddleAudioSource.Play();
+            }
+            paddleAudioSource.volume = Throttle/2;
+            paddleAudioSource.pitch = Throttle;
+        }
+        if (throttle <= 0)
+        {
+            {
+                paddleAudioSource.Stop();
+                paddleAudioSource.volume = 0;
+            }
         }
 
 #if UNITY_EDITOR
