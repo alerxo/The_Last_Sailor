@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 3440784915598838320}
   m_Layer: 0
   m_Name: ObjectPool
-  m_TagString: Untagged
+  m_TagString: ObjectPool
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -204,6 +204,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3260705750193719497}
     m_Modifications:
+    - target: {fileID: 91401925939637663, guid: f1ab4fb9898de544293aed2e10750de9, type: 3}
+      propertyPath: m_TagString
+      value: PlayerCameraTarget
+      objectReference: {fileID: 0}
     - target: {fileID: 1077860905446495268, guid: f1ab4fb9898de544293aed2e10750de9, type: 3}
       propertyPath: m_Name
       value: Player
@@ -364,6 +368,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3260705750193719497}
     m_Modifications:
+    - target: {fileID: 477983024308869927, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
+      propertyPath: m_TagString
+      value: BoatCameraTarget
+      objectReference: {fileID: 0}
     - target: {fileID: 4602790332532205488, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
       propertyPath: m_Name
       value: PlayerBoat

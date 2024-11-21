@@ -38,7 +38,7 @@ public class ThrottlePlayerController : MonoBehaviour, IInteractable
     public void Interact()
     {
         CameraManager.Instance.SetInteractionCamera(cameraTarget);
-        FirstPersonController.instance.SetState(PlayerState.Throttle);
+        FirstPersonController.Instance.SetState(PlayerState.Throttle);
     }
 
     private void FirstPersonController_OnPlayerStateChanged(PlayerState _state)

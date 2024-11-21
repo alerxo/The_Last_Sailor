@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1020956718735848292}
   m_Layer: 0
   m_Name: SteeringWheelCamera
-  m_TagString: Untagged
+  m_TagString: SteeringWheelCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 2062085193638293000}
   m_Layer: 0
   m_Name: InteractionCamera
-  m_TagString: Untagged
+  m_TagString: InteractionCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -365,7 +365,7 @@ GameObject:
   - component: {fileID: 3135966661536386797}
   m_Layer: 0
   m_Name: MainMenuCamera
-  m_TagString: Untagged
+  m_TagString: MainMenuCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -771,6 +771,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3358513668011473414, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
       propertyPath: m_Name
+      value: PlayerCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 3358513668011473414, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
+      propertyPath: m_TagString
       value: PlayerCamera
       objectReference: {fileID: 0}
     - target: {fileID: 8017346286965035214, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}

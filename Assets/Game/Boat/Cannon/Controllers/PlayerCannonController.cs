@@ -58,7 +58,7 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
         {
             cannon.Fire();
             CameraManager.Instance.SetState(CameraState.Player);
-            FirstPersonController.instance.SetState(PlayerState.FirstPerson);
+            FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
         }
     }
 
@@ -75,7 +75,7 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
         if (cannon.State == CannonState.Ready)
         {
             CameraManager.Instance.SetInteractionCamera(cameraTarget);
-            FirstPersonController.instance.SetState(PlayerState.Cannon);
+            FirstPersonController.Instance.SetState(PlayerState.Cannon);
             input.Player.Enable();
         }
     }

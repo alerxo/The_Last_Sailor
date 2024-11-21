@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5556085460522738031}
   m_Layer: 0
   m_Name: Head/ Eye
-  m_TagString: Untagged
+  m_TagString: PlayerCameraTarget
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,7 +84,6 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 256
-  cameraTransform: {fileID: 0}
   isDebugMode: 0
 --- !u!114 &-7069472595334228414
 MonoBehaviour:

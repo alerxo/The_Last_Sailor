@@ -108,7 +108,7 @@ public class InteractionCollider : MonoBehaviour
 
     private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        switch (FirstPersonController.instance.State)
+        switch (FirstPersonController.Instance.State)
         {
             case PlayerState.FirstPerson:
                 current?.Interact();
@@ -118,7 +118,7 @@ public class InteractionCollider : MonoBehaviour
             case PlayerState.SteeringWheel:
             case PlayerState.Throttle:
                 CameraManager.Instance.SetState(CameraState.Player);
-                FirstPersonController.instance.SetState(PlayerState.FirstPerson);
+                FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
                 break;
         }
     }
