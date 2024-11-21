@@ -13,7 +13,7 @@ public partial class StopMovingAction : Action
     {
         Agent.Value.SetDistance(0);
         Agent.Value.SetCross(Vector3.zero);
-        Agent.Value.Boat.Engine.ChangeThrottle(0);
+        Agent.Value.Boat.Engine.ChangeTowardsThrottle(0);
 
         return Status.Success;
     }

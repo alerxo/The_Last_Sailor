@@ -1,22 +1,11 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SteeringWheel : MonoBehaviour
 {
-    private const float MAX_ROTATION = 170;
+    private const float MAX_ROTATION = 100;
 
     [Tooltip("The rotating part of the mesh")]
     [SerializeField] private Transform rotatingPart;
-
-    private void Start()
-    {
-    }
-
-    private void Update()
-    {
-
-    }
-
 
     public void SetRotation(float rotation)
     {

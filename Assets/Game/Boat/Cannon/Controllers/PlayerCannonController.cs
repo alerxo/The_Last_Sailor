@@ -7,8 +7,9 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
     [Tooltip("Target for the cannon camera")]
     [SerializeField] private Transform cameraTarget;
 
-    public Vector3 Position => transform.position;
+    public Vector3 Position => transform.position + transform.TransformVector(new(0, 0, -2));
     public bool CanInteract => cannon.State == CannonState.Ready;
+    public Transform Transform => transform;
 
     private InputSystem_Actions input;
     private Cannon cannon;
@@ -31,23 +32,23 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        Vector2 rotation = input.Player.Look.ReadValue<Vector2>();
+        Vector2 rotation = input.Player.Move.ReadValue<Vector2>();
 
         if (rotation.magnitude == 0)
         {
-            rotation = input.Player.Move.ReadValue<Vector2>();
+            rotation = input.Player.Look.ReadValue<Vector2>();
         }
 
         if (rotation.magnitude > 0)
         {
             if (rotation.x != 0)
             {
-                cannon.SetYaw(Mathf.Clamp(rotation.x, -ROTATION_SPEED, ROTATION_SPEED));
+                cannon.ChangeYaw(Mathf.Clamp(rotation.x, -ROTATION_SPEED, ROTATION_SPEED));
             }
 
             if (rotation.y != 0)
             {
-                cannon.SetPitch(Mathf.Clamp(rotation.y, -ROTATION_SPEED, ROTATION_SPEED));
+                cannon.ChangePitch(Mathf.Clamp(rotation.y, -ROTATION_SPEED, ROTATION_SPEED));
             }
         }
     }
@@ -74,7 +75,7 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
     {
         if (cannon.State == CannonState.Ready)
         {
-            CameraManager.Instance.SetInteractionCamera(cameraTarget);
+            CameraManager.Instance.SetInteractionCamera(cameraTarget, this);
             FirstPersonController.Instance.SetState(PlayerState.Cannon);
             input.Player.Enable();
         }
