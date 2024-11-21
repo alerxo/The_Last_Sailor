@@ -3,6 +3,7 @@ using UnityEngine;
 
 public abstract class Admiral : MonoBehaviour
 {
+    public string Name { get; private set; } = "Admiral Johnson";
     public Boat Owner { get; private set; }
 
     public Admiral Enemy { get; protected set; }

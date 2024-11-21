@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 public class PauseScreen : UIScreen
 {
     protected override UIState ActiveState => UIState.Pause;
+    [SerializeField] private Texture2D backgroundImage;
 
     private void Awake()
     {
@@ -22,20 +23,25 @@ public class PauseScreen : UIScreen
         Time.timeScale = _state == UIState.Pause ? 0 : 1;
     }
 
-    protected override void Generate()
+    public override void Generate()
     {
         VisualElement container = new();
         container.AddToClassList("pause-container");
         root.Add(container);
 
+        Image background = new();
+        background.AddToClassList("pause-background");
+        background.image = backgroundImage;
+        container.Add(background);
+
         Label header = new("PAUSED");
         header.AddToClassList("pause-header");
-        SetFontSize(header, 60);
-        container.Add(header);
+        SetFontSize(header, 50);
+        background.Add(header);
 
         VisualElement buttons = new();
         buttons.AddToClassList("pause-button-container");
-        container.Add(buttons);
+        background.Add(buttons);
 
         CreateButton(buttons, "-Resume-", () => UIManager.Instance.SetState(UIState.HUD));
         CreateButton(buttons, "-Options-", () => throw new NotImplementedException());
@@ -46,7 +52,6 @@ public class PauseScreen : UIScreen
     {
         Button button = new(_action);
         button.AddToClassList("pause-button");
-        SetWidth(button, 200);
         SetFontSize(button, 35);
         button.text = _text;
         _parent.Add(button);

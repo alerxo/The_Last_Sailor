@@ -11,8 +11,6 @@ public abstract class UIScreen : MonoBehaviour
     {
         root = GetComponent<UIDocument>().rootVisualElement;
 
-        Generate();
-
         foreach (StyleSheet styleSheet in styleSheets)
         {
             root.styleSheets.Add(styleSheet);
@@ -26,7 +24,7 @@ public abstract class UIScreen : MonoBehaviour
         UIManager.OnStateChanged -= UIManager_OnStateChanged;
     }
 
-    protected abstract void Generate();
+    public abstract void Generate();
 
     private void UIManager_OnStateChanged(UIState _state)
     {
@@ -54,12 +52,12 @@ public abstract class UIScreen : MonoBehaviour
         _target.style.fontSize = GetScaledValue(_value);
     }
 
-    protected void SetMargin(VisualElement _target, float _top, float _bottom, float _left, float _right)
+    protected void SetBorder(VisualElement _target, float _value)
     {
-        _target.style.marginTop = GetScaledValue(_top);
-        _target.style.marginBottom = GetScaledValue(_bottom);
-        _target.style.marginLeft = GetScaledValue(_left);
-        _target.style.marginRight = GetScaledValue(_right);
+        _target.style.borderTopWidth = GetScaledValue(_value);
+        _target.style.borderBottomWidth = GetScaledValue(_value);
+        _target.style.borderLeftWidth = GetScaledValue(_value);
+        _target.style.borderRightWidth = GetScaledValue(_value);
     }
 
     protected float GetScaledValue(float _value)

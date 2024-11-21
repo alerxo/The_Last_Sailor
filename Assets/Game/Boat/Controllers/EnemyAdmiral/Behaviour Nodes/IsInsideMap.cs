@@ -22,6 +22,6 @@ public partial class IsInsideMapAction : Action
 
     private bool IsInsideMap()
     {
-        return Vector3.Distance(PlayerBoatController.Instance.transform.position, Agent.Value.transform.position) < CombatManager.RING_OF_FIRE + CombatManager.SPAWN_DISTANCE + CombatManager.DESPAWN_DISTANCE;
+        return Vector3.Distance(PlayerBoatController.Instance.transform.position, Agent.Value.transform.position) < CombatManager.GetMapSize();
     }
 }
