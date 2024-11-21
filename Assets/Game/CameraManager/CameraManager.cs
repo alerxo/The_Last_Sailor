@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -20,6 +19,7 @@ public class CameraManager : MonoBehaviour
     private CinemachineInputAxisController[] cinemachineInputAxisControllers;
 
     private Transform interactionTarget;
+    private FirstPersonController player;
 
     private void Awake()
     {
@@ -39,14 +39,15 @@ public class CameraManager : MonoBehaviour
         UIManager.OnStateChanged += UIManager_OnStateChanged;
     }
 
-    private void OnDestroy()
-    {
-        UIManager.OnStateChanged -= UIManager_OnStateChanged;
-    }
-
     private void Start()
     {
         SetState(CameraState.MainMenu);
+        player = FirstPersonController.Instance;
+    }
+
+    private void OnDestroy()
+    {
+        UIManager.OnStateChanged -= UIManager_OnStateChanged;
     }
 
     private void Update()
@@ -57,12 +58,17 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void SetInteractionCamera(Transform _target)
+    public void SetInteractionCamera(Transform _target, IInteractable interactable)
     {
         interactionCamera.Target.TrackingTarget = _target;
         interactionTarget = _target;
         SetInteractionCameraPosition();
         SetState(CameraState.Interaction);
+
+        Vector3 position = interactable.Position;
+        position.y = player.transform.position.y;
+        player.Rigidbody.Move(position, player.transform.rotation);
+        PlayerCamera.ForceCameraPosition(PlayerCamera.transform.position, interactionTarget.transform.rotation);
     }
 
     public void SetInteractionCameraPosition()
@@ -74,20 +80,20 @@ public class CameraManager : MonoBehaviour
     {
         State = _state;
 
+        if (State != CameraState.Interaction && interactionTarget != null)
+        {
+            PlayerCamera.ForceCameraPosition(PlayerCamera.transform.position, interactionTarget.transform.rotation);
+            interactionTarget = null;
+        }
+
         switch (State)
         {
-            case CameraState.MainMenu:
-                interactionTarget = null;
-                break;
-
             case CameraState.Player:
                 PlayerCamera.ForceCameraPosition(PlayerCamera.transform.position, PlayerCamera.transform.rotation);
-                interactionTarget = null;
                 break;
 
             case CameraState.SteeringWheel:
                 steeringWheelCamera.ForceCameraPosition(steeringWheelCamera.transform.position, steeringWheelCamera.transform.rotation);
-                interactionTarget = null;
                 break;
         }
 

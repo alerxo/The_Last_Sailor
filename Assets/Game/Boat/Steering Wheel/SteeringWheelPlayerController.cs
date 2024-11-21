@@ -1,18 +1,21 @@
 using System.Collections;
 using UnityEngine;
+using Unity.Cinemachine;
+using UnityEngine.Splines;
 
 public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
 {
     private const float FORCE_PLAYER_POSITION_DURATION = 0.1f;
     private const float FORCE_STRAIGHTEN_UP_MARGIN = 0.1f;
-    private static readonly Vector3 playerPosition = new(0, 0, -1);
 
-    public Vector3 Position => transform.position;
+    public Vector3 Position => transform.position + transform.TransformVector(new(0, 0, -1.5f));
     public bool CanInteract => true;
+    public Transform Transform => transform;
 
     private InputSystem_Actions input;
     private Boat Boat;
     private FirstPersonController player;
+    private CinemachineCamera playerCamera;
 
     private void Awake()
     {
@@ -23,6 +26,11 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
         input.Player.ChangeCamera.performed += ChangeCamera_performed;
 
         FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
+    }
+
+    private void Start()
+    {
+        playerCamera = CameraManager.Instance.PlayerCamera;
     }
 
     private void OnDestroy()
@@ -42,7 +50,7 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
 
         else if (Mathf.Abs(Boat.Engine.Rudder) < FORCE_STRAIGHTEN_UP_MARGIN)
         {
-            Boat.Engine.ChangeRudder(0);
+            Boat.Engine.ChangeTowardsRudder(0);
         }
     }
 
@@ -56,6 +64,7 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
         switch (CameraManager.Instance.State)
         {
             case CameraState.Player:
+                playerCamera.ForceCameraPosition(playerCamera.transform.position, transform.rotation);
                 CameraManager.Instance.SetState(CameraState.SteeringWheel);
                 break;
 
@@ -86,19 +95,30 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
     private IEnumerator ForcePlayerAtPosition()
     {
         float duration = 0;
-        Vector3 startPosition = player.transform.position;
-        Quaternion startRotation = Quaternion.identity;
+        player.transform.GetPositionAndRotation(out Vector3 startPosition, out Quaternion startRotation);
+
+        Vector3 nextPosition;
+        Quaternion nextRotation;
 
         while (input.Player.enabled && (duration += Time.deltaTime) < FORCE_PLAYER_POSITION_DURATION)
         {
             float percentage = duration / FORCE_PLAYER_POSITION_DURATION;
-            player.GetComponent<Rigidbody>().Move(
-                Vector3.Lerp(startPosition, transform.position + playerPosition, percentage),
-                Quaternion.Lerp(startRotation, transform.rotation, percentage));
+
+            nextPosition = Vector3.Lerp(startPosition, Position, percentage);
+            nextPosition.y = player.transform.position.y;
+            nextRotation = Quaternion.Lerp(startRotation, transform.rotation, percentage);
+
+            playerCamera.ForceCameraPosition(playerCamera.transform.position, nextRotation);
+            player.Rigidbody.Move(nextPosition, playerCamera.transform.rotation);
 
             yield return null;
         }
 
-        player.GetComponent<Rigidbody>().Move(transform.position + playerPosition, transform.rotation);
+        nextPosition = Position;
+        nextPosition.y = player.transform.position.y;
+        nextRotation = transform.rotation;
+
+        playerCamera.ForceCameraPosition(playerCamera.transform.position, nextRotation);
+        player.Rigidbody.Move(nextPosition, playerCamera.transform.rotation);
     }
 }

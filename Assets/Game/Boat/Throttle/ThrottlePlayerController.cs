@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class ThrottlePlayerController : MonoBehaviour, IInteractable
 {
-    public Vector3 Position => transform.position;
+    public Vector3 Position => transform.position + transform.TransformVector(new(0, 0, 2));
     public bool CanInteract => true;
+    public Transform Transform => transform;
 
     [SerializeField] private Transform cameraTarget;
 
@@ -37,7 +38,7 @@ public class ThrottlePlayerController : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        CameraManager.Instance.SetInteractionCamera(cameraTarget);
+        CameraManager.Instance.SetInteractionCamera(cameraTarget, this);
         FirstPersonController.Instance.SetState(PlayerState.Throttle);
     }
 

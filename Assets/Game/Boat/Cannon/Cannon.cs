@@ -8,9 +8,11 @@ public class Cannon : MonoBehaviour
     public const float CANNONBALL_DRAG = 0.05f;
 
     private const float COOLDOWN = 5;
-    private const float ROTATION_SPEED = 0.7f;
-    private const float PITCH_OFFSET = -4;
+
+    private const float PITCH_ROTATION_SPEED = 20f;
+    private const float YAW_ROTATION_SPEED = 30f;
     private const float MAX_PITCH = 7.5f;
+    private const float PITCH_OFFSET = -4;
     public const float MAX_YAW = 20;
 
     private const int PREDICTION_ITERATIONS = 1000;
@@ -28,15 +30,15 @@ public class Cannon : MonoBehaviour
     private ParticleSystem[] particleSystems;
     private AudioSource audioSource;
 
-    private Vector3 localRotation, barrelRoation;
+    private Vector3 localRotation, barrelRotation;
 
     private void Awake()
     {
         particleSystems = GetComponentsInChildren<ParticleSystem>();
         audioSource = GetComponent<AudioSource>();
 
-        SetPitch(0);
-        SetYaw(0);
+        ChangePitchTowards(0);
+        ChangeYawTowards(0);
     }
 
     private void OnEnable()
@@ -50,15 +52,27 @@ public class Cannon : MonoBehaviour
         StopCoroutine(ReloadTimer());
     }
 
-    public void SetPitch(float pitch)
+    public void ChangePitch(float _pitch)
     {
-        barrelRoation.x = Mathf.Clamp(Mathf.Lerp(barrelRoation.x, -pitch * MAX_PITCH * 1.5f, ROTATION_SPEED * Time.deltaTime), -MAX_PITCH, MAX_PITCH);
-        barrel.localRotation = Quaternion.Euler(barrelRoation + new Vector3(PITCH_OFFSET, 0, 0));
+        barrelRotation.x = Mathf.Clamp(barrelRotation.x + (-_pitch * PITCH_ROTATION_SPEED * Time.deltaTime), -MAX_PITCH, MAX_PITCH);
+        barrel.localRotation = Quaternion.Euler(barrelRotation + new Vector3(PITCH_OFFSET, 0, 0));
     }
 
-    public void SetYaw(float yaw)
+    public void ChangePitchTowards(float _pitch)
     {
-        localRotation.y = Mathf.Clamp(Mathf.Lerp(localRotation.y, yaw * MAX_YAW * 1.5f, ROTATION_SPEED * Time.deltaTime), -MAX_YAW, MAX_YAW);
+        barrelRotation.x = Mathf.Clamp(Mathf.Lerp(barrelRotation.x, -_pitch * MAX_PITCH * 2f, Time.deltaTime), -MAX_PITCH, MAX_PITCH);
+        barrel.localRotation = Quaternion.Euler(barrelRotation + new Vector3(PITCH_OFFSET, 0, 0));
+    }
+
+    public void ChangeYaw(float _yaw)
+    {
+        localRotation.y = Mathf.Clamp(localRotation.y + (_yaw * YAW_ROTATION_SPEED * Time.deltaTime), -MAX_YAW, MAX_YAW);
+        mount.localRotation = Quaternion.Euler(localRotation);
+    }
+
+    public void ChangeYawTowards(float _yaw)
+    {
+        localRotation.y = Mathf.Clamp(Mathf.Lerp(localRotation.y, _yaw * MAX_YAW * 2f, Time.deltaTime), -MAX_YAW, MAX_YAW);
         mount.localRotation = Quaternion.Euler(localRotation);
     }
 

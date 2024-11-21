@@ -22,10 +22,10 @@ public partial class MoveTowardsDestination : Action
 
         float throttle = Mathf.Clamp01((Agent.Value.Distance - STOP_DISTANCE) / APROACH_DISTANCE);
         throttle = Mathf.Pow(throttle, 2);
-        Agent.Value.Boat.Engine.ChangeThrottle(throttle);
+        Agent.Value.Boat.Engine.ChangeTowardsThrottle(throttle);
 
         Agent.Value.SetCross(Vector3.Cross((Agent.Value.transform.position - Agent.Value.Destination.Value).normalized, Agent.Value.transform.forward));
-        Agent.Value.Boat.Engine.ChangeRudder(Agent.Value.Cross.y);
+        Agent.Value.Boat.Engine.ChangeTowardsRudder(Agent.Value.Cross.y);
 
         return Status.Success;
     }

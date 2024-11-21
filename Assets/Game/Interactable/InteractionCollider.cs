@@ -7,7 +7,7 @@ public class InteractionCollider : MonoBehaviour
 {
     public static event UnityAction<IInteractable> OnInteractableChanged;
 
-    private const int LOOK_ANGLE = 45;
+    private const int LOOK_ANGLE = 90;
     private readonly List<IInteractable> interactablesInRange = new();
     private IInteractable current;
     private FirstPersonController player;
@@ -82,7 +82,7 @@ public class InteractionCollider : MonoBehaviour
 
     private bool IsPlayerFacing(IInteractable interactable)
     {
-        return Vector3.Angle(interactable.Position - player.transform.position, player.transform.forward) < LOOK_ANGLE;
+        return Vector3.Angle(interactable.Transform.position - player.transform.position, player.transform.forward) < LOOK_ANGLE;
     }
 
     private float GetDistance(IInteractable interactable)

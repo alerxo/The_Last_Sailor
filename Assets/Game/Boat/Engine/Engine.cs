@@ -5,7 +5,7 @@ public class Engine : MonoBehaviour
     private const float POWER = 100000f;
     private const float ACCELERATION = 1f;
     private const float TURN_RADIUS = 3f;
-    private const float TURN_SPEEd = 1f;
+    private const float TURN_SPEED = 1f;
     private const float PADDLE_WHEEL_SPEED = 0.002f;
 
     [Tooltip("The rotating paddlewheel")]
@@ -42,19 +42,13 @@ public class Engine : MonoBehaviour
         {
             target.AddForceAtPosition(throttle * transform.forward, transform.position, ForceMode.Force);
             paddleWheel.Rotate(new Vector3(throttle * PADDLE_WHEEL_SPEED * Time.deltaTime, 0, 0));
-            if(paddleAudioSource.isPlaying == false) 
-            {
-                paddleAudioSource.Play();
-            }
-            paddleAudioSource.volume = Throttle/2;
-            paddleAudioSource.pitch = Throttle;
+
+            TryPlayerPaddleWheelAudio();
         }
-        if (throttle <= 0)
+
+        else
         {
-            {
-                paddleAudioSource.Stop();
-                paddleAudioSource.volume = 0;
-            }
+            StopPaddleWheelAudio();
         }
 
 #if UNITY_EDITOR
@@ -65,13 +59,42 @@ public class Engine : MonoBehaviour
 #endif
     }
 
+    private void TryPlayerPaddleWheelAudio()
+    {
+        if (paddleAudioSource.isPlaying == false)
+        {
+            paddleAudioSource.Play();
+        }
+
+        paddleAudioSource.volume = Throttle / 2;
+        paddleAudioSource.pitch = Throttle;
+    }
+
+    private void StopPaddleWheelAudio()
+    {
+        paddleAudioSource.Stop();
+        paddleAudioSource.volume = 0;
+    }
+
     public void ChangeRudder(float _rudder)
     {
-        Rudder = Mathf.Clamp(Mathf.Lerp(Rudder, -_rudder * 1.2f, TURN_SPEEd * Time.deltaTime), -1, 1);
+        Rudder = Mathf.Clamp(Rudder + (-_rudder * TURN_SPEED * Time.deltaTime), -1, 1);
+        steeringWheel.SetRotation(Rudder);
+    }
+
+    public void ChangeTowardsRudder(float _rudder)
+    {
+        Rudder = Mathf.Clamp(Mathf.Lerp(Rudder, -_rudder * 1.2f, TURN_SPEED * Time.deltaTime), -1, 1);
         steeringWheel.SetRotation(Rudder);
     }
 
     public void ChangeThrottle(float _throttle)
+    {
+        Throttle = Mathf.Clamp01(Throttle + (_throttle * ACCELERATION * Time.deltaTime));
+        throttle.SetRotation(Throttle);
+    }
+
+    public void ChangeTowardsThrottle(float _throttle)
     {
         Throttle = Mathf.Clamp(Mathf.Lerp(Throttle, _throttle * 1.2f, ACCELERATION * Time.deltaTime), 0, 1);
         throttle.SetRotation(Throttle);

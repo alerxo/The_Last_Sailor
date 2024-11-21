@@ -124,14 +124,14 @@ public class AICannonController : MonoBehaviour
         float actual = Vector3.Distance(transform.position, predictedPosition);
         float prediction = Vector3.Distance(transform.position, cannon.GetHitPrediction(predictedPosition.y));
         float difference = 1 - Mathf.Clamp(prediction / actual, 0, 2);
-        cannon.SetPitch(difference);
+        cannon.ChangePitchTowards(difference);
 
         return Mathf.Abs(difference) < MAX_FIRE_PITCH_DIFFERENCE;
     }
 
     private bool RotateYaw(Vector3 predictedPosition)
     {
-        cannon.SetYaw(Vector3.Cross((transform.position - predictedPosition).normalized, transform.forward).y);
+        cannon.ChangeYawTowards(Vector3.Cross((transform.position - predictedPosition).normalized, transform.forward).y);
 
         return GetCurrentAngle(predictedPosition) < GetAcceptableFireAngle(target, predictedPosition);
     }
