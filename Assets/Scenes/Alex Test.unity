@@ -171,6 +171,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Systems
       objectReference: {fileID: 0}
+    - target: {fileID: 9187017433266998018, guid: dfd273af92562ef45aacd76808bb4c77, type: 3}
+      propertyPath: IsDebugMode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -284,10 +288,6 @@ PrefabInstance:
     - target: {fileID: 5300996134505596827, guid: f51ea5723a15ad847a804a2747c38ad9, type: 3}
       propertyPath: m_Name
       value: Environment
-      objectReference: {fileID: 0}
-    - target: {fileID: 7542808275782380082, guid: f51ea5723a15ad847a804a2747c38ad9, type: 3}
-      propertyPath: largeWindSpeed
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

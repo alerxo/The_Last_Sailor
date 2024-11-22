@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class BouyancyPointGenerator : MonoBehaviour
 {
-    [SerializeField] private Transform start, end;
+    [SerializeField] private Transform excludeY, excludeZ;
     [SerializeField] private GameObject source;
     [SerializeField] private BuoyancyPoints target;
 
@@ -14,12 +14,25 @@ public class BouyancyPointGenerator : MonoBehaviour
     {
         List<Vector3> points = new();
 
-        for (float x = start.position.x; x <= end.position.x; x += Buoyancy.POINT_SCALE.x)
+        Vector3 start = Buoyancy.POINT_SCALE * -10;
+        Vector3 end = Buoyancy.POINT_SCALE * 10;
+
+        for (float x = start.x; x <= end.x; x += Buoyancy.POINT_SCALE.x)
         {
-            for (float y = start.position.y; y <= end.position.y; y += Buoyancy.POINT_SCALE.y)
+            for (float y = start.y; y <= end.y; y += Buoyancy.POINT_SCALE.y)
             {
-                for (float z = start.position.z; z <= end.position.z; z += Buoyancy.POINT_SCALE.z)
+                if(y > excludeY.transform.position.y)
                 {
+                    continue;
+                }
+
+                for (float z = start.z; z <= end.z; z += Buoyancy.POINT_SCALE.z)
+                {
+                    if (z > excludeZ.transform.position.z)
+                    {
+                        continue;
+                    }
+
                     Vector3 position = new(x, y, z);
 
                     if (Physics.CheckBox(position, Buoyancy.POINT_SCALE / 2, Quaternion.identity))

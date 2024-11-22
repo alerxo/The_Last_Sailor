@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Buoyancy : MonoBehaviour
 {
-    public static readonly Vector3 POINT_SCALE = new(2f, 2f, 4f);
+    public static readonly Vector3 POINT_SCALE = new(4f, 3f, 6f);
 
     public float BuoyancyForce = 1f;
     private float startBuoyancy;
