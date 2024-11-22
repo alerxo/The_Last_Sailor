@@ -1,44 +1,92 @@
-using System;
 using UnityEngine;
 
 public class Buoyancy : MonoBehaviour
 {
-    public static readonly Vector3 POINT_SCALE = new(2f, 2f, 4f);
+    public static readonly Vector3 POINT_SCALE = new(4f, 3f, 6f);
 
     public float BuoyancyForce = 1f;
     private float startBuoyancy;
 
     public BuoyancyPoints Points;
+
+    [HideInInspector] public float[] DepthValues;
+
     public float PointMass { get; private set; }
-    public Rigidbody Rb { get; private set; }
+    public Rigidbody RigidBody { get; private set; }
 
 #if UNITY_EDITOR
-    public BuoyancyDebugInfo Info = new();
+    [SerializeField] private bool IsDebugMode;
+    public float displacement;
+    public float submergedPercentage;
 #endif
 
     private void Awake()
     {
-        Rb = GetComponent<Rigidbody>();
-        PointMass = Rb.mass / Points.Values.Length;
+        RigidBody = GetComponent<Rigidbody>();
+        PointMass = RigidBody.mass / Points.Values.Length;
         startBuoyancy = BuoyancyForce;
+
+        DepthValues = new float[Points.Values.Length];
 
         SetDefault();
     }
 
     private void OnEnable()
     {
-        if(BuoyancyManager.Instance != null)
+        if (BuoyancyManager.Instance != null)
         {
-            BuoyancyManager.Instance.SetBuffers();
-        }   
+            BuoyancyManager.Instance.AddTarget(this);
+        }
     }
 
     private void OnDisable()
     {
         if (BuoyancyManager.Instance != null)
         {
-            BuoyancyManager.Instance.SetBuffers(this);
+            BuoyancyManager.Instance.RemoveTarget(this);
         }
+    }
+
+    private void FixedUpdate()
+    {
+        AddForce();
+    }
+
+    private void AddForce()
+    {
+        for (int i = 0; i < Points.Values.Length; i++)
+        {
+            if (DepthValues[i] > 0)
+            {
+                Vector3 force = new(0f, PointMass * BuoyancyForce * DepthValues[i] * -Physics.gravity.y, 0f);
+
+                RigidBody.AddForceAtPosition(force, transform.position + transform.TransformVector(Points.Values[i]), ForceMode.Force);
+            }
+        }
+
+#if UNITY_EDITOR
+        if (!IsDebugMode) return;
+
+        displacement = 0;
+        submergedPercentage = 0;
+
+        for (int i = 0; i < Points.Values.Length; i++)
+        {
+            if (DepthValues[i] > 0)
+            {
+                Vector3 force = new(0f, PointMass * BuoyancyForce * DepthValues[i] * -Physics.gravity.y, 0f);
+                displacement += PointMass;
+                DebugUtil.DrawBox(transform.position + transform.TransformVector(Points.Values[i]), transform.rotation, POINT_SCALE * DepthValues[i], Color.green, Time.fixedDeltaTime);
+            }
+
+            else
+            {
+                DebugUtil.DrawBox(transform.position + transform.TransformVector(Points.Values[i]), transform.rotation, POINT_SCALE * 0.05f, Color.red, Time.fixedDeltaTime);
+            }
+        }
+
+        submergedPercentage = displacement / RigidBody.mass;
+#endif
     }
 
     public void SetDefault()
@@ -46,28 +94,3 @@ public class Buoyancy : MonoBehaviour
         BuoyancyForce = startBuoyancy;
     }
 }
-
-#if UNITY_EDITOR
-[Serializable]
-public struct BuoyancyDebugInfo
-{
-    public float displacement;
-    public float submergedPercentage;
-
-    public void Reset()
-    {
-        displacement = 0;
-        submergedPercentage = 0;
-    }
-
-    public void AddDisplacement(float _value)
-    {
-        displacement += _value;
-    }
-
-    public void MakeCalculations(float _Value)
-    {
-        submergedPercentage = displacement / _Value;
-    }
-}
-#endif

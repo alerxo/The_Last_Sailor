@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 820003867011832682}
   - component: {fileID: 3755772069185646857}
   - component: {fileID: 5453346072263121864}
-  - component: {fileID: 1287602906170801372}
+  - component: {fileID: 4608273011806164495}
   m_Layer: 0
   m_Name: Cannon Mount.006
   m_TagString: Untagged
@@ -87,8 +87,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1287602906170801372
-MeshCollider:
+--- !u!65 &4608273011806164495
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -105,10 +105,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3582923655637408997, guid: f435d0b63d7468c40923a4517691f08a, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1.12, y: 2.5500844, z: 0.51}
+  m_Center: {x: -0.00000009782673, y: 0.5173154, z: -0.57}
 --- !u!1 &1440500285070317911
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,7 +152,7 @@ GameObject:
   - component: {fileID: 800497119294798035}
   - component: {fileID: 7457346420241349167}
   - component: {fileID: 3293457387954802638}
-  - component: {fileID: 4282953567338867848}
+  - component: {fileID: 3408088411320407318}
   m_Layer: 0
   m_Name: CannonBarrel.006
   m_TagString: Untagged
@@ -229,8 +228,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4282953567338867848
-MeshCollider:
+--- !u!136 &3408088411320407318
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -247,7 +246,8 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -1368250552197558144, guid: f435d0b63d7468c40923a4517691f08a, type: 3}
+  serializedVersion: 2
+  m_Radius: 0.3090991
+  m_Height: 3.2708392
+  m_Direction: 1
+  m_Center: {x: -0.0000000043329242, y: 0.10448545, z: 0.028262528}

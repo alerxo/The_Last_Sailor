@@ -10,6 +10,7 @@ public class AIBoatController : MonoBehaviour
     public Admiral Admiral { get; private set; }
 
     public Vector3? Destination { get; private set; }
+    public float Speed { get; private set; } = 1f;
     public float Distance { get; private set; }
     public Vector3 Cross { get; private set; }
 
@@ -58,6 +59,11 @@ public class AIBoatController : MonoBehaviour
     public void SetDestination(Vector3 _destination)
     {
         Destination = _destination;
+    }
+
+    public void SetSpeed(float _speed)
+    {
+        Speed = _speed;
     }
 
     public void SetDistance(float _distance)

@@ -1397,9 +1397,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BuoyancyForce: 4.3
   Points: {fileID: 11400000, guid: 472e3f1964620d04eb1b2c837096283c, type: 2}
-  Info:
-    displacement: 0
-    submergedPercentage: 0
+  DepthValues: []
+  IsDebugMode: 0
+  displacement: 0
+  submergedPercentage: 0
 --- !u!54 &7778793631126884502
 Rigidbody:
   m_ObjectHideFlags: 0

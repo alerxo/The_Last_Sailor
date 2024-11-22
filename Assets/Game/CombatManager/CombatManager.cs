@@ -15,9 +15,11 @@ public class CombatManager : MonoBehaviour
     private const float SPAWN_SIZE = 1000f;
     private const float SPAWN_BUFFER = 300f;
 
-    private const int MAX_ADMIRAL_COUNT = 4;
+    private const int MAX_ADMIRAL_COUNT = 3;
     private const float SPAWN_COOLDOWN = 30f;
-
+    private const float SPAWN_PAUSE_DURATION = 0.1f;
+    private const int MIN_FLEET_SIZE = 0;
+    private const int MAX_FLEET_SIZE = 5;
     private CombatManagerSpawnState spawnState = CombatManagerSpawnState.SpawningFirstAdmiral;
 
     private readonly List<EnemyAdmiralController> admirals = new();
@@ -73,10 +75,21 @@ public class CombatManager : MonoBehaviour
 
     private IEnumerator SpawnTimer(Vector3 position)
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(SPAWN_PAUSE_DURATION);
 
-        Quaternion rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
-        ObjectPoolManager.Instance.Spawn<EnemyAdmiralController>(position, rotation);
+        Quaternion rotation = Quaternion.LookRotation((player.transform.position - position).normalized);
+        EnemyAdmiralController admiral = ObjectPoolManager.Instance.Spawn<EnemyAdmiralController>(position, rotation);
+
+        yield return new WaitForSeconds(SPAWN_PAUSE_DURATION);
+
+        int size = Random.Range(MIN_FLEET_SIZE, MAX_FLEET_SIZE + 1);
+        Vector3[] positions = Formations.GetLine(admiral.transform.position, admiral.transform.forward, size);
+
+        for (int i = 0; i < size; i++)
+        {
+            admiral.SpawnSubordinate(positions[i]);
+            yield return new WaitForSeconds(SPAWN_PAUSE_DURATION);
+        }
 
         yield return new WaitForSeconds(SPAWN_COOLDOWN);
 

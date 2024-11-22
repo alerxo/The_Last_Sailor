@@ -12,7 +12,7 @@ public partial class MoveToClosestPositionOutsideRingOfFireAction : Action
 
     protected override Status OnStart()
     {
-        Agent.Value.BoatController.SetDestination(CombatManager.GetClosestPositionOutSideRingOfFire(Agent.Value.transform.position));
+        Agent.Value.SetDestination(CombatManager.GetClosestPositionOutSideRingOfFire(Agent.Value.transform.position));
 
         return Status.Success;
     }
