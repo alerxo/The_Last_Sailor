@@ -16,12 +16,12 @@ public partial class MoveTowardsEnemyAction : Action
         if (Vector3.Distance(Agent.Value.Enemy.transform.position + (Agent.Value.Enemy.transform.right * ENGAGEMENT_RANGE), Agent.Value.transform.position) <
             Vector3.Distance(Agent.Value.Enemy.transform.position - (Agent.Value.Enemy.transform.right * ENGAGEMENT_RANGE), Agent.Value.transform.position))
         {
-            Agent.Value.BoatController.SetDestination(Agent.Value.Enemy.transform.position + (Agent.Value.Enemy.transform.right * ENGAGEMENT_RANGE));
+            Agent.Value.SetDestination(Agent.Value.Enemy.transform.position + (Agent.Value.Enemy.transform.right * ENGAGEMENT_RANGE));
         }
 
         else
         {
-            Agent.Value.BoatController.SetDestination(Agent.Value.Enemy.transform.position - (Agent.Value.Enemy.transform.right * ENGAGEMENT_RANGE));
+            Agent.Value.SetDestination(Agent.Value.Enemy.transform.position - (Agent.Value.Enemy.transform.right * ENGAGEMENT_RANGE));
         }
 
         return Status.Success;

@@ -11,7 +11,7 @@ public partial class SetDestinationInsideRingOfFireAction : Action
     [SerializeReference] public BlackboardVariable<EnemyAdmiralController> Agent;
     protected override Status OnStart()
     {
-        Agent.Value.BoatController.SetDestination(CombatManager.GetPositionInSideRingOfFire());
+        Agent.Value.SetDestination(CombatManager.GetPositionInSideRingOfFire());
 
         return Status.Success;
     }

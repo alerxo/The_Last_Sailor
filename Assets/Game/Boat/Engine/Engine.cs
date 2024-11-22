@@ -3,9 +3,9 @@ using UnityEngine;
 public class Engine : MonoBehaviour
 {
     private const float POWER = 100000f;
-    private const float ACCELERATION = 1f;
+    private const float THROTTLE_ACCELERATION = 0.9f;
+    private const float RUDDER_ACCELERATION = 0.9f;
     private const float TURN_RADIUS = 3f;
-    private const float TURN_SPEED = 1f;
     private const float PADDLE_WHEEL_SPEED = 0.002f;
 
     [Tooltip("The rotating paddlewheel")]
@@ -78,25 +78,25 @@ public class Engine : MonoBehaviour
 
     public void ChangeRudder(float _rudder)
     {
-        Rudder = Mathf.Clamp(Rudder + (-_rudder * TURN_SPEED * Time.deltaTime), -1, 1);
+        Rudder = Mathf.Clamp(Rudder + (-_rudder * RUDDER_ACCELERATION * Time.deltaTime), -1, 1);
         steeringWheel.SetRotation(Rudder);
     }
 
     public void ChangeTowardsRudder(float _rudder)
     {
-        Rudder = Mathf.Clamp(Mathf.Lerp(Rudder, -_rudder * 1.2f, TURN_SPEED * Time.deltaTime), -1, 1);
+        Rudder = Mathf.Clamp(Mathf.Lerp(Rudder, -_rudder, RUDDER_ACCELERATION * Time.deltaTime), -1, 1);
         steeringWheel.SetRotation(Rudder);
     }
 
     public void ChangeThrottle(float _throttle)
     {
-        Throttle = Mathf.Clamp01(Throttle + (_throttle * ACCELERATION * Time.deltaTime));
+        Throttle = Mathf.Clamp01(Throttle + (_throttle * THROTTLE_ACCELERATION * Time.deltaTime));
         throttle.SetRotation(Throttle);
     }
 
     public void ChangeTowardsThrottle(float _throttle)
     {
-        Throttle = Mathf.Clamp(Mathf.Lerp(Throttle, _throttle * 1.2f, ACCELERATION * Time.deltaTime), 0, 1);
+        Throttle = Mathf.Clamp(Mathf.Lerp(Throttle, _throttle, THROTTLE_ACCELERATION * Time.deltaTime), 0, 1);
         throttle.SetRotation(Throttle);
     }
 }
