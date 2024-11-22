@@ -60,17 +60,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff09da281c87194a87fc0f32b102ec3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenuCamera: {fileID: 0}
-  playerCamera: {fileID: 0}
-  steeringWheelCamera: {fileID: 0}
-  interactionCamera: {fileID: 0}
-  cinemachineBasicMultiChannelPerlins:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  cinemachineInputAxisControllers:
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &9187017433266998018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,7 +72,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cdff32de7654d54787916b6dabbcfab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsDebugMode: 0
+  buoyancyPoints: {fileID: 11400000, guid: 472e3f1964620d04eb1b2c837096283c, type: 2}
 --- !u!114 &904102292298761573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,7 +89,6 @@ MonoBehaviour:
   - {fileID: -9044174118299729711, guid: 7368a15327c26b545887268cd6410741, type: 3}
   - {fileID: 1304222455834577700, guid: 3bad0d0818fbf9e4b8125aa6dc3068de, type: 3}
   - {fileID: 564866446082053032, guid: 4eb76afa5b9da714594904dcf4d6db47, type: 3}
-  parent: {fileID: 0}
 --- !u!114 &3197544527876440092
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -24,7 +24,7 @@ public abstract class Admiral : MonoBehaviour
         Owner = GetComponent<Boat>();
         Fleet.Add(Owner);
 
-        SetFormation(Formation.Ring);
+        SetFormation(Formation.Spearhead);
     }
 
     private void Update()

@@ -10,9 +10,9 @@ public class BuoyancyManager : MonoBehaviour
 {
     public static BuoyancyManager Instance { get; private set; }
 
-    private Vector3[] points;
-    private Buoyancy[] targets;
-    private int[] endIndexes;
+    [SerializeField] private BuoyancyPoints buoyancyPoints;
+    private readonly List<Buoyancy> targets = new();
+    private int currentTarget;
 
     private WaterSurface waterSurface;
 
@@ -24,12 +24,6 @@ public class BuoyancyManager : MonoBehaviour
     private NativeArray<float3> normalBuffer;
     private NativeArray<float3> directionBuffer;
 
-    public bool IsDataSet { get; private set; } = false;
-
-#if UNITY_EDITOR
-    [SerializeField] private bool IsDebugMode;
-#endif
-
     private void Awake()
     {
         Assert.IsNull(Instance);
@@ -37,33 +31,44 @@ public class BuoyancyManager : MonoBehaviour
 
         waterSurface = FindFirstObjectByType<WaterSurface>();
 
-        SetBuffers();
+        targetPositionBuffer = new(buoyancyPoints.Values.Length, Allocator.Persistent);
+        projectedPositionBuffer = new(buoyancyPoints.Values.Length, Allocator.Persistent);
+        errorBuffer = new(buoyancyPoints.Values.Length, Allocator.Persistent);
+        candidatePositionBuffer = new(buoyancyPoints.Values.Length, Allocator.Persistent);
+        stepCountBuffer = new(buoyancyPoints.Values.Length, Allocator.Persistent);
+        normalBuffer = new(buoyancyPoints.Values.Length, Allocator.Persistent);
+        directionBuffer = new(buoyancyPoints.Values.Length, Allocator.Persistent);
+
+        AddTarget(FindFirstObjectByType<Buoyancy>());
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (targets.Length == 0) return;
-
-        GetData();
-
-        if (IsDataSet)
+        if (targets.Count > 0)
         {
-            AddForce();
+            if (currentTarget >= targets.Count)
+            {
+                currentTarget = 0;
+            }
+
+            UpdateTargetDepthValues();
+
+            currentTarget++;
         }
     }
 
-    private void GetData()
+    private void UpdateTargetDepthValues()
     {
         WaterSimSearchData waterSimSearchData = new();
-        if (!waterSurface.FillWaterSearchData(ref waterSimSearchData)) return;
 
-        int current = 0;
-
-        for (int i = 0; i < points.Length; i++)
+        if (!waterSurface.FillWaterSearchData(ref waterSimSearchData))
         {
-            if (i == endIndexes[current]) current++;
+            return;
+        }
 
-            targetPositionBuffer[i] = targets[current].transform.position + targets[current].transform.TransformVector(points[i]);
+        for (int i = 0; i < buoyancyPoints.Values.Length; i++)
+        {
+            targetPositionBuffer[i] = targets[currentTarget].transform.position + targets[currentTarget].transform.TransformVector(buoyancyPoints.Values[i]);
         }
 
         WaterSimulationSearchJob waterSimulationSearchJob = new()
@@ -83,94 +88,28 @@ public class BuoyancyManager : MonoBehaviour
             directionBuffer = directionBuffer
         };
 
-        JobHandle jobHandle = waterSimulationSearchJob.Schedule(points.Length, 1);
+        JobHandle jobHandle = waterSimulationSearchJob.Schedule(buoyancyPoints.Values.Length, 1);
         jobHandle.Complete();
 
-        IsDataSet = true;
+        for (int i = 0; i < buoyancyPoints.Values.Length; i++)
+        {
+            targets[currentTarget].DepthValues[i] = Mathf.Clamp(projectedPositionBuffer[i].y - targetPositionBuffer[i].y, 0, Buoyancy.POINT_SCALE.y) / Buoyancy.POINT_SCALE.y;
+        }
     }
 
-    private void AddForce()
+    public void AddTarget(Buoyancy _buoyancy)
     {
-        int current = 0;
-
-        for (int i = 0; i < points.Length; i++)
+        if (!targets.Contains(_buoyancy))
         {
-            if (i >= endIndexes[current]) current++;
-
-            float depth = Mathf.Clamp(projectedPositionBuffer[i].y - targetPositionBuffer[i].y, 0, Buoyancy.POINT_SCALE.y) / Buoyancy.POINT_SCALE.y;
-
-            if (depth > 0)
-            {
-                Vector3 force = new(0f, targets[current].PointMass * targets[current].BuoyancyForce * depth * -Physics.gravity.y, 0f);
-
-                targets[current].Rb.AddForceAtPosition(force, targetPositionBuffer[i], ForceMode.Force);
-            }
+            targets.Add(_buoyancy);
         }
-
-#if UNITY_EDITOR
-        if (!IsDebugMode) return;
-
-        foreach (Buoyancy target in targets)
-        {
-            target.Info.Reset();
-        }
-
-        current = 0;
-
-        for (int i = 0; i < points.Length; i++)
-        {
-            if (i >= endIndexes[current])
-            {
-                current++;
-            }
-
-            float depth = Mathf.Clamp(projectedPositionBuffer[i].y - targetPositionBuffer[i].y, 0, Buoyancy.POINT_SCALE.y) / Buoyancy.POINT_SCALE.y;
-
-            if (depth > 0)
-            {
-                Vector3 force = new(0f, targets[current].PointMass * targets[current].BuoyancyForce * depth * -Physics.gravity.y, 0f);
-                targets[current].Info.AddDisplacement(targets[current].PointMass);
-                DebugUtil.DrawBox(targetPositionBuffer[i], targets[current].transform.rotation, Buoyancy.POINT_SCALE * depth, Color.green, Time.fixedDeltaTime);
-            }
-
-            else
-            {
-                DebugUtil.DrawBox(targetPositionBuffer[i], targets[current].transform.rotation, Buoyancy.POINT_SCALE * 0.05f, Color.red, Time.fixedDeltaTime);
-            }
-        }
-
-        foreach (Buoyancy target in targets)
-        {
-            target.Info.MakeCalculations(target.Rb.mass);
-        }
-#endif
     }
 
-    public void SetBuffers(Buoyancy _ignore = null)
+    public void RemoveTarget(Buoyancy _buoyancy)
     {
-        List<Vector3> tempPoints = new();
-        List<Buoyancy> tempTargets = new();
-        List<int> tempEndIndexes = new();
-
-        foreach (Buoyancy buoancy in FindObjectsByType<Buoyancy>(FindObjectsSortMode.None))
+        if (targets.Contains(_buoyancy))
         {
-            if (_ignore != null && buoancy == _ignore) continue;
-
-            tempPoints.AddRange(buoancy.Points.Values);
-            tempTargets.Add(buoancy);
-            tempEndIndexes.Add(tempPoints.Count);
+            targets.Remove(_buoyancy);
         }
-
-        targets = tempTargets.ToArray();
-        endIndexes = tempEndIndexes.ToArray();
-        points = tempPoints.ToArray();
-
-        targetPositionBuffer = new(points.Length, Allocator.Persistent);
-        projectedPositionBuffer = new(points.Length, Allocator.Persistent);
-        errorBuffer = new(points.Length, Allocator.Persistent);
-        candidatePositionBuffer = new(points.Length, Allocator.Persistent);
-        stepCountBuffer = new(points.Length, Allocator.Persistent);
-        normalBuffer = new(points.Length, Allocator.Persistent);
-        directionBuffer = new(points.Length, Allocator.Persistent);
     }
 }
