@@ -12,9 +12,14 @@ public class AIBoatController : MonoBehaviour
     public Vector3? Destination { get; private set; }
     public float Speed { get; private set; } = 1f;
     public float Distance { get; private set; }
+    public float ForwardCollisionDistance { get; private set; }
     public Vector3 Cross { get; private set; }
 
     private float destructionTimer;
+
+    [SerializeField] private Transform[] rays;
+    private float forwardCollisionTimer;
+    private const float FORWARD_COLLISION_COOLDOWN = 1f;
 
 #if UNITY_EDITOR
     [SerializeField] protected bool isDebugMode;
@@ -22,6 +27,8 @@ public class AIBoatController : MonoBehaviour
 
     public void Awake()
     {
+        forwardCollisionTimer = Random.Range(0, FORWARD_COLLISION_COOLDOWN);
+
         Boat = GetComponent<Boat>();
 
         Boat.OnDestroyed += Boat_OnDestroyed;
@@ -49,6 +56,34 @@ public class AIBoatController : MonoBehaviour
                 PendingDestructionState();
                 break;
         }
+
+        if ((forwardCollisionTimer += Time.deltaTime) > FORWARD_COLLISION_COOLDOWN)
+        {
+            forwardCollisionTimer = 0f;
+            CheckForwardCollision();
+        }
+    }
+
+    private void CheckForwardCollision()
+    {
+        float distance = Distance;
+
+        foreach (Transform ray in rays)
+        {
+            if (Physics.Raycast(ray.position, ray.forward, out RaycastHit hit, MoveTowardsDestination.APROACH_DISTANCE))
+            {
+                distance = Mathf.Min(hit.distance, distance);
+
+#if UNITY_EDITOR
+                if (isDebugMode)
+                {
+                    Debug.DrawLine(ray.position, hit.point, Color.yellow, FORWARD_COLLISION_COOLDOWN);
+                }
+#endif
+            }
+        }
+
+        ForwardCollisionDistance = distance;
     }
 
     public void SetAdmiral(Admiral _admiral)
@@ -79,7 +114,6 @@ public class AIBoatController : MonoBehaviour
     private void Boat_OnDestroyed()
     {
         Destination = null;
-        Boat.NavigationObstacle.TryStopOccupying();
 
         StartCoroutine(Boat.SinkAtSurface(OnSunkAtSurface));
     }

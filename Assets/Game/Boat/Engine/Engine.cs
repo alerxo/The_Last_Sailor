@@ -6,6 +6,7 @@ public class Engine : MonoBehaviour
     private const float THROTTLE_ACCELERATION = 0.9f;
     private const float RUDDER_ACCELERATION = 0.9f;
     private const float TURN_RADIUS = 3f;
+    private const float RUDDER_PASSIVE_TORQUE = 20000f;
     private const float PADDLE_WHEEL_SPEED = 0.002f;
 
     [Tooltip("The rotating paddlewheel")]
@@ -33,8 +34,13 @@ public class Engine : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float x = Mathf.Clamp(Rudder * TURN_RADIUS, -TURN_RADIUS, TURN_RADIUS);
-        transform.localPosition = new Vector3(x, transform.localPosition.y, transform.localPosition.z);
+        float rudder = Mathf.Clamp(Rudder * TURN_RADIUS, -TURN_RADIUS, TURN_RADIUS);
+        transform.localPosition = new Vector3(rudder, transform.localPosition.y, transform.localPosition.z);
+
+        if (rudder != 0)
+        {
+            target.AddTorque(0, -rudder * RUDDER_PASSIVE_TORQUE, 0, ForceMode.Force);
+        }
 
         float throttle = Mathf.Clamp(Throttle * POWER, 0, POWER);
 

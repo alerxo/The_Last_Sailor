@@ -21,14 +21,12 @@ public class Boat : MonoBehaviour, IDamageable
     public Engine Engine { get; private set; }
     public Buoyancy Buoyancy { get; private set; }
     public Rigidbody RigidBody { get; private set; }
-    public NavigationObstacle NavigationObstacle { get; private set; }
 
     public virtual void Awake()
     {
         Engine = GetComponentInChildren<Engine>();
         Buoyancy = GetComponent<Buoyancy>();
         RigidBody = GetComponent<Rigidbody>();
-        NavigationObstacle = GetComponent<NavigationObstacle>();
 
         startCOM = COM.localPosition;
         RigidBody.centerOfMass = COM.localPosition;

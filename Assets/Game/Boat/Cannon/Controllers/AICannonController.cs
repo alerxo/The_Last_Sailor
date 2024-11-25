@@ -5,6 +5,7 @@ public class AICannonController : MonoBehaviour
     private const float MAX_TARGET_ANGLE = 100f;
     private const float MAX_FIRE_YAW_DIFFERENCE = 10f;
     private const float BOAT_LENGTH = 15f;
+    private const float CANNONBALL_DRAG_ESTIMATION = 1.05f;
 
     private AICannonControllerState state;
 
@@ -12,12 +13,19 @@ public class AICannonController : MonoBehaviour
     private Cannon cannon;
     private Boat target;
 
+    Vector3 targetPredictedPosition;
+    float predictionDistance;
+    private float predictionTimer;
+    private const float PREDICTION_COOLDOWN = 0.2f;
+
 #if UNITY_EDITOR
     [SerializeField] private bool isDebugMode;
 #endif
 
     private void Awake()
     {
+        predictionTimer = Random.Range(0, PREDICTION_COOLDOWN);
+
         cannon = GetComponentInParent<Cannon>();
         owner = GetComponentInParent<AIBoatController>();
     }
@@ -33,6 +41,7 @@ public class AICannonController : MonoBehaviour
 
         if (state == AICannonControllerState.Aiming)
         {
+            TryUpdatePredictions();
             AimAtTarget();
         }
 
@@ -82,10 +91,30 @@ public class AICannonController : MonoBehaviour
         return _distance < CombatManager.RING_OF_FIRE_SIZE && GetCurrentAngle(_boat.transform.position) <= MAX_TARGET_ANGLE;
     }
 
+    private void TryUpdatePredictions()
+    {
+        if ((predictionTimer += Time.deltaTime) > PREDICTION_COOLDOWN)
+        {
+            predictionTimer = 0f;
+            CalculatePredictions();
+        }
+    }
+
+    private void CalculatePredictions()
+    {
+        float speed = Cannon.CANNONBALL_FORCE / Cannon.CANNONBALL_MASS;
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+        float estimatedTime = distance / speed * CANNONBALL_DRAG_ESTIMATION;
+
+        Vector3 velocity = target.RigidBody.linearVelocity;
+        velocity.y = 0;
+
+        targetPredictedPosition = target.transform.position + (velocity * estimatedTime);
+        predictionDistance = Vector3.Distance(transform.position, cannon.GetHitPrediction(targetPredictedPosition.y));
+    }
+
     private void AimAtTarget()
     {
-        Vector3 targetPredictedPosition = GetPredictedPosition();
-
         RotatePitch(targetPredictedPosition);
         bool hasAcceptableYaw = RotateYaw(targetPredictedPosition);
 
@@ -105,23 +134,10 @@ public class AICannonController : MonoBehaviour
 #endif
     }
 
-    private Vector3 GetPredictedPosition()
-    {
-        float speed = Cannon.CANNONBALL_FORCE / Cannon.CANNONBALL_MASS;
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        float estimatedTime = distance / speed;
-
-        Vector3 velocity = target.RigidBody.linearVelocity;
-        velocity.y = 0;
-
-        return target.transform.position + (velocity * estimatedTime);
-    }
-
     private void RotatePitch(Vector3 predictedPosition)
     {
         float actual = Vector3.Distance(transform.position, predictedPosition);
-        float prediction = Vector3.Distance(transform.position, cannon.GetHitPrediction(predictedPosition.y));
-        float difference = 1 - Mathf.Clamp(prediction / actual, 0, 2);
+        float difference = 1 - Mathf.Clamp(predictionDistance / actual, 0, 2);
         cannon.ChangePitchTowards(difference);
     }
 

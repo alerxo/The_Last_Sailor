@@ -18,7 +18,7 @@ public class Cannon : MonoBehaviour
     public const float MAX_YAW = 20;
 
     private const int PREDICTION_ITERATIONS = 1000;
-    private const float PREDICTION_INCREMENT = 0.025f;
+    private const float PREDICTION_INCREMENT = 0.1f;
 
     private bool firstReload;
 
