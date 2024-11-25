@@ -290,17 +290,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3260705750193719497}
     m_Modifications:
-    - target: {fileID: 98163679443826136, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: largeWindSpeed
-      value: 250
-      objectReference: {fileID: 0}
     - target: {fileID: 3924458489242471966, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
       propertyPath: m_Name
       value: Sun And Ocean Controller
-      objectReference: {fileID: 0}
-    - target: {fileID: 3924458489242471966, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6511450991575843894, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -341,14 +333,6 @@ PrefabInstance:
     - target: {fileID: 6511450991575843894, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7768106205998226639, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8690881304057997260, guid: 831542ff2e17c1b4fadf2e833404131b, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -368,22 +352,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3260705750193719497}
     m_Modifications:
-    - target: {fileID: 477983024308869927, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
-      propertyPath: m_TagString
-      value: BoatCameraTarget
-      objectReference: {fileID: 0}
     - target: {fileID: 4602790332532205488, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
       propertyPath: m_Name
       value: PlayerBoat
       objectReference: {fileID: 0}
-    - target: {fileID: 5024949801701461398, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
-      propertyPath: steeringClickClip
-      value: 
-      objectReference: {fileID: 8300000, guid: ad6eef1ae3af2f348861c77b2f87ad8b, type: 3}
-    - target: {fileID: 5024949801701461398, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
-      propertyPath: SteeringStraightClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 0789fd2d823ccf84da5db0728f8de2ab, type: 3}
     - target: {fileID: 6877299985886926126, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -422,10 +394,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6877299985886926126, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7024839172140607057, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
