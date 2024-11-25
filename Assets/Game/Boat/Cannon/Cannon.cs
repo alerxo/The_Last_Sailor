@@ -9,6 +9,8 @@ public class Cannon : MonoBehaviour
 
     private const float COOLDOWN = 5;
 
+    [SerializeField] private Renderer barrelRenderer;
+
     private const float PITCH_ROTATION_SPEED = 20f;
     private const float YAW_ROTATION_SPEED = 30f;
     private const float MAX_PITCH = 7.5f;
@@ -96,6 +98,7 @@ public class Cannon : MonoBehaviour
 
         State = CannonState.Reloading;
         StartCoroutine(ReloadTimer());
+        StartCoroutine(CooldownShader());
     }
 
     private IEnumerator ReloadTimer()
@@ -108,13 +111,30 @@ public class Cannon : MonoBehaviour
             audioSource.PlayOneShot(reloadClip);
             yield return new WaitForSeconds(2);
         }
-        else 
+        else
         {
             yield return new WaitForSeconds(COOLDOWN);
             firstReload = false;
         }
 
         State = CannonState.Ready;
+    }
+    private IEnumerator CooldownShader()// ändra namn
+    {
+        MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
+        barrelRenderer.GetPropertyBlock(propertyBlock);
+        float f;
+        float duration = 0;
+        while ((duration += Time.deltaTime) < COOLDOWN)
+        {
+            f = Mathf.Lerp(1f, 0f, duration / COOLDOWN);
+            propertyBlock.SetFloat("_EmissionStrength", f);
+            barrelRenderer.SetPropertyBlock(propertyBlock);
+            yield return null;
+        }
+        f = 0;
+        propertyBlock.SetFloat("_EmissionStrength", f);
+        barrelRenderer.SetPropertyBlock(propertyBlock);
     }
 
     public Vector3 GetHitPrediction(float minYPos)
