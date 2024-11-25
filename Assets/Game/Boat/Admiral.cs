@@ -24,7 +24,7 @@ public abstract class Admiral : MonoBehaviour
         Owner = GetComponent<Boat>();
         Fleet.Add(Owner);
 
-        SetFormation(Formation.Spearhead);
+        SetFormation(Formation.Ring);
     }
 
     private void Update()
@@ -38,14 +38,20 @@ public abstract class Admiral : MonoBehaviour
 
     protected void AddSubordinate(Boat _boat)
     {
-        Fleet.Add(_boat);
-        Subordinates.Add(_boat.GetComponent<AIBoatController>());
+        if(!Fleet.Contains(_boat))
+        {
+            Fleet.Add(_boat);
+            Subordinates.Add(_boat.GetComponent<AIBoatController>());
+        }
     }
 
-    protected void RemoveSubordinate(Boat _boat)
+    public void RemoveSubordinate(Boat _boat)
     {
-        Fleet.Remove(_boat);
-        Subordinates.Remove(_boat.GetComponent<AIBoatController>());
+        if (Fleet.Contains(_boat))
+        {
+            Fleet.Remove(_boat);
+            Subordinates.Remove(_boat.GetComponent<AIBoatController>());
+        }
     }
 
     public void SetEnemy(Admiral _enemy)

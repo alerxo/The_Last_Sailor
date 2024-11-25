@@ -20,7 +20,7 @@ public partial class MoveTowardsDestination : Action
             return Status.Failure;
         }
 
-        float throttle = Mathf.Clamp01((Agent.Value.Distance - STOP_DISTANCE) / (APROACH_DISTANCE - STOP_DISTANCE));
+        float throttle = Mathf.Clamp01((Agent.Value.ForwardCollisionDistance - STOP_DISTANCE) / (APROACH_DISTANCE - STOP_DISTANCE));
         throttle = Mathf.Pow(throttle, 3);
         Agent.Value.Boat.Engine.ChangeTowardsThrottle(throttle * Agent.Value.Speed);
 

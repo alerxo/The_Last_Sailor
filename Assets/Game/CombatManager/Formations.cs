@@ -4,7 +4,7 @@ public static class Formations
 {
     private const float POSITION_FORWARD_OFFSET = 10f;
 
-    private const float LINE_MARGIN = 50f;
+    private const float LINE_MARGIN = 75f;
 
     private const float SPEARHEAD_MARGIN = 100f;
 

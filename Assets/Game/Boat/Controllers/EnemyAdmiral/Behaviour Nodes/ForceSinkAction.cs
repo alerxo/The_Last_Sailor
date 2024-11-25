@@ -12,7 +12,10 @@ public partial class ForceSinkAction : Action
 
     protected override Status OnStart()
     {
-        Agent.Value.BoatController.Boat.Damage(999999);
+        foreach (Boat boat in Agent.Value.Fleet.ToArray())
+        {
+            boat.Damage(999999);
+        }
 
         return Status.Running;
     }

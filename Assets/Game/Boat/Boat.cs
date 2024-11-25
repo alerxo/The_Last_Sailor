@@ -35,11 +35,6 @@ public class Boat : MonoBehaviour, IDamageable
         SetDefault();
     }
 
-    private void Update() // ta bort efter 20/11
-    {
-        RigidBody.centerOfMass = COM.localPosition;
-    }
-
     public void Damage(float _damage)
     {
         if (Health == 0) return;
