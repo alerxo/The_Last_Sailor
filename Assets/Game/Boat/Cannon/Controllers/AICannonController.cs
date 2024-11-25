@@ -3,7 +3,6 @@ using UnityEngine;
 public class AICannonController : MonoBehaviour
 {
     private const float MAX_TARGET_ANGLE = 100f;
-    private const float MAX_FIRE_PITCH_DIFFERENCE = 0.50f;
     private const float MAX_FIRE_YAW_DIFFERENCE = 10f;
     private const float BOAT_LENGTH = 15f;
 
@@ -87,10 +86,10 @@ public class AICannonController : MonoBehaviour
     {
         Vector3 targetPredictedPosition = GetPredictedPosition();
 
-        bool hasAcceptablePitch = RotatePitch(targetPredictedPosition);
+        RotatePitch(targetPredictedPosition);
         bool hasAcceptableYaw = RotateYaw(targetPredictedPosition);
 
-        if (cannon.State == CannonState.Ready && hasAcceptablePitch && hasAcceptableYaw)
+        if (cannon.State == CannonState.Ready && hasAcceptableYaw)
         {
             SetState(AICannonControllerState.Shooting);
         }
@@ -118,14 +117,12 @@ public class AICannonController : MonoBehaviour
         return target.transform.position + (velocity * estimatedTime);
     }
 
-    private bool RotatePitch(Vector3 predictedPosition)
+    private void RotatePitch(Vector3 predictedPosition)
     {
         float actual = Vector3.Distance(transform.position, predictedPosition);
         float prediction = Vector3.Distance(transform.position, cannon.GetHitPrediction(predictedPosition.y));
         float difference = 1 - Mathf.Clamp(prediction / actual, 0, 2);
         cannon.ChangePitchTowards(difference);
-
-        return Mathf.Abs(difference) < MAX_FIRE_PITCH_DIFFERENCE;
     }
 
     private bool RotateYaw(Vector3 predictedPosition)
