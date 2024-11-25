@@ -21,23 +21,20 @@ public class Boat : MonoBehaviour, IDamageable
     public Engine Engine { get; private set; }
     public Buoyancy Buoyancy { get; private set; }
     public Rigidbody RigidBody { get; private set; }
+    public NavigationObstacle NavigationObstacle { get; private set; }
 
     public virtual void Awake()
     {
         Engine = GetComponentInChildren<Engine>();
         Buoyancy = GetComponent<Buoyancy>();
         RigidBody = GetComponent<Rigidbody>();
+        NavigationObstacle = GetComponent<NavigationObstacle>();
 
         startCOM = COM.localPosition;
         RigidBody.centerOfMass = COM.localPosition;
         Engine.transform.localPosition = new Vector3(Engine.transform.localPosition.x, COM.localPosition.y, Engine.transform.localPosition.z);
 
         SetDefault();
-    }
-
-    private void Update() // ta bort efter 20/11
-    {
-        RigidBody.centerOfMass = COM.localPosition;
     }
 
     public void Damage(float _damage)

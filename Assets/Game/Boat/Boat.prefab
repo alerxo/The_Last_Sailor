@@ -1335,6 +1335,7 @@ GameObject:
   - component: {fileID: 607066503725585090}
   - component: {fileID: 630431310281460194}
   - component: {fileID: 5389780127521897786}
+  - component: {fileID: -2377590450834818596}
   - component: {fileID: 7778793631126884502}
   m_Layer: 8
   m_Name: Boat
@@ -1401,6 +1402,18 @@ MonoBehaviour:
   IsDebugMode: 0
   displacement: 0
   submergedPercentage: 0
+--- !u!114 &-2377590450834818596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7565428663125270620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a79cf79e7fe3b34897ec7abd0306e31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!54 &7778793631126884502
 Rigidbody:
   m_ObjectHideFlags: 0

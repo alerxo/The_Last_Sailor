@@ -79,6 +79,7 @@ public class AIBoatController : MonoBehaviour
     private void Boat_OnDestroyed()
     {
         Destination = null;
+        Boat.NavigationObstacle.TryStopOccupying();
 
         StartCoroutine(Boat.SinkAtSurface(OnSunkAtSurface));
     }
@@ -115,6 +116,13 @@ public class AIBoatController : MonoBehaviour
                 break;
 
             case AIBoatControllerState.PendingDestruction:
+
+                if (GetComponent<EnemyAdmiralController>() == null)
+                {
+                    Admiral.RemoveSubordinate(Boat);
+                    SetAdmiral(null);
+                }
+
                 Boat.SetDefault();
                 Boat.Buoyancy.SetDefault();
                 Boat.RigidBody.linearVelocity = Vector3.zero;

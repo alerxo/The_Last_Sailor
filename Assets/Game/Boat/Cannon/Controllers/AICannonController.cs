@@ -4,7 +4,7 @@ public class AICannonController : MonoBehaviour
 {
     private const float MAX_TARGET_ANGLE = 100f;
     private const float MAX_FIRE_PITCH_DIFFERENCE = 0.50f;
-    private const float MAX_FIRE_YAW_DIFFERENCE = 1f;
+    private const float MAX_FIRE_YAW_DIFFERENCE = 10f;
     private const float BOAT_LENGTH = 15f;
 
     private AICannonControllerState state;
@@ -45,7 +45,7 @@ public class AICannonController : MonoBehaviour
 
     private void CheckIfActive()
     {
-        if (owner.Admiral.Enemy == null || owner.Boat.Health <= 0)
+        if (owner.Admiral == null || owner.Admiral.Enemy == null || owner.Boat.Health <= 0)
         {
             SetState(AICannonControllerState.Inactive);
         }
@@ -87,10 +87,10 @@ public class AICannonController : MonoBehaviour
     {
         Vector3 targetPredictedPosition = GetPredictedPosition();
 
-        bool pitch = RotatePitch(targetPredictedPosition);
-        bool yaw = RotateYaw(targetPredictedPosition);
+        bool hasAcceptablePitch = RotatePitch(targetPredictedPosition);
+        bool hasAcceptableYaw = RotateYaw(targetPredictedPosition);
 
-        if (cannon.State == CannonState.Ready && pitch && yaw)
+        if (cannon.State == CannonState.Ready && hasAcceptablePitch && hasAcceptableYaw)
         {
             SetState(AICannonControllerState.Shooting);
         }
