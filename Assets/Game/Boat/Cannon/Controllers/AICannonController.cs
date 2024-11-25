@@ -3,9 +3,9 @@ using UnityEngine;
 public class AICannonController : MonoBehaviour
 {
     private const float MAX_TARGET_ANGLE = 100f;
-    private const float MAX_FIRE_YAW_DIFFERENCE = 10f;
+    private const float MAX_FIRE_YAW_DIFFERENCE = 7f;
     private const float BOAT_LENGTH = 15f;
-    private const float CANNONBALL_DRAG_ESTIMATION = 1.05f;
+    private const float CANNONBALL_DRAG_ESTIMATION = 1.03f;
 
     private AICannonControllerState state;
 
