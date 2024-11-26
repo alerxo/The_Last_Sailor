@@ -1,0 +1,83 @@
+.post-combat-container {
+	justify-content: center;
+	align-items: center;
+
+	width: 100%;
+	height: 100%;
+}
+
+.post-combat-background {
+	justify-content: space-around;
+	align-items: center;
+
+	width: 50%;
+	height: 60%;
+}
+
+.post-combat-header {
+	
+}
+
+.post-combat-column-container {
+	flex-direction: row;
+	justify-content: space-around;
+	
+	width: 90%;
+	height: 60%;
+	padding: 3%;
+}
+
+.post-combat-column {
+	align-items: flex-start;
+
+	width: 45%;
+}
+
+.post-combat-column-header {
+	align-self: center;
+}
+
+
+
+.post-combat-row {
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.post-combat-row-desciption {
+
+}
+
+.post-combat-row-button {
+
+}
+
+
+.post-combat-navigation-button {
+	
+}
+
+
+
+.post-combat-button {
+	transition-property: scale;
+    transition-duration: 50ms;
+	transition-timing-function: ease-in-out;
+}
+
+.post-combat-button:hover {
+	scale: 1.20;
+
+	transition-property: scale;
+    transition-duration: 200ms;
+	transition-timing-function: ease-in-out;
+}
+
+.post-combat-button:active {
+	scale: 1.35;
+
+	transition-property: scale;
+    transition-duration: 100ms;
+	transition-timing-function: ease-in-out;
+}

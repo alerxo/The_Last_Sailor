@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class CombatManager : MonoBehaviour
 {
@@ -19,13 +22,13 @@ public class CombatManager : MonoBehaviour
     private const float SPAWN_COOLDOWN = 30f;
     private const float SPAWN_PAUSE_DURATION = 0.1f;
     private const int MIN_FLEET_SIZE = 0;
-    private const int MAX_FLEET_SIZE = 4;
+    private const int MAX_FLEET_SIZE = 1;
     private CombatManagerSpawnState spawnState = CombatManagerSpawnState.SpawningFirstAdmiral;
 
     private readonly List<EnemyAdmiralController> admirals = new();
 
     private PlayerBoatController player;
-    private EnemyAdmiralController admiralInCombat;
+    public EnemyAdmiralController AdmiralInCombat { get; private set; }
     private EnemyAdmiralController admiralInRingOfFireBuffer;
 
     private void Awake()
@@ -46,18 +49,70 @@ public class CombatManager : MonoBehaviour
     {
         if (admiralInRingOfFireBuffer != null)
         {
-            if (admiralInCombat == null && Vector3.Distance(player.transform.position, admiralInRingOfFireBuffer.transform.position) <= RING_OF_FIRE_SIZE)
+            if (AdmiralInCombat == null && Vector3.Distance(player.transform.position, admiralInRingOfFireBuffer.transform.position) <= RING_OF_FIRE_SIZE)
             {
-                admiralInCombat = admiralInRingOfFireBuffer;
-                OnAdmiralInCombatChanged?.Invoke(admiralInCombat);
+                EnterCombat();
             }
 
-            else if (admiralInCombat != null && Vector3.Distance(player.transform.position, admiralInCombat.transform.position) > RING_OF_FIRE_SIZE)
+            else if (AdmiralInCombat != null && Vector3.Distance(player.transform.position, AdmiralInCombat.transform.position) > RING_OF_FIRE_SIZE)
             {
-                admiralInCombat = null;
-                OnAdmiralInCombatChanged?.Invoke(admiralInCombat);
+                ExitCombat();
+            }
+
+            else if (IsBattleOver())
+            {
+                ExitCombat();
             }
         }
+    }
+
+    private bool IsBattleOver()
+    {
+        return AdmiralInCombat != null && (player.AdmiralController.Fleet.All((b) => b.IsSunk) || AdmiralInCombat.Fleet.All((b) => b.IsSunk));
+    }
+
+    private void EnterCombat()
+    {
+        AdmiralInCombat = admiralInRingOfFireBuffer;
+        OnAdmiralInCombatChanged?.Invoke(AdmiralInCombat);
+    }
+
+    private void ExitCombat()
+    {
+        PostCombatScreen.Instance.CreateBattleResults(AdmiralInCombat);
+        UIManager.Instance.SetState(UIState.PostCombat);
+        FirstPersonController.Instance.SetState(PlayerState.Inactive);
+
+        Time.timeScale = 0.1f;
+    }
+
+    public void BattleResultsCompleted()
+    {
+        foreach (AIBoatController boatController in player.AdmiralController.Subordinates)
+        {
+            if (boatController.Boat.IsSunk)
+            {
+                boatController.SinkToBottom();
+            }
+        }
+
+        foreach (Boat boat in player.AdmiralController.Fleet)
+        {
+            AIBoatController boatController = boat.GetComponent<AIBoatController>();
+
+            if (boatController.Boat.IsSunk)
+            {
+                boatController.SinkToBottom();
+            }
+        }
+
+        AdmiralInCombat = null;
+        OnAdmiralInCombatChanged?.Invoke(AdmiralInCombat);
+
+        UIManager.Instance.SetState(UIState.HUD);
+        FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
+
+        Time.timeScale = 1f;
     }
 
     private void SpawnEnemyAdmiral()

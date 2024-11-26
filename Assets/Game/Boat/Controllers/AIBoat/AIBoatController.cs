@@ -86,6 +86,13 @@ public class AIBoatController : MonoBehaviour
         ForwardCollisionDistance = distance;
     }
 
+    public void Seize(Admiral _admiral)
+    {
+        Admiral.RemoveSubordinate(Boat);
+        _admiral.AddSubordinate(Boat);
+        Boat.Repair();
+    }
+
     public void SetAdmiral(Admiral _admiral)
     {
         Admiral = _admiral;
@@ -115,11 +122,16 @@ public class AIBoatController : MonoBehaviour
     {
         Destination = null;
 
-        StartCoroutine(Boat.SinkAtSurface(OnSunkAtSurface));
+        StartCoroutine(Boat.SinkAtSurface());
     }
 
-    private void OnSunkAtSurface()
+    public void SinkToBottom()
     {
+        if (GetComponent<EnemyAdmiralController>() == null)
+        {
+            Admiral.RemoveSubordinate(Boat);
+        }
+
         StartCoroutine(Boat.SinkToBottom(OnSunkAtBottom));
     }
 
@@ -150,13 +162,6 @@ public class AIBoatController : MonoBehaviour
                 break;
 
             case AIBoatControllerState.PendingDestruction:
-
-                if (GetComponent<EnemyAdmiralController>() == null)
-                {
-                    Admiral.RemoveSubordinate(Boat);
-                    SetAdmiral(null);
-                }
-
                 Boat.SetDefault();
                 Boat.Buoyancy.SetDefault();
                 Boat.RigidBody.linearVelocity = Vector3.zero;

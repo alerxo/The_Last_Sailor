@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public abstract class Admiral : MonoBehaviour
 {
@@ -36,12 +37,15 @@ public abstract class Admiral : MonoBehaviour
         }
     }
 
-    protected void AddSubordinate(Boat _boat)
+    public void AddSubordinate(Boat _boat)
     {
-        if(!Fleet.Contains(_boat))
+        if (!Fleet.Contains(_boat))
         {
+            AIBoatController controller = _boat.GetComponent<AIBoatController>();
+            Assert.IsNull(controller.Admiral);
+            controller.SetAdmiral(this);
+            Subordinates.Add(controller);
             Fleet.Add(_boat);
-            Subordinates.Add(_boat.GetComponent<AIBoatController>());
         }
     }
 
@@ -49,8 +53,11 @@ public abstract class Admiral : MonoBehaviour
     {
         if (Fleet.Contains(_boat))
         {
+            AIBoatController controller = _boat.GetComponent<AIBoatController>();
+            Assert.IsTrue(controller.Admiral == this);
+            controller.SetAdmiral(null);
+            Subordinates.Remove(controller);
             Fleet.Remove(_boat);
-            Subordinates.Remove(_boat.GetComponent<AIBoatController>());
         }
     }
 

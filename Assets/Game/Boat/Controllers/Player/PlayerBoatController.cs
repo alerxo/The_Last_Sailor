@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.SceneManagement;
 
 public class PlayerBoatController : MonoBehaviour
 {
@@ -28,11 +27,6 @@ public class PlayerBoatController : MonoBehaviour
 
     private void Boat_OnDestroyed()
     {
-        StartCoroutine(Boat.SinkAtSurface(OnSunk));
-    }
-
-    private void OnSunk()
-    {
-        SceneManager.LoadScene("Game");
+        StartCoroutine(Boat.SinkAtSurface());
     }
 }

@@ -18,6 +18,8 @@ public class Boat : MonoBehaviour, IDamageable
 
     private Vector3 startCOM;
     public float Health { get; private set; }
+    public bool IsDamaged => Health < MaxHealth;
+    public bool IsSunk => Health <= 0;
     public Engine Engine { get; private set; }
     public Buoyancy Buoyancy { get; private set; }
     public Rigidbody RigidBody { get; private set; }
@@ -50,7 +52,12 @@ public class Boat : MonoBehaviour, IDamageable
         }
     }
 
-    public IEnumerator SinkAtSurface(Action _onComplete)
+    public void Repair()
+    {
+        Health = MaxHealth;
+    }
+
+    public IEnumerator SinkAtSurface()
     {
         float startBuoyancy = Buoyancy.BuoyancyForce;
         Vector3 startCenterOfMass = COM.localPosition;
@@ -66,8 +73,6 @@ public class Boat : MonoBehaviour, IDamageable
 
             yield return null;
         }
-
-        _onComplete();
     }
 
     public IEnumerator SinkToBottom(Action _onComplete)

@@ -29,7 +29,6 @@ public class EnemyAdmiralController : Admiral
     public void SpawnSubordinate(Vector3 position)
     {
         AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController>(position, transform.rotation);
-        subordinate.SetAdmiral(this);
         AddSubordinate(subordinate.Boat);
     }
 
