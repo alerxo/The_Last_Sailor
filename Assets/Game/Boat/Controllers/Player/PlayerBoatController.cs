@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.SceneManagement;
 
 public class PlayerBoatController : MonoBehaviour
 {
@@ -14,8 +13,9 @@ public class PlayerBoatController : MonoBehaviour
         Assert.IsNull(Instance);
         Instance = this;
 
-        AdmiralController = GetComponent<PlayerAdmiralController>();
         Boat = GetComponent<Boat>();
+        AdmiralController = GetComponent<PlayerAdmiralController>();
+        AdmiralController.SetOwner(Boat);
 
         Boat.OnDamaged += Boat_OnDamaged;
         Boat.OnDestroyed += Boat_OnDestroyed;
@@ -28,11 +28,6 @@ public class PlayerBoatController : MonoBehaviour
 
     private void Boat_OnDestroyed()
     {
-        StartCoroutine(Boat.SinkAtSurface(OnSunk));
-    }
-
-    private void OnSunk()
-    {
-        SceneManager.LoadScene("Game");
+        Boat.StartSinkAtSurface();
     }
 }

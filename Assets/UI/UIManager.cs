@@ -71,5 +71,6 @@ public enum UIState
 {
     TitleScreen,
     HUD,
-    Pause
+    Pause,
+    PostCombat
 }

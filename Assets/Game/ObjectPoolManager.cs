@@ -8,7 +8,7 @@ public class ObjectPoolManager : MonoBehaviour
 {
     public static ObjectPoolManager Instance { get; private set; }
 
-    public static readonly Vector3 InactiveObjectPosition = new(0f, 100f, 0f);
+    public static readonly Vector3 InactiveObjectPosition = new(0f, 1000f, 0f);
     private readonly Dictionary<Type, ObjectPool<MonoBehaviour>> pools = new();
 
     [SerializeField] private List<MonoBehaviour> prefabs;
@@ -22,7 +22,7 @@ public class ObjectPoolManager : MonoBehaviour
         parent = GameObject.FindWithTag("ObjectPool").transform;
     }
 
-    public T Spawn<T>(Vector3 _position, Quaternion _rotation) where T : MonoBehaviour
+    public T Spawn<T>(Vector3 _position, Quaternion _rotation, Transform _parent = null) where T : MonoBehaviour
     {
         if (!pools.ContainsKey(typeof(T)))
         {
@@ -31,15 +31,32 @@ public class ObjectPoolManager : MonoBehaviour
 
         T t = pools[typeof(T)].Get() as T;
 
-        Rigidbody rigidbody = t.GetComponent<Rigidbody>();
-        rigidbody.position = _position;
-        rigidbody.rotation = _rotation;
+        if (_parent != null)
+        {
+            t.transform.SetParent(_parent);
+        }
+
+        if (TryGetComponent(out Rigidbody rigidbody))
+        {
+            rigidbody.position = _position;
+            rigidbody.rotation = _rotation;
+        }
+
+        else
+        {
+            t.transform.SetPositionAndRotation(_position, _rotation);
+        }
 
         return t;
     }
 
     public void Release<T>(T _t) where T : MonoBehaviour
     {
+        if (_t.transform.parent != parent)
+        {
+            _t.transform.SetParent(parent);
+        }
+
         pools[typeof(T)].Release(_t);
     }
 }
@@ -65,8 +82,8 @@ public class ObjectPool<T> where T : MonoBehaviour
     public void Release(T _t)
     {
         _t.gameObject.SetActive(false);
-        _t.transform.position = ObjectPoolManager.InactiveObjectPosition;
-        _t.transform.rotation = Quaternion.identity;
+        _t.transform.SetPositionAndRotation(ObjectPoolManager.InactiveObjectPosition, Quaternion.identity);
+
         pool.Enqueue(_t);
     }
 }

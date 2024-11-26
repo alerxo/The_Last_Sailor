@@ -14,6 +14,7 @@ public class CameraManager : MonoBehaviour
     public CinemachineCamera PlayerCamera { get; private set; }
     private CinemachineCamera steeringWheelCamera;
     private CinemachineCamera interactionCamera;
+    private CinemachineCamera fleetCamera;
 
     private CinemachineBasicMultiChannelPerlin[] cinemachineBasicMultiChannelPerlins;
     private CinemachineInputAxisController[] cinemachineInputAxisControllers;
@@ -32,6 +33,8 @@ public class CameraManager : MonoBehaviour
         steeringWheelCamera = GameObject.FindWithTag("SteeringWheelCamera").GetComponent<CinemachineCamera>();
         steeringWheelCamera.Target.TrackingTarget = GameObject.FindWithTag("BoatCameraTarget").transform;
         interactionCamera = GameObject.FindWithTag("InteractionCamera").GetComponent<CinemachineCamera>();
+        fleetCamera = GameObject.FindWithTag("FleetCamera").GetComponent<CinemachineCamera>();
+        fleetCamera.Target.TrackingTarget = GameObject.FindWithTag("BoatCameraTarget").transform;
 
         cinemachineBasicMultiChannelPerlins = FindObjectsByType<CinemachineBasicMultiChannelPerlin>(FindObjectsSortMode.None);
         cinemachineInputAxisControllers = FindObjectsByType<CinemachineInputAxisController>(FindObjectsSortMode.None);
@@ -101,6 +104,7 @@ public class CameraManager : MonoBehaviour
         PlayerCamera.enabled = State == CameraState.Player;
         steeringWheelCamera.enabled = State == CameraState.SteeringWheel;
         interactionCamera.enabled = State == CameraState.Interaction;
+        fleetCamera.enabled = State == CameraState.Fleet;
 
         OnStateChanged?.Invoke(State);
     }
@@ -181,5 +185,6 @@ public enum CameraState
     MainMenu,
     Player,
     SteeringWheel,
-    Interaction
+    Interaction,
+    Fleet
 }

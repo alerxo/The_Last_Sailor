@@ -88,7 +88,7 @@ public class AICannonController : MonoBehaviour
 
     private bool IsValidTarget(Boat _boat, float _distance)
     {
-        return _distance < CombatManager.RING_OF_FIRE_SIZE && GetCurrentAngle(_boat.transform.position) <= MAX_TARGET_ANGLE;
+        return _boat.Health > 0 && _distance < CombatManager.RING_OF_FIRE_SIZE && GetCurrentAngle(_boat.transform.position) <= MAX_TARGET_ANGLE;
     }
 
     private void TryUpdatePredictions()

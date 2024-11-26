@@ -14,7 +14,7 @@ public partial class ForceSinkAction : Action
     {
         foreach (Boat boat in Agent.Value.Fleet.ToArray())
         {
-            boat.Damage(999999);
+            boat.GetComponent<AIBoatController>().SinkToBottom();
         }
 
         return Status.Running;

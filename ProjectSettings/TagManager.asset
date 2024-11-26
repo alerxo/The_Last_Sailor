@@ -12,6 +12,7 @@ TagManager:
   - PlayerCamera
   - SteeringWheelCamera
   - InteractionCamera
+  - FleetCamera
   layers:
   - Default
   - TransparentFX
