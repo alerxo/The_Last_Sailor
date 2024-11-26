@@ -5,10 +5,10 @@ using UnityEngine.Events;
 
 public class Boat : MonoBehaviour, IDamageable
 {
-    private const float SINK_DURATION = 30f;
-    private const float SINK_BUOYANCY = 1.7f;
-    private const float SINK_COM_MAX_X_CHANGE = 2f;
-    private const float SINK_COM_MAX_Z_CHANGE = 7f;
+    private const float SINK_DURATION = 20f;
+    private const float SINK_BUOYANCY = 1.6f;
+    private const float SINK_COM_MAX_X_CHANGE = 4f;
+    private const float SINK_COM_MAX_Z_CHANGE = 9f;
 
     public event UnityAction OnDestroyed;
     public event UnityAction OnDamaged;
@@ -16,7 +16,7 @@ public class Boat : MonoBehaviour, IDamageable
     [SerializeField] private float MaxHealth;
     [SerializeField] Transform COM;
 
-    private Vector3 startCOM;
+    private Vector3 defaultCOM;
     public float Health { get; private set; }
     public bool IsDamaged => Health < MaxHealth;
     public bool IsSunk => Health <= 0;
@@ -30,8 +30,8 @@ public class Boat : MonoBehaviour, IDamageable
         Buoyancy = GetComponent<Buoyancy>();
         RigidBody = GetComponent<Rigidbody>();
 
-        startCOM = COM.localPosition;
-        RigidBody.centerOfMass = COM.localPosition;
+        defaultCOM = COM.localPosition;
+        RigidBody.centerOfMass = defaultCOM;
         Engine.transform.localPosition = new Vector3(Engine.transform.localPosition.x, COM.localPosition.y, Engine.transform.localPosition.z);
 
         SetDefault();
@@ -54,14 +54,21 @@ public class Boat : MonoBehaviour, IDamageable
 
     public void Repair()
     {
-        Health = MaxHealth;
+        StopAllCoroutines();
+        SetDefault();
+        Buoyancy.SetDefault();
     }
 
-    public IEnumerator SinkAtSurface()
+    public void StartSinkAtSurface()
+    {
+        StartCoroutine(SinkAtSurface());
+    }
+
+    private IEnumerator SinkAtSurface()
     {
         float startBuoyancy = Buoyancy.BuoyancyForce;
-        Vector3 startCenterOfMass = COM.localPosition;
-        Vector3 endCenterOfMass = COM.localPosition + new Vector3(UnityEngine.Random.Range(-SINK_COM_MAX_X_CHANGE, SINK_COM_MAX_X_CHANGE), 0, UnityEngine.Random.Range(-SINK_COM_MAX_Z_CHANGE, SINK_COM_MAX_Z_CHANGE));
+        Vector3 startCenterOfMass = RigidBody.centerOfMass;
+        Vector3 endCenterOfMass = RigidBody.centerOfMass + new Vector3(UnityEngine.Random.Range(-SINK_COM_MAX_X_CHANGE, SINK_COM_MAX_X_CHANGE), 0, UnityEngine.Random.Range(-SINK_COM_MAX_Z_CHANGE, SINK_COM_MAX_Z_CHANGE));
 
         float duration = 0;
 
@@ -69,13 +76,18 @@ public class Boat : MonoBehaviour, IDamageable
         {
             float percentage = duration / SINK_DURATION;
             Buoyancy.BuoyancyForce = Mathf.Lerp(startBuoyancy, SINK_BUOYANCY, percentage);
-            COM.localPosition = Vector3.Lerp(startCenterOfMass, endCenterOfMass, percentage);
+            RigidBody.centerOfMass = Vector3.Lerp(startCenterOfMass, endCenterOfMass, percentage);
 
             yield return null;
         }
     }
 
-    public IEnumerator SinkToBottom(Action _onComplete)
+    public void StartSinkToBottom(Action _onComplete)
+    {
+        StartCoroutine(SinkToBottom(_onComplete));
+    }
+
+    private IEnumerator SinkToBottom(Action _onComplete)
     {
         float startBuoyancy = Buoyancy.BuoyancyForce;
         float duration = 0;
@@ -94,6 +106,6 @@ public class Boat : MonoBehaviour, IDamageable
     public void SetDefault()
     {
         Health = MaxHealth;
-        COM.localPosition = startCOM;
+        RigidBody.centerOfMass = defaultCOM;
     }
 }

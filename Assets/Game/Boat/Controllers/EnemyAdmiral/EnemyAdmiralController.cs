@@ -8,14 +8,6 @@ public class EnemyAdmiralController : Admiral
     private const float ACCEPTABLE_LONGEST_SUBORDINATE_MARGIN = 10f;
     private const float WAIT_ON_SUBORDINATE_CATCHUP_SPEED = 0.5f;
 
-    public override void Awake()
-    {
-        base.Awake();
-
-        BoatController = GetComponent<AIBoatController>();
-        BoatController.SetAdmiral(this);
-    }
-
     private void OnEnable()
     {
         CombatManager.Instance.AddAdmiral(this);
@@ -24,6 +16,11 @@ public class EnemyAdmiralController : Admiral
     private void OnDisable()
     {
         CombatManager.Instance.RemoveAdmiral(this);
+    }
+
+    public void SetController(AIBoatController controller)
+    {
+        BoatController = controller;
     }
 
     public void SpawnSubordinate(Vector3 position)

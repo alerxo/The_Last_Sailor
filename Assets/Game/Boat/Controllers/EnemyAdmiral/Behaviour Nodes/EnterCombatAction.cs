@@ -15,13 +15,11 @@ public partial class EnterCombatAction : Action
     {
         if (IsInverted)
         {
-            Agent.Value.SetEnemy(null);
             CombatManager.Instance.ExitRingOfFire();
 
             return Status.Success;
         }
 
-        Agent.Value.SetEnemy(PlayerBoatController.Instance.AdmiralController);
         CombatManager.Instance.EnterRingOfFire(Agent.Value);
 
         return Status.Success;

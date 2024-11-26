@@ -53,7 +53,6 @@ public class PostCombatScreen : UIScreen
         {
             CreateDefeatButton(background);
         }
-
     }
 
     public BattleResult GetBattleResult()
@@ -78,22 +77,21 @@ public class PostCombatScreen : UIScreen
 
     private void CreatePlayerColumn(VisualElement _parent)
     {
-        VisualElement container = new();
-        container.AddToClassList("post-combat-column");
-        _parent.Add(container);
+        VisualElement columnContainer = CreateColumnContainer(_parent);
+        CreateColumnHeader(columnContainer, "Player Fleet");
+        ScrollView rowContainer = CreateRowScrollView(columnContainer);
 
-        CreateColumnHeader(container, "Player Fleet");
-        CreatePlayerRow(container, PlayerBoatController.Instance.Boat, "Player Boat");
+        CreatePlayerRow(rowContainer, PlayerBoatController.Instance.Boat, "Player Boat");
 
         foreach (AIBoatController boatController in PlayerBoatController.Instance.AdmiralController.Subordinates)
         {
-            CreatePlayerRow(container, boatController.Boat, "Allied Boat");
+            CreatePlayerRow(rowContainer, boatController.Boat, "Allied Boat");
         }
     }
 
     private void CreatePlayerRow(VisualElement _parent, Boat _boat, string _boatName)
     {
-        VisualElement container = CreateRowContainer(_parent);
+        VisualElement container = CreateRow(_parent);
         Label description = CreateRowDescription(container, _boat, _boatName);
         Button button = CreateRowButton(container, "Repair", _boat.IsDamaged);
         button.clicked += () => OnRepaired(button, description, _boatName, _boat);
@@ -102,7 +100,7 @@ public class PostCombatScreen : UIScreen
     private void OnRepaired(Button _button, Label _description, string _boatName, Boat _boat)
     {
         _boat.Repair();
-        _description.text = $"{_boatName}: {_boat.Health} Health";
+        _description.text = $"{_boatName}: Repaired";
         _button.SetEnabled(false);
     }
 
@@ -110,22 +108,20 @@ public class PostCombatScreen : UIScreen
 
     private void CreateEnemyColumn(VisualElement _parent, EnemyAdmiralController _admiral)
     {
-        VisualElement container = new();
-        container.AddToClassList("post-combat-column");
-        _parent.Add(container);
-
-        CreateColumnHeader(container, $"{_admiral.Name}'s Fleet");
-        CreateEnemyRow(container, _admiral.BoatController, $"{_admiral.Name}'s Boat");
+        VisualElement columnContainer = CreateColumnContainer(_parent);
+        CreateColumnHeader(columnContainer, $"{_admiral.Name}'s Fleet");
+        ScrollView rowContainer = CreateRowScrollView(columnContainer);
+        CreateEnemyRow(rowContainer, _admiral.BoatController, $"{_admiral.Name}");
 
         foreach (AIBoatController boatController in _admiral.Subordinates)
         {
-            CreateEnemyRow(container, boatController, $"Enemy Boat");
+            CreateEnemyRow(rowContainer, boatController, $"Enemy Boat");
         }
     }
 
     private void CreateEnemyRow(VisualElement _parent, AIBoatController _boatController, string _boatName)
     {
-        VisualElement container = CreateRowContainer(_parent);
+        VisualElement container = CreateRow(_parent);
         Label description = CreateRowDescription(container, _boatController.Boat, _boatName);
         Button button = CreateRowButton(container, "Seize", _boatController.Boat.IsSunk);
         button.clicked += () => OnSeized(button, description, _boatName, _boatController);
@@ -134,21 +130,41 @@ public class PostCombatScreen : UIScreen
     private void OnSeized(Button _button, Label _description, string _boatName, AIBoatController _boatController)
     {
         _boatController.Seize(PlayerBoatController.Instance.AdmiralController);
-        _description.text = $"{_boatName}: {(_boatController.Boat.IsSunk ? "Sunk" : $"{_boatController.Boat.Health} Health")}";
+        _description.text = $"{_boatName}: Seized";
         _button.SetEnabled(false);
     }
 
     // Components
 
+    private VisualElement CreateColumnContainer(VisualElement _parent)
+    {
+        VisualElement container = new();
+        container.AddToClassList("post-combat-column");
+        _parent.Add(container);
+
+        return container;
+    }
+
     private void CreateColumnHeader(VisualElement _parent, string _name)
     {
         Label header = new(_name);
         header.AddToClassList("post-combat-column-header");
-        SetFontSize(header, 45);
+        SetFontSize(header, 33);
         _parent.Add(header);
     }
 
-    private static VisualElement CreateRowContainer(VisualElement _parent)
+    private ScrollView CreateRowScrollView(VisualElement _parent)
+    {
+        ScrollView container = new();
+        container.AddToClassList("post-combat-row-container");
+        container.verticalScroller.highButton.RemoveFromHierarchy();
+        container.verticalScroller.lowButton.RemoveFromHierarchy();
+        _parent.Add(container);
+
+        return container;
+    }
+
+    private VisualElement CreateRow(VisualElement _parent)
     {
         VisualElement container = new();
         container.AddToClassList("post-combat-row");
@@ -161,7 +177,7 @@ public class PostCombatScreen : UIScreen
     {
         Label description = new($"{_name}: {(_boat.IsSunk ? "Sunk" : $"{_boat.Health} Health")}");
         description.AddToClassList("post-combat-row-desciption");
-        SetFontSize(description, 22);
+        SetFontSize(description, 20);
         _parent.Add(description);
 
         return description;
@@ -172,7 +188,7 @@ public class PostCombatScreen : UIScreen
         Button button = new();
         button.AddToClassList("post-combat-button");
         button.AddToClassList("post-combat-row-button");
-        SetFontSize(button, 19);
+        SetFontSize(button, 18);
         button.text = _text;
         button.SetEnabled(_isEnabled);
         _parent.Add(button);

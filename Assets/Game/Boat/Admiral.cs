@@ -22,9 +22,6 @@ public abstract class Admiral : MonoBehaviour
 
     public virtual void Awake()
     {
-        Owner = GetComponent<Boat>();
-        Fleet.Add(Owner);
-
         SetFormation(Formation.Spearhead);
     }
 
@@ -35,6 +32,18 @@ public abstract class Admiral : MonoBehaviour
             canSetFleetDestinations = false;
             StartCoroutine(SetFleetDestinations());
         }
+    }
+
+    public void SetOwner(Boat boat)
+    {
+        Owner = boat;
+        Fleet.Add(Owner);
+    }
+
+    public void RemoveOwner()
+    {
+        Fleet.Remove(Owner);
+        Owner = null;
     }
 
     public void AddSubordinate(Boat _boat)
