@@ -15,7 +15,7 @@ public class MusicScript : MonoBehaviour
     {
         musicSource.volume = musicVolume;
         musicSource.clip = musicClip;
-        bool turnOffMusic = false;
+        turnOffMusic = false;
     }
 
     // Update is called once per frame
