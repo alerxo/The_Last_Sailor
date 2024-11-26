@@ -105,11 +105,11 @@ public class Cannon : MonoBehaviour
     {
         if (firstReload == false)
         {
-            yield return new WaitForSeconds(COOLDOWN - 3);
-            audioSource.PlayOneShot(sizzlingClip);
             yield return new WaitForSeconds(1);
             audioSource.PlayOneShot(reloadClip);
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(COOLDOWN - 2);
+            audioSource.PlayOneShot(sizzlingClip);
+            yield return new WaitForSeconds(1);
         }
         else
         {
