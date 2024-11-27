@@ -52,6 +52,11 @@ public class Boat : MonoBehaviour, IDamageable
         }
     }
 
+    public int GetPercentageHealth()
+    {
+        return (int)(Health / MaxHealth * 100);
+    }
+
     public void Repair()
     {
         StopAllCoroutines();

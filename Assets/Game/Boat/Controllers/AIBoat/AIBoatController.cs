@@ -2,24 +2,23 @@ using UnityEngine;
 
 public class AIBoatController : MonoBehaviour
 {
-    private const float DESTRUCTION_COOLDOWN = 1f;
-
-    private AIBoatControllerState state;
+    public AIBoatControllerState State {  get; private set; }
 
     public Boat Boat { get; private set; }
     public Admiral Admiral { get; private set; }
 
-    public Vector3? Destination { get; private set; }
-    public float Speed { get; private set; } = 1f;
-    public float Distance { get; private set; }
-    public float ForwardCollisionDistance { get; private set; }
-    public Vector3 Cross { get; private set; }
-
-    private float destructionTimer;
-
     [SerializeField] private Transform[] rays;
     private float forwardCollisionTimer;
     private const float FORWARD_COLLISION_COOLDOWN = 1f;
+    public float ForwardCollisionDistance { get; private set; }
+
+    public Vector3? Destination { get; private set; }
+    public float Speed { get; private set; } = 1f;
+    public float Distance { get; private set; }
+    public Vector3 Cross { get; private set; }
+
+    private float destructionTimer;
+    private const float DESTRUCTION_COOLDOWN = 1f;
 
 #if UNITY_EDITOR
     [SerializeField] protected bool isDebugMode;
@@ -46,9 +45,10 @@ public class AIBoatController : MonoBehaviour
 
     private void Update()
     {
-        switch (state)
+        switch (State)
         {
             case AIBoatControllerState.Active:
+                TryCheckForCollisions();
                 DrawDebug();
                 break;
 
@@ -56,7 +56,10 @@ public class AIBoatController : MonoBehaviour
                 PendingDestructionState();
                 break;
         }
+    }
 
+    private void TryCheckForCollisions()
+    {
         if ((forwardCollisionTimer += Time.deltaTime) > FORWARD_COLLISION_COOLDOWN)
         {
             forwardCollisionTimer = 0f;
@@ -86,7 +89,31 @@ public class AIBoatController : MonoBehaviour
         ForwardCollisionDistance = distance;
     }
 
+    private void Boat_OnDestroyed()
+    {
+        Destination = null;
+        Boat.StartSinkAtSurface();
+    }
+
     public void Seize(Admiral _admiral)
+    {
+        RemoveFromFleet();
+        _admiral.AddSubordinate(Boat);
+        Boat.Repair();
+    }
+
+    public void Scrap()
+    {
+        SinkToBottom();
+    }
+
+    public void SinkToBottom()
+    {
+        RemoveFromFleet();
+        SetState(AIBoatControllerState.SinkingToBottom);
+    }
+
+    private void RemoveFromFleet()
     {
         if (GetComponentInChildren<EnemyAdmiralController>() != null)
         {
@@ -97,9 +124,6 @@ public class AIBoatController : MonoBehaviour
         {
             Admiral.RemoveSubordinate(Boat);
         }
-
-        _admiral.AddSubordinate(Boat);
-        Boat.Repair();
     }
 
     public EnemyAdmiralController PromoteToAdmiral()
@@ -119,6 +143,45 @@ public class AIBoatController : MonoBehaviour
         admiralController.RemoveOwner();
         SetAdmiral(null);
         ObjectPoolManager.Instance.Release(admiralController);
+    }
+
+    private void SetState(AIBoatControllerState _state)
+    {
+        State = _state;
+
+        switch (State)
+        {
+            case AIBoatControllerState.Disabled:
+                destructionTimer = DESTRUCTION_COOLDOWN;
+                break;
+
+            case AIBoatControllerState.Active:
+                break;
+
+            case AIBoatControllerState.SinkingToBottom:
+                Boat.StartSinkToBottom(() => SetState(AIBoatControllerState.PendingDestruction));
+                break;
+
+            case AIBoatControllerState.PendingDestruction:
+                Boat.Repair();
+                Boat.RigidBody.linearVelocity = Vector3.zero;
+                Boat.RigidBody.angularVelocity = Vector3.zero;
+                Destination = null;
+                break;
+
+            case AIBoatControllerState.Destruction:
+                ObjectPoolManager.Instance.Release(this);
+
+                break;
+        }
+    }
+
+    private void PendingDestructionState()
+    {
+        if ((destructionTimer -= Time.deltaTime) <= 0)
+        {
+            SetState(AIBoatControllerState.Destruction);
+        }
     }
 
     public void SetAdmiral(Admiral _admiral)
@@ -146,84 +209,17 @@ public class AIBoatController : MonoBehaviour
         Cross = _cross;
     }
 
-    private void Boat_OnDestroyed()
-    {
-        Destination = null;
-        Boat.StartSinkAtSurface();
-    }
-
-    public void SinkToBottom()
-    {
-        if (GetComponentInChildren<EnemyAdmiralController>() != null)
-        {
-            DemoteFromAdmiral();
-        }
-
-        else
-        {
-            Admiral.RemoveSubordinate(Boat);
-            SetAdmiral(null);
-        }
-
-        Boat.StartSinkToBottom(OnSunkAtBottom);
-    }
-
-    private void OnSunkAtBottom()
-    {
-        SetState(AIBoatControllerState.PendingDestruction);
-    }
-
-    private void PendingDestructionState()
-    {
-        if ((destructionTimer -= Time.deltaTime) <= 0)
-        {
-            SetState(AIBoatControllerState.Destruction);
-        }
-    }
-
-    private void SetState(AIBoatControllerState _state)
-    {
-        state = _state;
-
-        switch (state)
-        {
-            case AIBoatControllerState.Disabled:
-                destructionTimer = DESTRUCTION_COOLDOWN;
-                break;
-
-            case AIBoatControllerState.Active:
-                break;
-
-            case AIBoatControllerState.PendingDestruction:
-                Boat.Repair();
-                Boat.RigidBody.linearVelocity = Vector3.zero;
-                Boat.RigidBody.angularVelocity = Vector3.zero;
-                Destination = null;
-                break;
-
-            case AIBoatControllerState.Destruction:
-
-                if (TryGetComponent(out EnemyAdmiralController enemyAdmiralController))
-                {
-                    ObjectPoolManager.Instance.Release(enemyAdmiralController);
-                }
-
-                else
-                {
-                    ObjectPoolManager.Instance.Release(this);
-                }
-
-                break;
-        }
-    }
-
     private void DrawDebug()
     {
 #if UNITY_EDITOR
         if (isDebugMode && Destination != null)
         {
-            DebugUtil.DrawBox(Destination.Value, Quaternion.identity, Vector3.one, Admiral != null && Admiral.Enemy == null ? Color.green : Color.red, Time.deltaTime);
-            Debug.DrawLine(transform.position, Destination.Value, Admiral != null && Admiral.Enemy == null ? Color.green : Color.red, Time.deltaTime);
+            Color color = Color.green;
+            if (Admiral == null) color = Color.yellow;
+            else if (Admiral.Enemy != null) color = Color.red;
+
+            DebugUtil.DrawBox(Destination.Value, Quaternion.identity, Vector3.one, color, Time.deltaTime);
+            Debug.DrawLine(transform.position, Destination.Value, color, Time.deltaTime);
         }
 #endif
     }
@@ -233,6 +229,7 @@ public enum AIBoatControllerState
 {
     Disabled,
     Active,
+    SinkingToBottom,
     PendingDestruction,
     Destruction
 }

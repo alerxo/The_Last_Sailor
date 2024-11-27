@@ -83,19 +83,19 @@ public class CombatManager : MonoBehaviour
 
     public void BattleResultsCompleted()
     {
-        foreach (AIBoatController boatController in player.AdmiralController.Subordinates)
+        foreach (AIBoatController boatController in player.AdmiralController.Subordinates.ToArray())
         {
-            if (boatController.Boat.IsSunk)
+            if (boatController.Boat.IsSunk && boatController.State == AIBoatControllerState.Active)
             {
                 boatController.SinkToBottom();
             }
         }
 
-        foreach (Boat boat in AdmiralInCombat.Fleet)
+        foreach (Boat boat in AdmiralInCombat.Fleet.ToArray())
         {
             AIBoatController boatController = boat.GetComponent<AIBoatController>();
 
-            if (boatController.Boat.IsSunk)
+            if (boatController.Boat.IsSunk && boatController.State == AIBoatControllerState.Active)
             {
                 boatController.SinkToBottom();
             }
