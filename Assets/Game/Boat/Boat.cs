@@ -15,6 +15,8 @@ public class Boat : MonoBehaviour, IDamageable
 
     [SerializeField] private float MaxHealth;
     [SerializeField] Transform COM;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip destroyedSound;
 
     private Vector3 defaultCOM;
     public float Health { get; private set; }
@@ -24,6 +26,8 @@ public class Boat : MonoBehaviour, IDamageable
     public Buoyancy Buoyancy { get; private set; }
     public Rigidbody RigidBody { get; private set; }
 
+    private bool isDestroyed;
+
     public virtual void Awake()
     {
         Engine = GetComponentInChildren<Engine>();
@@ -31,6 +35,7 @@ public class Boat : MonoBehaviour, IDamageable
         RigidBody = GetComponent<Rigidbody>();
 
         defaultCOM = COM.localPosition;
+        isDestroyed = false;
         RigidBody.centerOfMass = defaultCOM;
         Engine.transform.localPosition = new Vector3(Engine.transform.localPosition.x, COM.localPosition.y, Engine.transform.localPosition.z);
 
@@ -39,7 +44,10 @@ public class Boat : MonoBehaviour, IDamageable
 
     public void Damage(float _damage)
     {
-        if (Health == 0) return;
+        if (Health == 0) 
+        {
+            return;
+        }
 
         if (Mathf.Clamp(Health -= _damage, 0, MaxHealth) <= 0)
         {
@@ -49,6 +57,7 @@ public class Boat : MonoBehaviour, IDamageable
         else
         {
             OnDamaged?.Invoke();
+            audioSource.PlayOneShot(destroyedSound);
         }
     }
 

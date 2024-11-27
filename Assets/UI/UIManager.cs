@@ -15,12 +15,9 @@ public class UIManager : MonoBehaviour
     private const float UIScreenBaseHeight = 1080f;
 
     private InputSystem_Actions input;
-    AudioSource audioSource;
-    [SerializeField] AudioClip pauseSound;
 
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
         Assert.IsNull(Instance);
         Instance = this;
 
@@ -61,7 +58,6 @@ public class UIManager : MonoBehaviour
         {
             case UIState.HUD:
                 SetState(UIState.Pause);
-                audioSource.PlayOneShot(pauseSound);
                 break;
 
             case UIState.Pause:
