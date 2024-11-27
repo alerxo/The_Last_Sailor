@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -11,11 +13,30 @@ public class PostCombatScreen : UIScreen
     protected override UIState ActiveState => UIState.PostCombat;
 
     private Box background;
+    private Label resourceCount;
+
+    private readonly List<PostCombatButton> postCombatButtons = new();
+    private readonly List<Action> scrapActions = new();
 
     private void Awake()
     {
         Assert.IsNull(Instance);
         Instance = this;
+
+        ResourceManager.OnResourceAmountChanged += ResourceManager_OnResourceAmountChanged;
+    }
+
+    private void OnDestroy()
+    {
+        ResourceManager.OnResourceAmountChanged -= ResourceManager_OnResourceAmountChanged;
+    }
+
+    private void ResourceManager_OnResourceAmountChanged(float _amount)
+    {
+        if (resourceCount == null) return;
+
+        resourceCount.text = ((int)_amount).ToString();
+        EvaluateButtons();
     }
 
     public override void Generate()
@@ -29,37 +50,60 @@ public class PostCombatScreen : UIScreen
         container.Add(background);
     }
 
+    private void EvaluateButtons()
+    {
+        Assert.IsTrue(postCombatButtons.All((b) => b != null));
+        postCombatButtons.ForEach((b) => b.Evaluate());
+    }
+
     public void CreateBattleResults(EnemyAdmiralController _enemyAdmiralController)
     {
+        postCombatButtons.Clear();
+        scrapActions.Clear();
         background.Clear();
 
-        BattleResult battleResult = GetBattleResult();
+        BattleResult battleResult = GetBattleResult(_enemyAdmiralController);
 
         CreateHeader(background, battleResult);
 
         if (battleResult != BattleResult.Defeat)
         {
-            Box battleResultsContainer = new();
-            battleResultsContainer.AddToClassList("post-combat-column-container");
-            background.Add(battleResultsContainer);
+            Box battleResultsContainer = CreateBattleResultsContainer();
 
-            CreatePlayerColumn(battleResultsContainer);
-            CreateEnemyColumn(battleResultsContainer, _enemyAdmiralController);
+            CreatePlayerColumn(battleResultsContainer, true);
+            CreateEnemyColumn(battleResultsContainer, _enemyAdmiralController, true);
 
-            CreateContinueButton(background);
+            VisualElement navigationButtonContainer = CreateNavigationButtonContainer();
+            CreateContinueButton(navigationButtonContainer, _enemyAdmiralController);
+            CreateScrapAllButton(navigationButtonContainer, _enemyAdmiralController);
+
+            CreateResoureContainer(background);
         }
 
         else
         {
-            CreateDefeatButton(background);
+            Box battleResultsContainer = CreateBattleResultsContainer();
+
+            CreatePlayerColumn(battleResultsContainer, false);
+            CreateEnemyColumn(battleResultsContainer, _enemyAdmiralController, false);
+
+            VisualElement navigationButtonContainer = CreateNavigationButtonContainer();
+            CreateDefeatButton(navigationButtonContainer);
         }
+
+        ResourceManager_OnResourceAmountChanged(ResourceManager.Instance.Amount);
     }
 
-    public BattleResult GetBattleResult()
+    public BattleResult GetBattleResult(EnemyAdmiralController _enemyAdmiral)
     {
         if (PlayerBoatController.Instance.AdmiralController.Fleet.All((b) => b.IsSunk))
         {
             return BattleResult.Defeat;
+        }
+
+        else if (!_enemyAdmiral.BoatController.Boat.IsSunk)
+        {
+            return BattleResult.Inconclusive;
         }
 
         return BattleResult.Victory;
@@ -73,65 +117,115 @@ public class PostCombatScreen : UIScreen
         _container.Add(header);
     }
 
+    private Box CreateBattleResultsContainer()
+    {
+        Box battleResultsContainer = new();
+        battleResultsContainer.AddToClassList("post-combat-column-container");
+        background.Add(battleResultsContainer);
+        return battleResultsContainer;
+    }
+
     // Player
 
-    private void CreatePlayerColumn(VisualElement _parent)
+    private void CreatePlayerColumn(VisualElement _parent, bool _shoulCreateButtons)
     {
         VisualElement columnContainer = CreateColumnContainer(_parent);
         CreateColumnHeader(columnContainer, "Player Fleet");
         ScrollView rowContainer = CreateRowScrollView(columnContainer);
 
-        CreatePlayerRow(rowContainer, PlayerBoatController.Instance.Boat, "Player Boat");
+        CreatePlayerRow(rowContainer, PlayerBoatController.Instance.Boat, "Player Boat", _shoulCreateButtons);
 
         foreach (AIBoatController boatController in PlayerBoatController.Instance.AdmiralController.Subordinates)
         {
-            CreatePlayerRow(rowContainer, boatController.Boat, "Allied Boat");
+            CreatePlayerRow(rowContainer, boatController.Boat, "Allied Boat", _shoulCreateButtons);
         }
     }
 
-    private void CreatePlayerRow(VisualElement _parent, Boat _boat, string _boatName)
+    private void CreatePlayerRow(VisualElement _parent, Boat _boat, string _boatName, bool _shoulCreateButtons)
     {
         VisualElement container = CreateRow(_parent);
         Label description = CreateRowDescription(container, _boat, _boatName);
-        Button button = CreateRowButton(container, "Repair", _boat.IsDamaged);
-        button.clicked += () => OnRepaired(button, description, _boatName, _boat);
+        VisualElement buttonContainer = CreateButtonContainer(container);
+
+        if (_shoulCreateButtons)
+        {
+            Button button = CreateRowButton(buttonContainer, "Repair", ResourceManager.GetRepairCost(_boat), () => CanRepair(_boat));
+            button.clicked += () => OnRepaired(description, _boatName, _boat);
+        }
     }
 
-    private void OnRepaired(Button _button, Label _description, string _boatName, Boat _boat)
+    private bool CanRepair(Boat _boat)
     {
+        return _boat.IsDamaged && ResourceManager.Instance.CanRepair(_boat);
+    }
+
+    private void OnRepaired(Label _description, string _boatName, Boat _boat)
+    {
+        int cost = ResourceManager.GetRepairCost(_boat);
         _boat.Repair();
         _description.text = $"{_boatName}: Repaired";
-        _button.SetEnabled(false);
+        ResourceManager.Instance.BoatWasRepaired(_boat, cost);
     }
 
     // Enemy
 
-    private void CreateEnemyColumn(VisualElement _parent, EnemyAdmiralController _admiral)
+    private void CreateEnemyColumn(VisualElement _parent, EnemyAdmiralController _admiral, bool _shoulCreateButtons)
     {
         VisualElement columnContainer = CreateColumnContainer(_parent);
         CreateColumnHeader(columnContainer, $"{_admiral.Name}'s Fleet");
         ScrollView rowContainer = CreateRowScrollView(columnContainer);
-        CreateEnemyRow(rowContainer, _admiral.BoatController, $"{_admiral.Name}");
+        CreateEnemyRow(rowContainer, _admiral.BoatController, $"{_admiral.Name}", _shoulCreateButtons);
 
         foreach (AIBoatController boatController in _admiral.Subordinates)
         {
-            CreateEnemyRow(rowContainer, boatController, $"Enemy Boat");
+            CreateEnemyRow(rowContainer, boatController, $"Enemy Boat", _shoulCreateButtons);
         }
     }
 
-    private void CreateEnemyRow(VisualElement _parent, AIBoatController _boatController, string _boatName)
+    private void CreateEnemyRow(VisualElement _parent, AIBoatController _boatController, string _boatName, bool _shoulCreateButtons)
     {
         VisualElement container = CreateRow(_parent);
         Label description = CreateRowDescription(container, _boatController.Boat, _boatName);
-        Button button = CreateRowButton(container, "Seize", _boatController.Boat.IsSunk);
-        button.clicked += () => OnSeized(button, description, _boatName, _boatController);
+        VisualElement buttonContainer = CreateButtonContainer(container);
+
+        if (_shoulCreateButtons)
+        {
+            Button seizeButton = CreateRowButton(buttonContainer, "Seize", ResourceManager.GetRepairCost(_boatController.Boat), () => CanSeize(_boatController));
+            Button scrapButton = CreateRowButton(buttonContainer, "Scrap", ResourceManager.GAIN_FROM_SCRAPPING_AMOUNT, () => CanScrap(_boatController));
+
+            seizeButton.clicked += () => OnSeized(description, _boatName, _boatController);
+            scrapButton.clicked += () => OnScrapped(description, _boatName, _boatController);
+
+            scrapActions.Add(() => OnScrapped(description, _boatName, _boatController));
+        }
     }
 
-    private void OnSeized(Button _button, Label _description, string _boatName, AIBoatController _boatController)
+    private bool CanScrap(AIBoatController _boatController)
     {
+        return _boatController.Boat.IsSunk && _boatController.State == AIBoatControllerState.Active;
+    }
+
+    private bool CanSeize(AIBoatController _boatController)
+    {
+        return _boatController.Boat.IsSunk && _boatController.State == AIBoatControllerState.Active && ResourceManager.Instance.CanSeize(_boatController.Boat);
+    }
+
+    private void OnSeized(Label _description, string _boatName, AIBoatController _boatController)
+    {
+        int cost = ResourceManager.GetRepairCost(_boatController.Boat);
         _boatController.Seize(PlayerBoatController.Instance.AdmiralController);
         _description.text = $"{_boatName}: Seized";
-        _button.SetEnabled(false);
+        ResourceManager.Instance.BoatWasSeized(_boatController.Boat, cost);
+    }
+
+    private void OnScrapped(Label _description, string _boatName, AIBoatController _boatController)
+    {
+        if (CanScrap(_boatController))
+        {
+            _boatController.Scrap();
+            _description.text = $"{_boatName}: Scrapped";
+            ResourceManager.Instance.BoatWasScrapped();
+        }
     }
 
     // Components
@@ -175,37 +269,104 @@ public class PostCombatScreen : UIScreen
 
     private Label CreateRowDescription(VisualElement _parent, Boat _boat, string _name)
     {
-        Label description = new($"{_name}: {(_boat.IsSunk ? "Sunk" : $"{_boat.Health} Health")}");
+        Label description = new($"{_name}: {(_boat.IsSunk ? "Sunk" : $"Durability %{_boat.GetPercentageHealth()}")}");
         description.AddToClassList("post-combat-row-desciption");
-        SetFontSize(description, 20);
+        SetFontSize(description, 19);
         _parent.Add(description);
 
         return description;
     }
 
-    private Button CreateRowButton(VisualElement _parent, string _text, bool _isEnabled)
+    private VisualElement CreateButtonContainer(VisualElement container)
+    {
+        VisualElement buttonContainer = new();
+        buttonContainer.AddToClassList("post-combat-row-button-container");
+        container.Add(buttonContainer);
+        return buttonContainer;
+    }
+
+    private Button CreateRowButton(VisualElement _parent, string _text, int _resource, Func<bool> _isEnabled)
     {
         Button button = new();
         button.AddToClassList("post-combat-button");
         button.AddToClassList("post-combat-row-button");
-        SetFontSize(button, 18);
-        button.text = _text;
-        button.SetEnabled(_isEnabled);
+        SetFontSize(button, 17);
+        button.text = $"{_text} for {_resource} resources";
+        postCombatButtons.Add(new(button, _isEnabled));
         _parent.Add(button);
 
         return button;
     }
 
+    // Resource
+
+    private void CreateResoureContainer(VisualElement _parent)
+    {
+        VisualElement resourceContainer = new();
+        resourceContainer.AddToClassList("post-combat-resource-container");
+        _parent.Add(resourceContainer);
+
+        Label label = new("Resources: ");
+        label.AddToClassList("post-combat-resource-label");
+        SetFontSize(label, 30);
+        resourceContainer.Add(label);
+
+        resourceCount = new();
+        resourceCount.AddToClassList("post-combat-resource-label");
+        SetFontSize(resourceCount, 30);
+        resourceContainer.Add(resourceCount);
+    }
+
     // Navigation
 
-    private void CreateContinueButton(VisualElement _parent)
+    private VisualElement CreateNavigationButtonContainer()
+    {
+        VisualElement navigationButtonContainer = new();
+        navigationButtonContainer.AddToClassList("post-combat-navigation-button-container");
+        background.Add(navigationButtonContainer);
+
+        return navigationButtonContainer;
+    }
+
+    private void CreateContinueButton(VisualElement _parent, EnemyAdmiralController _admiral)
     {
         Button button = new(() => CombatManager.Instance.BattleResultsCompleted());
         button.AddToClassList("post-combat-button");
         button.AddToClassList("post-combat-navigation-button");
         SetFontSize(button, 35);
         button.text = "Continue";
+        postCombatButtons.Add(new(button, () => CanContinue(_admiral)));
         _parent.Add(button);
+    }
+
+    private bool CanContinue(EnemyAdmiralController _admiral)
+    {
+        return (_admiral.BoatController == null || !CanScrap(_admiral.BoatController)) && _admiral.Subordinates.All((s) => !CanScrap(s));
+    }
+
+    private void CreateScrapAllButton(VisualElement _parent, EnemyAdmiralController _admiral)
+    {
+        Button button = new(() => OnScrapAll(_admiral));
+        button.AddToClassList("post-combat-button");
+        button.AddToClassList("post-combat-navigation-button");
+        SetFontSize(button, 35);
+        postCombatButtons.Add(new(button, () => CanScrapAll(_admiral)));
+        button.text = "Scrap all enemy boats";
+
+        _parent.Add(button);
+    }
+
+    private bool CanScrapAll(EnemyAdmiralController _admiral)
+    {
+        return (_admiral.BoatController != null && CanScrap(_admiral.BoatController)) || _admiral.Subordinates.Any((s) => CanScrap(s));
+    }
+
+    private void OnScrapAll(EnemyAdmiralController _admiral)
+    {
+        foreach (Action action in scrapActions)
+        {
+            action();
+        }
     }
 
     private void CreateDefeatButton(VisualElement _parent)
@@ -217,10 +378,28 @@ public class PostCombatScreen : UIScreen
         button.text = "Return to main menu";
         _parent.Add(button);
     }
+
+    private class PostCombatButton
+    {
+        private readonly Button Button;
+        private readonly Func<bool> IsActive;
+
+        public PostCombatButton(Button _button, Func<bool> _activeFunc)
+        {
+            Button = _button;
+            IsActive = _activeFunc;
+        }
+
+        public void Evaluate()
+        {
+            Button.SetEnabled(IsActive());
+        }
+    }
 }
 
 public enum BattleResult
 {
     Defeat,
-    Victory
+    Victory,
+    Inconclusive
 }
