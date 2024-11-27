@@ -24,7 +24,7 @@ public class MusicScript : MonoBehaviour
         if (turnOffMusic == false) 
         {
             PlayMusic();
-            if (musicSource.volume != 0.2f) 
+            if (musicSource.volume <= 0.2f) 
             {
                 musicSource.volume = musicSource.volume + 0.001f;
             }
@@ -58,6 +58,10 @@ public class MusicScript : MonoBehaviour
         if (_admiral != null)
         {
             turnOffMusic = true;
+        }
+        if (_admiral == null)
+        {
+            turnOffMusic = false;
         }
     }
 }

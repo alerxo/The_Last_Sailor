@@ -57,6 +57,7 @@ public class Boat : MonoBehaviour, IDamageable
         else
         {
             OnDamaged?.Invoke();
+            audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
             audioSource.PlayOneShot(destroyedSound);
         }
     }
