@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 
 public abstract class Admiral : MonoBehaviour
 {
-    public string Name { get; private set; } = "Admiral Johnson";
+    public string Name { get; private set; }
     public Boat Owner { get; private set; }
 
     public Admiral Enemy { get; protected set; }
@@ -78,6 +78,11 @@ public abstract class Admiral : MonoBehaviour
     protected void SetFormation(Formation _formation)
     {
         Formation = _formation;
+    }
+
+    protected void SetName(string _name)
+    {
+        Name = _name;
     }
 
     private IEnumerator SetFleetDestinations()

@@ -217,5 +217,6 @@ public enum PlayerState
     FirstPerson,
     SteeringWheel,
     Cannon,
-    Throttle
+    Throttle,
+    Fleet
 }

@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using Unity.Cinemachine;
-using UnityEngine.Splines;
 
 public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
 {

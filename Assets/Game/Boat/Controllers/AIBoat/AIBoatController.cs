@@ -99,6 +99,7 @@ public class AIBoatController : MonoBehaviour
     {
         RemoveFromFleet();
         _admiral.AddSubordinate(Boat);
+        Boat.SetName("Allied Boat");
         Boat.Repair();
     }
 
@@ -132,6 +133,7 @@ public class AIBoatController : MonoBehaviour
         admiralController.SetOwner(Boat);
         admiralController.SetController(this);
         SetAdmiral(admiralController);
+        Boat.SetName($"{admiralController.Name}'s Boat");
 
         return admiralController;
     }

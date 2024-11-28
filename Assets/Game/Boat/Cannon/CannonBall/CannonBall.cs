@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class Cannonball : MonoBehaviour
 {
-    private const float DAMAGE = 10;
     private const float WATER_HEIGHT = -5f;
     private const float DESTRUCTION_COOLDOWN = 3f;
+
+    private float damage;
 
     private CannonballState state;
     private IDamageable ignore;
@@ -74,15 +75,16 @@ public class Cannonball : MonoBehaviour
         {
             Destroy(Instantiate(explosion,transform.position,transform.rotation),5); // lär behöva enablas / disablas med canon kulan så det poolas. Jag vet inte riktigt hur jag gör det med din kod /viktor
 
-            _damageable.Damage(DAMAGE);
+            _damageable.Damage(damage);
             boatImpact.Play();
             SetState(CannonballState.PendingDestruction);
         }
     }
 
-    public void SetIgnore(IDamageable _ignore)
+    public void SetValues(IDamageable _ignore, float _damage)
     {
         ignore = _ignore;
+        damage = _damage;
     }
 
     public void SetState(CannonballState _state)
