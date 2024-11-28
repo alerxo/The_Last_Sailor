@@ -160,6 +160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 4778426383006465752}
   musicClip: {fileID: 8300000, guid: 73b8d956beab81c4a9ff429bce73510d, type: 3}
+  battleMusicClip: {fileID: 8300000, guid: ce81c20d94721454fb07e0c253491e9d, type: 3}
   musicVolume: 0.2
   minDelayBetweenTracks: 3
   maxDelayBetweenTracks: 5

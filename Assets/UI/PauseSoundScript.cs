@@ -4,7 +4,6 @@ public class PauseSoundScript : MonoBehaviour
 {
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip pauseClip;
-    [SerializeField] private AudioSource[] audioSourcesToPause;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
@@ -18,9 +17,10 @@ public class PauseSoundScript : MonoBehaviour
 
     private void UImanager_OnUIStateChange (UIState state) 
     {
+        AudioSource[] audios = FindObjectsOfType<AudioSource>();
         if (state == UIState.Pause) 
         {
-            foreach (AudioSource audio in audioSourcesToPause)
+            foreach (AudioSource audio in audios)
             {
                 audio.Pause();
             }
@@ -28,11 +28,11 @@ public class PauseSoundScript : MonoBehaviour
         }
         if (state == UIState.HUD)
         {
-            foreach (AudioSource audio in audioSourcesToPause)
+            foreach (AudioSource audio in audios)
             {
                 if (!audio.isPlaying) 
                 {
-                    audio.Play();
+                    audio.UnPause();
                 }
             }
         }
