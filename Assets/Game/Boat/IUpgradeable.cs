@@ -3,7 +3,8 @@ using UnityEngine;
 public interface IUpgradeable
 {
     public UpgradeTier UpgradeTier { get; set; }
-    public float GetUpgradeValue();
+    public float UpgradeIncrease { get; }
+    public float GetUpgradeValue { get; }
 }
 
 public enum UpgradeTier

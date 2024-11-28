@@ -27,6 +27,8 @@ public class Cannon : MonoBehaviour, IUpgradeable
     public CannonState State { get; private set; }
 
     public UpgradeTier UpgradeTier { get; set; }
+    public float UpgradeIncrease => 0.25f;
+    public float GetUpgradeValue => CANNONBALL_DAMAGE + (CANNONBALL_DAMAGE * ((int)UpgradeTier * UpgradeIncrease));
 
     [Tooltip("The empty transform at the base of the cannon")]
     [SerializeField] private Transform mount;
@@ -91,7 +93,7 @@ public class Cannon : MonoBehaviour, IUpgradeable
     {
         Cannonball cannonball = ObjectPoolManager.Instance.Spawn<Cannonball>(explosionPoint.position, Quaternion.identity);
         cannonball.GetComponent<Rigidbody>().AddForce(-barrel.up * CANNONBALL_FORCE, ForceMode.Impulse);
-        cannonball.SetValues(GetComponentInParent<IDamageable>(), GetUpgradeValue());
+        cannonball.SetValues(GetComponentInParent<IDamageable>(), GetUpgradeValue);
 
         foreach (ParticleSystem particleSystem in particleSystems)
         {
@@ -207,25 +209,6 @@ public class Cannon : MonoBehaviour, IUpgradeable
         velocity *= Mathf.Clamp01(1f - (drag * increment));
 
         return velocity;
-    }
-
-    public float GetUpgradeValue()
-    {
-        switch (UpgradeTier)
-        {
-            case UpgradeTier.One:
-                return CANNONBALL_DAMAGE;
-
-            case UpgradeTier.Two:
-                return CANNONBALL_DAMAGE * 1.2f;
-
-            case UpgradeTier.Three:
-                return CANNONBALL_DAMAGE * 1.5f;
-
-            default:
-                Debug.LogError("Defaulted in GetUpgradeTier");
-                return 0;
-        }
     }
 }
 

@@ -11,9 +11,8 @@ public class HUDScreen : UIScreen
     private const float ADMIRAL_BORDER_DURATION = 0.1f;
     private const float ADMIRAL_BACKGROUND_DURATION = 0.5f;
 
-    private const float INTERACTION_BUTTON_SIZE = 128f;
-    private const float INTERACTION_BUTTON_FONT_SIZE = 80;
-    private const float INTERACTION_BUTTON_BORDER_WIDTH = 5;
+    private const float INTERACTION_BUTTON_SIZE = 100f;
+    private const float INTERACTION_BUTTON_FONT_SIZE = 60;
     private const float INTERACTION_ANIMATION_DURATION = 0.1f;
 
     [SerializeField] private InputActionReference interactionAsset;
@@ -26,16 +25,20 @@ public class HUDScreen : UIScreen
     private Box interactionBackground;
     private Label interactionText;
 
+    private Box exitInteractionBackground;
+
     private void Awake()
     {
         InteractionCollider.OnInteractableChanged += InteractionCollider_OnInteractableChanged;
         CombatManager.OnAdmiralInCombatChanged += CombatManager_OnAdmiralInCombatChanged;
+        FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
     }
 
     private void OnDestroy()
     {
         InteractionCollider.OnInteractableChanged -= InteractionCollider_OnInteractableChanged;
         CombatManager.OnAdmiralInCombatChanged -= CombatManager_OnAdmiralInCombatChanged;
+        FirstPersonController.OnPlayerStateChanged -= FirstPersonController_OnPlayerStateChanged;
     }
 
     private void InteractionCollider_OnInteractableChanged(IInteractable _interactable)
@@ -69,6 +72,24 @@ public class HUDScreen : UIScreen
         }
     }
 
+    private void FirstPersonController_OnPlayerStateChanged(PlayerState _state)
+    {
+        switch (_state)
+        {
+            case PlayerState.FirstPerson:
+                interactionBackground.style.display = DisplayStyle.Flex;
+                exitInteractionBackground.style.display = DisplayStyle.None;
+                break;
+
+            case PlayerState.SteeringWheel:
+            case PlayerState.Throttle:
+            case PlayerState.Cannon:
+                interactionBackground.style.display = DisplayStyle.None;
+                exitInteractionBackground.style.display = DisplayStyle.Flex;
+                break;
+        }
+    }
+
     public override void Generate()
     {
         VisualElement container = new();
@@ -77,15 +98,16 @@ public class HUDScreen : UIScreen
 
         CreateAdmiral(container);
         CreateInteraction(container);
+        CreateExitInteraction(container);
     }
 
-    private void CreateAdmiral(VisualElement container)
+    private void CreateAdmiral(VisualElement _parent)
     {
         admiralContainer = new();
         admiralContainer.AddToClassList("hud-admiral-container");
         SetWidth(admiralContainer, 0);
         SetBorder(admiralContainer, 0);
-        container.Add(admiralContainer);
+        _parent.Add(admiralContainer);
 
         Box admiralBackground = new();
         admiralBackground.AddToClassList("hud-admiral-background");
@@ -164,12 +186,12 @@ public class HUDScreen : UIScreen
         SetBorder(admiralContainer, 0);
     }
 
-    private void CreateInteraction(VisualElement container)
+    private void CreateInteraction(VisualElement _parent)
     {
         VisualElement interactionContainer = new();
         interactionContainer.AddToClassList("hud-interaction-container");
         SetSize(interactionContainer, INTERACTION_BUTTON_SIZE, INTERACTION_BUTTON_SIZE);
-        container.Add(interactionContainer);
+        _parent.Add(interactionContainer);
 
         interactionBackground = new();
         interactionBackground.AddToClassList("hud-interaction-background");
@@ -187,7 +209,6 @@ public class HUDScreen : UIScreen
     {
         SetSize(interactionBackground, 0, 0);
         SetFontSize(interactionText, 0);
-        SetBorder(interactionBackground, 0);
 
         float duration = 0;
 
@@ -197,21 +218,18 @@ public class HUDScreen : UIScreen
             float size = Mathf.Lerp(0, INTERACTION_BUTTON_SIZE, percentage);
             SetSize(interactionBackground, size, size);
             SetFontSize(interactionText, Mathf.Lerp(0, INTERACTION_BUTTON_FONT_SIZE, percentage));
-            SetBorder(interactionBackground, Mathf.Lerp(0, INTERACTION_BUTTON_BORDER_WIDTH, percentage));
 
             yield return null;
         }
 
         SetSize(interactionBackground, INTERACTION_BUTTON_SIZE, INTERACTION_BUTTON_SIZE);
         SetFontSize(interactionText, INTERACTION_BUTTON_FONT_SIZE);
-        SetBorder(interactionBackground, INTERACTION_BUTTON_BORDER_WIDTH);
     }
 
     private IEnumerator HideInteractionButton()
     {
         SetSize(interactionBackground, INTERACTION_BUTTON_SIZE, INTERACTION_BUTTON_SIZE);
         SetFontSize(interactionText, INTERACTION_BUTTON_FONT_SIZE);
-        SetBorder(interactionBackground, INTERACTION_BUTTON_BORDER_WIDTH);
 
         float duration = 0;
 
@@ -221,13 +239,23 @@ public class HUDScreen : UIScreen
             float size = Mathf.Lerp(INTERACTION_BUTTON_SIZE, 0, percentage);
             SetSize(interactionBackground, size, size);
             SetFontSize(interactionText, Mathf.Lerp(INTERACTION_BUTTON_FONT_SIZE, 0, percentage));
-            SetBorder(interactionBackground, Mathf.Lerp(INTERACTION_BUTTON_BORDER_WIDTH, 0, percentage));
 
             yield return null;
         }
 
         SetSize(interactionBackground, 0, 0);
         SetFontSize(interactionText, 0);
-        SetBorder(interactionBackground, 0);
+    }
+
+    private void CreateExitInteraction(VisualElement _parent)
+    {
+        exitInteractionBackground = new();
+        exitInteractionBackground.AddToClassList("hud-exit-interaction-background");
+        _parent.Add(exitInteractionBackground);
+
+        Label text = new("Press E to exit");
+        text.AddToClassList("hud-exit-interaction-text");
+        SetFontSize(text, 35);
+        exitInteractionBackground.Add(text);
     }
 }

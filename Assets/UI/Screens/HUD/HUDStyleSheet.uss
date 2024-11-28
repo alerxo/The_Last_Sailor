@@ -21,6 +21,7 @@
 	justify-content: center;
 	align-items: center;
 
+	padding: 1%;
 	border-width: 0px;
 }
 
@@ -30,14 +31,32 @@
 	justify-content: center;
 	align-items: center;
 
-	margin-bottom: 7%;
+	margin-bottom: 6%;
 }
 
 .hud-interaction-background {
 	justify-content: center;
 	align-items: center;
 
+	background-color: rgba(200, 200, 200, 0.7);
+
 	border-radius: 100%;
+	border-width: 0px;
 }
 
-.hud-interaction-text { }
+.hud-interaction-text { 
+	margin: 0px;
+	padding: 0px;
+}
+
+.hud-exit-interaction-background {
+	margin-bottom: 6%;
+
+	background-color: rgba(200, 200, 200, 0.4);
+
+	padding: 0.6%;
+	border-radius: 10px;
+	border-width: 0px;
+}
+
+.hud-exit-interaction-text { }

@@ -64,6 +64,8 @@ public class FleetScreen : UIScreen
     {
         boatContainer.Clear();
 
+        CreateExitButton(boatContainer);
+
         Boat boat = PlayerBoatController.Instance.AdmiralController.Fleet[currentBoat];
 
         Label header = new(boat.Name);
@@ -91,7 +93,7 @@ public class FleetScreen : UIScreen
         container.AddToClassList("fleet-boat-upgrade-container");
         _parent.Add(container);
 
-        Label description = new($"Tier {_boat.GetTierOfUpgrade(_type)} {_type}");
+        Label description = new($"Tier {_boat.GetTierOfUpgrade(_type)} {_type}\nCurrent increase: {_boat.GetUpgradeModifierPercentage(_type)}%");
         description.AddToClassList("fleet-boat-upgrade-description");
         SetFontSize(description, 22);
         container.Add(description);
@@ -100,7 +102,7 @@ public class FleetScreen : UIScreen
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-boat-button");
         SetFontSize(button, 22);
-        button.text = $"Upgrade for {Boat.UPGRADE_COST} resources";
+        button.text = $"Increase by {_boat.GetUpgradeIncreasePercentage(_type)}% for {Boat.UPGRADE_COST} resources";
         button.SetEnabled(_boat.CanUpgrade(_type));
         container.Add(button);
 
@@ -125,5 +127,25 @@ public class FleetScreen : UIScreen
         else if (currentBoat > PlayerBoatController.Instance.AdmiralController.Fleet.Count - 1) currentBoat = 0;
 
         FillBoatContainer();
+    }
+
+    private void CreateExitButton(VisualElement _parent)
+    {
+        VisualElement container = new();
+        container.AddToClassList("fleet-exit-button-container");
+        _parent.Add(container);
+
+        Button button = new(() => OnExit());
+        button.AddToClassList("fleet-exit-button");
+        SetFontSize(button, 40);
+        button.text = "X";
+        container.Add(button);
+    }
+
+    private void OnExit()
+    {
+        UIManager.Instance.SetState(UIState.HUD);
+        CameraManager.Instance.SetState(CameraState.Player);
+        FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
     }
 }

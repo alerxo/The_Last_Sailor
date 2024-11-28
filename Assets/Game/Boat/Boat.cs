@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 {
-    public const int UPGRADE_COST = 5;
+    public const int UPGRADE_COST = 10;
 
     private const float SINK_DURATION = 20f;
     private const float SINK_BUOYANCY = 1.6f;
@@ -32,6 +32,8 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     private readonly Dictionary<UpgradeType, IUpgradeable[]> Upgradeables = new();
     public UpgradeTier UpgradeTier { get; set; }
+    public float UpgradeIncrease => 0.25f;
+    public float GetUpgradeValue => MaxHealth + (MaxHealth * ((int)UpgradeTier * UpgradeIncrease));
 
     public virtual void Awake()
     {
@@ -76,7 +78,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     public int GetPercentageHealth()
     {
-        return (int)(Health / GetUpgradeValue() * 100);
+        return (int)(Health / GetUpgradeValue * 100);
     }
 
     public void Repair()
@@ -158,6 +160,16 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         return Upgradeables[_type][0].UpgradeTier;
     }
 
+    public float GetUpgradeIncreasePercentage(UpgradeType _type)
+    {
+        return (int)(Upgradeables[_type][0].UpgradeIncrease * 100);
+    }
+
+    public float GetUpgradeModifierPercentage(UpgradeType _type)
+    {
+        return (int)((int)Upgradeables[_type][0].UpgradeTier * Upgradeables[_type][0].UpgradeIncrease * 100);
+    }
+
     public void SetName(string _name)
     {
         Name = _name;
@@ -165,26 +177,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     public void SetDefault()
     {
-        Health = GetUpgradeValue();
+        Health = GetUpgradeValue;
         RigidBody.centerOfMass = defaultCOM;
-    }
-
-    public float GetUpgradeValue()
-    {
-        switch (UpgradeTier)
-        {
-            case UpgradeTier.One:
-                return MaxHealth;
-
-            case UpgradeTier.Two:
-                return MaxHealth * 1.2f;
-
-            case UpgradeTier.Three:
-                return MaxHealth * 1.5f;
-
-            default:
-                Debug.LogError("Defaulted in GetUpgradeTier");
-                return 0;
-        }
     }
 }
