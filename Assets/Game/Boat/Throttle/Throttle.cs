@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Throttle : MonoBehaviour
 {
-    private const float MAX_ROTATION = 30;
+    [SerializeField] private float MAX_ROTATION = 45;
 
     [Tooltip("The rotating part of the mesh")]
     [SerializeField] private Transform rotatingPart;
