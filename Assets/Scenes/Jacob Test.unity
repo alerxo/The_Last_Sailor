@@ -119,6 +119,21 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!82 &93412191 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6241897974270852319, guid: f51ea5723a15ad847a804a2747c38ad9, type: 3}
+  m_PrefabInstance: {fileID: 2100224017}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &643593990 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 7262794013433602917, guid: f51ea5723a15ad847a804a2747c38ad9, type: 3}
+  m_PrefabInstance: {fileID: 2100224017}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &1256657362 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6199364132918764782, guid: f51ea5723a15ad847a804a2747c38ad9, type: 3}
+  m_PrefabInstance: {fileID: 2100224017}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1693634276
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -237,10 +252,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI
       objectReference: {fileID: 0}
-    - target: {fileID: 5490845379398287992, guid: c96f58a38e3c5b346931dd749c2e5655, type: 3}
-      propertyPath: m_Volume
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 6459675633536075590, guid: c96f58a38e3c5b346931dd749c2e5655, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -281,6 +292,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8321236525493657375, guid: c96f58a38e3c5b346931dd749c2e5655, type: 3}
+      propertyPath: 'audioSourcesToPause.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1256657362}
+    - target: {fileID: 8321236525493657375, guid: c96f58a38e3c5b346931dd749c2e5655, type: 3}
+      propertyPath: 'audioSourcesToPause.Array.data[1]'
+      value: 
+      objectReference: {fileID: 643593990}
+    - target: {fileID: 8321236525493657375, guid: c96f58a38e3c5b346931dd749c2e5655, type: 3}
+      propertyPath: 'audioSourcesToPause.Array.data[2]'
+      value: 
+      objectReference: {fileID: 93412191}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
