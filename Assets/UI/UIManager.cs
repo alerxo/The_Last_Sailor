@@ -62,6 +62,14 @@ public class UIManager : MonoBehaviour
 
             case UIState.Pause:
                 SetState(UIState.HUD);
+                CameraManager.Instance.SetState(CameraState.Player);
+                FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
+                break;
+
+            case UIState.Fleet:
+                SetState(UIState.HUD);
+                CameraManager.Instance.SetState(CameraState.Player);
+                FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
                 break;
         }
     }
@@ -72,5 +80,6 @@ public enum UIState
     TitleScreen,
     HUD,
     Pause,
-    PostCombat
+    PostCombat,
+    Fleet
 }

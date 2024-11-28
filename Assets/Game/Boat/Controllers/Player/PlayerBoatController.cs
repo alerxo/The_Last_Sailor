@@ -21,6 +21,11 @@ public class PlayerBoatController : MonoBehaviour
         Boat.OnDestroyed += Boat_OnDestroyed;
     }
 
+    private void Start()
+    {
+        Boat.SetName("Player Boat");
+    }
+
     private void Boat_OnDamaged()
     {
         CameraManager.Instance.ShakeCamera(0.3f, 2.5f, 0.5f, 0.1f);

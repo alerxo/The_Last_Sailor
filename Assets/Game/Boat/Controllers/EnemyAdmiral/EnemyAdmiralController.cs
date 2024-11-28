@@ -18,6 +18,13 @@ public class EnemyAdmiralController : Admiral
         CombatManager.Instance.RemoveAdmiral(this);
     }
 
+    public override void Awake()
+    {
+        base.Awake();
+
+        SetName("Admiral Johnson");
+    }
+
     public void SetController(AIBoatController controller)
     {
         BoatController = controller;
@@ -26,6 +33,7 @@ public class EnemyAdmiralController : Admiral
     public void SpawnSubordinate(Vector3 position)
     {
         AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController>(position, transform.rotation);
+        subordinate.Boat.SetName("Enemy Boat");
         AddSubordinate(subordinate.Boat);
     }
 

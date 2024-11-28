@@ -19,6 +19,7 @@ public class Boat : MonoBehaviour, IDamageable
     [SerializeField] AudioClip destroyedSound;
 
     private Vector3 defaultCOM;
+    public string Name { get; private set; }
     public float Health { get; private set; }
     public bool IsDamaged => Health < MaxHealth;
     public bool IsSunk => Health <= 0;
@@ -112,9 +113,31 @@ public class Boat : MonoBehaviour, IDamageable
         _onComplete();
     }
 
+    public void Upgrade(UpgradeType _type)
+    {
+
+    }
+
+    public bool CanUpgrade(UpgradeType _type)
+    {
+        return true;
+    }
+
+    public void SetName(string _name)
+    {
+        Name = _name;
+    }
+
     public void SetDefault()
     {
         Health = MaxHealth;
         RigidBody.centerOfMass = defaultCOM;
     }
+}
+
+public enum UpgradeType
+{
+    Hull,
+    Engine,
+    Cannons
 }

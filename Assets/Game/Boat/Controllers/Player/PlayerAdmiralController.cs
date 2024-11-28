@@ -9,5 +9,7 @@ public class PlayerAdmiralController : Admiral
         base.Awake();
 
         BoatController = GetComponent<PlayerBoatController>();
+
+        SetName("Player");
     }
 }
