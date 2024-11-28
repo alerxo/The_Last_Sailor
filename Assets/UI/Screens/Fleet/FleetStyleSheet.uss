@@ -1,31 +1,44 @@
 .fleet-container {
-	flex-direction: row;
-	justify-content: space-around;
-	align-items: flex-end;
+	justify-content: flex-end;
+	align-items: center;
 
 	width: 100%;
 	height: 100%;
+}
+
+.fleet-menu-container {
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+
+	width: 55%;
+	height: 15%;
 }
 
 .fleet-boat-container {
 	justify-content: space-around;
 	align-items: center;
 
+	height: 100%;
+	width: 75%;
+
 	background-color: rgba(89, 89, 89, 0.5);
+	border-width: 5px;
+	border-radius: 10px;
 }
 
-.fleet-boat-header {
-
-}
+.fleet-boat-header { }
 
 .fleet-boat-button-container {
 	flex-direction: row;
 }
 
 .fleet-boat-button {
-
+	border-width: 3px;
+	border-radius: 7px;
 }
 
 .fleet-navigation-arrow-button {
-
+	border-width: 3px;
+	border-radius: 7px;
 }

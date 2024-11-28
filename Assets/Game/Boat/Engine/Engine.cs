@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Engine : MonoBehaviour
+public class Engine : MonoBehaviour, IUpgradeable
 {
     private const float POWER = 100000f;
     private const float THROTTLE_ACCELERATION = 0.9f;
@@ -18,6 +18,8 @@ public class Engine : MonoBehaviour
     private Throttle throttle;
     public float Rudder { get; private set; }
     public float Throttle { get; private set; }
+
+    public UpgradeTier UpgradeTier { get; set; }
 
     private Rigidbody target;
 
@@ -104,5 +106,24 @@ public class Engine : MonoBehaviour
     {
         Throttle = Mathf.Clamp(Mathf.Lerp(Throttle, _throttle, THROTTLE_ACCELERATION * Time.deltaTime), 0, 1);
         throttle.SetRotation(Throttle);
+    }
+
+    public float GetUpgradeValue()
+    {
+        switch (UpgradeTier)
+        {
+            case UpgradeTier.First:
+                return POWER;
+
+            case UpgradeTier.Second:
+                return POWER * 1.5f;
+
+            case UpgradeTier.Third:
+                return POWER * 2f;
+
+            default:
+                Debug.LogError("Defaulted in GetUpgradeTier");
+                return 0;
+        }
     }
 }

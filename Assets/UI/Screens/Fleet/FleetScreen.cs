@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 public class FleetScreen : UIScreen
@@ -9,7 +7,7 @@ public class FleetScreen : UIScreen
 
     private int currentBoat;
 
-    private VisualElement boatContainer;
+    private Box boatContainer;
 
     private void Awake()
     {
@@ -36,16 +34,20 @@ public class FleetScreen : UIScreen
         container.AddToClassList("fleet-container");
         root.Add(container);
 
-        CreateNavigatioButton(container, "<", -1);
-        CreateBoatContainer(container);
-        CreateNavigatioButton(container, ">", 1);
+        VisualElement menuContainer = new();
+        menuContainer.AddToClassList("fleet-menu-container");
+        container.Add(menuContainer);
+
+        CreateNavigatioButton(menuContainer, "<", -1);
+        CreateBoatContainer(menuContainer);
+        CreateNavigatioButton(menuContainer, ">", 1);
     }
 
-    private void CreateBoatContainer(VisualElement container)
+    private void CreateBoatContainer(VisualElement _parent)
     {
         boatContainer = new();
         boatContainer.AddToClassList("fleet-boat-container");
-        container.Add(boatContainer);
+        _parent.Add(boatContainer);
     }
 
     private void FillBoatContainer()
@@ -71,6 +73,7 @@ public class FleetScreen : UIScreen
     private void CreateBoatButton(VisualElement _parent, string _text, Boat _boat, UpgradeType _type)
     {
         Button button = new(() => _boat.Upgrade(_type));
+        button.AddToClassList("main-button");
         button.AddToClassList("fleet-boat-button");
         SetFontSize(button, 25);
         button.text = _text;
@@ -81,6 +84,7 @@ public class FleetScreen : UIScreen
     private void CreateNavigatioButton(VisualElement _parent, string _text, int _index)
     {
         Button button = new(() => OnNavigationArrow(_index));
+        button.AddToClassList("main-button");
         button.AddToClassList("fleet-navigation-arrow-button");
         SetFontSize(button, 30);
         button.text = _text;

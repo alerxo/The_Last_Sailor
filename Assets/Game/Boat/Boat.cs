@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Boat : MonoBehaviour, IDamageable
+public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 {
     private const float SINK_DURATION = 20f;
     private const float SINK_BUOYANCY = 1.6f;
@@ -27,6 +28,9 @@ public class Boat : MonoBehaviour, IDamageable
     public Buoyancy Buoyancy { get; private set; }
     public Rigidbody RigidBody { get; private set; }
 
+    private readonly Dictionary<UpgradeType, IUpgradeable[]> Upgradeables = new();
+    public UpgradeTier UpgradeTier { get; set; }
+
     public virtual void Awake()
     {
         Engine = GetComponentInChildren<Engine>();
@@ -37,7 +41,18 @@ public class Boat : MonoBehaviour, IDamageable
         RigidBody.centerOfMass = defaultCOM;
         Engine.transform.localPosition = new Vector3(Engine.transform.localPosition.x, COM.localPosition.y, Engine.transform.localPosition.z);
 
+        Upgradeables.Add(UpgradeType.Hull, new IUpgradeable[] { this });
+        Upgradeables.Add(UpgradeType.Cannons, GetComponentsInChildren<Cannon>());
+        Upgradeables.Add(UpgradeType.Hull, new IUpgradeable[] { Engine });
+
         SetDefault();
+    }
+
+    private void OnEnable()
+    {
+        SetUpgrade(UpgradeType.Hull, UpgradeTier.First);
+        SetUpgrade(UpgradeType.Cannons, UpgradeTier.First);
+        SetUpgrade(UpgradeType.Engine, UpgradeTier.First);
     }
 
     public void Damage(float _damage)
@@ -113,14 +128,25 @@ public class Boat : MonoBehaviour, IDamageable
         _onComplete();
     }
 
+    public void SetUpgrade(UpgradeType _type, UpgradeTier _tier)
+    {
+        foreach (IUpgradeable upgradeable in Upgradeables[_type])
+        {
+            upgradeable.UpgradeTier = _tier;
+        }
+    }
+
     public void Upgrade(UpgradeType _type)
     {
-
+        foreach (IUpgradeable upgradeable in Upgradeables[_type])
+        {
+            upgradeable.UpgradeTier++;
+        }
     }
 
     public bool CanUpgrade(UpgradeType _type)
     {
-        return true;
+        return Upgradeables[_type][0].UpgradeTier < UpgradeTier.Third;
     }
 
     public void SetName(string _name)
@@ -130,14 +156,26 @@ public class Boat : MonoBehaviour, IDamageable
 
     public void SetDefault()
     {
-        Health = MaxHealth;
+        Health = GetUpgradeValue();
         RigidBody.centerOfMass = defaultCOM;
     }
-}
 
-public enum UpgradeType
-{
-    Hull,
-    Engine,
-    Cannons
+    public float GetUpgradeValue()
+    {
+        switch (UpgradeTier)
+        {
+            case UpgradeTier.First:
+                return MaxHealth;
+
+            case UpgradeTier.Second:
+                return MaxHealth * 1.5f;
+
+            case UpgradeTier.Third:
+                return MaxHealth * 2f;
+
+            default:
+                Debug.LogError("Defaulted in GetUpgradeTier");
+                return 0;
+        }
+    }
 }
