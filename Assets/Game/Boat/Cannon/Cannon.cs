@@ -213,14 +213,14 @@ public class Cannon : MonoBehaviour, IUpgradeable
     {
         switch (UpgradeTier)
         {
-            case UpgradeTier.First:
+            case UpgradeTier.One:
                 return CANNONBALL_DAMAGE;
 
-            case UpgradeTier.Second:
-                return CANNONBALL_DAMAGE * 1.5f;
+            case UpgradeTier.Two:
+                return CANNONBALL_DAMAGE * 1.2f;
 
-            case UpgradeTier.Third:
-                return CANNONBALL_DAMAGE * 2f;
+            case UpgradeTier.Three:
+                return CANNONBALL_DAMAGE * 1.5f;
 
             default:
                 Debug.LogError("Defaulted in GetUpgradeTier");

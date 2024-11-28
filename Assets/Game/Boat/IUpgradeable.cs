@@ -8,9 +8,9 @@ public interface IUpgradeable
 
 public enum UpgradeTier
 {
-    First,
-    Second,
-    Third
+    One,
+    Two,
+    Three
 }
 
 public enum UpgradeType

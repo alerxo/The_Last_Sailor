@@ -44,7 +44,7 @@ public class Engine : MonoBehaviour, IUpgradeable
             target.AddTorque(0, -rudder * RUDDER_PASSIVE_TORQUE, 0, ForceMode.Force);
         }
 
-        float throttle = Mathf.Clamp(Throttle * POWER, 0, POWER);
+        float throttle = Mathf.Clamp(Throttle * GetUpgradeValue(), 0, GetUpgradeValue());
 
         if (throttle > 0)
         {
@@ -112,14 +112,14 @@ public class Engine : MonoBehaviour, IUpgradeable
     {
         switch (UpgradeTier)
         {
-            case UpgradeTier.First:
-                return POWER;
+            case UpgradeTier.One:
+                return POWER * 1f;
 
-            case UpgradeTier.Second:
-                return POWER * 1.5f;
+            case UpgradeTier.Two:
+                return POWER * 1.15f;
 
-            case UpgradeTier.Third:
-                return POWER * 2f;
+            case UpgradeTier.Three:
+                return POWER * 1.3f;
 
             default:
                 Debug.LogError("Defaulted in GetUpgradeTier");

@@ -12,16 +12,26 @@ public class FleetScreen : UIScreen
     private void Awake()
     {
         UIManager.OnStateChanged += UIManager_OnStateChanged;
+        ResourceManager.OnResourceAmountChanged += ResourceManager_OnResourceAmountChanged;
     }
 
     private void OnDestroy()
     {
         UIManager.OnStateChanged -= UIManager_OnStateChanged;
+        ResourceManager.OnResourceAmountChanged -= ResourceManager_OnResourceAmountChanged;
+    }
+
+    private void ResourceManager_OnResourceAmountChanged(float _amount)
+    {
+        if (boatContainer != null)
+        {
+            FillBoatContainer();
+        }
     }
 
     private void UIManager_OnStateChanged(UIState _state)
     {
-        if (_state == UIState.Fleet)
+        if (boatContainer != null && _state == UIState.Fleet)
         {
             currentBoat = 0;
             FillBoatContainer();
@@ -61,24 +71,40 @@ public class FleetScreen : UIScreen
         SetFontSize(header, 40);
         boatContainer.Add(header);
 
+        Label resourceCount = new($"Resources: {ResourceManager.Instance.Amount}");
+        resourceCount.AddToClassList("fleet-resource-count");
+        SetFontSize(resourceCount, 30);
+        boatContainer.Add(resourceCount);
+
         VisualElement buttonContainer = new();
         buttonContainer.AddToClassList("fleet-boat-button-container");
         boatContainer.Add(buttonContainer);
 
-        CreateBoatButton(buttonContainer, "Upgrade Hull", boat, UpgradeType.Hull);
-        CreateBoatButton(buttonContainer, "Upgrade Cannons", boat, UpgradeType.Cannons);
-        CreateBoatButton(buttonContainer, "Upgrade Engine", boat, UpgradeType.Engine);
+        CreateUpgradeButton(buttonContainer, boat, UpgradeType.Hull).clicked += () => boat.Repair();
+        CreateUpgradeButton(buttonContainer, boat, UpgradeType.Cannons);
+        CreateUpgradeButton(buttonContainer, boat, UpgradeType.Engine);
     }
 
-    private void CreateBoatButton(VisualElement _parent, string _text, Boat _boat, UpgradeType _type)
+    private Button CreateUpgradeButton(VisualElement _parent, Boat _boat, UpgradeType _type)
     {
+        VisualElement container = new();
+        container.AddToClassList("fleet-boat-upgrade-container");
+        _parent.Add(container);
+
+        Label description = new($"Tier {_boat.GetTierOfUpgrade(_type)} {_type}");
+        description.AddToClassList("fleet-boat-upgrade-description");
+        SetFontSize(description, 22);
+        container.Add(description);
+
         Button button = new(() => _boat.Upgrade(_type));
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-boat-button");
-        SetFontSize(button, 25);
-        button.text = _text;
+        SetFontSize(button, 22);
+        button.text = $"Upgrade for {Boat.UPGRADE_COST} resources";
         button.SetEnabled(_boat.CanUpgrade(_type));
-        _parent.Add(button);
+        container.Add(button);
+
+        return button;
     }
 
     private void CreateNavigatioButton(VisualElement _parent, string _text, int _index)
@@ -86,7 +112,7 @@ public class FleetScreen : UIScreen
         Button button = new(() => OnNavigationArrow(_index));
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-navigation-arrow-button");
-        SetFontSize(button, 30);
+        SetFontSize(button, 40);
         button.text = _text;
         _parent.Add(button);
     }

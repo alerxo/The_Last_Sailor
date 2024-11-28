@@ -6,6 +6,8 @@ using UnityEngine.Events;
 
 public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 {
+    public const int UPGRADE_COST = 5;
+
     private const float SINK_DURATION = 20f;
     private const float SINK_BUOYANCY = 1.6f;
     private const float SINK_COM_MAX_X_CHANGE = 4f;
@@ -43,16 +45,16 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
         Upgradeables.Add(UpgradeType.Hull, new IUpgradeable[] { this });
         Upgradeables.Add(UpgradeType.Cannons, GetComponentsInChildren<Cannon>());
-        Upgradeables.Add(UpgradeType.Hull, new IUpgradeable[] { Engine });
+        Upgradeables.Add(UpgradeType.Engine, new IUpgradeable[] { Engine });
 
         SetDefault();
     }
 
     private void OnEnable()
     {
-        SetUpgrade(UpgradeType.Hull, UpgradeTier.First);
-        SetUpgrade(UpgradeType.Cannons, UpgradeTier.First);
-        SetUpgrade(UpgradeType.Engine, UpgradeTier.First);
+        SetUpgrade(UpgradeType.Hull, UpgradeTier.One);
+        SetUpgrade(UpgradeType.Cannons, UpgradeTier.One);
+        SetUpgrade(UpgradeType.Engine, UpgradeTier.One);
     }
 
     public void Damage(float _damage)
@@ -74,7 +76,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     public int GetPercentageHealth()
     {
-        return (int)(Health / MaxHealth * 100);
+        return (int)(Health / GetUpgradeValue() * 100);
     }
 
     public void Repair()
@@ -142,11 +144,18 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         {
             upgradeable.UpgradeTier++;
         }
+
+        ResourceManager.Instance.AddResource(-UPGRADE_COST);
     }
 
     public bool CanUpgrade(UpgradeType _type)
     {
-        return Upgradeables[_type][0].UpgradeTier < UpgradeTier.Third;
+        return GetTierOfUpgrade(_type) < UpgradeTier.Three && ResourceManager.Instance.Amount >= UPGRADE_COST;
+    }
+
+    public UpgradeTier GetTierOfUpgrade(UpgradeType _type)
+    {
+        return Upgradeables[_type][0].UpgradeTier;
     }
 
     public void SetName(string _name)
@@ -164,14 +173,14 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
     {
         switch (UpgradeTier)
         {
-            case UpgradeTier.First:
+            case UpgradeTier.One:
                 return MaxHealth;
 
-            case UpgradeTier.Second:
-                return MaxHealth * 1.5f;
+            case UpgradeTier.Two:
+                return MaxHealth * 1.2f;
 
-            case UpgradeTier.Third:
-                return MaxHealth * 2f;
+            case UpgradeTier.Three:
+                return MaxHealth * 1.5f;
 
             default:
                 Debug.LogError("Defaulted in GetUpgradeTier");

@@ -170,7 +170,7 @@ public class PostCombatScreen : UIScreen
         int cost = ResourceManager.GetRepairCost(_boat);
         _boat.Repair();
         _description.text = $"{_boat.Name}: Repaired";
-        ResourceManager.Instance.BoatWasRepaired(_boat, cost);
+        ResourceManager.Instance.BoatWasRepaired(cost);
     }
 
     // Enemy
@@ -223,7 +223,7 @@ public class PostCombatScreen : UIScreen
         int cost = ResourceManager.GetRepairCost(_boatController.Boat);
         _boatController.Seize(PlayerBoatController.Instance.AdmiralController);
         _description.text = $"{_boatController.Boat.Name}: Seized";
-        ResourceManager.Instance.BoatWasSeized(_boatController.Boat, cost);
+        ResourceManager.Instance.BoatWasSeized(cost);
     }
 
     private void OnScrapped(Label _description, AIBoatController _boatController)

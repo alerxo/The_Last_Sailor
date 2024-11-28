@@ -12,25 +12,43 @@
 	align-items: center;
 
 	width: 55%;
-	height: 15%;
+	height: 25%;
+	margin-bottom: 1%;
 }
 
 .fleet-boat-container {
-	justify-content: space-around;
+	justify-content: space-between;
 	align-items: center;
 
 	height: 100%;
-	width: 75%;
+	padding: 1%;
 
 	background-color: rgba(89, 89, 89, 0.5);
 	border-width: 5px;
 	border-radius: 10px;
 }
 
-.fleet-boat-header { }
+.fleet-boat-header { 
+	margin: 0px;
+	padding: 0px;
+}
+
+.fleet-resource-count {
+	margin: 0px;
+	padding: 0px;
+}
 
 .fleet-boat-button-container {
 	flex-direction: row;
+}
+
+.fleet-boat-upgrade-container {
+	justify-content: space-between;
+	align-items: center;
+}
+
+.fleet-boat-upgrade-description {
+
 }
 
 .fleet-boat-button {
