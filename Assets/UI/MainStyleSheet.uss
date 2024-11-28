@@ -3,3 +3,25 @@
 .unity-text-element, .unity-text-field{
 	-unity-font-definition: url("project://database/Assets/UI/Fonts/GermaniaOne/GermaniaOne-Regular.ttf");
 }
+
+.main-button {
+	transition-property: scale;
+    transition-duration: 50ms;
+	transition-timing-function: ease-in-out;
+}
+
+.main-button:hover {
+	scale: 1.20;
+
+	transition-property: scale;
+    transition-duration: 200ms;
+	transition-timing-function: ease-in-out;
+}
+
+.main-button:active {
+	scale: 1.35;
+
+	transition-property: scale;
+    transition-duration: 100ms;
+	transition-timing-function: ease-in-out;
+}

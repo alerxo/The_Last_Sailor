@@ -117,6 +117,8 @@ public class InteractionCollider : MonoBehaviour
             case PlayerState.Cannon:
             case PlayerState.SteeringWheel:
             case PlayerState.Throttle:
+            case PlayerState.Fleet:
+                UIManager.Instance.SetState(UIState.HUD);
                 CameraManager.Instance.SetState(CameraState.Player);
                 FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
                 break;

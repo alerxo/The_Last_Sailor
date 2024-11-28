@@ -42,7 +42,6 @@ public class CombatManager : MonoBehaviour
     {
         SpawnEnemyAdmiral();
 
-
         switch (combatState)
         {
             case CombatState.OutOfCombat:
