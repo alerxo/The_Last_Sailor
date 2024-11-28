@@ -202,7 +202,7 @@ public class PostCombatScreen : UIScreen
             seizeButton.clicked += () => OnSeized(description, _boatController);
             seizeButton.clicked += () => OnBoatSeized?.Invoke();
             scrapButton.clicked += () => OnScrapped(description, _boatController);
-            scrapButton.clicked += () => OnBoatRepaired?.Invoke();
+            scrapButton.clicked += () => OnBoatScrapped?.Invoke();
 
             scrapActions.Add(() => OnScrapped(description, _boatController));
         }
