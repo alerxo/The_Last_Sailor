@@ -23,17 +23,17 @@ public class ResourceManager : MonoBehaviour
         AddResource(GAIN_FROM_SCRAPPING_AMOUNT);
     }
 
-    public void BoatWasSeized(Boat _boat, int _cost)
+    public void BoatWasSeized(int _cost)
     {
-        BoatWasRepaired(_boat, _cost);
+        BoatWasRepaired(_cost);
     }
 
-    public void BoatWasRepaired(Boat _boat, int _cost)
+    public void BoatWasRepaired(int _cost)
     {
         AddResource(-_cost);
     }
 
-    private void AddResource(float _amount)
+    public void AddResource(float _amount)
     {
         Amount += _amount;
         OnResourceAmountChanged?.Invoke(Amount);
