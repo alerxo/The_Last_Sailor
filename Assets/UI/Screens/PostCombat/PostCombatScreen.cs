@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class PostCombatScreen : UIScreen
 {
+    public static event UnityAction OnBoatScrapped;
+    public static event UnityAction OnBoatSeized;
+    public static event UnityAction OnBoatRepaired;
+
     public static PostCombatScreen Instance { get; private set; }
 
     protected override UIState ActiveState => UIState.PostCombat;
@@ -151,6 +156,7 @@ public class PostCombatScreen : UIScreen
         {
             Button button = CreateRowButton(buttonContainer, "Repair", ResourceManager.GetRepairCost(_boat), () => CanRepair(_boat));
             button.clicked += () => OnRepaired(description, _boatName, _boat);
+            button.clicked += () => OnBoatRepaired?.Invoke();
         }
     }
 
@@ -194,7 +200,9 @@ public class PostCombatScreen : UIScreen
             Button scrapButton = CreateRowButton(buttonContainer, "Scrap", ResourceManager.GAIN_FROM_SCRAPPING_AMOUNT, () => CanScrap(_boatController));
 
             seizeButton.clicked += () => OnSeized(description, _boatName, _boatController);
+            seizeButton.clicked += () => OnBoatSeized?.Invoke();
             scrapButton.clicked += () => OnScrapped(description, _boatName, _boatController);
+            scrapButton.clicked += () => OnBoatRepaired?.Invoke();
 
             scrapActions.Add(() => OnScrapped(description, _boatName, _boatController));
         }
@@ -269,7 +277,7 @@ public class PostCombatScreen : UIScreen
 
     private Label CreateRowDescription(VisualElement _parent, Boat _boat, string _name)
     {
-        Label description = new($"{_name}: {(_boat.IsSunk ? "Sunk" : $"Durability %{_boat.GetPercentageHealth()}")}");
+        Label description = new($"{_name}: {(_boat.IsSunk ? "Sunk" : $"Durability {_boat.GetPercentageHealth()}%")}");
         description.AddToClassList("post-combat-row-desciption");
         SetFontSize(description, 19);
         _parent.Add(description);
@@ -367,6 +375,8 @@ public class PostCombatScreen : UIScreen
         {
             action();
         }
+
+        OnBoatScrapped?.Invoke();
     }
 
     private void CreateDefeatButton(VisualElement _parent)

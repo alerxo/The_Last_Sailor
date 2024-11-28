@@ -14,6 +14,7 @@
 	height: 70%;
 	padding: 2.5%;
 
+	background-color: rgba(89, 89, 89, 0.5);
 	border-width: 5px;
 	border-radius: 10px;
 }
@@ -33,6 +34,7 @@
 	height: 65%;
 	padding: 3%;
 
+	background-color: rgba(0, 0, 0, 0);
 	border-width: 3px;
 	border-radius: 7px;
 }
@@ -74,6 +76,8 @@
 
 .post-combat-row-button-container {
 	flex-direction: row;
+
+	overflow: visible;
 }
 
 .post-combat-row-button {
