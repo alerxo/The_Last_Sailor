@@ -20,10 +20,12 @@ public class AfterCombatButtonSound : MonoBehaviour
     }
     private void PostCombatScreen_Repaired()
     {
+        audioSource.pitch = (Random.Range(0.8f, 1.2f));
         audioSource.PlayOneShot(repair);
     }
     private void PostCombatScreen_Scrap()
     {
+        audioSource.pitch = (Random.Range(0.8f, 1.2f));
         audioSource.PlayOneShot(scrap);
     }
 }

@@ -76,7 +76,7 @@ public class Engine : MonoBehaviour, IUpgradeable
             paddleAudioSource.Play();
         }
 
-        paddleAudioSource.volume = Throttle / 2;
+        paddleAudioSource.volume = (Throttle / 9);
         paddleAudioSource.pitch = Throttle;
     }
 

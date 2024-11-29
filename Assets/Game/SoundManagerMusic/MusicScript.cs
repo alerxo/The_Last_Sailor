@@ -44,6 +44,10 @@ public class MusicScript : MonoBehaviour
         }
         if (turnOffBattleMusic == false)
         {
+            if (musicSource.isPlaying) 
+            {
+                musicSource.Stop();
+            }
             PlayBattleMusic();
             if (battleMusicSource.volume <= 0.2f)
             {
