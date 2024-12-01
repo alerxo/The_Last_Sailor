@@ -554,6 +554,7 @@ MonoBehaviour:
   boatImpact: {fileID: 3700719852418523581}
   waterImpact: {fileID: 6710568974709871637}
   explosion: {fileID: 7949005730559079955, guid: cf8a666820f28ab4c97edffb71ba6738, type: 3}
+  waterSplash: {fileID: 5528013579338106430, guid: efb23b4426cdfbf479cb6be20a5a5be5, type: 3}
 --- !u!54 &7300662342679320267
 Rigidbody:
   m_ObjectHideFlags: 0
