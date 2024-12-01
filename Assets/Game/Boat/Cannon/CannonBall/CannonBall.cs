@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Cannonball : MonoBehaviour
@@ -14,6 +15,7 @@ public class Cannonball : MonoBehaviour
 
     [SerializeField] private AudioSource boatImpact, waterImpact;
     [SerializeField] private GameObject explosion;
+    [SerializeField] private GameObject waterSplash;
 
     private Rigidbody rb;
     private MeshRenderer meshRenderer;
@@ -60,6 +62,7 @@ public class Cannonball : MonoBehaviour
     {
         if (state == CannonballState.Active && transform.position.y < WATER_HEIGHT)
         {
+            Destroy(Instantiate(waterSplash,transform.position,quaternion.Euler(0,0,0)),10); // lär behöva enablas / disablas med canon kulan så det poolas. Jag vet inte riktigt hur jag gör det med din kod /viktor
             waterImpact.Play();
             SetState(CannonballState.PendingDestruction);
         }
