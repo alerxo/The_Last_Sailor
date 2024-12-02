@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AIBoatController : MonoBehaviour
 {
-    public AIBoatControllerState State {  get; private set; }
+    public AIBoatControllerState State { get; private set; }
 
     public Boat Boat { get; private set; }
     public Admiral Admiral { get; private set; }
@@ -12,6 +12,7 @@ public class AIBoatController : MonoBehaviour
     private const float FORWARD_COLLISION_COOLDOWN = 1f;
     public float ForwardCollisionDistance { get; private set; }
 
+    public Vector3? FormationPosition { get; private set; }
     public Vector3? Destination { get; private set; }
     public float Speed { get; private set; } = 1f;
     public float Distance { get; private set; }
@@ -49,6 +50,7 @@ public class AIBoatController : MonoBehaviour
         {
             case AIBoatControllerState.Active:
                 TryCheckForCollisions();
+                TrySetDestination();
                 DrawDebug();
                 break;
 
@@ -65,6 +67,19 @@ public class AIBoatController : MonoBehaviour
             forwardCollisionTimer = 0f;
             CheckForwardCollision();
         }
+    }
+
+    private void TrySetDestination()
+    {
+        if (FormationPosition.HasValue)
+        {
+            SetDestination(GetFormationPositionInWorld());
+        }
+    }
+
+    public Vector3 GetFormationPositionInWorld()
+    {
+        return Admiral.transform.position + Admiral.transform.TransformVector(FormationPosition.Value);
     }
 
     private void CheckForwardCollision()
@@ -92,6 +107,7 @@ public class AIBoatController : MonoBehaviour
     private void Boat_OnDestroyed()
     {
         Destination = null;
+        FormationPosition = null;
         Boat.StartSinkAtSurface();
     }
 
@@ -189,6 +205,11 @@ public class AIBoatController : MonoBehaviour
     public void SetAdmiral(Admiral _admiral)
     {
         Admiral = _admiral;
+    }
+
+    public void SetFormationPosition(Vector3 _position)
+    {
+        FormationPosition = _position;
     }
 
     public void SetDestination(Vector3 _destination)

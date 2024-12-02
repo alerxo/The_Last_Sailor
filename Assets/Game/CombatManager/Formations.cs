@@ -12,25 +12,25 @@ public static class Formations
     private const int RING_GROWTH_SIZE = 4;
     private const float RING_MARGIN = 200f;
 
-    public static Vector3[] GetLine(Vector3 _origin, Vector3 _forward, int _count)
+    public static Vector3[] GetLine(int _count)
     {
         Vector3[] positions = new Vector3[_count];
 
         for (int i = 0; i < _count; i++)
         {
-            positions[i] = _origin + ((i + 1) * LINE_MARGIN * -_forward) + GetForwardOffset(_forward);
+            positions[i] = ((i + 1) * LINE_MARGIN * -Vector3.forward) + GetForwardOffset();
         }
 
         return positions;
     }
 
-    public static Vector3[] GetSpearhead(Transform _transform, int _count)
+    public static Vector3[] GetSpearhead(int _count)
     {
         Vector3[] positions = new Vector3[_count];
 
         for (int i = 0; i < _count; i++)
         {
-            positions[i] = _transform.position + _transform.TransformVector((GetSpearheadDirection(i) * GetSpearheadDistance(i)) + GetForwardOffset(_transform.forward));
+            positions[i] = (GetSpearheadDirection(i) * GetSpearheadDistance(i)) + GetForwardOffset();
         }
 
         return positions;
@@ -46,7 +46,7 @@ public static class Formations
         return ((_index / 2) + 1) * SPEARHEAD_MARGIN;
     }
 
-    public static Vector3[] GetRing(Transform _transform, int _count)
+    public static Vector3[] GetRing(int _count)
     {
         Vector3[] positions = new Vector3[_count];
 
@@ -63,7 +63,7 @@ public static class Formations
                 ringIteration++;
             }
 
-            positions[i] = _transform.position + _transform.TransformVector((GetRingDirection(ringIndex, ringCount) * GetRingDistance(ringIteration)) + GetForwardOffset(_transform.forward));
+            positions[i] = (GetRingDirection(ringIndex, ringCount) * GetRingDistance(ringIteration)) + GetForwardOffset();
 
             ringIndex++;
         }
@@ -85,9 +85,9 @@ public static class Formations
         return ((_ringIteration / 2) + 1) * RING_MARGIN;
     }
 
-    private static Vector3 GetForwardOffset(Vector3 _forward)
+    private static Vector3 GetForwardOffset()
     {
-        return POSITION_FORWARD_OFFSET * _forward;
+        return POSITION_FORWARD_OFFSET * -Vector3.forward;
     }
 }
 

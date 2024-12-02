@@ -10,7 +10,7 @@ public class ResourceManager : MonoBehaviour
 
     public const int GAIN_FROM_SCRAPPING_AMOUNT = 10;
     private const float COST_FOR_REPAIR_PER_DURABILITY = 0.1f;
-    public float Amount { get; private set; }
+    public float Amount { get; private set; } = 1000;
 
     private void Awake()
     {

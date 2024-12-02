@@ -9,7 +9,7 @@ public class CommandDeck : MonoBehaviour, IInteractable
     public void Interact()
     {
         UIManager.Instance.SetState(UIState.Command);
-        FirstPersonController.Instance.SetState(PlayerState.Inactive);
+        FirstPersonController.Instance.SetState(PlayerState.Command);
         CameraManager.Instance.SetState(CameraState.Fleet);
     }
 }

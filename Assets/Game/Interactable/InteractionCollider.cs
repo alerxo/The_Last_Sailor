@@ -112,16 +112,17 @@ public class InteractionCollider : MonoBehaviour
         {
             case PlayerState.FirstPerson:
                 current?.Interact();
-                break;
+                return;
 
             case PlayerState.Cannon:
             case PlayerState.SteeringWheel:
             case PlayerState.Throttle:
             case PlayerState.Fleet:
+            case PlayerState.Command:
                 UIManager.Instance.SetState(UIState.HUD);
                 CameraManager.Instance.SetState(CameraState.Player);
                 FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
-                break;
+                return;
         }
     }
 

@@ -98,6 +98,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CommandSelect"",
+                    ""type"": ""Button"",
+                    ""id"": ""708da9f7-b261-4680-a91c-e8412e2ce2e5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CommandDeselect"",
+                    ""type"": ""Button"",
+                    ""id"": ""db47538e-fd6b-4ce6-9004-e712ae6846b2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -384,6 +402,28 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ChangeCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f3396b63-cd8d-4917-858b-a02056ba1711"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CommandSelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f34c94f2-b640-42b8-9711-75f573d0947c"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CommandDeselect"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -979,6 +1019,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
         m_Player_ChangeCamera = m_Player.FindAction("ChangeCamera", throwIfNotFound: true);
+        m_Player_CommandSelect = m_Player.FindAction("CommandSelect", throwIfNotFound: true);
+        m_Player_CommandDeselect = m_Player.FindAction("CommandDeselect", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1066,6 +1108,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Escape;
     private readonly InputAction m_Player_ChangeCamera;
+    private readonly InputAction m_Player_CommandSelect;
+    private readonly InputAction m_Player_CommandDeselect;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1078,6 +1122,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
         public InputAction @ChangeCamera => m_Wrapper.m_Player_ChangeCamera;
+        public InputAction @CommandSelect => m_Wrapper.m_Player_CommandSelect;
+        public InputAction @CommandDeselect => m_Wrapper.m_Player_CommandDeselect;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1111,6 +1157,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ChangeCamera.started += instance.OnChangeCamera;
             @ChangeCamera.performed += instance.OnChangeCamera;
             @ChangeCamera.canceled += instance.OnChangeCamera;
+            @CommandSelect.started += instance.OnCommandSelect;
+            @CommandSelect.performed += instance.OnCommandSelect;
+            @CommandSelect.canceled += instance.OnCommandSelect;
+            @CommandDeselect.started += instance.OnCommandDeselect;
+            @CommandDeselect.performed += instance.OnCommandDeselect;
+            @CommandDeselect.canceled += instance.OnCommandDeselect;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1139,6 +1191,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ChangeCamera.started -= instance.OnChangeCamera;
             @ChangeCamera.performed -= instance.OnChangeCamera;
             @ChangeCamera.canceled -= instance.OnChangeCamera;
+            @CommandSelect.started -= instance.OnCommandSelect;
+            @CommandSelect.performed -= instance.OnCommandSelect;
+            @CommandSelect.canceled -= instance.OnCommandSelect;
+            @CommandDeselect.started -= instance.OnCommandDeselect;
+            @CommandDeselect.performed -= instance.OnCommandDeselect;
+            @CommandDeselect.canceled -= instance.OnCommandDeselect;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1329,6 +1387,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
         void OnChangeCamera(InputAction.CallbackContext context);
+        void OnCommandSelect(InputAction.CallbackContext context);
+        void OnCommandDeselect(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
