@@ -81,5 +81,6 @@ public enum UIState
     HUD,
     Pause,
     PostCombat,
-    Fleet
+    Fleet,
+    Command
 }
