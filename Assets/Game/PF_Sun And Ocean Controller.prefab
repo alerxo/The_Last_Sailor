@@ -59,7 +59,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6511450991575843894}
   m_Layer: 0
-  m_Name: Sun And Ocean Controller
+  m_Name: PF_Sun And Ocean Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

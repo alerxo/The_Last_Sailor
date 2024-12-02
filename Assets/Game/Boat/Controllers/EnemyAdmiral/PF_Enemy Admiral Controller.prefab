@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2494986971297771465}
   - component: {fileID: 6814803007962962676}
   m_Layer: 0
-  m_Name: Enemy Admiral Controller
+  m_Name: PF_Enemy Admiral Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

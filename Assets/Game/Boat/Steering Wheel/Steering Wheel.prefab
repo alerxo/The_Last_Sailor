@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 187065625687275740}
   - component: {fileID: 125869238325462739}
   - component: {fileID: 31235163573952702}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wheel the spinny part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8261583989967440153}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 2716525291334064546}
   - component: {fileID: 7603724628143643824}
   - component: {fileID: 7719177223148293062}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wheel Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -388,7 +388,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6934040351366515465}
   - component: {fileID: 6212035584758067149}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Steering Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

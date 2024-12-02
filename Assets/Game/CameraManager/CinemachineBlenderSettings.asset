@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CustomBlends:
   - From: MainMenuCamera
-    To: PlayerCamera
+    To: PF_PlayerCamera
     Blend:
       Style: 1
       Time: 2
@@ -25,7 +25,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: InteractionCamera
-    To: PlayerCamera
+    To: PF_PlayerCamera
     Blend:
       Style: 1
       Time: 0.25
@@ -35,7 +35,7 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
-  - From: PlayerCamera
+  - From: PF_PlayerCamera
     To: InteractionCamera
     Blend:
       Style: 1
@@ -47,7 +47,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: SteeringWheelCamera
-    To: PlayerCamera
+    To: PF_PlayerCamera
     Blend:
       Style: 1
       Time: 0.7
@@ -57,7 +57,7 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
-  - From: PlayerCamera
+  - From: PF_PlayerCamera
     To: SteeringWheelCamera
     Blend:
       Style: 1

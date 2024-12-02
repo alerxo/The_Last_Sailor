@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6111964791501833671}
   - component: {fileID: 1855762649149754975}
   m_Layer: 0
-  m_Name: ThrottlePlayerController
+  m_Name: PF_ThrottlePlayerController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

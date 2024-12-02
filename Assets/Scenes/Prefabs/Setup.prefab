@@ -867,7 +867,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3358513668011473414, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
       propertyPath: m_Name
-      value: PlayerCamera
+      value: PF_PlayerCamera
       objectReference: {fileID: 0}
     - target: {fileID: 3358513668011473414, guid: 82099ce6c56b01f4b8f940ce7804aca9, type: 3}
       propertyPath: m_TagString

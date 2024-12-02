@@ -14720,7 +14720,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2304858889956851602}
   m_Layer: 0
-  m_Name: CannonHit
+  m_Name: PF_CannonHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

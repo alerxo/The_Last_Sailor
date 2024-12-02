@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5277518947242693268}
   m_Layer: 0
-  m_Name: ReflProbes
+  m_Name: PF_ReflProbes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
