@@ -19,7 +19,7 @@ public class CombatManager : MonoBehaviour
     private const int MAX_ADMIRAL_COUNT = 3;
     private const float SPAWN_COOLDOWN = 30f;
     private const float SPAWN_PAUSE_DURATION = 0.1f;
-    private const int MIN_FLEET_SIZE = 0;
+    private const int MIN_FLEET_SIZE = 1;
     private const int MAX_FLEET_SIZE = 1;
     private CombatManagerSpawnState spawnState = CombatManagerSpawnState.SpawningFirstAdmiral;
 
@@ -167,13 +167,15 @@ public class CombatManager : MonoBehaviour
         yield return new WaitForSeconds(SPAWN_PAUSE_DURATION);
 
         int size = Random.Range(MIN_FLEET_SIZE, MAX_FLEET_SIZE + 1);
-        Vector3[] positions = Formations.GetLine(admiralBoat.transform.position, admiralBoat.transform.forward, size);
+        Vector3[] positions = Formations.GetLine(size);
 
         for (int i = 0; i < size; i++)
         {
-            admiralController.SpawnSubordinate(positions[i]);
+            admiralController.SpawnSubordinate(admiralBoat.transform.position + admiralBoat.transform.TransformVector(positions[i]));
             yield return new WaitForSeconds(SPAWN_PAUSE_DURATION);
         }
+
+        admiralController.SetFleetFormation();
 
         yield return new WaitForSeconds(SPAWN_COOLDOWN);
 

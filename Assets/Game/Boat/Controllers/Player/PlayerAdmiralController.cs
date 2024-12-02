@@ -4,10 +4,8 @@ public class PlayerAdmiralController : Admiral
 {
     public PlayerBoatController BoatController { get; private set; }
 
-    public override void Awake()
+    public void Awake()
     {
-        base.Awake();
-
         BoatController = GetComponent<PlayerBoatController>();
 
         SetName("Player");

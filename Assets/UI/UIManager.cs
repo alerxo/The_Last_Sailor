@@ -54,23 +54,30 @@ public class UIManager : MonoBehaviour
 
     private void Escape_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
+        switch (FirstPersonController.Instance.State)
+        {
+            case PlayerState.Cannon:
+            case PlayerState.SteeringWheel:
+            case PlayerState.Throttle:
+            case PlayerState.Fleet:
+            case PlayerState.Command:
+                SetState(UIState.HUD);
+                CameraManager.Instance.SetState(CameraState.Player);
+                FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
+                return;
+        }
+
         switch (State)
         {
             case UIState.HUD:
                 SetState(UIState.Pause);
-                break;
+                return;
 
             case UIState.Pause:
                 SetState(UIState.HUD);
                 CameraManager.Instance.SetState(CameraState.Player);
                 FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
-                break;
-
-            case UIState.Fleet:
-                SetState(UIState.HUD);
-                CameraManager.Instance.SetState(CameraState.Player);
-                FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
-                break;
+                return;
         }
     }
 }
@@ -81,5 +88,6 @@ public enum UIState
     HUD,
     Pause,
     PostCombat,
-    Fleet
+    Fleet,
+    Command
 }

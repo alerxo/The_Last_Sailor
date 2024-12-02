@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Events;
 
 public abstract class Admiral : MonoBehaviour
 {
+    public event UnityAction<AIBoatController, bool> OnSubordinateChanged;
     public string Name { get; private set; }
     public Boat Owner { get; private set; }
 
@@ -12,27 +14,6 @@ public abstract class Admiral : MonoBehaviour
 
     public readonly List<Boat> Fleet = new();
     public readonly List<AIBoatController> Subordinates = new();
-
-    private const float SET_SUBORDINATE_DESTINATION_WAIT_DURATION = 0.2f;
-    private bool canSetFleetDestinations = true;
-
-    public float LongestSubordinateDistance { get; private set; }
-
-    public Formation Formation { get; private set; }
-
-    public virtual void Awake()
-    {
-        SetFormation(Formation.Spearhead);
-    }
-
-    private void Update()
-    {
-        if (canSetFleetDestinations)
-        {
-            canSetFleetDestinations = false;
-            StartCoroutine(SetFleetDestinations());
-        }
-    }
 
     public void SetOwner(Boat boat)
     {
@@ -54,6 +35,7 @@ public abstract class Admiral : MonoBehaviour
             Assert.IsNull(controller.Admiral);
             controller.SetAdmiral(this);
             Subordinates.Add(controller);
+            OnSubordinateChanged?.Invoke(controller, true);
             Fleet.Add(_boat);
         }
     }
@@ -66,6 +48,7 @@ public abstract class Admiral : MonoBehaviour
             Assert.IsTrue(controller.Admiral == this);
             controller.SetAdmiral(null);
             Subordinates.Remove(controller);
+            OnSubordinateChanged?.Invoke(controller, false);
             Fleet.Remove(_boat);
         }
     }
@@ -75,55 +58,8 @@ public abstract class Admiral : MonoBehaviour
         Enemy = _enemy;
     }
 
-    protected void SetFormation(Formation _formation)
-    {
-        Formation = _formation;
-    }
-
     protected void SetName(string _name)
     {
         Name = _name;
-    }
-
-    private IEnumerator SetFleetDestinations()
-    {
-        Vector3[] positions = GetFleetPositions();
-
-        float distance = 0;
-
-        for (int i = 0; i < Subordinates.Count; i++)
-        {
-            if (i >= Subordinates.Count || i >= positions.Length)
-            {
-                break;
-            }
-
-            Subordinates[i].SetDestination(positions[i]);
-            distance = Mathf.Max(distance, Subordinates[i].Distance);
-
-            yield return new WaitForSeconds(SET_SUBORDINATE_DESTINATION_WAIT_DURATION);
-        }
-
-        LongestSubordinateDistance = distance;
-        canSetFleetDestinations = true;
-    }
-
-    private Vector3[] GetFleetPositions()
-    {
-        switch (Formation)
-        {
-            case Formation.Line:
-                return Formations.GetLine(transform.position, transform.forward, Subordinates.Count);
-
-            case Formation.Spearhead:
-                return Formations.GetSpearhead(transform, Subordinates.Count);
-
-            case Formation.Ring:
-                return Formations.GetRing(transform, Subordinates.Count);
-
-            default:
-                Debug.LogError($"Defaulted for case {Formation}");
-                return null;
-        }
     }
 }
