@@ -16,7 +16,7 @@ public class CommandScreen : UIScreen
         CreateBoatContainer(container);
     }
 
-    private static void CreateBoatContainer(VisualElement _parent)
+    private void CreateBoatContainer(VisualElement _parent)
     {
         VisualElement boatContainer = new();
         boatContainer.AddToClassList("command-boat-container");
@@ -24,7 +24,12 @@ public class CommandScreen : UIScreen
 
         foreach(AIBoatController boatController in PlayerBoatController.Instance.AdmiralController.Subordinates)
         {
-
+            CreateBoat(boatController);
         }
+    }
+
+    private void CreateBoat(AIBoatController _boatController)
+    {
+
     }
 }
