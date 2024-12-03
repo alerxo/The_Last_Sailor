@@ -72,7 +72,7 @@ public class CombatManager : MonoBehaviour
             PostCombatScreen.Instance.CreateBattleResults(AdmiralInCombat);
             UIManager.Instance.SetState(UIState.PostCombat);
             FirstPersonController.Instance.SetState(PlayerState.Inactive);
-            CameraManager.Instance.SetState(CameraState.Fleet);
+            CameraManager.Instance.SetState(CameraState.Command);
 
             Time.timeScale = 0.3f;
 

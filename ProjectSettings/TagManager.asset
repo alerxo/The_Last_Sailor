@@ -7,12 +7,13 @@ TagManager:
   - PlayerReturnPosition
   - ObjectPool
   - PlayerCameraTarget
-  - BoatCameraTarget
   - MainMenuCamera
   - PlayerCamera
   - SteeringWheelCamera
   - InteractionCamera
   - FleetCamera
+  - CommandCamera
+  - SteeringWheelCameraTarget
   layers:
   - Default
   - TransparentFX

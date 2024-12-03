@@ -23,7 +23,7 @@ public class FleetScreen : UIScreen
 
     private void ResourceManager_OnResourceAmountChanged(float _amount)
     {
-        if (boatContainer != null)
+        if (boatContainer != null && UIManager.Instance.State == UIState.Fleet)
         {
             FillBoatContainer();
         }
@@ -67,6 +67,7 @@ public class FleetScreen : UIScreen
         CreateExitButton(boatContainer);
 
         Boat boat = PlayerBoatController.Instance.AdmiralController.Fleet[currentBoat];
+        CameraManager.Instance.SetFleetCamera(boat.transform);
 
         Label header = new(boat.Name);
         header.AddToClassList("fleet-boat-header");

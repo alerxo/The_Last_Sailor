@@ -29,7 +29,6 @@ public class Office : MonoBehaviour, IInteractable
     public void Interact()
     {
         UIManager.Instance.SetState(UIState.Fleet);
-        CameraManager.Instance.SetState(CameraState.Fleet);
         FirstPersonController.Instance.SetState(PlayerState.Fleet);
     }
 }

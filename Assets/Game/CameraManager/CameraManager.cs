@@ -3,6 +3,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 
 public class CameraManager : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class CameraManager : MonoBehaviour
     public CinemachineCamera PlayerCamera { get; private set; }
     private CinemachineCamera steeringWheelCamera;
     private CinemachineCamera interactionCamera;
-    private CinemachineCamera fleetCamera;
+    private CinemachineCamera[] fleetCameras;
+    private CinemachineCamera commandCamera;
 
     private CinemachineBasicMultiChannelPerlin[] cinemachineBasicMultiChannelPerlins;
     private CinemachineInputAxisController[] cinemachineInputAxisControllers;
@@ -28,13 +30,24 @@ public class CameraManager : MonoBehaviour
         Instance = this;
 
         mainMenuCamera = GameObject.FindWithTag("MainMenuCamera").GetComponent<CinemachineCamera>();
+
         PlayerCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CinemachineCamera>();
         PlayerCamera.Target.TrackingTarget = GameObject.FindWithTag("PlayerCameraTarget").transform;
+
         steeringWheelCamera = GameObject.FindWithTag("SteeringWheelCamera").GetComponent<CinemachineCamera>();
-        steeringWheelCamera.Target.TrackingTarget = GameObject.FindWithTag("BoatCameraTarget").transform;
+        steeringWheelCamera.Target.TrackingTarget = GameObject.FindWithTag("SteeringWheelCameraTarget").transform;
+
         interactionCamera = GameObject.FindWithTag("InteractionCamera").GetComponent<CinemachineCamera>();
-        fleetCamera = GameObject.FindWithTag("FleetCamera").GetComponent<CinemachineCamera>();
-        fleetCamera.Target.TrackingTarget = GameObject.FindWithTag("BoatCameraTarget").transform;
+
+        GameObject[] fleet = GameObject.FindGameObjectsWithTag("FleetCamera");
+        fleetCameras = new CinemachineCamera[fleet.Length];
+
+        for (int i = 0; i < fleet.Length; i++)
+        {
+            fleetCameras[i] = fleet[i].GetComponent<CinemachineCamera>();
+        }
+
+        commandCamera = GameObject.FindWithTag("CommandCamera").GetComponent<CinemachineCamera>();
 
         cinemachineBasicMultiChannelPerlins = FindObjectsByType<CinemachineBasicMultiChannelPerlin>(FindObjectsSortMode.None);
         cinemachineInputAxisControllers = FindObjectsByType<CinemachineInputAxisController>(FindObjectsSortMode.None);
@@ -55,9 +68,15 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
-        if (interactionTarget != null)
+        switch (State)
         {
-            SetInteractionCameraPosition();
+            case CameraState.Interaction when interactionTarget != null:
+                SetInteractionCameraPosition();
+                break;
+
+            case CameraState.Command:
+                SetCommandCameraPosition();
+                break;
         }
     }
 
@@ -77,6 +96,33 @@ public class CameraManager : MonoBehaviour
     public void SetInteractionCameraPosition()
     {
         interactionCamera.ForceCameraPosition(interactionTarget.position, interactionTarget.rotation);
+    }
+
+    public void SetFleetCamera(Transform _target)
+    {
+        GetNextFleetCamera().Target.TrackingTarget = _target;
+        SetState(CameraState.Fleet);
+    }
+
+    public CinemachineCamera GetNextFleetCamera()
+    {
+        if (fleetCameras[0].enabled)
+        {
+            fleetCameras[0].enabled = false;
+            fleetCameras[1].enabled = true;
+
+            return fleetCameras[1];
+        }
+
+        fleetCameras[1].enabled = false;
+        fleetCameras[0].enabled = true;
+
+        return fleetCameras[0];
+    }
+
+    public void SetCommandCameraPosition()
+    {
+        commandCamera.Target.TrackingTarget.position = PlayerBoatController.Instance.transform.position;
     }
 
     public void SetState(CameraState _state)
@@ -104,7 +150,15 @@ public class CameraManager : MonoBehaviour
         PlayerCamera.enabled = State == CameraState.Player;
         steeringWheelCamera.enabled = State == CameraState.SteeringWheel;
         interactionCamera.enabled = State == CameraState.Interaction;
-        fleetCamera.enabled = State == CameraState.Fleet;
+        commandCamera.enabled = State == CameraState.Command;
+
+        if (State != CameraState.Fleet)
+        {
+            foreach (CinemachineCamera camera in fleetCameras)
+            {
+                camera.enabled = false;
+            }
+        }
 
         OnStateChanged?.Invoke(State);
     }
@@ -186,5 +240,6 @@ public enum CameraState
     Player,
     SteeringWheel,
     Interaction,
-    Fleet
+    Fleet,
+    Command
 }
