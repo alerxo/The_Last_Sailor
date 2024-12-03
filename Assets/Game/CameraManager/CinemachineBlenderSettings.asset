@@ -134,7 +134,18 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
-  - From: CommandCamera
+  - From: CommandCamera_First
+    To: PF_PlayerCamera
+    Blend:
+      Style: 1
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: CommandCamera_Second
     To: PF_PlayerCamera
     Blend:
       Style: 1
@@ -146,10 +157,43 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: PF_PlayerCamera
-    To: CommandCamera
+    To: CommandCamera_First
     Blend:
       Style: 1
       Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: PF_PlayerCamera
+    To: CommandCamera_Second
+    Blend:
+      Style: 1
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: CommandCamera_First
+    To: CommandCamera_Second
+    Blend:
+      Style: 1
+      Time: 0.5
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: CommandCamera_Second
+    To: CommandCamera_First
+    Blend:
+      Style: 1
+      Time: 0.5
       CustomCurve:
         serializedVersion: 2
         m_Curve: []

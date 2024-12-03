@@ -10,8 +10,8 @@ public class CombatManager : MonoBehaviour
     public static CombatManager Instance { get; private set; }
     public static event UnityAction<Admiral> OnAdmiralInCombatChanged;
 
-    public const float RING_OF_FIRE_SIZE = 500f;
-    private const float RING_OF_FIRE_BUFFER = 500f;
+    public const float RING_OF_FIRE_SIZE = 600f;
+    private const float RING_OF_FIRE_BUFFER = 700f;
     private const float GET_POSITION_INSIDE_BUFFER_OFFSET = 50f;
     private const float SPAWN_SIZE = 1000f;
     private const float SPAWN_BUFFER = 300f;

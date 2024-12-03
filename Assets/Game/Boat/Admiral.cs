@@ -53,6 +53,8 @@ public abstract class Admiral : MonoBehaviour
         }
     }
 
+    public abstract string GetSubordinateName();
+
     public void SetEnemy(Admiral _enemy)
     {
         Enemy = _enemy;

@@ -37,8 +37,8 @@ public class EnemyAdmiralController : Admiral
     public void SpawnSubordinate(Vector3 position)
     {
         AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController>(position, transform.rotation);
-        subordinate.Boat.SetName("Enemy Boat");
         AddSubordinate(subordinate.Boat);
+        subordinate.Boat.SetName(GetSubordinateName());
     }
 
     public void SetDestination(Vector3 position)
@@ -85,5 +85,10 @@ public class EnemyAdmiralController : Admiral
                 Debug.LogError($"Defaulted for case {formation}");
                 return null;
         }
+    }
+
+    public override string GetSubordinateName()
+    {
+        return $"Enemy Boat {Subordinates.Count}";
     }
 }

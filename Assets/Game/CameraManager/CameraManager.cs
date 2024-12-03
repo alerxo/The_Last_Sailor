@@ -3,7 +3,6 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
-using UnityEngine.Rendering;
 
 public class CameraManager : MonoBehaviour
 {
@@ -11,12 +10,20 @@ public class CameraManager : MonoBehaviour
     public static event UnityAction<CameraState> OnStateChanged;
     public CameraState State { get; private set; }
 
+    private InputSystem_Actions input;
+
+    private const float MAX_COMMAND_ZOOM = 150;
+    private const float COMMAND_SROLL_SPEED = 350;
+    private const float MAX_COMMAND_MOVEMENT = 100;
+    private const float COMMAND_MOVEMENT_SPEED = 100;
+    private Vector3 commandCameraMovement;
+
     private CinemachineCamera mainMenuCamera;
     public CinemachineCamera PlayerCamera { get; private set; }
     private CinemachineCamera steeringWheelCamera;
     private CinemachineCamera interactionCamera;
     private CinemachineCamera[] fleetCameras;
-    private CinemachineCamera commandCamera;
+    private CinemachineCamera[] commandCamera;
 
     private CinemachineBasicMultiChannelPerlin[] cinemachineBasicMultiChannelPerlins;
     private CinemachineInputAxisController[] cinemachineInputAxisControllers;
@@ -29,6 +36,19 @@ public class CameraManager : MonoBehaviour
         Assert.IsNull(Instance);
         Instance = this;
 
+        input = new();
+        input.Player.Enable();
+
+        AssignCameras();
+
+        cinemachineBasicMultiChannelPerlins = FindObjectsByType<CinemachineBasicMultiChannelPerlin>(FindObjectsSortMode.None);
+        cinemachineInputAxisControllers = FindObjectsByType<CinemachineInputAxisController>(FindObjectsSortMode.None);
+
+        UIManager.OnStateChanged += UIManager_OnStateChanged;
+    }
+
+    private void AssignCameras()
+    {
         mainMenuCamera = GameObject.FindWithTag("MainMenuCamera").GetComponent<CinemachineCamera>();
 
         PlayerCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CinemachineCamera>();
@@ -47,12 +67,13 @@ public class CameraManager : MonoBehaviour
             fleetCameras[i] = fleet[i].GetComponent<CinemachineCamera>();
         }
 
-        commandCamera = GameObject.FindWithTag("CommandCamera").GetComponent<CinemachineCamera>();
+        GameObject[] command = GameObject.FindGameObjectsWithTag("CommandCamera");
+        commandCamera = new CinemachineCamera[command.Length];
 
-        cinemachineBasicMultiChannelPerlins = FindObjectsByType<CinemachineBasicMultiChannelPerlin>(FindObjectsSortMode.None);
-        cinemachineInputAxisControllers = FindObjectsByType<CinemachineInputAxisController>(FindObjectsSortMode.None);
-
-        UIManager.OnStateChanged += UIManager_OnStateChanged;
+        for (int i = 0; i < command.Length; i++)
+        {
+            commandCamera[i] = command[i].GetComponent<CinemachineCamera>();
+        }
     }
 
     private void Start()
@@ -63,6 +84,8 @@ public class CameraManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        input.Player.Disable();
+
         UIManager.OnStateChanged -= UIManager_OnStateChanged;
     }
 
@@ -75,6 +98,7 @@ public class CameraManager : MonoBehaviour
                 break;
 
             case CameraState.Command:
+                GetCommandCameraMovement();
                 SetCommandCameraPosition();
                 break;
         }
@@ -120,24 +144,71 @@ public class CameraManager : MonoBehaviour
         return fleetCameras[0];
     }
 
+    public void FocusCommandCamera(Vector3 _position)
+    {
+        Vector3 position = PlayerBoatController.Instance.transform.InverseTransformVector(_position - PlayerBoatController.Instance.transform.position);
+        position.y = commandCameraMovement.y;
+        commandCameraMovement = position;
+        GetNextCommandCamera();
+    }
+
+    public void GetCommandCameraMovement()
+    {
+        Vector2 inputVector = input.Player.Move.ReadValue<Vector2>();
+        Vector3 movement = new(
+            inputVector.x * COMMAND_MOVEMENT_SPEED,
+            input.Player.CameraZoom.ReadValue<float>() * COMMAND_SROLL_SPEED,
+            inputVector.y * COMMAND_MOVEMENT_SPEED);
+
+        movement *= Time.deltaTime;
+        movement += commandCameraMovement;
+
+        commandCameraMovement.x = Mathf.Clamp(movement.x, -MAX_COMMAND_MOVEMENT, MAX_COMMAND_MOVEMENT);
+        commandCameraMovement.y = Mathf.Clamp(movement.y, 0, MAX_COMMAND_ZOOM);
+        commandCameraMovement.z = Mathf.Clamp(movement.z, -MAX_COMMAND_MOVEMENT, MAX_COMMAND_MOVEMENT);
+    }
+
     public void SetCommandCameraPosition()
     {
-        commandCamera.Target.TrackingTarget.position = PlayerBoatController.Instance.transform.position;
+        Vector3 position = PlayerBoatController.Instance.transform.position + PlayerBoatController.Instance.transform.TransformVector(commandCameraMovement);
+        Vector3 rotation = new(
+            GetCurrentCommandCamera().Target.TrackingTarget.transform.rotation.eulerAngles.x,
+            PlayerBoatController.Instance.transform.rotation.eulerAngles.y,
+            GetCurrentCommandCamera().Target.TrackingTarget.transform.rotation.eulerAngles.z);
+
+        GetCurrentCommandCamera().Target.TrackingTarget.SetPositionAndRotation(position, Quaternion.Euler(rotation));
+    }
+
+    public CinemachineCamera GetCurrentCommandCamera()
+    {
+        return commandCamera[0].enabled ? commandCamera[0] : commandCamera[1];
+    }
+
+    public void GetNextCommandCamera()
+    {
+        if (commandCamera[0].enabled)
+        {
+            commandCamera[0].enabled = false;
+            commandCamera[1].enabled = true;
+        }
+
+        else
+        {
+            commandCamera[1].enabled = false;
+            commandCamera[0].enabled = true;
+        }
     }
 
     public void SetState(CameraState _state)
     {
-        State = _state;
-
-        if (State != CameraState.Interaction && interactionTarget != null)
+        if (_state != CameraState.Interaction && interactionTarget != null)
         {
-            PlayerCamera.ForceCameraPosition(PlayerCamera.transform.position, interactionTarget.transform.rotation);
             interactionTarget = null;
         }
 
-        switch (State)
+        switch (_state)
         {
-            case CameraState.Player:
+            case CameraState.Player when State != CameraState.MainMenu:
                 PlayerCamera.ForceCameraPosition(PlayerCamera.transform.position, PlayerCamera.transform.rotation);
                 break;
 
@@ -146,19 +217,37 @@ public class CameraManager : MonoBehaviour
                 break;
         }
 
-        mainMenuCamera.enabled = State == CameraState.MainMenu;
-        PlayerCamera.enabled = State == CameraState.Player;
-        steeringWheelCamera.enabled = State == CameraState.SteeringWheel;
-        interactionCamera.enabled = State == CameraState.Interaction;
-        commandCamera.enabled = State == CameraState.Command;
+        mainMenuCamera.enabled = _state == CameraState.MainMenu;
+        PlayerCamera.enabled = _state == CameraState.Player;
+        steeringWheelCamera.enabled = _state == CameraState.SteeringWheel;
+        interactionCamera.enabled = _state == CameraState.Interaction;
 
-        if (State != CameraState.Fleet)
+        if (_state != CameraState.Fleet)
         {
             foreach (CinemachineCamera camera in fleetCameras)
             {
                 camera.enabled = false;
             }
         }
+
+        if (_state != CameraState.Command)
+        {
+            foreach (CinemachineCamera camera in commandCamera)
+            {
+                camera.enabled = false;
+            }
+        }
+
+        else
+        {
+            commandCameraMovement = Vector3.zero;
+            GetNextCommandCamera();
+            SetCommandCameraPosition();
+            GetNextCommandCamera();
+            SetCommandCameraPosition();
+        }
+
+        State = _state;
 
         OnStateChanged?.Invoke(State);
     }
