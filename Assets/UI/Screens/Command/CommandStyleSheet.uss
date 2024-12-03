@@ -25,6 +25,8 @@
 }
 
 .command-boat-item {
+	width: 98%;
+
 	margin-bottom: 3%;
 
 	border-width: 5px;
