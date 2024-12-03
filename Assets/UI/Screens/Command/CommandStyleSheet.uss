@@ -1,1 +1,69 @@
-VisualElement {}
+.command-container {
+	justify-content: center;
+	align-items: flex-end;
+
+	width: 100%;
+	height: 100%;
+}
+
+.command-background {
+	justify-content: center;
+	align-items: center;
+
+	width: 20%;
+	height: 90%;
+	
+	margin-right: 1%;
+
+	border-width: 0px;
+	background-color: rgba(50, 50, 50, 0.7);
+}
+
+.command-boat-item-container {
+	width: 92%;
+	height: 97%;
+}
+
+.command-boat-item {
+	margin-bottom: 3%;
+
+	border-width: 5px;
+	border-radius: 10px;
+	background-color: rgba(150, 150, 150, 0.8);
+}
+
+.command-boat-item-header {
+
+}
+
+.command-boat-item-description {
+
+}
+
+/* ScrollView */
+
+.unity-base-slider {
+	margin: 0px;
+}
+
+.unity-base-slider__tracker {
+	border-width: 0px;
+
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.unity-base-slider__dragger {
+	border-width: 0px;
+
+	background-color: black;
+
+	width: 15px;
+}
+
+.unity-scroll-view__vertical-scroller {
+	margin-top: 1%;
+	margin-bottom: 1%;
+	margin-right: 0.5%;
+
+	background-color: rgba(0, 0, 0, 0);
+}

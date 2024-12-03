@@ -114,9 +114,9 @@ public class AIBoatController : MonoBehaviour
     public void Seize(Admiral _admiral)
     {
         RemoveFromFleet();
-        _admiral.AddSubordinate(Boat);
-        Boat.SetName("Allied Boat");
+        Boat.SetName(PlayerBoatController.Instance.AdmiralController.GetSubordinateName());
         Boat.Repair();
+        _admiral.AddSubordinate(Boat);
     }
 
     public void Scrap()
