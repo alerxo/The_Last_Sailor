@@ -10,6 +10,6 @@ public class CommandDeck : MonoBehaviour, IInteractable
     {
         UIManager.Instance.SetState(UIState.Command);
         FirstPersonController.Instance.SetState(PlayerState.Command);
-        CameraManager.Instance.SetState(CameraState.Fleet);
+        CameraManager.Instance.SetState(CameraState.Command);
     }
 }

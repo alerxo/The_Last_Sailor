@@ -68,3 +68,91 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
+  - From: FleetCamera_First
+    To: PF_PlayerCamera
+    Blend:
+      Style: 1
+      Time: 0.7
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: FleetCamera_Second
+    To: PF_PlayerCamera
+    Blend:
+      Style: 1
+      Time: 0.7
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: PF_PlayerCamera
+    To: FleetCamera_Second
+    Blend:
+      Style: 1
+      Time: 0.7
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: PF_PlayerCamera
+    To: FleetCamera_Second
+    Blend:
+      Style: 1
+      Time: 0.7
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: FleetCamera_First
+    To: FleetCamera_Second
+    Blend:
+      Style: 1
+      Time: 0.7
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: FleetCamera_Second
+    To: FleetCamera_First
+    Blend:
+      Style: 1
+      Time: 0.7
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: CommandCamera
+    To: PF_PlayerCamera
+    Blend:
+      Style: 1
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: PF_PlayerCamera
+    To: CommandCamera
+    Blend:
+      Style: 1
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
