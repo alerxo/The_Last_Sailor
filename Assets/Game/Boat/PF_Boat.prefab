@@ -1933,6 +1933,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6025641810161982838, guid: 335d07d1620662f419584b9419157ccf, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1943,9 +1947,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4354142037271340971, guid: 335d07d1620662f419584b9419157ccf, type: 3}
   m_PrefabInstance: {fileID: 3027248502534501267}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &2844582196866456739 stripped
+--- !u!4 &2323235171285012502 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 971385634608836400, guid: 335d07d1620662f419584b9419157ccf, type: 3}
+  m_CorrespondingSourceObject: {fileID: 738370905021211525, guid: 335d07d1620662f419584b9419157ccf, type: 3}
   m_PrefabInstance: {fileID: 3027248502534501267}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4424927075330351638
@@ -2003,7 +2007,7 @@ PrefabInstance:
     - target: {fileID: 8160458022112652082, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
       propertyPath: paddleWheel
       value: 
-      objectReference: {fileID: 2844582196866456739}
+      objectReference: {fileID: 2323235171285012502}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

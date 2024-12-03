@@ -7,7 +7,7 @@ public class Engine : MonoBehaviour, IUpgradeable
     private const float RUDDER_ACCELERATION = 0.9f;
     private const float TURN_RADIUS = 3f;
     private const float RUDDER_PASSIVE_TORQUE = 20000f;
-    private const float PADDLE_WHEEL_SPEED = 0.002f;
+    private const float PADDLE_WHEEL_SPEED = 0.0015f;
 
     [Tooltip("The rotating paddlewheel")]
     [SerializeField] private Transform paddleWheel;
@@ -51,7 +51,8 @@ public class Engine : MonoBehaviour, IUpgradeable
         if (throttle > 0)
         {
             target.AddForceAtPosition(throttle * transform.forward, transform.position, ForceMode.Force);
-            paddleWheel.Rotate(new Vector3(throttle * PADDLE_WHEEL_SPEED * Time.deltaTime, 0, 0));
+
+            paddleWheel.Rotate(new Vector3(throttle * PADDLE_WHEEL_SPEED * Time.fixedDeltaTime, 0, 0));     
 
             TryPlayerPaddleWheelAudio();
         }
