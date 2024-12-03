@@ -13,9 +13,10 @@ public class CommandScreen : UIScreen
     private const float Y_POSITION_FOR_HIGHLIGHTS = 7f;
 
     [SerializeField] private MeshRenderer highlightPrefab, wayPointPrefab;
+    [SerializeField] private Transform trailPrefab;
     [SerializeField] private Material playerMaterial, activeMaterial, inactiveMaterial;
 
-    private MeshRenderer playerHighlight, selectedHighlight;
+    private MeshRenderer playerHighlight;
     private readonly Dictionary<AIBoatController, CommandItem> commandItems = new();
     private AIBoatController current;
     private bool canClickWater = true;
@@ -33,9 +34,6 @@ public class CommandScreen : UIScreen
         playerHighlight = Instantiate(highlightPrefab, transform);
         playerHighlight.material = playerMaterial;
         playerHighlight.gameObject.SetActive(false);
-
-        selectedHighlight = Instantiate(highlightPrefab, transform);
-        selectedHighlight.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -63,99 +61,17 @@ public class CommandScreen : UIScreen
 
     private void Update()
     {
-        SetHighlights();
-    }
-
-    private void SetHighlights()
-    {
         if (UIManager.Instance.State == UIState.Command)
         {
-            playerHighlight.gameObject.SetActive(true);
             playerHighlight.transform.position = GetPositionAboveWater(PlayerBoatController.Instance.transform.position);
 
-            if (current != null)
-            {
-                selectedHighlight.gameObject.SetActive(true);
-                selectedHighlight.transform.position = GetPositionAboveWater(current.transform.position);
-            }
-
-            else
-            {
-                selectedHighlight.gameObject.SetActive(false);
-            }
-
-            SetWayPoints();
-        }
-
-        else
-        {
-            playerHighlight.gameObject.SetActive(false);
-            selectedHighlight.gameObject.SetActive(false);
-        }
-    }
-
-    private void UIManager_OnStateChanged(UIState _state)
-    {
-        if (_state == UIState.Command)
-        {
-            input.Player.Enable();
-
             foreach (CommandItem item in commandItems.Values)
             {
-                item.Waypoint.gameObject.SetActive(true);
-            }
+                item.SetHighlight();
+                item.SetWaypoint();
 
-            Time.timeScale = 0.5f;
-        }
-
-        else
-        {
-            current = null;
-
-            input.Player.Disable();
-
-            foreach (CommandItem item in commandItems.Values)
-            {
-                item.Waypoint.gameObject.SetActive(false);
-                item.Waypoint.material = inactiveMaterial;
-                SetBorder(item.Button, inactiveMaterial.color);
-            }
-
-            Time.timeScale = 1f;
-        }
-    }
-
-    private void AdmiralController_OnSubordinateChanged(AIBoatController _boatController, bool _wasAdded)
-    {
-        if (_wasAdded)
-        {
-            Assert.IsFalse(commandItems.ContainsKey(_boatController));
-            commandItems.Add(_boatController, new CommandItem(Instantiate(wayPointPrefab, transform), CreateSuborinateItem(boatItemContainer, _boatController)));
-            commandItems[_boatController].SetDescription(_boatController);
-        }
-
-        else
-        {
-            Assert.IsTrue(commandItems.ContainsKey(_boatController));
-            commandItems[_boatController].Button.RemoveFromHierarchy();
-            Destroy(commandItems[_boatController].Waypoint.gameObject);
-            commandItems.Remove(_boatController);
-        }
-    }
-
-    private void SetWayPoints()
-    {
-        foreach (KeyValuePair<AIBoatController, CommandItem> item in commandItems)
-        {
-            if (item.Key.FormationPosition.HasValue)
-            {
-                item.Value.Waypoint.gameObject.SetActive(true);
-                item.Value.Waypoint.transform.position = GetPositionAboveWater(item.Key.GetFormationPositionInWorld());
-            }
-
-            else
-            {
-                item.Value.Waypoint.gameObject.SetActive(false);
+                if (item.IsTrailMoving) item.MoveTrail();
+                else if (item.CanMoveTrail()) item.StartMoveTrail();
             }
         }
     }
@@ -189,8 +105,7 @@ public class CommandScreen : UIScreen
     private void AssignCurrent(AIBoatController _boatController)
     {
         current = _boatController;
-        commandItems[current].Waypoint.material = activeMaterial;
-        SetBorder(commandItems[current].Button, activeMaterial.color);
+        commandItems[current].Select(activeMaterial);
     }
 
     private void SetCurrentFormation(Ray _ray)
@@ -200,7 +115,8 @@ public class CommandScreen : UIScreen
         float hypotenuse = adjacent / Mathf.Cos(theta * Mathf.Deg2Rad);
         Vector3 hit = _ray.origin + (_ray.direction * hypotenuse);
         current.SetFormationPosition(PlayerBoatController.Instance.transform.InverseTransformVector(hit - PlayerBoatController.Instance.transform.position));
-        commandItems[current].SetDescription(current);
+        commandItems[current].SetDescription();
+        commandItems[current].StopMoveTrail();
     }
 
     private void CommandDeselect_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
@@ -212,14 +128,12 @@ public class CommandScreen : UIScreen
     {
         if (current != null)
         {
-            commandItems[current].Waypoint.material = inactiveMaterial;
-            SetBorder(commandItems[current].Button, inactiveMaterial.color);
+            commandItems[current].Deselect(inactiveMaterial);
             current = null;
-            selectedHighlight.transform.position = ObjectPoolManager.InactiveObjectPosition;
         }
     }
 
-    private Vector3 GetPositionAboveWater(Vector3 _position)
+    public static Vector3 GetPositionAboveWater(Vector3 _position)
     {
         _position.y = Y_POSITION_FOR_HIGHLIGHTS;
 
@@ -290,24 +204,172 @@ public class CommandScreen : UIScreen
         CameraManager.Instance.FocusCommandCamera(_boatController.transform.position);
     }
 
+    private void UIManager_OnStateChanged(UIState _state)
+    {
+        if (_state == UIState.Command)
+        {
+            input.Player.Enable();
+
+            playerHighlight.gameObject.SetActive(true);
+
+            foreach (CommandItem item in commandItems.Values)
+            {
+                item.Activate();
+            }
+
+            Time.timeScale = 0.5f;
+        }
+
+        else
+        {
+            current = null;
+
+            input.Player.Disable();
+
+            playerHighlight.gameObject.SetActive(false);
+
+            foreach (CommandItem item in commandItems.Values)
+            {
+                item.Deactivate(inactiveMaterial);
+            }
+
+            Time.timeScale = 1f;
+        }
+    }
+
+    private void AdmiralController_OnSubordinateChanged(AIBoatController _boatController, bool _wasAdded)
+    {
+        if (_wasAdded)
+        {
+            Assert.IsFalse(commandItems.ContainsKey(_boatController));
+            commandItems.Add(_boatController, new CommandItem(
+                _boatController,
+                Instantiate(highlightPrefab, transform),
+                Instantiate(wayPointPrefab, transform),
+                Instantiate(trailPrefab, transform),
+                CreateSuborinateItem(boatItemContainer, _boatController)));
+            commandItems[_boatController].SetDescription();
+        }
+
+        else
+        {
+            Assert.IsTrue(commandItems.ContainsKey(_boatController));
+            commandItems[_boatController].Dispose();
+            commandItems.Remove(_boatController);
+        }
+    }
+
     private class CommandItem
     {
+        public AIBoatController BoatController;
+        public MeshRenderer Highlight;
         public MeshRenderer Waypoint;
+        public Transform Trail;
         public Button Button;
         public Label Header;
         public Label Description;
 
-        public CommandItem(MeshRenderer _waypoint, Button _button)
+        private const float TRAIL_SPEED = 150f;
+        public bool IsTrailMoving { get; private set; } = false;
+
+        public CommandItem(AIBoatController _boatController, MeshRenderer _highlight, MeshRenderer _waypoint, Transform _trail, Button _button)
         {
+            BoatController = _boatController;
+            Highlight = _highlight;
             Waypoint = _waypoint;
+            Trail = _trail;
             Button = _button;
             Header = Button.ElementAt(0) as Label;
             Description = Button.ElementAt(1) as Label;
         }
 
-        public void SetDescription(AIBoatController _boatController)
+        public void SetDescription()
         {
-            Description.text = $"{(_boatController.FormationPosition.HasValue ? "In formation" : "Unassigned")}";
+            Description.text = $"{(BoatController.FormationPosition.HasValue ? "In formation" : "Unassigned")}";
+        }
+
+        public void Select(Material _material)
+        {
+            Highlight.material = _material;
+            Waypoint.material = _material;
+            SetBorder(Button, _material.color);
+        }
+
+        public void Deselect(Material _material)
+        {
+            Highlight.material = _material;
+            Waypoint.material = _material;
+            SetBorder(Button, _material.color);
+        }
+
+        public void SetHighlight()
+        {
+            Highlight.transform.position = GetPositionAboveWater(BoatController.transform.position);
+        }
+
+        public void SetWaypoint()
+        {
+            if (BoatController.FormationPosition.HasValue)
+            {
+                Waypoint.gameObject.SetActive(true);
+                Waypoint.transform.position = GetPositionAboveWater(BoatController.GetFormationPositionInWorld());
+            }
+
+            else
+            {
+                Waypoint.gameObject.SetActive(false);
+            }
+        }
+
+        public bool CanMoveTrail() => BoatController.FormationPosition.HasValue;
+
+        public void StartMoveTrail()
+        {
+            Trail.gameObject.SetActive(true);
+            Trail.transform.position = BoatController.transform.position;
+            IsTrailMoving = true;
+        }
+
+        public void MoveTrail()
+        {
+            if (!CanMoveTrail() || Vector3.Distance(Trail.transform.position, Waypoint.transform.position) < 1)
+            {
+                StopMoveTrail();
+                return;
+            }
+
+            Trail.transform.position = GetPositionAboveWater(Vector3.MoveTowards(Trail.transform.position, Waypoint.transform.position, TRAIL_SPEED * Time.deltaTime));
+        }
+
+        public void StopMoveTrail()
+        {
+            IsTrailMoving = false;
+            Trail.gameObject.SetActive(false);
+        }
+
+        public void Activate()
+        {
+            Waypoint.gameObject.SetActive(true);
+            Trail.gameObject.SetActive(true);
+            Highlight.gameObject.SetActive(true);
+        }
+
+        public void Deactivate(Material _material)
+        {
+            Waypoint.gameObject.SetActive(false);
+            Trail.gameObject.SetActive(false);
+            Highlight.gameObject.SetActive(false);
+            Highlight.material = _material;
+            Waypoint.material = _material;
+            SetBorder(Button, _material.color);
+            StopMoveTrail();
+        }
+
+        public void Dispose()
+        {
+            Button.RemoveFromHierarchy();
+            Destroy(Waypoint.gameObject);
+            Destroy(Trail.gameObject);
         }
     }
 }

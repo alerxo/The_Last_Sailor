@@ -170,7 +170,9 @@ public class CameraManager : MonoBehaviour
 
     public void SetCommandCameraPosition()
     {
-        Vector3 position = PlayerBoatController.Instance.transform.position + PlayerBoatController.Instance.transform.TransformVector(commandCameraMovement);
+        Vector3 playerXZPosition = PlayerBoatController.Instance.transform.position;
+        playerXZPosition.y = 0;
+        Vector3 position = playerXZPosition + PlayerBoatController.Instance.transform.TransformVector(commandCameraMovement);
         Vector3 rotation = new(
             GetCurrentCommandCamera().Target.TrackingTarget.transform.rotation.eulerAngles.x,
             PlayerBoatController.Instance.transform.rotation.eulerAngles.y,

@@ -60,7 +60,7 @@ public abstract class UIScreen : MonoBehaviour
         _target.style.borderRightWidth = GetScaledValue(_value);
     }
 
-    protected void SetBorder(VisualElement _target, Color _color)
+    public static void SetBorder(VisualElement _target, Color _color)
     {
         _target.style.borderBottomColor = _color;
         _target.style.borderTopColor = _color;

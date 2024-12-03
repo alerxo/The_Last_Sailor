@@ -308,6 +308,7 @@ MonoBehaviour:
   - {fileID: 7433441132597879392, guid: 7c836e0d43f512242b27bb1bf67a03e1, type: 3}
   highlightPrefab: {fileID: 7516447183933808321, guid: fc899b563287cda4d883798a1be3ba68, type: 3}
   wayPointPrefab: {fileID: 8057175062765386483, guid: 20cd7be6f2578a8459a77240d908b76f, type: 3}
+  trailPrefab: {fileID: 4243916727641695407, guid: ae898597b4bdfe443857bb2b5ecf5dc6, type: 3}
   playerMaterial: {fileID: 2100000, guid: 21096fbf65900a24f9c90eddefe37c98, type: 2}
   activeMaterial: {fileID: 2100000, guid: 42852c66397ce1640b6fb09a6d7c0b0d, type: 2}
   inactiveMaterial: {fileID: 2100000, guid: c70c4388fc85a9342a32a2773c38a706, type: 2}
