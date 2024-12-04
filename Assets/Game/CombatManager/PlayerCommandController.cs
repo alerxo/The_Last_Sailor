@@ -62,24 +62,15 @@ public class PlayerCommandController : MonoBehaviour
 
     private void FirstCommand_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        foreach (AIBoatController boatController in admiralController.Subordinates)
-        {
-            boatController.SetCommand(Command.Formation);
-        }
+        admiralController.SetCommandForSubordinates(Command.Formation);
     }
     private void SecondCommand_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        foreach (AIBoatController boatController in admiralController.Subordinates)
-        {
-            boatController.SetCommand(Command.Hold);
-        }
+        admiralController.SetCommandForSubordinates(Command.Hold);
     }
 
     private void ThirdCommand_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        foreach (AIBoatController boatController in admiralController.Subordinates)
-        {
-            boatController.SetCommand(Command.Charge);
-        }
+        admiralController.SetCommandForSubordinates(Command.Charge);
     }
 }

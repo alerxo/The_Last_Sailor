@@ -176,6 +176,7 @@ public class CombatManager : MonoBehaviour
             yield return new WaitForSeconds(SPAWN_PAUSE_DURATION);
         }
 
+        admiralController.GetRandomFormation();
         admiralController.SetFleetFormation();
 
         yield return new WaitForSeconds(SPAWN_COOLDOWN);

@@ -1,3 +1,4 @@
+using Unity.Behavior;
 using UnityEngine;
 
 public class AIBoatController : MonoBehaviour
@@ -98,8 +99,10 @@ public class AIBoatController : MonoBehaviour
 
     private void Boat_OnDestroyed()
     {
-        Destination = null;
-        FormationPosition = null;
+        SetFormationPosition(null);
+        SetHoldPosition(null);
+        SetDestination(null);
+        SetCommand(Command.Unassigned);
         Boat.StartSinkAtSurface();
     }
 
@@ -186,23 +189,18 @@ public class AIBoatController : MonoBehaviour
                 Boat.Repair();
                 Boat.RigidBody.linearVelocity = Vector3.zero;
                 Boat.RigidBody.angularVelocity = Vector3.zero;
-                SetDestination(null);
                 break;
 
             case AIBoatControllerState.Destruction:
                 ObjectPoolManager.Instance.Release(this);
-
                 break;
         }
     }
 
-    public void SetAdmiral(Admiral _admiral)
-    {
-        Admiral = _admiral;
-    }
-
     public void SetCommand(Command _command)
     {
+        if (Boat.IsSunk || _command == Command) return;
+
         switch (_command)
         {
             case Command.Unassigned:
@@ -227,6 +225,11 @@ public class AIBoatController : MonoBehaviour
         }
 
         Command = _command;
+    }
+
+    public void SetAdmiral(Admiral _admiral)
+    {
+        Admiral = _admiral;
     }
 
     public void SetFormationPosition(Vector3? _position)
