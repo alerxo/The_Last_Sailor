@@ -22,10 +22,10 @@ public class OptionsScreen : UIScreen
         returnButton.text = "Return";
         background.Add(returnButton);
 
-        CreateSlider(background, "Master Volume", 50f, (f) => Debug.LogWarning("Missing Slider Action"));
-        CreateSlider(background, "Music Volume", 50f, (f) => Debug.LogWarning("Missing Slider Action"));
-        CreateSlider(background, "Sound Effects Volume", 50f, (f) => Debug.LogWarning("Missing Slider Action"));
-        CreateSlider(background, "Ambience Volume", 50f, (f) => Debug.LogWarning("Missing Slider Action"));
+        CreateSlider(background, "Master Volume", SoundSettingsManager.Instance.GetMasterVolume(), (f) => SoundSettingsManager.Instance.SetMasterVolume(f));
+        CreateSlider(background, "Music Volume", SoundSettingsManager.Instance.GetMusicVolume(), (f) => SoundSettingsManager.Instance.SetMusicVolume(f));
+        CreateSlider(background, "Sound Effects Volume", SoundSettingsManager.Instance.GetSFXVolume(), (f) => SoundSettingsManager.Instance.SetSFXVolume(f));
+        CreateSlider(background, "Ambience Volume", SoundSettingsManager.Instance.GetAmbianceVolume(), (f) => SoundSettingsManager.Instance.SetAmbianceVolume(f));
     }
 
     private VisualElement CreateItemContainer(VisualElement _parent)
