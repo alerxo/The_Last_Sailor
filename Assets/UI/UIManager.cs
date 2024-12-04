@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
@@ -9,6 +10,10 @@ public class UIManager : MonoBehaviour
     public static event UnityAction<UIState> OnStateChanged;
 
     public UIState State { get; private set; } = UIState.TitleScreen;
+    private readonly List<UIState> pauseScreens = new() { UIState.Pause, UIState.Options };
+    private readonly List<UIState> slowmoScreens = new() { UIState.Command, UIState.PostCombat };
+    private UIState optionsReturnState;
+    private bool isInTitleScreen = true;
 
     public static float UIScale = 1f;
     private const float UIScreenBaseWidth = 1920f;
@@ -43,8 +48,28 @@ public class UIManager : MonoBehaviour
         SetState(UIState.TitleScreen);
     }
 
+    public void SetStateOptions(UIState _returnState)
+    {
+        optionsReturnState = _returnState;
+        SetState(UIState.Options);
+    }
+
+    public void ReturnFromOptions()
+    {
+        SetState(optionsReturnState);
+    }
+
     public void SetState(UIState _state)
     {
+        if (_state != UIState.TitleScreen && !pauseScreens.Contains(_state))
+        {
+            isInTitleScreen = false;
+        }
+
+        if (!isInTitleScreen && pauseScreens.Contains(_state)) Time.timeScale = 0;
+        else if (!isInTitleScreen && slowmoScreens.Contains(_state)) Time.timeScale = 0.4f;
+        else Time.timeScale = 1f;
+
         State = _state;
         OnStateChanged?.Invoke(State);
 
@@ -87,6 +112,7 @@ public enum UIState
     TitleScreen,
     HUD,
     Pause,
+    Options,
     PostCombat,
     Fleet,
     Command
