@@ -5,11 +5,10 @@ using Action = Unity.Behavior.Action;
 using Unity.Properties;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "SetDestinationAtPlayerLocation", story: "[Agent] sets its destination close to the player", category: "Action", id: "6b28d345b93bda6e20dc0c47ff25a23f")]
+[NodeDescription(name: "AdmiralMoveTowardsPlayer", story: "[Agent] moves towards player", category: "Action", id: "6b28d345b93bda6e20dc0c47ff25a23f")]
 public partial class SetDestinationAtPlayerLocationAction : Action
 {
     [SerializeReference] public BlackboardVariable<EnemyAdmiralController> Agent;
-
     protected override Status OnStart()
     {
         Agent.Value.SetDestination(PlayerBoatController.Instance.transform.position);

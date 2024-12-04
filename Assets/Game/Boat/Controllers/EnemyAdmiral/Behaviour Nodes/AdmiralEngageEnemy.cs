@@ -5,7 +5,7 @@ using Action = Unity.Behavior.Action;
 using Unity.Properties;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "MoveTowardsEnemy", story: "[Agent] moves towards enemy", category: "Action", id: "f6e4d0f7cf7aae0dea241a65a581d6d3")]
+[NodeDescription(name: "AdmiralEngageEnemy", story: "[Agent] engages enemy", category: "Action", id: "f6e4d0f7cf7aae0dea241a65a581d6d3")]
 public partial class MoveTowardsEnemyAction : Action
 {
     [SerializeReference] public BlackboardVariable<EnemyAdmiralController> Agent;

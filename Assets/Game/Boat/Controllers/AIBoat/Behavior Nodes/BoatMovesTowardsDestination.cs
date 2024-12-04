@@ -10,17 +10,24 @@ public partial class BoatMovesTowardsDestination : Action
 {
     [SerializeReference] public BlackboardVariable<AIBoatController> Agent;
     public const float APROACH_DISTANCE = 100f;
-    private const float ARRIVAL_RANGE = 10f;
     private const float STOP_DISTANCE = 5f;
 
     protected override Status OnStart()
     {
-        if (!Agent.Value.Destination.HasValue || HasArrived())
+        if (!Agent.Value.Destination.HasValue)
         {
             return Status.Failure;
         }
 
         SetDistance();
+
+        if (HasArrived())
+        {
+            Agent.Value.ClearDestination();
+
+            return Status.Failure;
+        }
+
         SetEngine();
 
         return Status.Success;
@@ -29,7 +36,7 @@ public partial class BoatMovesTowardsDestination : Action
     private void SetEngine()
     {
         float throttle = Mathf.Clamp01((Agent.Value.ForwardCollisionDistance - STOP_DISTANCE) / (APROACH_DISTANCE - STOP_DISTANCE));
-        throttle = Mathf.Pow(throttle, 3);
+        throttle = Mathf.Clamp(Mathf.Pow(throttle, 3), 0.1f, 1);
         Agent.Value.Boat.Engine.ChangeTowardsThrottle(throttle * Agent.Value.Speed);
 
         Vector3 cross = Vector3.Cross((Agent.Value.transform.position - Agent.Value.Destination.Value).normalized, Agent.Value.transform.forward);
@@ -43,6 +50,6 @@ public partial class BoatMovesTowardsDestination : Action
 
     private bool HasArrived()
     {
-        return Agent.Value.Distance <= ARRIVAL_RANGE;
+        return Agent.Value.Distance <= STOP_DISTANCE;
     }
 }

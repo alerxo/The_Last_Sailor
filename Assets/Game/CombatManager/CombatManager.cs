@@ -10,14 +10,13 @@ public class CombatManager : MonoBehaviour
     public static CombatManager Instance { get; private set; }
     public static event UnityAction<Admiral> OnAdmiralInCombatChanged;
 
-    public const float RING_OF_FIRE_SIZE = 600f;
-    private const float RING_OF_FIRE_BUFFER = 700f;
-    private const float GET_POSITION_INSIDE_BUFFER_OFFSET = 50f;
-    private const float SPAWN_SIZE = 1000f;
-    private const float SPAWN_BUFFER = 300f;
+    public const float RING_OF_FIRE_SIZE = 700f;
+    private const float RING_OF_FIRE_BUFFER = 300f;
+    private const float SPAWN_SIZE = 500f;
+    private const float SPAWN_BUFFER = 100f;
 
     private const int MAX_ADMIRAL_COUNT = 3;
-    private const float SPAWN_COOLDOWN = 30f;
+    private const float SPAWN_COOLDOWN = 5f;
     private const float SPAWN_PAUSE_DURATION = 0.1f;
     private const int MIN_FLEET_SIZE = 1;
     private const int MAX_FLEET_SIZE = 1;
@@ -40,7 +39,7 @@ public class CombatManager : MonoBehaviour
 
     private void Update()
     {
-        SpawnEnemyAdmiral();
+        TrySpawnEnemyAdmiral();
 
         switch (combatState)
         {
@@ -135,21 +134,23 @@ public class CombatManager : MonoBehaviour
 
     public void EnterRingOfFire(EnemyAdmiralController _admiral)
     {
+        Assert.IsNull(AdmiralInRingOfFireBuffer);
         AdmiralInRingOfFireBuffer = _admiral;
     }
 
     public void ExitRingOfFire()
     {
+        Assert.IsNotNull(AdmiralInRingOfFireBuffer);
         AdmiralInRingOfFireBuffer = null;
     }
 
-    private void SpawnEnemyAdmiral()
+    private void TrySpawnEnemyAdmiral()
     {
         if (UIManager.Instance.State == UIState.HUD && spawnState != CombatManagerSpawnState.Spawning && admirals.Count < MAX_ADMIRAL_COUNT)
         {
-            Vector3 position = player.transform.position + (spawnState == CombatManagerSpawnState.SpawningFirstAdmiral ?
+            Vector3 position = spawnState == CombatManagerSpawnState.SpawningFirstAdmiral ?
                 GetPositionInSideRingOfFireBuffer() :
-                GetPositionOutSideRingOfFire());
+                GetPositionOutSideRingOfFire();
 
             spawnState = CombatManagerSpawnState.Spawning;
             StartCoroutine(SpawnTimer(position));
@@ -200,17 +201,17 @@ public class CombatManager : MonoBehaviour
 
     public static Vector3 GetPositionInSideRingOfFire()
     {
-        return new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * Random.Range(0, GetRingOfFireSize());
+        return PlayerBoatController.Instance.transform.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * Random.Range(0, GetRingOfFireSize());
     }
 
     public static Vector3 GetPositionInSideRingOfFireBuffer()
     {
-        return new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * (RING_OF_FIRE_SIZE + GET_POSITION_INSIDE_BUFFER_OFFSET + Random.Range(0, RING_OF_FIRE_BUFFER));
+        return PlayerBoatController.Instance.transform.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * Random.Range(RING_OF_FIRE_BUFFER, GetRingOfFireSize());
     }
 
     public static Vector3 GetPositionOutSideRingOfFire()
     {
-        return new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * (GetRingOfFireSize() + Random.Range(0, SPAWN_SIZE));
+        return PlayerBoatController.Instance.transform.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * Random.Range(GetRingOfFireSize(), GetSpawnSize());
     }
 
     public static Vector3 GetClosestPositionOutSideRingOfFire(Vector3 position)
@@ -223,9 +224,14 @@ public class CombatManager : MonoBehaviour
         return RING_OF_FIRE_SIZE + RING_OF_FIRE_BUFFER;
     }
 
+    public static float GetSpawnSize()
+    {
+        return GetRingOfFireSize() + SPAWN_SIZE;
+    }
+
     public static float GetMapSize()
     {
-        return RING_OF_FIRE_SIZE + RING_OF_FIRE_BUFFER + SPAWN_SIZE + SPAWN_BUFFER;
+        return GetSpawnSize() + SPAWN_BUFFER;
     }
 }
 

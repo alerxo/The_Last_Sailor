@@ -185,7 +185,7 @@ public class AIBoatController : MonoBehaviour
                 Boat.Repair();
                 Boat.RigidBody.linearVelocity = Vector3.zero;
                 Boat.RigidBody.angularVelocity = Vector3.zero;
-                Destination = null;
+                ClearDestination();
                 break;
 
             case AIBoatControllerState.Destruction:
@@ -213,6 +213,11 @@ public class AIBoatController : MonoBehaviour
     public void SetDestination(Vector3 _destination)
     {
         Destination = _destination;
+    }
+
+    public void ClearDestination()
+    {
+        Destination = null;
     }
 
     public void SetSpeed(float _speed)
