@@ -106,7 +106,7 @@ public class PostCombatScreen : UIScreen
             return BattleResult.Defeat;
         }
 
-        else if (!_enemyAdmiral.BoatController.Boat.IsSunk)
+        else if (!_enemyAdmiral.AIBoatController.Boat.IsSunk)
         {
             return BattleResult.Inconclusive;
         }
@@ -180,7 +180,7 @@ public class PostCombatScreen : UIScreen
         VisualElement columnContainer = CreateColumnContainer(_parent);
         CreateColumnHeader(columnContainer, $"{_admiral.Name}'s Fleet");
         ScrollView rowContainer = CreateRowScrollView(columnContainer);
-        CreateEnemyRow(rowContainer, _admiral.BoatController, _shoulCreateButtons);
+        CreateEnemyRow(rowContainer, _admiral.AIBoatController, _shoulCreateButtons);
 
         foreach (AIBoatController boatController in _admiral.Subordinates)
         {
@@ -349,7 +349,7 @@ public class PostCombatScreen : UIScreen
 
     private bool CanContinue(EnemyAdmiralController _admiral)
     {
-        return (_admiral.BoatController == null || !CanScrap(_admiral.BoatController)) && _admiral.Subordinates.All((s) => !CanScrap(s));
+        return (_admiral.AIBoatController == null || !CanScrap(_admiral.AIBoatController)) && _admiral.Subordinates.All((s) => !CanScrap(s));
     }
 
     private void CreateScrapAllButton(VisualElement _parent, EnemyAdmiralController _admiral)
@@ -366,7 +366,7 @@ public class PostCombatScreen : UIScreen
 
     private bool CanScrapAll(EnemyAdmiralController _admiral)
     {
-        return (_admiral.BoatController != null && CanScrap(_admiral.BoatController)) || _admiral.Subordinates.Any((s) => CanScrap(s));
+        return (_admiral.AIBoatController != null && CanScrap(_admiral.AIBoatController)) || _admiral.Subordinates.Any((s) => CanScrap(s));
     }
 
     private void OnScrapAll(EnemyAdmiralController _admiral)

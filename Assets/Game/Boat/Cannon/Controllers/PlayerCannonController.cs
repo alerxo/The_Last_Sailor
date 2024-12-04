@@ -19,14 +19,14 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
         cannon = GetComponentInParent<Cannon>();
 
         input = new();
-        input.Player.Fire.performed += Fire_performed;
+        input.Player.CannonFire.performed += CannonFire_performed;
         FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
     }
 
     private void OnDestroy()
     {
         input.Player.Disable();
-        input.Player.Fire.performed -= Fire_performed;
+        input.Player.CannonFire.performed -= CannonFire_performed;
         FirstPersonController.OnPlayerStateChanged -= FirstPersonController_OnPlayerStateChanged;
     }
 
@@ -53,7 +53,7 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
         }
     }
 
-    private void Fire_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    private void CannonFire_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
         if (cannon.State == CannonState.Ready)
         {

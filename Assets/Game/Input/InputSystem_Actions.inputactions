@@ -24,6 +24,24 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "ChangeCamera",
+                    "type": "Button",
+                    "id": "5bbb54a3-9e5f-42ba-a9b1-2fe886b1a849",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CameraZoom",
+                    "type": "Value",
+                    "id": "7d28ed36-400b-479c-89bb-3dc0927977e8",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Interact",
                     "type": "Button",
                     "id": "852140f2-7766-474d-8707-702459ba45f3",
@@ -33,7 +51,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Fire",
+                    "name": "CannonFire",
                     "type": "Button",
                     "id": "79b78312-02fc-46a0-ab7f-a3265d6ad85d",
                     "expectedControlType": "",
@@ -69,15 +87,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeCamera",
-                    "type": "Button",
-                    "id": "5bbb54a3-9e5f-42ba-a9b1-2fe886b1a849",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "CommandSelect",
                     "type": "Button",
                     "id": "708da9f7-b261-4680-a91c-e8412e2ce2e5",
@@ -96,13 +105,31 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "CameraZoom",
-                    "type": "Value",
-                    "id": "7d28ed36-400b-479c-89bb-3dc0927977e8",
-                    "expectedControlType": "Axis",
+                    "name": "FirstCommand",
+                    "type": "Button",
+                    "id": "701470c9-583b-485f-837b-a7a9ac93568d",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SecondCommand",
+                    "type": "Button",
+                    "id": "f07b912c-1aaa-44da-a53e-1d495b07fc19",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ThirdCommand",
+                    "type": "Button",
+                    "id": "a053b3cd-9df4-4142-97be-373d9b366bb1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -377,7 +404,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Fire",
+                    "action": "CannonFire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -446,6 +473,39 @@
                     "action": "CameraZoom",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "7935ade4-bc35-4b80-8171-2a031c913ed6",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "FirstCommand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b3a93a2e-4519-44ab-a22d-13838eb3b3f3",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "SecondCommand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "23c0c218-872d-4aea-b97d-5b176533ca35",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ThirdCommand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

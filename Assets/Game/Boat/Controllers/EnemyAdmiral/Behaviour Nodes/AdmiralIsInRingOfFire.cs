@@ -5,7 +5,7 @@ using Action = Unity.Behavior.Action;
 using Unity.Properties;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "IsInRingOfFire", story: "[Agent] is in ring of fire [IsInverted] Invert", category: "Action", id: "0580de8e12e2e973c0db4a76574826bf")]
+[NodeDescription(name: "AdmiralIsInRingOfFire", story: "Is [Agent] in ring of fire. Invert [IsInverted]", category: "Action", id: "0580de8e12e2e973c0db4a76574826bf")]
 public partial class IsInRingOfFireAction : Action
 {
     [SerializeReference] public BlackboardVariable<EnemyAdmiralController> Agent;

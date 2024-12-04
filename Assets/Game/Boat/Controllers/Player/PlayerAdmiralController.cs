@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class PlayerAdmiralController : Admiral
 {
-    public PlayerBoatController BoatController { get; private set; }
+    public PlayerBoatController PlayerBoatController { get; private set; }
 
     private int subordinateNumber = 0;
 
     public void Awake()
     {
-        BoatController = GetComponent<PlayerBoatController>();
+        PlayerBoatController = GetComponent<PlayerBoatController>();
 
         SetName("Player");
     }

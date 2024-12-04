@@ -46,6 +46,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""ChangeCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""5bbb54a3-9e5f-42ba-a9b1-2fe886b1a849"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CameraZoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""7d28ed36-400b-479c-89bb-3dc0927977e8"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""852140f2-7766-474d-8707-702459ba45f3"",
@@ -55,7 +73,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Fire"",
+                    ""name"": ""CannonFire"",
                     ""type"": ""Button"",
                     ""id"": ""79b78312-02fc-46a0-ab7f-a3265d6ad85d"",
                     ""expectedControlType"": """",
@@ -91,15 +109,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ChangeCamera"",
-                    ""type"": ""Button"",
-                    ""id"": ""5bbb54a3-9e5f-42ba-a9b1-2fe886b1a849"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""CommandSelect"",
                     ""type"": ""Button"",
                     ""id"": ""708da9f7-b261-4680-a91c-e8412e2ce2e5"",
@@ -118,13 +127,31 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""CameraZoom"",
-                    ""type"": ""Value"",
-                    ""id"": ""7d28ed36-400b-479c-89bb-3dc0927977e8"",
-                    ""expectedControlType"": ""Axis"",
+                    ""name"": ""FirstCommand"",
+                    ""type"": ""Button"",
+                    ""id"": ""701470c9-583b-485f-837b-a7a9ac93568d"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SecondCommand"",
+                    ""type"": ""Button"",
+                    ""id"": ""f07b912c-1aaa-44da-a53e-1d495b07fc19"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ThirdCommand"",
+                    ""type"": ""Button"",
+                    ""id"": ""a053b3cd-9df4-4142-97be-373d9b366bb1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -399,7 +426,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Fire"",
+                    ""action"": ""CannonFire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -468,6 +495,39 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""CameraZoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7935ade4-bc35-4b80-8171-2a031c913ed6"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""FirstCommand"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b3a93a2e-4519-44ab-a22d-13838eb3b3f3"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SecondCommand"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""23c0c218-872d-4aea-b97d-5b176533ca35"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ThirdCommand"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1055,15 +1115,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
+        m_Player_ChangeCamera = m_Player.FindAction("ChangeCamera", throwIfNotFound: true);
+        m_Player_CameraZoom = m_Player.FindAction("CameraZoom", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
-        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+        m_Player_CannonFire = m_Player.FindAction("CannonFire", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
-        m_Player_ChangeCamera = m_Player.FindAction("ChangeCamera", throwIfNotFound: true);
         m_Player_CommandSelect = m_Player.FindAction("CommandSelect", throwIfNotFound: true);
         m_Player_CommandDeselect = m_Player.FindAction("CommandDeselect", throwIfNotFound: true);
-        m_Player_CameraZoom = m_Player.FindAction("CameraZoom", throwIfNotFound: true);
+        m_Player_FirstCommand = m_Player.FindAction("FirstCommand", throwIfNotFound: true);
+        m_Player_SecondCommand = m_Player.FindAction("SecondCommand", throwIfNotFound: true);
+        m_Player_ThirdCommand = m_Player.FindAction("ThirdCommand", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1145,30 +1208,36 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Look;
+    private readonly InputAction m_Player_ChangeCamera;
+    private readonly InputAction m_Player_CameraZoom;
     private readonly InputAction m_Player_Interact;
-    private readonly InputAction m_Player_Fire;
+    private readonly InputAction m_Player_CannonFire;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Escape;
-    private readonly InputAction m_Player_ChangeCamera;
     private readonly InputAction m_Player_CommandSelect;
     private readonly InputAction m_Player_CommandDeselect;
-    private readonly InputAction m_Player_CameraZoom;
+    private readonly InputAction m_Player_FirstCommand;
+    private readonly InputAction m_Player_SecondCommand;
+    private readonly InputAction m_Player_ThirdCommand;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
         public PlayerActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Look => m_Wrapper.m_Player_Look;
+        public InputAction @ChangeCamera => m_Wrapper.m_Player_ChangeCamera;
+        public InputAction @CameraZoom => m_Wrapper.m_Player_CameraZoom;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
-        public InputAction @Fire => m_Wrapper.m_Player_Fire;
+        public InputAction @CannonFire => m_Wrapper.m_Player_CannonFire;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
-        public InputAction @ChangeCamera => m_Wrapper.m_Player_ChangeCamera;
         public InputAction @CommandSelect => m_Wrapper.m_Player_CommandSelect;
         public InputAction @CommandDeselect => m_Wrapper.m_Player_CommandDeselect;
-        public InputAction @CameraZoom => m_Wrapper.m_Player_CameraZoom;
+        public InputAction @FirstCommand => m_Wrapper.m_Player_FirstCommand;
+        public InputAction @SecondCommand => m_Wrapper.m_Player_SecondCommand;
+        public InputAction @ThirdCommand => m_Wrapper.m_Player_ThirdCommand;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1184,12 +1253,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
+            @ChangeCamera.started += instance.OnChangeCamera;
+            @ChangeCamera.performed += instance.OnChangeCamera;
+            @ChangeCamera.canceled += instance.OnChangeCamera;
+            @CameraZoom.started += instance.OnCameraZoom;
+            @CameraZoom.performed += instance.OnCameraZoom;
+            @CameraZoom.canceled += instance.OnCameraZoom;
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
-            @Fire.started += instance.OnFire;
-            @Fire.performed += instance.OnFire;
-            @Fire.canceled += instance.OnFire;
+            @CannonFire.started += instance.OnCannonFire;
+            @CannonFire.performed += instance.OnCannonFire;
+            @CannonFire.canceled += instance.OnCannonFire;
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
@@ -1199,18 +1274,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Escape.started += instance.OnEscape;
             @Escape.performed += instance.OnEscape;
             @Escape.canceled += instance.OnEscape;
-            @ChangeCamera.started += instance.OnChangeCamera;
-            @ChangeCamera.performed += instance.OnChangeCamera;
-            @ChangeCamera.canceled += instance.OnChangeCamera;
             @CommandSelect.started += instance.OnCommandSelect;
             @CommandSelect.performed += instance.OnCommandSelect;
             @CommandSelect.canceled += instance.OnCommandSelect;
             @CommandDeselect.started += instance.OnCommandDeselect;
             @CommandDeselect.performed += instance.OnCommandDeselect;
             @CommandDeselect.canceled += instance.OnCommandDeselect;
-            @CameraZoom.started += instance.OnCameraZoom;
-            @CameraZoom.performed += instance.OnCameraZoom;
-            @CameraZoom.canceled += instance.OnCameraZoom;
+            @FirstCommand.started += instance.OnFirstCommand;
+            @FirstCommand.performed += instance.OnFirstCommand;
+            @FirstCommand.canceled += instance.OnFirstCommand;
+            @SecondCommand.started += instance.OnSecondCommand;
+            @SecondCommand.performed += instance.OnSecondCommand;
+            @SecondCommand.canceled += instance.OnSecondCommand;
+            @ThirdCommand.started += instance.OnThirdCommand;
+            @ThirdCommand.performed += instance.OnThirdCommand;
+            @ThirdCommand.canceled += instance.OnThirdCommand;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1221,12 +1299,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
+            @ChangeCamera.started -= instance.OnChangeCamera;
+            @ChangeCamera.performed -= instance.OnChangeCamera;
+            @ChangeCamera.canceled -= instance.OnChangeCamera;
+            @CameraZoom.started -= instance.OnCameraZoom;
+            @CameraZoom.performed -= instance.OnCameraZoom;
+            @CameraZoom.canceled -= instance.OnCameraZoom;
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
-            @Fire.started -= instance.OnFire;
-            @Fire.performed -= instance.OnFire;
-            @Fire.canceled -= instance.OnFire;
+            @CannonFire.started -= instance.OnCannonFire;
+            @CannonFire.performed -= instance.OnCannonFire;
+            @CannonFire.canceled -= instance.OnCannonFire;
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
@@ -1236,18 +1320,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Escape.started -= instance.OnEscape;
             @Escape.performed -= instance.OnEscape;
             @Escape.canceled -= instance.OnEscape;
-            @ChangeCamera.started -= instance.OnChangeCamera;
-            @ChangeCamera.performed -= instance.OnChangeCamera;
-            @ChangeCamera.canceled -= instance.OnChangeCamera;
             @CommandSelect.started -= instance.OnCommandSelect;
             @CommandSelect.performed -= instance.OnCommandSelect;
             @CommandSelect.canceled -= instance.OnCommandSelect;
             @CommandDeselect.started -= instance.OnCommandDeselect;
             @CommandDeselect.performed -= instance.OnCommandDeselect;
             @CommandDeselect.canceled -= instance.OnCommandDeselect;
-            @CameraZoom.started -= instance.OnCameraZoom;
-            @CameraZoom.performed -= instance.OnCameraZoom;
-            @CameraZoom.canceled -= instance.OnCameraZoom;
+            @FirstCommand.started -= instance.OnFirstCommand;
+            @FirstCommand.performed -= instance.OnFirstCommand;
+            @FirstCommand.canceled -= instance.OnFirstCommand;
+            @SecondCommand.started -= instance.OnSecondCommand;
+            @SecondCommand.performed -= instance.OnSecondCommand;
+            @SecondCommand.canceled -= instance.OnSecondCommand;
+            @ThirdCommand.started -= instance.OnThirdCommand;
+            @ThirdCommand.performed -= instance.OnThirdCommand;
+            @ThirdCommand.canceled -= instance.OnThirdCommand;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1432,15 +1519,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
+        void OnChangeCamera(InputAction.CallbackContext context);
+        void OnCameraZoom(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
-        void OnFire(InputAction.CallbackContext context);
+        void OnCannonFire(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
-        void OnChangeCamera(InputAction.CallbackContext context);
         void OnCommandSelect(InputAction.CallbackContext context);
         void OnCommandDeselect(InputAction.CallbackContext context);
-        void OnCameraZoom(InputAction.CallbackContext context);
+        void OnFirstCommand(InputAction.CallbackContext context);
+        void OnSecondCommand(InputAction.CallbackContext context);
+        void OnThirdCommand(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

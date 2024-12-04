@@ -5,7 +5,7 @@ using Action = Unity.Behavior.Action;
 using Unity.Properties;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "IsInsideMap", story: "[Agent] is inside map [IsInverted] Invert", category: "Action", id: "ea0391b5ac16799b4b39255bce26c0be")]
+[NodeDescription(name: "AdmiralIsInMap", story: "Is [Agent] in map. Invert [IsInverted]", category: "Action", id: "ea0391b5ac16799b4b39255bce26c0be")]
 public partial class IsInsideMapAction : Action
 {
     [SerializeReference] public BlackboardVariable<EnemyAdmiralController> Agent;

@@ -114,7 +114,14 @@ public class CommandScreen : UIScreen
         float adjacent = Camera.main.transform.position.y;
         float hypotenuse = adjacent / Mathf.Cos(theta * Mathf.Deg2Rad);
         Vector3 hit = _ray.origin + (_ray.direction * hypotenuse);
+
         current.SetFormationPosition(PlayerBoatController.Instance.transform.InverseTransformVector(hit - PlayerBoatController.Instance.transform.position));
+
+        if (current.Command == Command.Unassigned)
+        {
+            current.SetCommand(Command.Formation);
+        }
+
         commandItems[current].SetDescription();
         commandItems[current].StopMoveTrail();
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Behavior;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
@@ -63,5 +64,21 @@ public abstract class Admiral : MonoBehaviour
     protected void SetName(string _name)
     {
         Name = _name;
+    }
+
+    public void SetCommandForSubordinates(int _command)
+    {
+        SetCommandForSubordinates((Command)_command);
+    }
+
+    public void SetCommandForSubordinates(Command _command)
+    {
+        foreach (AIBoatController boatController in Subordinates)
+        {
+            if (!boatController.Boat.IsSunk)
+            {
+                boatController.SetCommand(_command);
+            }
+        }
     }
 }

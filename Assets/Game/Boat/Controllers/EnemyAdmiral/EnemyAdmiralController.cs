@@ -1,8 +1,10 @@
+using Unity.Behavior;
 using UnityEngine;
 
 public class EnemyAdmiralController : Admiral
 {
-    public AIBoatController BoatController { get; private set; }
+    private BehaviorGraphAgent behaviourAgent;
+    public AIBoatController AIBoatController { get; private set; }
 
     private const float MAX_ACCEPTABLE_LONGEST_SUBORDINATE_DISTANCE = 300f;
     private const float ACCEPTABLE_LONGEST_SUBORDINATE_MARGIN = 10f;
@@ -24,14 +26,15 @@ public class EnemyAdmiralController : Admiral
 
     public void Awake()
     {
-        formation = (Formation)Random.Range(0, 3);
-
+        behaviourAgent = GetComponent<BehaviorGraphAgent>();
         SetName("Admiral Johnson");
     }
 
     public void SetController(AIBoatController controller)
     {
-        BoatController = controller;
+        AIBoatController = controller;
+        behaviourAgent.GetVariable("BoatController", out BlackboardVariable variable);
+        variable.ObjectValue = AIBoatController;
     }
 
     public void SpawnSubordinate(Vector3 position)
@@ -43,9 +46,14 @@ public class EnemyAdmiralController : Admiral
 
     public void SetDestination(Vector3 position)
     {
-        BoatController.SetDestination(position);
-        float distance = Mathf.Clamp(longestSubordinateDistance - MoveTowardsDestination.APROACH_DISTANCE - ACCEPTABLE_LONGEST_SUBORDINATE_MARGIN, 0, MAX_ACCEPTABLE_LONGEST_SUBORDINATE_DISTANCE);
-        BoatController.SetSpeed(Mathf.Lerp(1f, WAIT_ON_SUBORDINATE_CATCHUP_SPEED, distance / MAX_ACCEPTABLE_LONGEST_SUBORDINATE_DISTANCE));
+        AIBoatController.SetDestination(position);
+        float distance = Mathf.Clamp(longestSubordinateDistance - BoatMovesTowardsDestination.APROACH_DISTANCE - ACCEPTABLE_LONGEST_SUBORDINATE_MARGIN, 0, MAX_ACCEPTABLE_LONGEST_SUBORDINATE_DISTANCE);
+        AIBoatController.SetSpeed(Mathf.Lerp(1f, WAIT_ON_SUBORDINATE_CATCHUP_SPEED, distance / MAX_ACCEPTABLE_LONGEST_SUBORDINATE_DISTANCE));
+    }
+
+    public void GetRandomFormation()
+    {
+        formation = (Formation)Random.Range(0, 3);
     }
 
     public void SetFleetFormation()
