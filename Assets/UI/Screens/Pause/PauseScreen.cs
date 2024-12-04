@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -6,22 +7,8 @@ using UnityEngine.UIElements;
 public class PauseScreen : UIScreen
 {
     protected override UIState ActiveState => UIState.Pause;
+
     [SerializeField] private Texture2D backgroundImage;
-
-    private void Awake()
-    {
-        UIManager.OnStateChanged += UIManager_OnStateChanged;
-    }
-
-    private void OnDestroy()
-    {
-        UIManager.OnStateChanged -= UIManager_OnStateChanged;
-    }
-
-    private void UIManager_OnStateChanged(UIState _state)
-    {
-        Time.timeScale = _state == UIState.Pause ? 0 : 1;
-    }
 
     public override void Generate()
     {
@@ -44,7 +31,7 @@ public class PauseScreen : UIScreen
         background.Add(buttons);
 
         CreateButton(buttons, "-Resume-", () => UIManager.Instance.SetState(UIState.HUD));
-        CreateButton(buttons, "-Options-", () => throw new NotImplementedException());
+        CreateButton(buttons, "-Options-", () => UIManager.Instance.SetStateOptions(UIState.Pause));
         CreateButton(buttons, "-Main Menu-", OnMainMenu);
     }
 

@@ -216,8 +216,6 @@ public class CommandScreen : UIScreen
             {
                 item.Activate();
             }
-
-            Time.timeScale = 0.5f;
         }
 
         else
@@ -232,8 +230,6 @@ public class CommandScreen : UIScreen
             {
                 item.Deactivate(inactiveMaterial);
             }
-
-            Time.timeScale = 1f;
         }
     }
 

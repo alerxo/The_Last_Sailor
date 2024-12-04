@@ -24,7 +24,7 @@ public class TitleScreen : UIScreen
         background.Add(buttons);
 
         CreateButton(buttons, "-Play-", OnPlay);
-        CreateButton(buttons, "-Options-", () => throw new NotImplementedException());
+        CreateButton(buttons, "-Options-", () => UIManager.Instance.SetStateOptions(UIState.TitleScreen));
         CreateButton(buttons, "-Quit-", () => Application.Quit());
     }
 
