@@ -381,6 +381,7 @@ MonoBehaviour:
   audioSource: {fileID: 1065205882141152369}
   repair: {fileID: 8300000, guid: ee37ce4ccd1f9f44e8ffb47e009369fb, type: 3}
   scrap: {fileID: 8300000, guid: 63ed7694dc1c59a4daf17026c3eca274, type: 3}
+  Seize: {fileID: 8300000, guid: 0789fd2d823ccf84da5db0728f8de2ab, type: 3}
 --- !u!82 &1065205882141152369
 AudioSource:
   m_ObjectHideFlags: 0
