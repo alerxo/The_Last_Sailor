@@ -38,6 +38,7 @@ public class Cannon : MonoBehaviour, IUpgradeable
     [SerializeField] private Transform explosionPoint;
     [SerializeField] private AudioClip reloadClip;
     [SerializeField] private AudioClip sizzlingClip;
+    [SerializeField] private AudioClip fireClip;
 
     private ParticleSystem[] particleSystems;
     private AudioSource audioSource;
@@ -100,7 +101,7 @@ public class Cannon : MonoBehaviour, IUpgradeable
             particleSystem.Play();
         }
 
-        audioSource.Play();
+        audioSource.PlayOneShot(fireClip);
 
         State = CannonState.Reloading;
         StartCoroutine(ReloadTimer());
