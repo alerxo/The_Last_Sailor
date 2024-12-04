@@ -14,6 +14,7 @@ public class AIBoatController : MonoBehaviour
 
     public Command Command { get; private set; } = Command.Unassigned;
     public Vector3? FormationPosition { get; private set; }
+    public Vector3? HoldPosition { get; private set; }
     public Vector3? Destination { get; private set; }
     public float Speed { get; private set; } = 1f;
     public float Distance { get; private set; }
@@ -185,7 +186,7 @@ public class AIBoatController : MonoBehaviour
                 Boat.Repair();
                 Boat.RigidBody.linearVelocity = Vector3.zero;
                 Boat.RigidBody.angularVelocity = Vector3.zero;
-                ClearDestination();
+                SetDestination(null);
                 break;
 
             case AIBoatControllerState.Destruction:
@@ -202,22 +203,45 @@ public class AIBoatController : MonoBehaviour
 
     public void SetCommand(Command _command)
     {
+        switch (_command)
+        {
+            case Command.Unassigned:
+                SetHoldPosition(null);
+                SetDestination(null);
+                break;
+
+            case Command.Formation:
+                SetHoldPosition(null);
+                SetDestination(null);
+                break;
+
+            case Command.Hold:
+                SetHoldPosition(FormationPosition);
+                SetDestination(null);
+                break;
+
+            case Command.Charge:
+                SetHoldPosition(null);
+                SetDestination(null);
+                break;
+        }
+
         Command = _command;
     }
 
-    public void SetFormationPosition(Vector3 _position)
+    public void SetFormationPosition(Vector3? _position)
     {
         FormationPosition = _position;
     }
 
-    public void SetDestination(Vector3 _destination)
+    public void SetHoldPosition(Vector3? _position)
     {
-        Destination = _destination;
+        HoldPosition = _position;
     }
 
-    public void ClearDestination()
+    public void SetDestination(Vector3? _destination)
     {
-        Destination = null;
+        Destination = _destination;
     }
 
     public void SetSpeed(float _speed)

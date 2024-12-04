@@ -23,7 +23,7 @@ public partial class BoatMovesTowardsDestination : Action
 
         if (HasArrived())
         {
-            Agent.Value.ClearDestination();
+            Agent.Value.SetDestination(null);
 
             return Status.Failure;
         }

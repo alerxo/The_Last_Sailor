@@ -9,6 +9,6 @@ public enum Command
 {
     Unassigned = 0,
     Formation = 1,
-    Disperse = 2,
+    Hold = 2,
     Charge = 3
 }

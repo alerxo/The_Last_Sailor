@@ -5,8 +5,8 @@ using Action = Unity.Behavior.Action;
 using Unity.Properties;
 
 [Serializable, GeneratePropertyBag]
-[NodeDescription(name: "BoatDisperseCommand", story: "[Agent] disperses", category: "Action", id: "b0070ae74b0df0810fc4acbda6eae196")]
-public partial class BoatDisperseCommandAction : Action
+[NodeDescription(name: "BoatChargeCommand", story: "[Agent] charges enemy", category: "Action", id: "0c9af263cfa955f25da88aaa83cefb44")]
+public partial class BoatChargeCommandAction : Action
 {
     [SerializeReference] public BlackboardVariable<AIBoatController> Agent;
 
@@ -14,7 +14,7 @@ public partial class BoatDisperseCommandAction : Action
 
     protected override Status OnStart()
     {
-        if (Agent.Value.Admiral.Enemy == null)
+        if (Agent.Value.Admiral == null || Agent.Value.Admiral.Enemy == null)
         {
             return Status.Failure;
         }
