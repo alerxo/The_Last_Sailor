@@ -12,11 +12,11 @@ public class AIBoatController : MonoBehaviour
     private const float FORWARD_COLLISION_COOLDOWN = 1f;
     public float ForwardCollisionDistance { get; private set; }
 
+    public Command Command { get; private set; } = Command.Unassigned;
     public Vector3? FormationPosition { get; private set; }
     public Vector3? Destination { get; private set; }
     public float Speed { get; private set; } = 1f;
     public float Distance { get; private set; }
-    public Vector3 Cross { get; private set; }
 
     private float destructionTimer;
     private const float DESTRUCTION_COOLDOWN = 1f;
@@ -50,7 +50,6 @@ public class AIBoatController : MonoBehaviour
         {
             case AIBoatControllerState.Active:
                 TryCheckForCollisions();
-                TrySetDestination();
                 DrawDebug();
                 break;
 
@@ -69,26 +68,13 @@ public class AIBoatController : MonoBehaviour
         }
     }
 
-    private void TrySetDestination()
-    {
-        if (FormationPosition.HasValue)
-        {
-            SetDestination(GetFormationPositionInWorld());
-        }
-    }
-
-    public Vector3 GetFormationPositionInWorld()
-    {
-        return Admiral.transform.position + Admiral.transform.TransformVector(FormationPosition.Value);
-    }
-
     private void CheckForwardCollision()
     {
         float distance = Distance;
 
         foreach (Transform ray in rays)
         {
-            if (Physics.Raycast(ray.position, ray.forward, out RaycastHit hit, MoveTowardsDestination.APROACH_DISTANCE))
+            if (Physics.Raycast(ray.position, ray.forward, out RaycastHit hit, BoatMovesTowardsDestination.APROACH_DISTANCE))
             {
                 distance = Mathf.Min(hit.distance, distance);
 
@@ -104,6 +90,11 @@ public class AIBoatController : MonoBehaviour
         ForwardCollisionDistance = distance;
     }
 
+    public Vector3 GetFormationPositionInWorld()
+    {
+        return Admiral.transform.position + Admiral.transform.TransformVector(FormationPosition.Value);
+    }
+
     private void Boat_OnDestroyed()
     {
         Destination = null;
@@ -116,6 +107,7 @@ public class AIBoatController : MonoBehaviour
         RemoveFromFleet();
         Boat.SetName(PlayerBoatController.Instance.AdmiralController.GetSubordinateName());
         Boat.Repair();
+        SetCommand(Command.Unassigned);
         _admiral.AddSubordinate(Boat);
     }
 
@@ -149,6 +141,7 @@ public class AIBoatController : MonoBehaviour
         admiralController.SetOwner(Boat);
         admiralController.SetController(this);
         SetAdmiral(admiralController);
+        SetCommand(Command.Unassigned);
         Boat.SetName($"{admiralController.Name}'s Boat");
 
         return admiralController;
@@ -161,6 +154,14 @@ public class AIBoatController : MonoBehaviour
         admiralController.RemoveOwner();
         SetAdmiral(null);
         ObjectPoolManager.Instance.Release(admiralController);
+    }
+
+    private void PendingDestructionState()
+    {
+        if ((destructionTimer -= Time.deltaTime) <= 0)
+        {
+            SetState(AIBoatControllerState.Destruction);
+        }
     }
 
     private void SetState(AIBoatControllerState _state)
@@ -194,17 +195,14 @@ public class AIBoatController : MonoBehaviour
         }
     }
 
-    private void PendingDestructionState()
-    {
-        if ((destructionTimer -= Time.deltaTime) <= 0)
-        {
-            SetState(AIBoatControllerState.Destruction);
-        }
-    }
-
     public void SetAdmiral(Admiral _admiral)
     {
         Admiral = _admiral;
+    }
+
+    public void SetCommand(Command _command)
+    {
+        Command = _command;
     }
 
     public void SetFormationPosition(Vector3 _position)
@@ -225,11 +223,6 @@ public class AIBoatController : MonoBehaviour
     public void SetDistance(float _distance)
     {
         Distance = _distance;
-    }
-
-    public void SetCross(Vector3 _cross)
-    {
-        Cross = _cross;
     }
 
     private void DrawDebug()

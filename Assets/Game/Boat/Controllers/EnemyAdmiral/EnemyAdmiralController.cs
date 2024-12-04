@@ -39,12 +39,13 @@ public class EnemyAdmiralController : Admiral
         AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController>(position, transform.rotation);
         AddSubordinate(subordinate.Boat);
         subordinate.Boat.SetName(GetSubordinateName());
+        subordinate.SetCommand(Command.Formation);
     }
 
     public void SetDestination(Vector3 position)
     {
         BoatController.SetDestination(position);
-        float distance = Mathf.Clamp(longestSubordinateDistance - MoveTowardsDestination.APROACH_DISTANCE - ACCEPTABLE_LONGEST_SUBORDINATE_MARGIN, 0, MAX_ACCEPTABLE_LONGEST_SUBORDINATE_DISTANCE);
+        float distance = Mathf.Clamp(longestSubordinateDistance - BoatMovesTowardsDestination.APROACH_DISTANCE - ACCEPTABLE_LONGEST_SUBORDINATE_MARGIN, 0, MAX_ACCEPTABLE_LONGEST_SUBORDINATE_DISTANCE);
         BoatController.SetSpeed(Mathf.Lerp(1f, WAIT_ON_SUBORDINATE_CATCHUP_SPEED, distance / MAX_ACCEPTABLE_LONGEST_SUBORDINATE_DISTANCE));
     }
 
