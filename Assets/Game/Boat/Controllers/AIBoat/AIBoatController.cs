@@ -216,7 +216,7 @@ public class AIBoatController : MonoBehaviour
                 break;
 
             case Command.Hold:
-                SetHoldPosition(FormationPosition);
+                SetHoldPosition(GetFormationPositionInWorld());
                 SetDestination(null);
                 break;
 
