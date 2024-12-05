@@ -102,7 +102,7 @@ public class AIBoatController : MonoBehaviour
         SetFormationPosition(null);
         SetHoldPosition(null);
         SetDestination(null);
-        SetCommand(Command.Unassigned);
+        TrySetCommand(Command.Unassigned);
         Boat.StartSinkAtSurface();
     }
 
@@ -111,7 +111,7 @@ public class AIBoatController : MonoBehaviour
         RemoveFromFleet();
         Boat.SetName(PlayerBoatController.Instance.AdmiralController.GetSubordinateName());
         Boat.Repair();
-        SetCommand(_admiral.Command);
+        TrySetCommand(_admiral.Command);
         _admiral.AddSubordinate(Boat);
     }
 
@@ -145,7 +145,7 @@ public class AIBoatController : MonoBehaviour
         admiralController.SetOwner(Boat);
         admiralController.SetController(this);
         SetAdmiral(admiralController);
-        SetCommand(Command.Unassigned);
+        TrySetCommand(Command.Unassigned);
         Boat.SetName($"{admiralController.Name}'s Boat");
 
         return admiralController;
@@ -197,9 +197,37 @@ public class AIBoatController : MonoBehaviour
         }
     }
 
-    public void SetCommand(Command _command)
+    public void TrySetCommand(Command _command)
     {
-        if (Boat.IsSunk || _command == Command) return;
+        if (Boat.IsSunk) return;
+
+        switch (_command)
+        {
+            case Command.Unassigned:
+                SetCommand(Command.Unassigned);
+                break;
+
+            case Command.Formation when FormationPosition.HasValue:
+                SetCommand(Command.Formation);
+                break;
+
+            case Command.Hold when FormationPosition.HasValue:
+                SetCommand(Command.Hold);
+                break;
+
+            case Command.Charge:
+                SetCommand(Command.Charge);
+                break;
+
+            default:
+                SetCommand(Command.Unassigned);
+                break;
+        }
+    }
+
+    private void SetCommand(Command _command)
+    {
+        if (_command == Command) return;
 
         switch (_command)
         {

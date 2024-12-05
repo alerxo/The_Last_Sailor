@@ -162,7 +162,6 @@ public class CombatManager : MonoBehaviour
 
     public void ExitRingOfFire()
     {
-        Assert.IsNotNull(AdmiralInRingOfFireBuffer);
         AdmiralInRingOfFireBuffer = null;
     }
 

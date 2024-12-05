@@ -112,10 +112,9 @@ public class FormationScreen : UIScreen
 
         if (current.Command == Command.Unassigned)
         {
-            current.SetCommand(Command.Formation);
+            current.TrySetCommand(Command.Formation);
         }
 
-        commandItems[current].SetDescription();
         commandItems[current].StopMoveTrail();
     }
 
@@ -153,6 +152,8 @@ public class FormationScreen : UIScreen
         boatItemContainer.AddToClassList("formation-boat-item-container");
         boatItemContainer.RegisterCallback<MouseEnterEvent>(evt => canClickWater = false);
         boatItemContainer.RegisterCallback<MouseLeaveEvent>(evt => canClickWater = true);
+        boatItemContainer.verticalScroller.highButton.RemoveFromHierarchy();
+        boatItemContainer.verticalScroller.lowButton.RemoveFromHierarchy();
         background.Add(boatItemContainer);
 
         CreatePlayerItem(boatItemContainer, PlayerBoatController.Instance.Boat);
@@ -240,7 +241,6 @@ public class FormationScreen : UIScreen
                 Instantiate(wayPointPrefab, transform),
                 Instantiate(trailPrefab, transform),
                 CreateSuborinateItem(boatItemContainer, _boatController)));
-            commandItems[_boatController].SetDescription();
             commandItems[_boatController].Deactivate(defaultMaterial);
         }
 
@@ -278,11 +278,16 @@ public class FormationScreen : UIScreen
 
         public void SetDescription()
         {
-            Description.text = $"{(BoatController.FormationPosition.HasValue ? "In formation" : "Unassigned")}";
+            Description.text = $"{BoatController.Command}";
         }
 
         public void Update(AIBoatController _current, Material _defaultMaterial, Material _selectedMaterial, Material _formationMaterial, Material _holdMaterial, Material _chargeMaterial)
         {
+            if (Description.text != $"{BoatController.Command}")
+            {
+                Description.text = $"{BoatController.Command}";
+            }
+
             switch (BoatController.Command)
             {
                 case Command.Unassigned when _current == BoatController:

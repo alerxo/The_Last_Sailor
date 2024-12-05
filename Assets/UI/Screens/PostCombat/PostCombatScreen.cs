@@ -344,7 +344,7 @@ public class PostCombatScreen : UIScreen
 
     private void CreateScrapAllButton(VisualElement _parent, EnemyAdmiralController _admiral)
     {
-        Button button = new(() => OnScrapAll(_admiral));
+        Button button = new(OnScrapAll);
         button.AddToClassList("post-combat-button");
         button.AddToClassList("post-combat-navigation-button");
         SetFontSize(button, 35);
@@ -359,7 +359,7 @@ public class PostCombatScreen : UIScreen
         return (_admiral.AIBoatController != null && CanScrap(_admiral.AIBoatController)) || _admiral.Subordinates.Any((s) => CanScrap(s));
     }
 
-    private void OnScrapAll(EnemyAdmiralController _admiral)
+    private void OnScrapAll()
     {
         foreach (Action action in scrapActions)
         {
