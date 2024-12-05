@@ -99,4 +99,6 @@ public class EnemyAdmiralController : Admiral
     {
         return $"Enemy Boat {Subordinates.Count}";
     }
+
+    public bool IsSunk() => AIBoatController == null;
 }

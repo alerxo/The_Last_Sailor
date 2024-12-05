@@ -29,11 +29,13 @@ public class PostCombatScreen : UIScreen
         Instance = this;
 
         ResourceManager.OnResourceAmountChanged += ResourceManager_OnResourceAmountChanged;
+        CombatManager.OnBattleConcluded += CombatManager_OnBattleConcluded;
     }
 
     private void OnDestroy()
     {
         ResourceManager.OnResourceAmountChanged -= ResourceManager_OnResourceAmountChanged;
+        CombatManager.OnBattleConcluded -= CombatManager_OnBattleConcluded;
     }
 
     private void ResourceManager_OnResourceAmountChanged(float _amount)
@@ -42,6 +44,11 @@ public class PostCombatScreen : UIScreen
 
         resourceCount.text = ((int)_amount).ToString();
         EvaluateButtons();
+    }
+
+    private void CombatManager_OnBattleConcluded(BattleResult _result)
+    {
+        CreateBattleResults(CombatManager.Instance.AdmiralInCombat, _result);
     }
 
     public override void Generate()
@@ -61,17 +68,15 @@ public class PostCombatScreen : UIScreen
         postCombatButtons.ForEach((b) => b.Evaluate());
     }
 
-    public void CreateBattleResults(EnemyAdmiralController _enemyAdmiralController)
+    public void CreateBattleResults(EnemyAdmiralController _enemyAdmiralController, BattleResult _result)
     {
         postCombatButtons.Clear();
         scrapActions.Clear();
         background.Clear();
 
-        BattleResult battleResult = GetBattleResult(_enemyAdmiralController);
+        CreateHeader(background, _result);
 
-        CreateHeader(background, battleResult);
-
-        if (battleResult != BattleResult.Defeat)
+        if (_result != BattleResult.Defeat)
         {
             Box battleResultsContainer = CreateBattleResultsContainer();
 
@@ -97,21 +102,6 @@ public class PostCombatScreen : UIScreen
         }
 
         ResourceManager_OnResourceAmountChanged(ResourceManager.Instance.Amount);
-    }
-
-    public BattleResult GetBattleResult(EnemyAdmiralController _enemyAdmiral)
-    {
-        if (PlayerBoatController.Instance.AdmiralController.Fleet.All((b) => b.IsSunk))
-        {
-            return BattleResult.Defeat;
-        }
-
-        else if (!_enemyAdmiral.AIBoatController.Boat.IsSunk)
-        {
-            return BattleResult.Inconclusive;
-        }
-
-        return BattleResult.Victory;
     }
 
     private void CreateHeader(VisualElement _container, BattleResult _battleResult)
@@ -405,11 +395,4 @@ public class PostCombatScreen : UIScreen
             Button.SetEnabled(IsActive());
         }
     }
-}
-
-public enum BattleResult
-{
-    Defeat,
-    Victory,
-    Inconclusive
 }

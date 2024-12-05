@@ -8,6 +8,7 @@ using UnityEngine.Events;
 public class CombatManager : MonoBehaviour
 {
     public static CombatManager Instance { get; private set; }
+    public static event UnityAction<BattleResult> OnBattleConcluded;
     public static event UnityAction<Admiral> OnAdmiralInCombatChanged;
 
     public const float RING_OF_FIRE_SIZE = 700f;
@@ -68,19 +69,36 @@ public class CombatManager : MonoBehaviour
             player.AdmiralController.Fleet.All((b) => b.IsSunk) ||
             AdmiralInCombat.Fleet.All((b) => b.IsSunk)))
         {
-            PostCombatScreen.Instance.CreateBattleResults(AdmiralInCombat);
             UIManager.Instance.SetState(UIState.PostCombat);
             FirstPersonController.Instance.SetState(PlayerState.Inactive);
             CameraManager.Instance.SetState(CameraState.Command);
 
-            Time.timeScale = 0.3f;
-
+            OnBattleConcluded?.Invoke(GetBattleResult(AdmiralInCombat));
             combatState = CombatState.PostCombat;
+
+            Time.timeScale = 0.3f;
         }
+    }
+
+    public BattleResult GetBattleResult(EnemyAdmiralController _enemyAdmiral)
+    {
+        if (PlayerBoatController.Instance.AdmiralController.Fleet.All((b) => b.IsSunk))
+        {
+            return BattleResult.Defeat;
+        }
+
+        else if (!_enemyAdmiral.AIBoatController.Boat.IsSunk)
+        {
+            return BattleResult.Inconclusive;
+        }
+
+        return BattleResult.Victory;
     }
 
     public void BattleResultsCompleted()
     {
+        EnemyAdmiralController admiral = AdmiralInCombat;
+
         foreach (AIBoatController boatController in player.AdmiralController.Subordinates.ToArray())
         {
             if (boatController.Boat.IsSunk && boatController.State == AIBoatControllerState.Active)
@@ -103,9 +121,14 @@ public class CombatManager : MonoBehaviour
         FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
         CameraManager.Instance.SetState(CameraState.Player);
 
-        Time.timeScale = 1f;
-
         ExitCombat();
+
+        if (admiral.AIBoatController == null)
+        {
+            ExitRingOfFire();
+        }
+
+        Time.timeScale = 1f;
     }
 
     public void EnterCombat()
@@ -122,7 +145,6 @@ public class CombatManager : MonoBehaviour
         AdmiralInCombat.SetEnemy(null);
         player.AdmiralController.SetEnemy(null);
         AdmiralInCombat = null;
-        ExitRingOfFire();
         OnAdmiralInCombatChanged?.Invoke(AdmiralInCombat);
         combatState = CombatState.OutOfCombat;
     }
@@ -248,4 +270,11 @@ public enum CombatState
     OutOfCombat,
     InCombat,
     PostCombat
+}
+
+public enum BattleResult
+{
+    Defeat,
+    Victory,
+    Inconclusive
 }

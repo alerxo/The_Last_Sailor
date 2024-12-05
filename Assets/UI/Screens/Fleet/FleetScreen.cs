@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 public class FleetScreen : UIScreen
 {
+    public static event UnityAction OnBoatUpgraded;
     protected override UIState ActiveState => UIState.Fleet;
 
     private int currentBoat;
@@ -99,7 +101,7 @@ public class FleetScreen : UIScreen
         SetFontSize(description, 22);
         container.Add(description);
 
-        Button button = new(() => _boat.Upgrade(_type));
+        Button button = new(() => OnUpgrade(_boat, _type));
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-boat-button");
         SetFontSize(button, 22);
@@ -108,6 +110,12 @@ public class FleetScreen : UIScreen
         container.Add(button);
 
         return button;
+    }
+
+    private static void OnUpgrade(Boat _boat, UpgradeType _type)
+    {
+        _boat.Upgrade(_type);
+        OnBoatUpgraded?.Invoke();
     }
 
     private void CreateNavigatioButton(VisualElement _parent, string _text, int _index)
