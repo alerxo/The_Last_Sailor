@@ -19,8 +19,8 @@ public class CombatManager : MonoBehaviour
     private const int MAX_ADMIRAL_COUNT = 3;
     private const float SPAWN_COOLDOWN = 5f;
     private const float SPAWN_PAUSE_DURATION = 0.1f;
-    private const int MIN_FLEET_SIZE = 1;
-    private const int MAX_FLEET_SIZE = 1;
+    private const float MIN_FLEET_SIZE = 0.5f;
+    private const float MAX_FLEET_SIZE = 1.5f;
     private CombatManagerSpawnState spawnState = CombatManagerSpawnState.SpawningFirstAdmiral;
 
     private readonly List<EnemyAdmiralController> admirals = new();
@@ -75,8 +75,6 @@ public class CombatManager : MonoBehaviour
 
             OnBattleConcluded?.Invoke(GetBattleResult(AdmiralInCombat));
             combatState = CombatState.PostCombat;
-
-            Time.timeScale = 0.3f;
         }
     }
 
@@ -127,8 +125,6 @@ public class CombatManager : MonoBehaviour
         {
             ExitRingOfFire();
         }
-
-        Time.timeScale = 1f;
     }
 
     public void EnterCombat()
@@ -188,7 +184,7 @@ public class CombatManager : MonoBehaviour
 
         yield return new WaitForSeconds(SPAWN_PAUSE_DURATION);
 
-        int size = Random.Range(MIN_FLEET_SIZE, MAX_FLEET_SIZE + 1);
+        int size = Mathf.Clamp(Mathf.FloorToInt(player.AdmiralController.Fleet.Count * Random.Range(MIN_FLEET_SIZE, MAX_FLEET_SIZE)), 0, 100);
         Vector3[] positions = Formations.GetLine(size);
 
         for (int i = 0; i < size; i++)

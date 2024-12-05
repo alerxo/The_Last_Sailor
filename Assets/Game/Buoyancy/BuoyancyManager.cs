@@ -11,9 +11,9 @@ public class BuoyancyManager : MonoBehaviour
 {
     public static BuoyancyManager Instance { get; private set; }
 
-    private const int MAX_UPDATE_COUNT = 25;
+    private const int MAX_UPDATE_COUNT = 30;
+    private const int HIGH_QUALITY_UPDATE_COUNT = 22;
     private const int MEDIUM_QUALITY_UPDATE_COUNT = 5;
-    private const int LOW_QUALITY_UPDATE_COUNT = 1;
 
     [SerializeField] private BuoyancyPoints buoyancyPoints;
 
@@ -136,19 +136,19 @@ public class BuoyancyManager : MonoBehaviour
 
     private void GetTargets()
     {
-        for (int i = targets.Count; i < LOW_QUALITY_UPDATE_COUNT; i++)
+        for (int i = targets.Count; i < HIGH_QUALITY_UPDATE_COUNT; i++)
         {
-            if (lowQualityIndex >= lowQuality.Count)
+            if (highQualityIndex >= highQuality.Count)
             {
-                lowQualityIndex = 0;
+                highQualityIndex = 0;
                 break;
             }
 
-            targets.Add(lowQuality[lowQualityIndex]);
-            lowQualityIndex++;
+            targets.Add(highQuality[highQualityIndex]);
+            highQualityIndex++;
         }
 
-        for (int i = targets.Count; i < MEDIUM_QUALITY_UPDATE_COUNT; i++)
+        for (int i = targets.Count; i < HIGH_QUALITY_UPDATE_COUNT + MEDIUM_QUALITY_UPDATE_COUNT; i++)
         {
             if (mediumQualityIndex >= mediumQuality.Count)
             {
@@ -162,15 +162,17 @@ public class BuoyancyManager : MonoBehaviour
 
         for (int i = targets.Count; i < MAX_UPDATE_COUNT; i++)
         {
-            if (highQualityIndex >= highQuality.Count)
+            if (lowQualityIndex >= lowQuality.Count)
             {
-                highQualityIndex = 0;
+                lowQualityIndex = 0;
                 break;
             }
 
-            targets.Add(highQuality[highQualityIndex]);
-            highQualityIndex++;
+            targets.Add(lowQuality[lowQualityIndex]);
+            lowQualityIndex++;
         }
+
+        Assert.IsTrue(targets.Count < MAX_UPDATE_COUNT);
     }
 
     private void UpdateTargetsDepthValues()
