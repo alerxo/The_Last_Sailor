@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
@@ -17,7 +18,7 @@ public class WaterSplash : MonoBehaviour
 
     void Update()
     {
-        wave.localScale += new Vector3(waveSpeed*Time.deltaTime, -waveSpeed/10f*Time.deltaTime,waveSpeed*Time.deltaTime);
+        wave.localScale += new Vector3(waveSpeed*Time.deltaTime, math.clamp(-waveFallOffSpeed/10*Time.deltaTime,0f,1f),waveSpeed*Time.deltaTime);
         foreach(WaterDecal wd in waterDecals)
         {
             float ampl = wd.amplitude;
