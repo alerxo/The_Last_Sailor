@@ -13,7 +13,7 @@ public class FormationScreen : UIScreen
 
     [SerializeField] private MeshRenderer highlightPrefab, wayPointPrefab;
     [SerializeField] private Transform trailPrefab;
-    [SerializeField] private Material playerMaterial, defaultMaterial, selectedMaterial, holdMaterial, chargeMaterial;
+    [SerializeField] private Material defaultMaterial, selectedMaterial, formationMaterial, holdMaterial, chargeMaterial;
 
     private MeshRenderer playerHighlight;
     private readonly Dictionary<AIBoatController, CommandItem> commandItems = new();
@@ -31,7 +31,7 @@ public class FormationScreen : UIScreen
         input.Player.CommandDeselect.performed += CommandDeselect_performed;
 
         playerHighlight = Instantiate(highlightPrefab, transform);
-        playerHighlight.material = playerMaterial;
+        playerHighlight.material = defaultMaterial;
         playerHighlight.gameObject.SetActive(false);
     }
 
@@ -54,7 +54,6 @@ public class FormationScreen : UIScreen
 
         input.Player.CommandSelect.performed -= CommandSelect_performed;
         input.Player.CommandDeselect.performed -= CommandDeselect_performed;
-
         input.Player.Disable();
     }
 
@@ -66,7 +65,7 @@ public class FormationScreen : UIScreen
 
             foreach (CommandItem item in commandItems.Values)
             {
-                item.Update(current, defaultMaterial, selectedMaterial, holdMaterial, chargeMaterial);
+                item.Update(current, defaultMaterial, selectedMaterial, formationMaterial, holdMaterial, chargeMaterial);
             }
         }
     }
@@ -163,7 +162,7 @@ public class FormationScreen : UIScreen
     {
         Button button = new(() => OnPlayerItem(_boat));
         button.AddToClassList("formation-boat-item");
-        SetBorder(button, playerMaterial.color);
+        SetBorder(button, defaultMaterial.color);
         _parent.Add(button);
 
         Label header = new(_boat.Name);
@@ -176,7 +175,7 @@ public class FormationScreen : UIScreen
     {
         Button button = new(() => OnSubordinateItem(_boatController));
         button.AddToClassList("formation-boat-item");
-        SetBorder(button, defaultMaterial.color);
+        SetBorder(button, formationMaterial.color);
         _parent.Add(button);
 
         Label header = new(_boatController.Boat.Name);
@@ -209,7 +208,6 @@ public class FormationScreen : UIScreen
         if (_state == UIState.Formation)
         {
             input.Player.Enable();
-
             playerHighlight.gameObject.SetActive(true);
 
             foreach (CommandItem item in commandItems.Values)
@@ -221,9 +219,7 @@ public class FormationScreen : UIScreen
         else
         {
             current = null;
-
             input.Player.Disable();
-
             playerHighlight.gameObject.SetActive(false);
 
             foreach (CommandItem item in commandItems.Values)
@@ -245,7 +241,6 @@ public class FormationScreen : UIScreen
                 Instantiate(trailPrefab, transform),
                 CreateSuborinateItem(boatItemContainer, _boatController)));
             commandItems[_boatController].SetDescription();
-
             commandItems[_boatController].Deactivate(defaultMaterial);
         }
 
@@ -286,7 +281,7 @@ public class FormationScreen : UIScreen
             Description.text = $"{(BoatController.FormationPosition.HasValue ? "In formation" : "Unassigned")}";
         }
 
-        public void Update(AIBoatController _current, Material _defaultMaterial, Material _selectedMaterial, Material _holdMaterial, Material _chargeMaterial)
+        public void Update(AIBoatController _current, Material _defaultMaterial, Material _selectedMaterial, Material _formationMaterial, Material _holdMaterial, Material _chargeMaterial)
         {
             switch (BoatController.Command)
             {
@@ -298,7 +293,7 @@ public class FormationScreen : UIScreen
                     break;
 
                 case Command.Formation when BoatController.FormationPosition.HasValue:
-                    SetMaterial(_current == BoatController ? _selectedMaterial : _defaultMaterial);
+                    SetMaterial(_current == BoatController ? _selectedMaterial : _formationMaterial);
                     SetHighlightPosition();
                     SetWaypointPositionAtFormation();
                     MoveTrail();

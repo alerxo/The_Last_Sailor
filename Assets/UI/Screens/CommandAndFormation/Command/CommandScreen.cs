@@ -16,9 +16,11 @@ public class CommandScreen : UIScreen
     private const float TIME_FADING = 1f;
 
     private PlayerAdmiralController admiralController;
+    [SerializeField] private Material defaultMaterial, formationMaterial, holdMaterial, chargeMaterial;
 
     private VisualElement buttonContainer;
     private Button changeViewButton;
+    private readonly Dictionary<Command, Button> commandButtons = new();
 
     private void Awake()
     {
@@ -31,6 +33,7 @@ public class CommandScreen : UIScreen
     private void Start()
     {
         admiralController = PlayerBoatController.Instance.AdmiralController;
+        admiralController.OnCommandChanged += AdmiralController_OnCommandChanged;
     }
 
     private void OnDestroy()
@@ -104,6 +107,43 @@ public class CommandScreen : UIScreen
         changeViewButton.text = GetChangeViewText();
     }
 
+    private void AdmiralController_OnCommandChanged(Command _command)
+    {
+        foreach (Command command in commandButtons.Keys)
+        {
+            if (command == _command)
+            {
+                SetBorder(commandButtons[command], GetMaterial(command).color);
+                commandButtons[command].SetEnabled(false);
+            }
+
+            else
+            {
+                SetBorder(commandButtons[command], defaultMaterial.color);
+                commandButtons[command].SetEnabled(true);
+            }
+        }
+    }
+
+    private Material GetMaterial(Command _command)
+    {
+        switch (_command)
+        {
+            case Command.Formation:
+                return formationMaterial;
+
+            case Command.Hold:
+                return holdMaterial;
+
+            case Command.Charge:
+                return chargeMaterial;
+
+            default:
+                Debug.LogError("Defaulted");
+                return null;
+        }
+    }
+
     public override void Generate()
     {
         VisualElement container = new();
@@ -127,19 +167,24 @@ public class CommandScreen : UIScreen
         container.AddToClassList("command-top-button-container");
         _parent.Add(container);
 
-        CreateTopButton(container, "1: Formation", () => admiralController.SetCommandForSubordinates(Command.Formation));
-        CreateTopButton(container, "2: Hold", () => admiralController.SetCommandForSubordinates(Command.Hold));
-        CreateTopButton(container, "3: Charge", () => admiralController.SetCommandForSubordinates(Command.Charge));
+        CreateTopButton(container, $"1: {Command.Formation}", Command.Formation);
+        CreateTopButton(container, $"2: {Command.Hold}", Command.Hold);
+        CreateTopButton(container, $"3: {Command.Charge}", Command.Charge);
+
+        AdmiralController_OnCommandChanged(Command.Unassigned);
     }
 
-    private void CreateTopButton(VisualElement _parent, string _name, Action _onClicked)
+    private void CreateTopButton(VisualElement _parent, string _name, Command _command)
     {
-        Button button = new(_onClicked);
+        Button button = new(() => admiralController.SetCommandForSubordinates(_command));
+        button.AddToClassList("main-button");
         button.AddToClassList("command-top-button");
         button.pickingMode = PickingMode.Position;
         SetFontSize(button, 22);
         button.text = _name;
         _parent.Add(button);
+
+        commandButtons[_command] = button;
     }
 
     private void CreateChangeViewButton(VisualElement _parent)

@@ -11,7 +11,7 @@
 	width: 17%;
 	height: 70%;
 	margin-bottom: 5%;
-	margin-left: 1%;
+	margin-left: 2%;
 }
 
 .command-top-button-container {
@@ -24,6 +24,15 @@
 .command-top-button {
 	border-width: 5px;
 	border-radius: 10px;
+}
+
+.command-top-button:disabled {
+	opacity: 1;
+	scale: 1.10;
+
+	transition-property: scale;
+    transition-duration: 50ms;
+	transition-timing-function: ease-in-out;
 }
 
 .command-change-view-button {

@@ -111,7 +111,7 @@ public class AIBoatController : MonoBehaviour
         RemoveFromFleet();
         Boat.SetName(PlayerBoatController.Instance.AdmiralController.GetSubordinateName());
         Boat.Repair();
-        SetCommand(_admiral.LastCommand);
+        SetCommand(_admiral.Command);
         _admiral.AddSubordinate(Boat);
     }
 
