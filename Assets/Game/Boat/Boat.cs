@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -73,7 +74,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         if (Mathf.Clamp(Health -= _damage, 0, MaxHealth) <= 0)
         {
             destroyedAudioSource.PlayOneShot(explodeSound);
-           burningAudioSource.clip = fireSound;
+            burningAudioSource.clip = fireSound;
             burningAudioSource.loop = true;
             burningAudioSource.Play();
             OnDestroyed?.Invoke();
@@ -92,10 +93,10 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     public void Repair()
     {
-        if (burningAudioSource.loop == true) 
+        if (burningAudioSource.loop == true)
         {
-           burningAudioSource.loop = false;
-           burningAudioSource.Stop();
+            burningAudioSource.loop = false;
+            burningAudioSource.Stop();
         }
         StopAllCoroutines();
         SetDefault();
@@ -174,6 +175,11 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         return Upgradeables[_type][0].UpgradeTier;
     }
 
+    public string GetTierOfUpgradeAsString(UpgradeType _type)
+    {
+        return string.Concat(Enumerable.Repeat("I", 1 + (int)Upgradeables[_type][0].UpgradeTier));
+    }
+
     public float GetUpgradeIncreasePercentage(UpgradeType _type)
     {
         return (int)(Upgradeables[_type][0].UpgradeIncrease * 100);
@@ -182,6 +188,25 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
     public float GetUpgradeModifierPercentage(UpgradeType _type)
     {
         return (int)((int)Upgradeables[_type][0].UpgradeTier * Upgradeables[_type][0].UpgradeIncrease * 100);
+    }
+
+    public string GetModifierDescription(UpgradeType _type)
+    {
+        switch (_type)
+        {
+            case UpgradeType.Hull:
+                return "Health";
+
+            case UpgradeType.Cannons:
+                return "Damage";
+
+            case UpgradeType.Engine:
+                return "Speed";
+
+            default:
+                Debug.LogError("Defaulted");
+                return null;
+        }
     }
 
     public void SetName(string _name)

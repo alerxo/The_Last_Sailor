@@ -12,7 +12,7 @@ public class UIManager : MonoBehaviour
 
     public UIState State { get; private set; } = UIState.TitleScreen;
     private readonly List<UIState> pauseScreens = new() { UIState.Pause, UIState.Options };
-    private readonly List<UIState> slowmoScreens = new() { UIState.Formation, UIState.PostCombat };
+    private readonly List<UIState> slowmoScreens = new() { UIState.Formation, UIState.Fleet, UIState.PostCombat };
     private UIState optionsReturnState;
     private bool isInTitleScreen = true;
 

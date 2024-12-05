@@ -17,13 +17,10 @@ public class PlayerBoatController : MonoBehaviour
         AdmiralController = GetComponent<PlayerAdmiralController>();
         AdmiralController.SetOwner(Boat);
 
+        Boat.SetName("Player Boat");
+
         Boat.OnDamaged += Boat_OnDamaged;
         Boat.OnDestroyed += Boat_OnDestroyed;
-    }
-
-    private void Start()
-    {
-        Boat.SetName("Player Boat");
     }
 
     private void Boat_OnDamaged()

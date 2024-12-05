@@ -11,7 +11,7 @@
 	justify-content: space-around;
 	align-items: center;
 
-	width: 70%;
+	width: 55%;
 	height: 25%;
 	margin-bottom: 1%;
 }
@@ -21,9 +21,10 @@
 	align-items: center;
 
 	height: 100%;
+	width: 80%;
 	padding: 1%;
 
-	background-color: rgba(180, 180, 180, 0.3);
+	background-color: rgba(200, 200, 200, 0.5);
 	border-radius: 10px;
 	border-width: 0px;
 }
@@ -40,6 +41,9 @@
 
 .fleet-boat-button-container {
 	flex-direction: row;
+	justify-content: space-around;
+
+	width: 100%;
 }
 
 .fleet-boat-upgrade-container {
@@ -47,11 +51,10 @@
 	align-items: center;
 }
 
-.fleet-boat-upgrade-description {
-
-}
+.fleet-boat-upgrade-description { }
 
 .fleet-boat-button {
+	border-color: black;
 	border-width: 3px;
 	border-radius: 7px;
 }
@@ -79,6 +82,7 @@
 	padding-top: 0.2%;
 	padding-bottom: 0.2%;
 
+	border-color: black;
 	border-width: 3px;
 	border-radius: 7px;
 }
