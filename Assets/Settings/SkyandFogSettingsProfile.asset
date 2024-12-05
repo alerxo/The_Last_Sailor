@@ -55,7 +55,7 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0
   cloudSimpleMode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   m_CloudPreset:
     m_OverrideState: 1
@@ -654,14 +654,14 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0.06
   tintColor:
-    m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 0.8498358, b: 0.7688679, a: 1}
   bloomMip:
     m_OverrideState: 0
     m_Value: 1
   firstFlareIntensity:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 2
   secondaryFlareIntensity:
     m_OverrideState: 0
     m_Value: 1
@@ -672,8 +672,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1}
   samples:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 2
   sampleDimmer:
     m_OverrideState: 0
     m_Value: 0.5
@@ -705,11 +705,11 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: {fileID: 0}
   chromaticAbberationIntensity:
-    m_OverrideState: 0
-    m_Value: 0.5
+    m_OverrideState: 1
+    m_Value: 0.75
   chromaticAbberationSampleCount:
-    m_OverrideState: 0
-    m_Value: 3
+    m_OverrideState: 1
+    m_Value: 5
 --- !u!114 &-1328027256141313857
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -776,8 +776,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 30
   ambientProbeDimmer:
-    m_OverrideState: 0
-    m_Value: 0.5
+    m_OverrideState: 1
+    m_Value: 0.75
 --- !u!114 &-13662133292806462
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1009,25 +1009,25 @@ MonoBehaviour:
     m_Value: 1
   focusMode:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 2
   focusDistance:
     m_OverrideState: 1
-    m_Value: 4.19
+    m_Value: 22.43
   focusDistanceMode:
     m_OverrideState: 1
     m_Value: 0
   nearFocusStart:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   nearFocusEnd:
-    m_OverrideState: 0
-    m_Value: 4
+    m_OverrideState: 1
+    m_Value: 16.12
   farFocusStart:
     m_OverrideState: 0
-    m_Value: 10
+    m_Value: 291.8
   farFocusEnd:
-    m_OverrideState: 0
-    m_Value: 20
+    m_OverrideState: 1
+    m_Value: 59940.2
   m_NearSampleCount:
     m_OverrideState: 1
     m_Value: 5
