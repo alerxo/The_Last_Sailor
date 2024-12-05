@@ -77,7 +77,28 @@ public abstract class Admiral : MonoBehaviour
         {
             if (!boatController.Boat.IsSunk)
             {
-                boatController.SetCommand(_command);
+                switch (_command)
+                {
+                    case Command.Unassigned:
+                        boatController.SetCommand(Command.Unassigned);
+                        break;
+
+                    case Command.Formation when boatController.FormationPosition.HasValue:
+                        boatController.SetCommand(Command.Formation);
+                        break;
+
+                    case Command.Hold when boatController.FormationPosition.HasValue:
+                        boatController.SetCommand(Command.Hold);
+                        break;
+
+                    case Command.Charge:
+                        boatController.SetCommand(Command.Charge);
+                        break;
+
+                    default:
+                        boatController.SetCommand(Command.Unassigned);
+                        break;
+                }
             }
         }
     }
