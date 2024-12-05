@@ -15,7 +15,7 @@ public class CameraManager : MonoBehaviour
     private const float MAX_COMMAND_ZOOM = 150;
     private const float COMMAND_SROLL_SPEED = 350;
     private const float MAX_COMMAND_MOVEMENT = 100;
-    private const float COMMAND_MOVEMENT_SPEED = 100;
+    private const float COMMAND_MOVEMENT_SPEED = 150;
     private Vector3 commandCameraMovement;
 
     private CinemachineCamera mainMenuCamera;
@@ -28,7 +28,6 @@ public class CameraManager : MonoBehaviour
     private CinemachineBasicMultiChannelPerlin[] cinemachineBasicMultiChannelPerlins;
     private CinemachineInputAxisController[] cinemachineInputAxisControllers;
 
-    private Transform interactionTarget;
     private FirstPersonController player;
 
     private void Awake()
@@ -93,13 +92,9 @@ public class CameraManager : MonoBehaviour
     {
         switch (State)
         {
-            case CameraState.Interaction when interactionTarget != null:
-                SetInteractionCameraPosition();
-                break;
-
             case CameraState.Formation:
-                GetCommandCameraMovement();
-                SetCommandCameraPosition();
+                GetFormationCameraMovement();
+                SetFormationCameraPosition();
                 break;
         }
     }
@@ -107,19 +102,12 @@ public class CameraManager : MonoBehaviour
     public void SetInteractionCamera(Transform _target, IInteractable interactable)
     {
         interactionCamera.Target.TrackingTarget = _target;
-        interactionTarget = _target;
-        SetInteractionCameraPosition();
         SetState(CameraState.Interaction);
 
         Vector3 position = interactable.Position;
         position.y = player.transform.position.y;
         player.Rigidbody.Move(position, player.transform.rotation);
-        PlayerCamera.ForceCameraPosition(PlayerCamera.transform.position, interactionTarget.transform.rotation);
-    }
-
-    public void SetInteractionCameraPosition()
-    {
-        interactionCamera.ForceCameraPosition(interactionTarget.position, interactionTarget.rotation);
+        PlayerCamera.ForceCameraPosition(PlayerCamera.transform.position, _target.transform.rotation);
     }
 
     public void SetFleetCamera(Transform _target)
@@ -144,7 +132,7 @@ public class CameraManager : MonoBehaviour
         return fleetCameras[0];
     }
 
-    public void FocusCommandCamera(Vector3 _position)
+    public void FocusFormationCamera(Vector3 _position)
     {
         Vector3 position = PlayerBoatController.Instance.transform.InverseTransformVector(_position - PlayerBoatController.Instance.transform.position);
         position.y = commandCameraMovement.y;
@@ -152,14 +140,12 @@ public class CameraManager : MonoBehaviour
         GetNextCommandCamera();
     }
 
-    public void GetCommandCameraMovement()
+    public void GetFormationCameraMovement()
     {
         Vector2 inputVector = input.Player.Move.ReadValue<Vector2>();
-        Vector3 movement = new(
-            inputVector.x * COMMAND_MOVEMENT_SPEED,
-            input.Player.CameraZoom.ReadValue<float>() * COMMAND_SROLL_SPEED,
-            inputVector.y * COMMAND_MOVEMENT_SPEED);
 
+        float movementSpeed = COMMAND_MOVEMENT_SPEED * Mathf.Lerp(1, 2, commandCameraMovement.y / MAX_COMMAND_ZOOM);
+        Vector3 movement = new(inputVector.x * movementSpeed, input.Player.CameraZoom.ReadValue<float>() * COMMAND_SROLL_SPEED, inputVector.y * movementSpeed);
         movement *= Time.deltaTime;
         movement += commandCameraMovement;
 
@@ -168,7 +154,7 @@ public class CameraManager : MonoBehaviour
         commandCameraMovement.z = Mathf.Clamp(movement.z, -MAX_COMMAND_MOVEMENT, MAX_COMMAND_MOVEMENT);
     }
 
-    public void SetCommandCameraPosition()
+    public void SetFormationCameraPosition()
     {
         Vector3 playerXZPosition = PlayerBoatController.Instance.transform.position;
         playerXZPosition.y = 0;
@@ -203,11 +189,6 @@ public class CameraManager : MonoBehaviour
 
     public void SetState(CameraState _state)
     {
-        if (_state != CameraState.Interaction && interactionTarget != null)
-        {
-            interactionTarget = null;
-        }
-
         switch (_state)
         {
             case CameraState.Player when State != CameraState.MainMenu:
@@ -244,9 +225,9 @@ public class CameraManager : MonoBehaviour
         {
             commandCameraMovement = Vector3.zero;
             GetNextCommandCamera();
-            SetCommandCameraPosition();
+            SetFormationCameraPosition();
             GetNextCommandCamera();
-            SetCommandCameraPosition();
+            SetFormationCameraPosition();
         }
 
         State = _state;

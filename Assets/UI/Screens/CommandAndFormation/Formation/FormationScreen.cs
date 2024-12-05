@@ -193,14 +193,14 @@ public class FormationScreen : UIScreen
 
     private void OnPlayerItem(Boat _boat)
     {
-        CameraManager.Instance.FocusCommandCamera(_boat.transform.position);
+        CameraManager.Instance.FocusFormationCamera(_boat.transform.position);
     }
 
     private void OnSubordinateItem(AIBoatController _boatController)
     {
         TryRemoveCurrent();
         AssignCurrent(_boatController);
-        CameraManager.Instance.FocusCommandCamera(_boatController.transform.position);
+        CameraManager.Instance.FocusFormationCamera(_boatController.transform.position);
     }
 
     private void UIManager_OnStateChanged(UIState _state)
