@@ -5,20 +5,30 @@ public class PostCombatSoundFX : MonoBehaviour
 {
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip winClip;
+    [SerializeField] private AudioClip defeatClip;
+    [SerializeField] private AudioClip inconclusiveClip;
     private void Awake()
     {
-        UIManager.OnStateChanged += UIManager_PostCombatStarts;
+        CombatManager.OnBattleConcluded += CombatManager_Results;
     }
 
     private void OnDestroy()
     {
-        UIManager.OnStateChanged -= UIManager_PostCombatStarts;
+        CombatManager.OnBattleConcluded -= CombatManager_Results;
     }
-    private void UIManager_PostCombatStarts(UIState state)
+    private void CombatManager_Results(BattleResult result)
     {
-        if (state == UIState.PostCombat)
+        if (result == BattleResult.Victory)
         {
             audioSource.PlayOneShot(winClip);
+        }
+        if (result == BattleResult.Defeat)
+        {
+            audioSource.PlayOneShot(defeatClip);
+        }
+        if (result == BattleResult.Inconclusive)
+        {
+            audioSource.PlayOneShot(inconclusiveClip);
         }
     }
 }

@@ -169,7 +169,7 @@ MonoBehaviour:
   battleMusicSource: {fileID: 8227921871195985098}
   musicClip: {fileID: 8300000, guid: 73b8d956beab81c4a9ff429bce73510d, type: 3}
   battleClip: {fileID: 8300000, guid: ce81c20d94721454fb07e0c253491e9d, type: 3}
-  musicVolume: 0.2
+  musicVolume: 0.15
   minDelayBetweenTracks: 3
   maxDelayBetweenTracks: 5
 --- !u!82 &4778426383006465752
@@ -381,7 +381,7 @@ MonoBehaviour:
   audioSource: {fileID: 1065205882141152369}
   repair: {fileID: 8300000, guid: ee37ce4ccd1f9f44e8ffb47e009369fb, type: 3}
   scrap: {fileID: 8300000, guid: 63ed7694dc1c59a4daf17026c3eca274, type: 3}
-  Seize: {fileID: 8300000, guid: 0789fd2d823ccf84da5db0728f8de2ab, type: 3}
+  Seize: {fileID: 8300000, guid: c33bc228b2e8ca8418c1478dd5214279, type: 3}
 --- !u!82 &1065205882141152369
 AudioSource:
   m_ObjectHideFlags: 0
@@ -493,6 +493,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 6139523061030344564}
   winClip: {fileID: 8300000, guid: 5b83a86bfb9967a4baaab6b678cbb53d, type: 3}
+  defeatClip: {fileID: 8300000, guid: 3fa4762fa5c13ae4cb1f29f375520010, type: 3}
+  inconclusiveClip: {fileID: 8300000, guid: 14dfea163a829b44082cbfa7a72e0308, type: 3}
 --- !u!114 &4602562621254828607
 MonoBehaviour:
   m_ObjectHideFlags: 0

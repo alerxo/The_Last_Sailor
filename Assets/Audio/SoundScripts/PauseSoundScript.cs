@@ -17,7 +17,7 @@ public class PauseSoundScript : MonoBehaviour
 
     private void UImanager_OnUIStateChange (UIState state) 
     {
-        AudioSource[] audios = FindObjectsOfType<AudioSource>();
+        AudioSource[] audios = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
         if (state == UIState.Pause) 
         {
             foreach (AudioSource audio in audios)

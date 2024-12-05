@@ -30,7 +30,7 @@ public class MusicScript : MonoBehaviour
         if (turnOffMusic == false) 
         {
             PlayMusic();
-            if (musicSource.volume <= 0.2f) 
+            if (musicSource.volume <= musicVolume) 
             {
                 musicSource.volume = musicSource.volume + 0.001f;
             }
@@ -49,7 +49,7 @@ public class MusicScript : MonoBehaviour
                 musicSource.Stop();
             }
             PlayBattleMusic();
-            if (battleMusicSource.volume <= 0.2f)
+            if (battleMusicSource.volume <= musicVolume)
             {
                 battleMusicSource.volume = battleMusicSource.volume + 0.001f;
             }
