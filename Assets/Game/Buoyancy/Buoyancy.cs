@@ -54,16 +54,30 @@ public class Buoyancy : MonoBehaviour
 
     private void AddForce()
     {
+        Vector3 force = Vector3.zero;
+        Vector3 position = Vector3.zero;
+        float positionCount = 0;
+
         for (int i = 0; i < Points.Values.Length; i++)
         {
             if (DepthValues[i] > 0)
             {
-                Vector3 force = new(0f, PointMass * BuoyancyForce * DepthValues[i] * -Physics.gravity.y, 0f);
-
-                RigidBody.AddForceAtPosition(force, transform.position + transform.TransformVector(Points.Values[i]), ForceMode.Force);
+                force += new Vector3(0f, PointMass * BuoyancyForce * DepthValues[i] * -Physics.gravity.y, 0f);
+                position += transform.TransformVector(Points.Values[i]) * DepthValues[i];
+                positionCount += DepthValues[i];
             }
         }
 
+        if (positionCount > 0)
+        {
+            RigidBody.AddForceAtPosition(force, transform.position + (position / positionCount), ForceMode.Force);
+        }
+
+        DebugDraw();
+    }
+
+    private void DebugDraw()
+    {
 #if UNITY_EDITOR
         if (!IsDebugMode) return;
 
@@ -74,8 +88,7 @@ public class Buoyancy : MonoBehaviour
         {
             if (DepthValues[i] > 0)
             {
-                Vector3 force = new(0f, PointMass * BuoyancyForce * DepthValues[i] * -Physics.gravity.y, 0f);
-                displacement += PointMass;
+                displacement += PointMass * DepthValues[i];
                 DebugUtil.DrawBox(transform.position + transform.TransformVector(Points.Values[i]), transform.rotation, POINT_SCALE * DepthValues[i], Color.green, Time.fixedDeltaTime);
             }
 
