@@ -14,7 +14,7 @@ public class TitleScreen : UIScreen
         Image background = new();
         background.AddToClassList("title-screen-background");
         background.image = backgroundImage;
-        root.Add(background);
+        Root.Add(background);
 
         Label title = new("The Last Sailor");
         title.AddToClassList("title-screen-title");

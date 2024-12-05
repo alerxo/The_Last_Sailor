@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,8 +15,6 @@ public class UIManager : MonoBehaviour
     private readonly List<UIState> slowmoScreens = new() { UIState.Formation, UIState.PostCombat };
     private UIState optionsReturnState;
     private bool isInTitleScreen = true;
-
-
 
     public static float UIScale = 1f;
     private const float UIScreenBaseWidth = 1920f;
@@ -45,9 +44,20 @@ public class UIManager : MonoBehaviour
         foreach (UIScreen screen in FindObjectsByType<UIScreen>(FindObjectsSortMode.None))
         {
             screen.Generate();
+            DisableTab(screen.Root);
         }
 
         SetState(UIState.TitleScreen);
+    }
+
+    private void DisableTab(VisualElement _target)
+    {
+        _target.tabIndex = -1;
+
+        foreach (VisualElement child in _target.Children())
+        {
+            DisableTab(child);
+        }
     }
 
     public void EnterFormationView()
@@ -97,8 +107,8 @@ public class UIManager : MonoBehaviour
         State = _state;
         OnStateChanged?.Invoke(State);
 
-        Cursor.lockState = State != UIState.HUD ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = State != UIState.HUD;
+        UnityEngine.Cursor.lockState = State != UIState.HUD ? CursorLockMode.None : CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = State != UIState.HUD;
     }
 
     private void Escape_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)

@@ -144,7 +144,7 @@ public class FormationScreen : UIScreen
     {
         VisualElement container = new();
         container.AddToClassList("formation-container");
-        root.Add(container);
+        Root.Add(container);
 
         Box background = new();
         background.AddToClassList("formation-background");

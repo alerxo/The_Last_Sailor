@@ -11,7 +11,7 @@ public class OptionsScreen : UIScreen
     {
         VisualElement container = new();
         container.AddToClassList("options-container");
-        root.Add(container);
+        Root.Add(container);
 
         Box background = new();
         background.AddToClassList("options-background");

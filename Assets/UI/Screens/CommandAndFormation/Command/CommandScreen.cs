@@ -109,7 +109,7 @@ public class CommandScreen : UIScreen
         VisualElement container = new();
         container.AddToClassList("command-container");
         container.pickingMode = PickingMode.Ignore;
-        root.Add(container);
+        Root.Add(container);
 
         buttonContainer = new();
         buttonContainer.AddToClassList("command-button-container");

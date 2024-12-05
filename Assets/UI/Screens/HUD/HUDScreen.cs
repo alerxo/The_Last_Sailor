@@ -95,7 +95,7 @@ public class HUDScreen : UIScreen
     {
         VisualElement container = new();
         container.AddToClassList("hud-container");
-        root.Add(container);
+        Root.Add(container);
 
         CreateAdmiral(container);
         CreateInteraction(container);

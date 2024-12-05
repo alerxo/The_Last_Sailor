@@ -14,7 +14,7 @@ public class PauseScreen : UIScreen
     {
         VisualElement container = new();
         container.AddToClassList("pause-container");
-        root.Add(container);
+        Root.Add(container);
 
         Image background = new();
         background.AddToClassList("pause-background");

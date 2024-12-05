@@ -45,7 +45,7 @@ public class FleetScreen : UIScreen
     {
         VisualElement container = new();
         container.AddToClassList("fleet-container");
-        root.Add(container);
+        Root.Add(container);
 
         VisualElement menuContainer = new();
         menuContainer.AddToClassList("fleet-menu-container");

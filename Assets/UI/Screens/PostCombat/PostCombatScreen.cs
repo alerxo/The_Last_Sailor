@@ -55,7 +55,7 @@ public class PostCombatScreen : UIScreen
     {
         VisualElement container = new();
         container.AddToClassList("post-combat-container");
-        root.Add(container);
+        Root.Add(container);
 
         background = new();
         background.AddToClassList("post-combat-background");
