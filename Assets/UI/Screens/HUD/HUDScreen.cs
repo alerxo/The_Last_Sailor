@@ -6,12 +6,7 @@ using UnityEngine.UIElements;
 
 public class HUDScreen : UIScreen
 {
-    private const float ADMIRAL_WIDTH = 700f;
-    private const float ADMIRAL_BORDER_WIDTH = 5f;
-    private const float ADMIRAL_DURATION = 10f;
-    private const float ADMIRAL_BORDER_DURATION = 0.1f;
-    private const float ADMIRAL_BACKGROUND_DURATION = 0.5f;
-
+    private const float BACKGROUND_WIDTH = 700f;
     private const float INTERACTION_BUTTON_SIZE = 100f;
     private const float INTERACTION_BUTTON_FONT_SIZE = 60;
     private const float INTERACTION_ANIMATION_DURATION = 0.1f;
@@ -112,7 +107,7 @@ public class HUDScreen : UIScreen
 
         Box admiralBackground = new();
         admiralBackground.AddToClassList("hud-admiral-background");
-        SetWidth(admiralBackground, ADMIRAL_WIDTH);
+        SetWidth(admiralBackground, BACKGROUND_WIDTH);
         admiralContainer.Add(admiralBackground);
 
         admiralText = new("Admiral");
@@ -123,68 +118,21 @@ public class HUDScreen : UIScreen
 
     private IEnumerator ShowAdmiral()
     {
+        const float BORDER_WIDTH = 5f;
+        const float WAIT_DURATION = 10f;
+        const float BORDER_DURATION = 0.1f;
+        const float BACKGROUND_DURATION = 0.5f;
+
         SetWidth(admiralContainer, 0);
         SetBorder(admiralContainer, 0);
 
-        // Show Border
+        yield return AnimateBorder(admiralContainer, BORDER_DURATION, 0, BORDER_WIDTH);
+        yield return AnimateWidth(admiralContainer, BACKGROUND_DURATION, 0, BACKGROUND_WIDTH);
 
-        float duration = 0;
+        yield return new WaitForSeconds(WAIT_DURATION);
 
-        while ((duration += Time.deltaTime) < ADMIRAL_BORDER_DURATION)
-        {
-            float percentage = duration / ADMIRAL_BORDER_DURATION;
-            SetBorder(admiralContainer, Mathf.Lerp(0, ADMIRAL_BORDER_WIDTH, percentage));
-
-            yield return null;
-        }
-
-        SetBorder(admiralContainer, ADMIRAL_BORDER_WIDTH);
-
-        // Show Container
-
-        duration = 0;
-
-        while ((duration += Time.deltaTime) < ADMIRAL_BACKGROUND_DURATION)
-        {
-            float percentage = duration / ADMIRAL_BACKGROUND_DURATION;
-            SetWidth(admiralContainer, Mathf.Lerp(0, ADMIRAL_WIDTH, percentage));
-
-            yield return null;
-        }
-
-        SetWidth(admiralContainer, ADMIRAL_WIDTH);
-
-        // Stay
-
-        yield return new WaitForSeconds(ADMIRAL_DURATION);
-
-        // Hide Container
-
-        duration = 0;
-
-        while ((duration += Time.deltaTime) < ADMIRAL_BACKGROUND_DURATION)
-        {
-            float percentage = duration / ADMIRAL_BACKGROUND_DURATION;
-            SetWidth(admiralContainer, Mathf.Lerp(ADMIRAL_WIDTH, 0, percentage));
-
-            yield return null;
-        }
-
-        SetWidth(admiralContainer, 0);
-
-        // Hide Border
-
-        duration = 0;
-
-        while ((duration += Time.deltaTime) < ADMIRAL_BORDER_DURATION)
-        {
-            float percentage = duration / ADMIRAL_BORDER_DURATION;
-            SetBorder(admiralContainer, Mathf.Lerp(ADMIRAL_BORDER_WIDTH, 0, percentage));
-
-            yield return null;
-        }
-
-        SetBorder(admiralContainer, 0);
+        yield return AnimateWidth(admiralContainer, BACKGROUND_DURATION, BACKGROUND_WIDTH, 0);
+        yield return AnimateBorder(admiralContainer, BORDER_DURATION, BORDER_WIDTH, 0);
     }
 
     private void CreateInteraction(VisualElement _parent)

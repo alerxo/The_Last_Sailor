@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -17,8 +18,23 @@ public class PostCombatScreen : UIScreen
 
     protected override List<UIState> ActiveStates => new() { UIState.PostCombat };
 
+    private const float BACKGROUND_WIDTH = 1200f;
     private Box background;
+
+    private const float HEADER_HEIGHT = 130f;
+    private VisualElement headerContainer;
+
+    private const float RESOURCE_HEIGHT = 50f;
+    private VisualElement resourceContainer;
     private Label resourceCount;
+
+    private const float RESULTS_HEIGHT = 500f;
+    private VisualElement battleResultsContainer;
+    private Box battleResultsBackground;
+
+    private const float NAVIGATION_HEIGHT = 140f;
+    private VisualElement navigationButtonContainer;
+    private readonly List<VisualElement> opacityElements = new();
 
     private readonly List<PostCombatButton> postCombatButtons = new();
     private readonly List<Action> scrapActions = new();
@@ -73,51 +89,90 @@ public class PostCombatScreen : UIScreen
         postCombatButtons.Clear();
         scrapActions.Clear();
         background.Clear();
-
-        CreateHeader(background, _result);
+        opacityElements.Clear();
 
         if (_result != BattleResult.Defeat)
         {
-            Box battleResultsContainer = CreateBattleResultsContainer();
+            CreateHeader(background, _result);
+            CreateResoureContainer(background);
 
-            CreatePlayerColumn(battleResultsContainer, true);
-            CreateEnemyColumn(battleResultsContainer, _enemyAdmiralController, true);
+            Box resultsBackground = CreateBattleResultsContainer(background);
+            CreatePlayerColumn(resultsBackground, true);
+            CreateEnemyColumn(resultsBackground, _enemyAdmiralController, true);
 
-            VisualElement navigationButtonContainer = CreateNavigationButtonContainer();
+            navigationButtonContainer = CreateNavigationButtonContainer(background);
             CreateContinueButton(navigationButtonContainer, _enemyAdmiralController);
             CreateScrapAllButton(navigationButtonContainer, _enemyAdmiralController);
 
-            CreateResoureContainer(background);
+            StartCoroutine(ShowPostCombatScreen());
         }
 
         else
         {
-            Box battleResultsContainer = CreateBattleResultsContainer();
+            CreateHeader(background, _result);
 
-            CreatePlayerColumn(battleResultsContainer, false);
-            CreateEnemyColumn(battleResultsContainer, _enemyAdmiralController, false);
+            Box resultsBackground = CreateBattleResultsContainer(background);
+            CreatePlayerColumn(resultsBackground, false);
+            CreateEnemyColumn(resultsBackground, _enemyAdmiralController, false);
 
-            VisualElement navigationButtonContainer = CreateNavigationButtonContainer();
+            navigationButtonContainer = CreateNavigationButtonContainer(background);
             CreateDefeatButton(navigationButtonContainer);
+
+            StartCoroutine(ShowPostCombatScreen());
         }
 
         ResourceManager_OnResourceAmountChanged(ResourceManager.Instance.Amount);
     }
 
-    private void CreateHeader(VisualElement _container, BattleResult _battleResult)
+    private void CreateHeader(VisualElement _parent, BattleResult _battleResult)
     {
+        headerContainer = new();
+        headerContainer.AddToClassList("post-combat-header-container");
+        _parent.Add(headerContainer);
+
         Label header = new(_battleResult.ToString());
         header.AddToClassList("post-combat-header");
         SetFontSize(header, 70);
-        _container.Add(header);
+        SetHeight(header, HEADER_HEIGHT);
+        headerContainer.Add(header);
     }
 
-    private Box CreateBattleResultsContainer()
+    // Resource
+
+    private void CreateResoureContainer(VisualElement _parent)
     {
-        Box battleResultsContainer = new();
+        resourceContainer = new();
+        resourceContainer.AddToClassList("post-combat-resource-container");
+        _parent.Add(resourceContainer);
+
+        VisualElement resourceBackground = new();
+        resourceBackground.AddToClassList("post-combat-resource-background");
+        SetHeight(resourceContainer, RESOURCE_HEIGHT);
+        resourceContainer.Add(resourceBackground);
+
+        Label label = new("Resources: ");
+        label.AddToClassList("post-combat-resource-label");
+        SetFontSize(label, 30);
+        resourceBackground.Add(label);
+
+        resourceCount = new();
+        resourceCount.AddToClassList("post-combat-resource-label");
+        SetFontSize(resourceCount, 30);
+        resourceBackground.Add(resourceCount);
+    }
+
+    private Box CreateBattleResultsContainer(VisualElement _parent)
+    {
+        battleResultsContainer = new();
         battleResultsContainer.AddToClassList("post-combat-column-container");
-        background.Add(battleResultsContainer);
-        return battleResultsContainer;
+        _parent.Add(battleResultsContainer);
+
+        battleResultsBackground = new();
+        battleResultsBackground.AddToClassList("post-combat-column-background");
+        SetHeight(battleResultsBackground, RESULTS_HEIGHT - 25);
+        battleResultsContainer.Add(battleResultsBackground);
+
+        return battleResultsBackground;
     }
 
     // Player
@@ -251,7 +306,10 @@ public class PostCombatScreen : UIScreen
         container.AddToClassList("post-combat-row-container");
         container.verticalScroller.highButton.RemoveFromHierarchy();
         container.verticalScroller.lowButton.RemoveFromHierarchy();
+        container.horizontalScroller.RemoveFromHierarchy();
         _parent.Add(container);
+
+        opacityElements.Add(container.verticalScroller);
 
         return container;
     }
@@ -296,34 +354,20 @@ public class PostCombatScreen : UIScreen
         return button;
     }
 
-    // Resource
-
-    private void CreateResoureContainer(VisualElement _parent)
-    {
-        VisualElement resourceContainer = new();
-        resourceContainer.AddToClassList("post-combat-resource-container");
-        _parent.Add(resourceContainer);
-
-        Label label = new("Resources: ");
-        label.AddToClassList("post-combat-resource-label");
-        SetFontSize(label, 30);
-        resourceContainer.Add(label);
-
-        resourceCount = new();
-        resourceCount.AddToClassList("post-combat-resource-label");
-        SetFontSize(resourceCount, 30);
-        resourceContainer.Add(resourceCount);
-    }
-
     // Navigation
 
-    private VisualElement CreateNavigationButtonContainer()
+    private VisualElement CreateNavigationButtonContainer(VisualElement _parent)
     {
-        VisualElement navigationButtonContainer = new();
+        navigationButtonContainer = new();
         navigationButtonContainer.AddToClassList("post-combat-navigation-button-container");
-        background.Add(navigationButtonContainer);
+        _parent.Add(navigationButtonContainer);
 
-        return navigationButtonContainer;
+        VisualElement navigationBackground = new();
+        navigationBackground.AddToClassList("post-combat-navigation-button-background");
+        SetHeight(navigationBackground, NAVIGATION_HEIGHT);
+        navigationButtonContainer.Add(navigationBackground);
+
+        return navigationBackground;
     }
 
     private void CreateContinueButton(VisualElement _parent, EnemyAdmiralController _admiral)
@@ -349,7 +393,7 @@ public class PostCombatScreen : UIScreen
         button.AddToClassList("post-combat-navigation-button");
         SetFontSize(button, 35);
         postCombatButtons.Add(new(button, () => CanScrapAll(_admiral)));
-        button.text = "Scrap all enemy boats";
+        button.text = "Scrap all";
 
         _parent.Add(button);
     }
@@ -377,6 +421,64 @@ public class PostCombatScreen : UIScreen
         SetFontSize(button, 35);
         button.text = "Return to main menu";
         _parent.Add(button);
+    }
+
+    public IEnumerator ShowPostCombatScreen()
+    {
+        const float BACKGROUND_BORDER_WIDTH = 6f;
+        const float BACKGROUND_BORDER_DURATION = 0.1f;
+        const float HEADER_HEIGHT_DURATION = 0.2f;
+
+        const float BACKGROUND_WIDTH_DURATION = 0.6f;
+
+        const float RESULTS_BORDER_WIDTH = 4f;
+        const float RESULTS_BORDER_DURATION = 0.1f;
+
+        const float HEIGHT_DURATION = 2f;
+
+        const float OPACITY_DURATION = 0.4f;
+
+        SetWidth(background, 0);
+        SetBorder(background, 0);
+        SetHeight(headerContainer, 0);
+
+        SetBorder(battleResultsBackground, 0);
+
+        SetHeight(resourceContainer, 0);
+        SetHeight(battleResultsContainer, 0);
+        SetHeight(navigationButtonContainer, 0);
+
+        foreach (VisualElement opacityElement in opacityElements)
+        {
+            opacityElement.style.opacity = 0;
+            opacityElement.enabledSelf = false;
+        }
+
+        yield return AnimateBorder(background, BACKGROUND_BORDER_DURATION, 0, BACKGROUND_BORDER_WIDTH);
+        yield return AnimateHeight(headerContainer, HEADER_HEIGHT_DURATION, 0, HEADER_HEIGHT);
+
+        yield return new WaitForSeconds(0.2f);
+
+        yield return AnimateWidth(background, BACKGROUND_WIDTH_DURATION, 0, BACKGROUND_WIDTH);
+
+        yield return new WaitForSeconds(2f);
+
+        yield return AnimateBorder(battleResultsBackground, RESULTS_BORDER_DURATION, 0, RESULTS_BORDER_WIDTH);
+
+        const float TOTAL_HEIGHT = RESOURCE_HEIGHT + RESULTS_HEIGHT + NAVIGATION_HEIGHT;
+
+        yield return AnimateHeight(resourceContainer, RESOURCE_HEIGHT / TOTAL_HEIGHT * HEIGHT_DURATION, 0, RESOURCE_HEIGHT);
+        yield return AnimateHeight(battleResultsContainer, RESULTS_HEIGHT / TOTAL_HEIGHT * HEIGHT_DURATION, 0, RESULTS_HEIGHT);
+        yield return AnimateHeight(navigationButtonContainer, NAVIGATION_HEIGHT / TOTAL_HEIGHT * HEIGHT_DURATION, 0, NAVIGATION_HEIGHT);
+
+        yield return new WaitForSeconds(0.5f);
+
+        foreach (VisualElement opacityElement in opacityElements)
+        {
+            opacityElement.enabledSelf = true;
+        }
+
+        yield return AnimateOpacity(opacityElements, OPACITY_DURATION, 0, 1);
     }
 
     private class PostCombatButton

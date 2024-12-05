@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -72,5 +73,67 @@ public abstract class UIScreen : MonoBehaviour
     protected float GetScaledValue(float _value)
     {
         return _value * UIManager.UIScale;
+    }
+
+    protected IEnumerator AnimateBorder(VisualElement _target, float _duration, float _start, float _end)
+    {
+        float timer = 0;
+
+        while ((timer += Time.unscaledDeltaTime) < _duration)
+        {
+            SetBorder(_target, Mathf.Lerp(_start, _end, timer / _duration));
+
+            yield return null;
+        }
+
+        SetBorder(_target, _end);
+    }
+
+    protected IEnumerator AnimateWidth(VisualElement _target, float _duration, float _start, float _end)
+    {
+        float timer = 0;
+
+        while ((timer += Time.unscaledDeltaTime) < _duration)
+        {
+            SetWidth(_target, Mathf.Lerp(_start, _end, timer / _duration));
+
+            yield return null;
+        }
+
+        SetWidth(_target, _end);
+    }
+
+    protected IEnumerator AnimateHeight(VisualElement _target, float _duration, float _start, float _end)
+    {
+        float timer = 0;
+
+        while ((timer += Time.unscaledDeltaTime) < _duration)
+        {
+            SetHeight(_target, Mathf.Lerp(_start, _end, timer / _duration));
+
+            yield return null;
+        }
+
+        SetHeight(_target, _end);
+    }
+
+    protected IEnumerator AnimateOpacity(List<VisualElement> _targets, float _duration, float _start, float _end)
+    {
+        float timer = 0;
+
+        while ((timer += Time.unscaledDeltaTime) < _duration)
+        {
+            foreach (VisualElement target in _targets)
+            {
+                target.style.opacity = Mathf.Lerp(_start, _end, timer / _duration);
+            }
+
+            yield return null;
+        }
+
+        foreach (VisualElement target in _targets)
+        {
+            target.style.opacity = _end;
+        }
     }
 }
