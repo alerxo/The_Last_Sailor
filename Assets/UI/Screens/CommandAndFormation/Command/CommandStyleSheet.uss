@@ -1,0 +1,35 @@
+.command-container {
+	justify-content: flex-end;
+
+	width: 100%;
+	height: 100%;
+}
+
+.command-button-container {
+	justify-content: space-between;
+
+	width: 17%;
+	height: 70%;
+	margin-bottom: 5%;
+	margin-left: 1%;
+}
+
+.command-top-button-container {
+	justify-content: space-between;
+
+	width: 100%;
+	height: 30%;
+}
+
+.command-top-button {
+	border-width: 5px;
+	border-radius: 10px;
+}
+
+.command-change-view-button {
+	width: 100%;
+	height: 10%;
+
+	border-width: 5px;
+	border-radius: 10px;
+}

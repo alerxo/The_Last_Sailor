@@ -23,7 +23,7 @@ public class CameraManager : MonoBehaviour
     private CinemachineCamera steeringWheelCamera;
     private CinemachineCamera interactionCamera;
     private CinemachineCamera[] fleetCameras;
-    private CinemachineCamera[] commandCamera;
+    private CinemachineCamera[] formationCamera;
 
     private CinemachineBasicMultiChannelPerlin[] cinemachineBasicMultiChannelPerlins;
     private CinemachineInputAxisController[] cinemachineInputAxisControllers;
@@ -67,12 +67,12 @@ public class CameraManager : MonoBehaviour
             fleetCameras[i] = fleet[i].GetComponent<CinemachineCamera>();
         }
 
-        GameObject[] command = GameObject.FindGameObjectsWithTag("CommandCamera");
-        commandCamera = new CinemachineCamera[command.Length];
+        GameObject[] formation = GameObject.FindGameObjectsWithTag("FormationCamera");
+        formationCamera = new CinemachineCamera[formation.Length];
 
-        for (int i = 0; i < command.Length; i++)
+        for (int i = 0; i < formation.Length; i++)
         {
-            commandCamera[i] = command[i].GetComponent<CinemachineCamera>();
+            formationCamera[i] = formation[i].GetComponent<CinemachineCamera>();
         }
     }
 
@@ -97,7 +97,7 @@ public class CameraManager : MonoBehaviour
                 SetInteractionCameraPosition();
                 break;
 
-            case CameraState.Command:
+            case CameraState.Formation:
                 GetCommandCameraMovement();
                 SetCommandCameraPosition();
                 break;
@@ -183,21 +183,21 @@ public class CameraManager : MonoBehaviour
 
     public CinemachineCamera GetCurrentCommandCamera()
     {
-        return commandCamera[0].enabled ? commandCamera[0] : commandCamera[1];
+        return formationCamera[0].enabled ? formationCamera[0] : formationCamera[1];
     }
 
     public void GetNextCommandCamera()
     {
-        if (commandCamera[0].enabled)
+        if (formationCamera[0].enabled)
         {
-            commandCamera[0].enabled = false;
-            commandCamera[1].enabled = true;
+            formationCamera[0].enabled = false;
+            formationCamera[1].enabled = true;
         }
 
         else
         {
-            commandCamera[1].enabled = false;
-            commandCamera[0].enabled = true;
+            formationCamera[1].enabled = false;
+            formationCamera[0].enabled = true;
         }
     }
 
@@ -232,9 +232,9 @@ public class CameraManager : MonoBehaviour
             }
         }
 
-        if (_state != CameraState.Command)
+        if (_state != CameraState.Formation)
         {
-            foreach (CinemachineCamera camera in commandCamera)
+            foreach (CinemachineCamera camera in formationCamera)
             {
                 camera.enabled = false;
             }
@@ -332,5 +332,5 @@ public enum CameraState
     SteeringWheel,
     Interaction,
     Fleet,
-    Command
+    Formation
 }

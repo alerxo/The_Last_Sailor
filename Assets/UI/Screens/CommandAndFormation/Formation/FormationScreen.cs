@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.UIElements;
 
-public class CommandScreen : UIScreen
+public class FormationScreen : UIScreen
 {
-    protected override UIState ActiveState => UIState.Command;
+    protected override List<UIState> ActiveStates => new() { UIState.Formation };
 
     private ScrollView boatItemContainer;
 
@@ -61,7 +60,7 @@ public class CommandScreen : UIScreen
 
     private void Update()
     {
-        if (UIManager.Instance.State == UIState.Command)
+        if (UIManager.Instance.State == UIState.Formation)
         {
             playerHighlight.transform.position = GetPositionAboveWater(PlayerBoatController.Instance.transform.position);
 
@@ -144,15 +143,15 @@ public class CommandScreen : UIScreen
     public override void Generate()
     {
         VisualElement container = new();
-        container.AddToClassList("command-container");
+        container.AddToClassList("formation-container");
         root.Add(container);
 
         Box background = new();
-        background.AddToClassList("command-background");
+        background.AddToClassList("formation-background");
         container.Add(background);
 
         boatItemContainer = new();
-        boatItemContainer.AddToClassList("command-boat-item-container");
+        boatItemContainer.AddToClassList("formation-boat-item-container");
         boatItemContainer.RegisterCallback<MouseEnterEvent>(evt => canClickWater = false);
         boatItemContainer.RegisterCallback<MouseLeaveEvent>(evt => canClickWater = true);
         background.Add(boatItemContainer);
@@ -163,12 +162,12 @@ public class CommandScreen : UIScreen
     private void CreatePlayerItem(VisualElement _parent, Boat _boat)
     {
         Button button = new(() => OnPlayerItem(_boat));
-        button.AddToClassList("command-boat-item");
+        button.AddToClassList("formation-boat-item");
         SetBorder(button, playerMaterial.color);
         _parent.Add(button);
 
         Label header = new(_boat.Name);
-        header.AddToClassList("command-boat-item-header");
+        header.AddToClassList("formation-boat-item-header");
         SetFontSize(header, 25);
         button.Add(header);
     }
@@ -176,17 +175,17 @@ public class CommandScreen : UIScreen
     private Button CreateSuborinateItem(VisualElement _parent, AIBoatController _boatController)
     {
         Button button = new(() => OnSubordinateItem(_boatController));
-        button.AddToClassList("command-boat-item");
+        button.AddToClassList("formation-boat-item");
         SetBorder(button, defaultMaterial.color);
         _parent.Add(button);
 
         Label header = new(_boatController.Boat.Name);
-        header.AddToClassList("command-boat-item-header");
+        header.AddToClassList("formation-boat-item-header");
         SetFontSize(header, 25);
         button.Add(header);
 
         Label description = new();
-        description.AddToClassList("command-boat-item-description");
+        description.AddToClassList("formation-boat-item-description");
         SetFontSize(description, 20);
         button.Add(description);
 
@@ -207,7 +206,7 @@ public class CommandScreen : UIScreen
 
     private void UIManager_OnStateChanged(UIState _state)
     {
-        if (_state == UIState.Command)
+        if (_state == UIState.Formation)
         {
             input.Player.Enable();
 

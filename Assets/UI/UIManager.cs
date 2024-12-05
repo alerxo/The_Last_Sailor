@@ -11,9 +11,11 @@ public class UIManager : MonoBehaviour
 
     public UIState State { get; private set; } = UIState.TitleScreen;
     private readonly List<UIState> pauseScreens = new() { UIState.Pause, UIState.Options };
-    private readonly List<UIState> slowmoScreens = new() { UIState.Command, UIState.PostCombat };
+    private readonly List<UIState> slowmoScreens = new() { UIState.Formation, UIState.PostCombat };
     private UIState optionsReturnState;
     private bool isInTitleScreen = true;
+
+
 
     public static float UIScale = 1f;
     private const float UIScreenBaseWidth = 1920f;
@@ -46,6 +48,28 @@ public class UIManager : MonoBehaviour
         }
 
         SetState(UIState.TitleScreen);
+    }
+
+    public void EnterFormationView()
+    {
+        SetState(UIState.Formation);
+        FirstPersonController.Instance.SetState(PlayerState.Formation);
+        CameraManager.Instance.SetState(CameraState.Formation);
+    }
+
+    public void ExitFormationView()
+    {
+        SetState(UIState.HUD);
+        FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
+        CameraManager.Instance.SetState(CameraState.Player);
+    }
+
+    public void ShowCommandView()
+    {
+        if (State != UIState.Formation)
+        {
+            CommandScreen.Instance.Show();
+        }
     }
 
     public void SetStateOptions(UIState _returnState)
@@ -85,10 +109,12 @@ public class UIManager : MonoBehaviour
             case PlayerState.SteeringWheel:
             case PlayerState.Throttle:
             case PlayerState.Fleet:
-            case PlayerState.Command:
                 SetState(UIState.HUD);
                 CameraManager.Instance.SetState(CameraState.Player);
                 FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
+                return;
+            case PlayerState.Formation:
+                ExitFormationView();
                 return;
         }
 
@@ -100,8 +126,6 @@ public class UIManager : MonoBehaviour
 
             case UIState.Pause:
                 SetState(UIState.HUD);
-                CameraManager.Instance.SetState(CameraState.Player);
-                FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
                 return;
         }
     }
@@ -115,5 +139,5 @@ public enum UIState
     Options,
     PostCombat,
     Fleet,
-    Command
+    Formation
 }

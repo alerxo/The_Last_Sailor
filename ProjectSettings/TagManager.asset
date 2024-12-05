@@ -12,9 +12,9 @@ TagManager:
   - SteeringWheelCamera
   - InteractionCamera
   - FleetCamera
-  - CommandCamera
   - SteeringWheelCameraTarget
-  - CommandCameraTarget
+  - FormationCamera
+  - FormationCameraTarget
   layers:
   - Default
   - TransparentFX

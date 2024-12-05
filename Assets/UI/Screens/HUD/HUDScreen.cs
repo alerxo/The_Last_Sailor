@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -17,7 +18,7 @@ public class HUDScreen : UIScreen
 
     [SerializeField] private InputActionReference interactionAsset;
 
-    protected override UIState ActiveState => UIState.HUD;
+    protected override List<UIState> ActiveStates => new() { UIState.HUD };
 
     private Box admiralContainer;
     private Label admiralText;

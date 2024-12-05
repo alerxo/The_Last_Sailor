@@ -15,7 +15,7 @@ public class PostCombatScreen : UIScreen
 
     public static PostCombatScreen Instance { get; private set; }
 
-    protected override UIState ActiveState => UIState.PostCombat;
+    protected override List<UIState> ActiveStates => new() { UIState.PostCombat };
 
     private Box background;
     private Label resourceCount;

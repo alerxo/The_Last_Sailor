@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -5,7 +6,7 @@ using UnityEngine.UIElements;
 public class FleetScreen : UIScreen
 {
     public static event UnityAction OnBoatUpgraded;
-    protected override UIState ActiveState => UIState.Fleet;
+    protected override List<UIState> ActiveStates => new() { UIState.Fleet };
 
     private int currentBoat;
 

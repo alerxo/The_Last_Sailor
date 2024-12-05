@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 public class PauseScreen : UIScreen
 {
-    protected override UIState ActiveState => UIState.Pause;
+    protected override List<UIState> ActiveStates => new() { UIState.Pause };
 
     [SerializeField] private Texture2D backgroundImage;
 

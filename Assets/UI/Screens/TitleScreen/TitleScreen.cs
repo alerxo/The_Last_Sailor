@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class TitleScreen : UIScreen
 {
-    protected override UIState ActiveState => UIState.TitleScreen;
+    protected override List<UIState> ActiveStates => new() { UIState.TitleScreen };
+
     [SerializeField] private Texture2D backgroundImage;
 
     public override void Generate()
