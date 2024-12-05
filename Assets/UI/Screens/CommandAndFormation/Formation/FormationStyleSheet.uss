@@ -35,11 +35,11 @@
 }
 
 .formation-boat-item-header {
-
+	margin: 0px;
 }
 
 .formation-boat-item-description {
-
+	margin: 0px;
 }
 
 /* ScrollView */

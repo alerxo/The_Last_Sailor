@@ -144,7 +144,7 @@ public class PostCombatScreen : UIScreen
 
         if (_shoulCreateButtons)
         {
-            Button button = CreateRowButton(buttonContainer, "Repair", ResourceManager.GetRepairCost(_boat), () => CanRepair(_boat));
+            Button button = CreateRowButton(buttonContainer, "Repair", -ResourceManager.GetRepairCost(_boat), () => CanRepair(_boat));
             button.clicked += () => OnRepaired(description, _boat);
             button.clicked += () => OnBoatRepaired?.Invoke();
         }
@@ -186,7 +186,7 @@ public class PostCombatScreen : UIScreen
 
         if (_shoulCreateButtons)
         {
-            Button seizeButton = CreateRowButton(buttonContainer, "Seize", ResourceManager.GetRepairCost(_boatController.Boat), () => CanSeize(_boatController));
+            Button seizeButton = CreateRowButton(buttonContainer, "Seize", -ResourceManager.GetRepairCost(_boatController.Boat), () => CanSeize(_boatController));
             Button scrapButton = CreateRowButton(buttonContainer, "Scrap", ResourceManager.GAIN_FROM_SCRAPPING_AMOUNT, () => CanScrap(_boatController));
 
             seizeButton.clicked += () => OnSeized(description, _boatController);
@@ -289,7 +289,7 @@ public class PostCombatScreen : UIScreen
         button.AddToClassList("post-combat-button");
         button.AddToClassList("post-combat-row-button");
         SetFontSize(button, 17);
-        button.text = $"{_text} for {_resource} resources";
+        button.text = $"{_text} ({(_resource > 0 ? "+" : "-")} {Mathf.Abs(_resource)} R)";
         postCombatButtons.Add(new(button, _isEnabled));
         _parent.Add(button);
 

@@ -11,6 +11,7 @@ public class FleetScreen : UIScreen
     private int currentBoat;
 
     private Box boatContainer;
+    private readonly List<VisualElement> navigationButtons = new();
 
     private void Awake()
     {
@@ -67,6 +68,11 @@ public class FleetScreen : UIScreen
     {
         boatContainer.Clear();
 
+        foreach (VisualElement item in navigationButtons)
+        {
+            item.style.display = PlayerBoatController.Instance.AdmiralController.Fleet.Count > 1 ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
         CreateExitButton(boatContainer);
 
         Boat boat = PlayerBoatController.Instance.AdmiralController.Fleet[currentBoat];
@@ -97,7 +103,7 @@ public class FleetScreen : UIScreen
         container.AddToClassList("fleet-boat-upgrade-container");
         _parent.Add(container);
 
-        Label description = new($"Tier {_boat.GetTierOfUpgrade(_type)} {_type}\nCurrent increase: {_boat.GetUpgradeModifierPercentage(_type)}%");
+        Label description = new($"Tier {_boat.GetTierOfUpgradeAsString(_type)} {_type} ({_boat.GetUpgradeModifierPercentage(_type)}% {_boat.GetModifierDescription(_type)})");
         description.AddToClassList("fleet-boat-upgrade-description");
         SetFontSize(description, 22);
         container.Add(description);
@@ -106,7 +112,7 @@ public class FleetScreen : UIScreen
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-boat-button");
         SetFontSize(button, 22);
-        button.text = $"Increase by {_boat.GetUpgradeIncreasePercentage(_type)}% for {Boat.UPGRADE_COST} resources";
+        button.text = $"+ {_boat.GetUpgradeIncreasePercentage(_type)}% {_boat.GetModifierDescription(_type)} (-{Boat.UPGRADE_COST} R)";
         button.SetEnabled(_boat.CanUpgrade(_type));
         container.Add(button);
 
@@ -127,6 +133,8 @@ public class FleetScreen : UIScreen
         SetFontSize(button, 40);
         button.text = _text;
         _parent.Add(button);
+
+        navigationButtons.Add(button);
     }
 
     public void OnNavigationArrow(int _index)
