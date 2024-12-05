@@ -1,16 +1,17 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class OptionsScreen : UIScreen
 {
-    protected override UIState ActiveState => UIState.Options;
+    protected override List<UIState> ActiveStates => new() { UIState.Options };
 
     public override void Generate()
     {
         VisualElement container = new();
         container.AddToClassList("options-container");
-        root.Add(container);
+        Root.Add(container);
 
         Box background = new();
         background.AddToClassList("options-background");

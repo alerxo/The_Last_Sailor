@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class PlayerCommandController : MonoBehaviour
 {
-    private static readonly List<UIState> activeUIStates = new() { UIState.HUD, UIState.Command };
-    private static readonly List<PlayerState> activePlayerStates = new() { PlayerState.SteeringWheel, PlayerState.FirstPerson, PlayerState.Cannon, PlayerState.Throttle, PlayerState.Command };
+    private static readonly List<UIState> activeUIStates = new() { UIState.HUD, UIState.Formation };
+    private static readonly List<PlayerState> activePlayerStates = new() { PlayerState.SteeringWheel, PlayerState.FirstPerson, PlayerState.Cannon, PlayerState.Throttle, PlayerState.Formation };
 
     private InputSystem_Actions input;
     private PlayerAdmiralController admiralController;
@@ -16,6 +15,8 @@ public class PlayerCommandController : MonoBehaviour
         input.Player.FirstCommand.performed += FirstCommand_performed;
         input.Player.SecondCommand.performed += SecondCommand_performed;
         input.Player.ThirdCommand.performed += ThirdCommand_performed;
+        input.Player.EnterCommandView.performed += EnterCommandView_performed;
+        input.Player.EnterFormationView.performed += EnterFormationView_performed;
 
         UIManager.OnStateChanged += UIManager_OnStateChanged;
         FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
@@ -63,14 +64,29 @@ public class PlayerCommandController : MonoBehaviour
     private void FirstCommand_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
         admiralController.SetCommandForSubordinates(Command.Formation);
+        UIManager.Instance.ShowCommandView();
     }
+
     private void SecondCommand_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
         admiralController.SetCommandForSubordinates(Command.Hold);
+        UIManager.Instance.ShowCommandView();
     }
 
     private void ThirdCommand_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
         admiralController.SetCommandForSubordinates(Command.Charge);
+        UIManager.Instance.ShowCommandView();
+    }
+
+    private void EnterCommandView_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    {
+        UIManager.Instance.ShowCommandView();
+    }
+
+    private void EnterFormationView_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    {
+        if (UIManager.Instance.State == UIState.Formation) UIManager.Instance.ExitFormationView();
+        else UIManager.Instance.EnterFormationView();
     }
 }

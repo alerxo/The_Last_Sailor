@@ -1,4 +1,4 @@
-.command-container {
+.formation-container {
 	justify-content: center;
 	align-items: flex-end;
 
@@ -6,7 +6,7 @@
 	height: 100%;
 }
 
-.command-background {
+.formation-background {
 	justify-content: center;
 	align-items: center;
 
@@ -19,12 +19,12 @@
 	background-color: rgba(50, 50, 50, 0.7);
 }
 
-.command-boat-item-container {
+.formation-boat-item-container {
 	width: 92%;
 	height: 97%;
 }
 
-.command-boat-item {
+.formation-boat-item {
 	width: 98%;
 
 	margin-bottom: 3%;
@@ -34,11 +34,11 @@
 	background-color: rgba(150, 150, 150, 0.8);
 }
 
-.command-boat-item-header {
+.formation-boat-item-header {
 
 }
 
-.command-boat-item-description {
+.formation-boat-item-description {
 
 }
 

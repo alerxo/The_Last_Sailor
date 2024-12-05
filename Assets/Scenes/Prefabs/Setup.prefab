@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 2904038259249123690}
   - component: {fileID: 6899278041928051270}
   m_Layer: 0
-  m_Name: CommandCamera_First
-  m_TagString: CommandCamera
+  m_Name: FormationCamera_First
+  m_TagString: FormationCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 33973444442417637}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 90, y: 150, z: 0}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 150, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -366,7 +366,7 @@ GameObject:
   - component: {fileID: 7965957315351847540}
   m_Layer: 0
   m_Name: CommandTarget_Second
-  m_TagString: CommandCameraTarget
+  m_TagString: FormationCameraTarget
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -397,7 +397,7 @@ GameObject:
   - component: {fileID: 4546009517442051033}
   m_Layer: 0
   m_Name: CommandTarget_First
-  m_TagString: CommandCameraTarget
+  m_TagString: FormationCameraTarget
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1201,8 +1201,8 @@ GameObject:
   - component: {fileID: 5974792243631529654}
   - component: {fileID: 1116320697762632503}
   m_Layer: 0
-  m_Name: CommandCamera_Second
-  m_TagString: CommandCamera
+  m_Name: FormationCamera_Second
+  m_TagString: FormationCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1215,8 +1215,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7751665657197719083}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 90, y: 150, z: 0}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 150, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

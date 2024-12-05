@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class TitleScreen : UIScreen
 {
-    protected override UIState ActiveState => UIState.TitleScreen;
+    protected override List<UIState> ActiveStates => new() { UIState.TitleScreen };
+
     [SerializeField] private Texture2D backgroundImage;
 
     public override void Generate()
@@ -12,7 +14,7 @@ public class TitleScreen : UIScreen
         Image background = new();
         background.AddToClassList("title-screen-background");
         background.image = backgroundImage;
-        root.Add(background);
+        Root.Add(background);
 
         Label title = new("The Last Sailor");
         title.AddToClassList("title-screen-title");

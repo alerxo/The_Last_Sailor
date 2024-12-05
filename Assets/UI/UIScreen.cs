@@ -1,19 +1,20 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public abstract class UIScreen : MonoBehaviour
 {
-    protected abstract UIState ActiveState { get; }
-    protected VisualElement root;
+    protected abstract List<UIState> ActiveStates { get; }
+    public VisualElement Root { get; protected set; }
     [SerializeField] private StyleSheet[] styleSheets;
 
     private void OnEnable()
     {
-        root = GetComponent<UIDocument>().rootVisualElement;
+        Root = GetComponent<UIDocument>().rootVisualElement;
 
         foreach (StyleSheet styleSheet in styleSheets)
         {
-            root.styleSheets.Add(styleSheet);
+            Root.styleSheets.Add(styleSheet);
         }
 
         UIManager.OnStateChanged += UIManager_OnStateChanged;
@@ -28,7 +29,7 @@ public abstract class UIScreen : MonoBehaviour
 
     private void UIManager_OnStateChanged(UIState _state)
     {
-        root.style.display = _state == ActiveState ? DisplayStyle.Flex : DisplayStyle.None;
+        Root.style.display = ActiveStates.Contains(_state) ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
     protected void SetSize(VisualElement _target, float _width, float _height)
