@@ -457,7 +457,7 @@ public class PostCombatScreen : UIScreen
         yield return AnimateBorder(background, BACKGROUND_BORDER_DURATION, 0, BACKGROUND_BORDER_WIDTH);
         yield return AnimateHeight(headerContainer, HEADER_HEIGHT_DURATION, 0, HEADER_HEIGHT);
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
 
         yield return AnimateWidth(background, BACKGROUND_WIDTH_DURATION, 0, BACKGROUND_WIDTH);
 
