@@ -19,7 +19,11 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
     [SerializeField] private float MaxHealth;
     [SerializeField] Transform COM;
     [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioSource destroyedAudioSource;
+    [SerializeField] AudioSource burningAudioSource;
     [SerializeField] AudioClip destroyedSound;
+    [SerializeField] AudioClip fireSound;
+    [SerializeField] AudioClip explodeSound;
 
     private Vector3 defaultCOM;
     public string Name { get; private set; }
@@ -61,18 +65,23 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     public void Damage(float _damage)
     {
+        audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
+        audioSource.PlayOneShot(destroyedSound);
+
         if (Health == 0) return;
 
         if (Mathf.Clamp(Health -= _damage, 0, MaxHealth) <= 0)
         {
+            destroyedAudioSource.PlayOneShot(explodeSound);
+           burningAudioSource.clip = fireSound;
+            burningAudioSource.loop = true;
+            burningAudioSource.Play();
             OnDestroyed?.Invoke();
         }
 
         else
         {
             OnDamaged?.Invoke();
-            audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
-            audioSource.PlayOneShot(destroyedSound);
         }
     }
 
@@ -83,6 +92,11 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     public void Repair()
     {
+        if (burningAudioSource.loop == true) 
+        {
+           burningAudioSource.loop = false;
+           burningAudioSource.Stop();
+        }
         StopAllCoroutines();
         SetDefault();
         Buoyancy.SetDefault();

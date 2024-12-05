@@ -77,8 +77,8 @@ public class Engine : MonoBehaviour, IUpgradeable
             paddleAudioSource.Play();
         }
 
-        paddleAudioSource.volume = (Throttle / 9);
-        paddleAudioSource.pitch = Throttle;
+        paddleAudioSource.volume = (Throttle / 5);
+        paddleAudioSource.pitch = Throttle / 1.5f;
     }
 
     private void StopPaddleWheelAudio()
