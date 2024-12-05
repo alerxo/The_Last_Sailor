@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 public class PauseScreen : UIScreen
 {
-    protected override UIState ActiveState => UIState.Pause;
+    protected override List<UIState> ActiveStates => new() { UIState.Pause };
 
     [SerializeField] private Texture2D backgroundImage;
 
@@ -14,7 +14,7 @@ public class PauseScreen : UIScreen
     {
         VisualElement container = new();
         container.AddToClassList("pause-container");
-        root.Add(container);
+        Root.Add(container);
 
         Image background = new();
         background.AddToClassList("pause-background");

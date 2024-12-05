@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -5,7 +6,7 @@ using UnityEngine.UIElements;
 public class FleetScreen : UIScreen
 {
     public static event UnityAction OnBoatUpgraded;
-    protected override UIState ActiveState => UIState.Fleet;
+    protected override List<UIState> ActiveStates => new() { UIState.Fleet };
 
     private int currentBoat;
 
@@ -44,7 +45,7 @@ public class FleetScreen : UIScreen
     {
         VisualElement container = new();
         container.AddToClassList("fleet-container");
-        root.Add(container);
+        Root.Add(container);
 
         VisualElement menuContainer = new();
         menuContainer.AddToClassList("fleet-menu-container");

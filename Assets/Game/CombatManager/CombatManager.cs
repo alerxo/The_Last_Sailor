@@ -71,7 +71,7 @@ public class CombatManager : MonoBehaviour
         {
             UIManager.Instance.SetState(UIState.PostCombat);
             FirstPersonController.Instance.SetState(PlayerState.Inactive);
-            CameraManager.Instance.SetState(CameraState.Command);
+            CameraManager.Instance.SetState(CameraState.Formation);
 
             OnBattleConcluded?.Invoke(GetBattleResult(AdmiralInCombat));
             combatState = CombatState.PostCombat;

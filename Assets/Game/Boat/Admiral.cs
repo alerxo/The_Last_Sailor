@@ -8,6 +8,7 @@ using UnityEngine.Events;
 public abstract class Admiral : MonoBehaviour
 {
     public event UnityAction<AIBoatController, bool> OnSubordinateChanged;
+    public event UnityAction<Command> OnCommandChanged;
     public string Name { get; private set; }
     public Boat Owner { get; private set; }
 
@@ -15,7 +16,7 @@ public abstract class Admiral : MonoBehaviour
 
     public readonly List<Boat> Fleet = new();
     public readonly List<AIBoatController> Subordinates = new();
-
+    public Command Command { get; private set; }
     public void SetOwner(Boat boat)
     {
         Owner = boat;
@@ -77,8 +78,32 @@ public abstract class Admiral : MonoBehaviour
         {
             if (!boatController.Boat.IsSunk)
             {
-                boatController.SetCommand(_command);
+                switch (_command)
+                {
+                    case Command.Unassigned:
+                        boatController.SetCommand(Command.Unassigned);
+                        break;
+
+                    case Command.Formation when boatController.FormationPosition.HasValue:
+                        boatController.SetCommand(Command.Formation);
+                        break;
+
+                    case Command.Hold when boatController.FormationPosition.HasValue:
+                        boatController.SetCommand(Command.Hold);
+                        break;
+
+                    case Command.Charge:
+                        boatController.SetCommand(Command.Charge);
+                        break;
+
+                    default:
+                        boatController.SetCommand(Command.Unassigned);
+                        break;
+                }
             }
         }
+
+        Command = _command;
+        OnCommandChanged?.Invoke(Command);
     }
 }

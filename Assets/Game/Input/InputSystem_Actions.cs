@@ -37,6 +37,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""f1ba0d36-48eb-4cd5-b651-1c94a6531f70"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Sprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""641cd816-40e6-41b4-8c3d-04687c349290"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Look"",
                     ""type"": ""Value"",
                     ""id"": ""6b444451-8a00-4d00-a97e-f47457f736a8"",
@@ -82,33 +100,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""f1ba0d36-48eb-4cd5-b651-1c94a6531f70"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Sprint"",
-                    ""type"": ""Button"",
-                    ""id"": ""641cd816-40e6-41b4-8c3d-04687c349290"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Escape"",
-                    ""type"": ""Button"",
-                    ""id"": ""d6f5d36a-ddf6-499b-91f2-2e1e1674c39b"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""CommandSelect"",
                     ""type"": ""Button"",
                     ""id"": ""708da9f7-b261-4680-a91c-e8412e2ce2e5"",
@@ -148,6 +139,33 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""ThirdCommand"",
                     ""type"": ""Button"",
                     ""id"": ""a053b3cd-9df4-4142-97be-373d9b366bb1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EnterCommandView"",
+                    ""type"": ""Button"",
+                    ""id"": ""19176c39-f113-4911-bb81-b9776b97a77c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EnterFormationView"",
+                    ""type"": ""Button"",
+                    ""id"": ""ba59b3bf-760b-4ef8-9b62-bc7ce5987039"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Escape"",
+                    ""type"": ""Button"",
+                    ""id"": ""d6f5d36a-ddf6-499b-91f2-2e1e1674c39b"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -526,6 +544,28 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ThirdCommand"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6783c89d-8429-4c64-b630-6f03dab4f1e0"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""EnterCommandView"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ed9c7f40-6df1-4949-99c0-d2b015ca06b8"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnterFormationView"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1114,19 +1154,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_ChangeCamera = m_Player.FindAction("ChangeCamera", throwIfNotFound: true);
         m_Player_CameraZoom = m_Player.FindAction("CameraZoom", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_CannonFire = m_Player.FindAction("CannonFire", throwIfNotFound: true);
-        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
         m_Player_CommandSelect = m_Player.FindAction("CommandSelect", throwIfNotFound: true);
         m_Player_CommandDeselect = m_Player.FindAction("CommandDeselect", throwIfNotFound: true);
         m_Player_FirstCommand = m_Player.FindAction("FirstCommand", throwIfNotFound: true);
         m_Player_SecondCommand = m_Player.FindAction("SecondCommand", throwIfNotFound: true);
         m_Player_ThirdCommand = m_Player.FindAction("ThirdCommand", throwIfNotFound: true);
+        m_Player_EnterCommandView = m_Player.FindAction("EnterCommandView", throwIfNotFound: true);
+        m_Player_EnterFormationView = m_Player.FindAction("EnterFormationView", throwIfNotFound: true);
+        m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1207,37 +1249,41 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
+    private readonly InputAction m_Player_Jump;
+    private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_ChangeCamera;
     private readonly InputAction m_Player_CameraZoom;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_CannonFire;
-    private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_Escape;
     private readonly InputAction m_Player_CommandSelect;
     private readonly InputAction m_Player_CommandDeselect;
     private readonly InputAction m_Player_FirstCommand;
     private readonly InputAction m_Player_SecondCommand;
     private readonly InputAction m_Player_ThirdCommand;
+    private readonly InputAction m_Player_EnterCommandView;
+    private readonly InputAction m_Player_EnterFormationView;
+    private readonly InputAction m_Player_Escape;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
         public PlayerActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
+        public InputAction @Jump => m_Wrapper.m_Player_Jump;
+        public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @ChangeCamera => m_Wrapper.m_Player_ChangeCamera;
         public InputAction @CameraZoom => m_Wrapper.m_Player_CameraZoom;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @CannonFire => m_Wrapper.m_Player_CannonFire;
-        public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
-        public InputAction @Escape => m_Wrapper.m_Player_Escape;
         public InputAction @CommandSelect => m_Wrapper.m_Player_CommandSelect;
         public InputAction @CommandDeselect => m_Wrapper.m_Player_CommandDeselect;
         public InputAction @FirstCommand => m_Wrapper.m_Player_FirstCommand;
         public InputAction @SecondCommand => m_Wrapper.m_Player_SecondCommand;
         public InputAction @ThirdCommand => m_Wrapper.m_Player_ThirdCommand;
+        public InputAction @EnterCommandView => m_Wrapper.m_Player_EnterCommandView;
+        public InputAction @EnterFormationView => m_Wrapper.m_Player_EnterFormationView;
+        public InputAction @Escape => m_Wrapper.m_Player_Escape;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1250,6 +1296,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
+            @Sprint.started += instance.OnSprint;
+            @Sprint.performed += instance.OnSprint;
+            @Sprint.canceled += instance.OnSprint;
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
@@ -1265,15 +1317,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @CannonFire.started += instance.OnCannonFire;
             @CannonFire.performed += instance.OnCannonFire;
             @CannonFire.canceled += instance.OnCannonFire;
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
-            @Sprint.started += instance.OnSprint;
-            @Sprint.performed += instance.OnSprint;
-            @Sprint.canceled += instance.OnSprint;
-            @Escape.started += instance.OnEscape;
-            @Escape.performed += instance.OnEscape;
-            @Escape.canceled += instance.OnEscape;
             @CommandSelect.started += instance.OnCommandSelect;
             @CommandSelect.performed += instance.OnCommandSelect;
             @CommandSelect.canceled += instance.OnCommandSelect;
@@ -1289,6 +1332,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ThirdCommand.started += instance.OnThirdCommand;
             @ThirdCommand.performed += instance.OnThirdCommand;
             @ThirdCommand.canceled += instance.OnThirdCommand;
+            @EnterCommandView.started += instance.OnEnterCommandView;
+            @EnterCommandView.performed += instance.OnEnterCommandView;
+            @EnterCommandView.canceled += instance.OnEnterCommandView;
+            @EnterFormationView.started += instance.OnEnterFormationView;
+            @EnterFormationView.performed += instance.OnEnterFormationView;
+            @EnterFormationView.canceled += instance.OnEnterFormationView;
+            @Escape.started += instance.OnEscape;
+            @Escape.performed += instance.OnEscape;
+            @Escape.canceled += instance.OnEscape;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1296,6 +1348,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
+            @Sprint.started -= instance.OnSprint;
+            @Sprint.performed -= instance.OnSprint;
+            @Sprint.canceled -= instance.OnSprint;
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
@@ -1311,15 +1369,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @CannonFire.started -= instance.OnCannonFire;
             @CannonFire.performed -= instance.OnCannonFire;
             @CannonFire.canceled -= instance.OnCannonFire;
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
-            @Sprint.started -= instance.OnSprint;
-            @Sprint.performed -= instance.OnSprint;
-            @Sprint.canceled -= instance.OnSprint;
-            @Escape.started -= instance.OnEscape;
-            @Escape.performed -= instance.OnEscape;
-            @Escape.canceled -= instance.OnEscape;
             @CommandSelect.started -= instance.OnCommandSelect;
             @CommandSelect.performed -= instance.OnCommandSelect;
             @CommandSelect.canceled -= instance.OnCommandSelect;
@@ -1335,6 +1384,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ThirdCommand.started -= instance.OnThirdCommand;
             @ThirdCommand.performed -= instance.OnThirdCommand;
             @ThirdCommand.canceled -= instance.OnThirdCommand;
+            @EnterCommandView.started -= instance.OnEnterCommandView;
+            @EnterCommandView.performed -= instance.OnEnterCommandView;
+            @EnterCommandView.canceled -= instance.OnEnterCommandView;
+            @EnterFormationView.started -= instance.OnEnterFormationView;
+            @EnterFormationView.performed -= instance.OnEnterFormationView;
+            @EnterFormationView.canceled -= instance.OnEnterFormationView;
+            @Escape.started -= instance.OnEscape;
+            @Escape.performed -= instance.OnEscape;
+            @Escape.canceled -= instance.OnEscape;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1518,19 +1576,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
+        void OnSprint(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnChangeCamera(InputAction.CallbackContext context);
         void OnCameraZoom(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnCannonFire(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
-        void OnSprint(InputAction.CallbackContext context);
-        void OnEscape(InputAction.CallbackContext context);
         void OnCommandSelect(InputAction.CallbackContext context);
         void OnCommandDeselect(InputAction.CallbackContext context);
         void OnFirstCommand(InputAction.CallbackContext context);
         void OnSecondCommand(InputAction.CallbackContext context);
         void OnThirdCommand(InputAction.CallbackContext context);
+        void OnEnterCommandView(InputAction.CallbackContext context);
+        void OnEnterFormationView(InputAction.CallbackContext context);
+        void OnEscape(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

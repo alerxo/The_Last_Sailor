@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class UIManager : MonoBehaviour
 
     public UIState State { get; private set; } = UIState.TitleScreen;
     private readonly List<UIState> pauseScreens = new() { UIState.Pause, UIState.Options };
-    private readonly List<UIState> slowmoScreens = new() { UIState.Command, UIState.PostCombat };
+    private readonly List<UIState> slowmoScreens = new() { UIState.Formation, UIState.PostCombat };
     private UIState optionsReturnState;
     private bool isInTitleScreen = true;
 
@@ -43,9 +44,42 @@ public class UIManager : MonoBehaviour
         foreach (UIScreen screen in FindObjectsByType<UIScreen>(FindObjectsSortMode.None))
         {
             screen.Generate();
+            DisableTab(screen.Root);
         }
 
         SetState(UIState.TitleScreen);
+    }
+
+    private void DisableTab(VisualElement _target)
+    {
+        _target.tabIndex = -1;
+
+        foreach (VisualElement child in _target.Children())
+        {
+            DisableTab(child);
+        }
+    }
+
+    public void EnterFormationView()
+    {
+        SetState(UIState.Formation);
+        FirstPersonController.Instance.SetState(PlayerState.Formation);
+        CameraManager.Instance.SetState(CameraState.Formation);
+    }
+
+    public void ExitFormationView()
+    {
+        SetState(UIState.HUD);
+        FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
+        CameraManager.Instance.SetState(CameraState.Player);
+    }
+
+    public void ShowCommandView()
+    {
+        if (State != UIState.Formation)
+        {
+            CommandScreen.Instance.Show();
+        }
     }
 
     public void SetStateOptions(UIState _returnState)
@@ -73,8 +107,8 @@ public class UIManager : MonoBehaviour
         State = _state;
         OnStateChanged?.Invoke(State);
 
-        Cursor.lockState = State != UIState.HUD ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = State != UIState.HUD;
+        UnityEngine.Cursor.lockState = State != UIState.HUD ? CursorLockMode.None : CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = State != UIState.HUD;
     }
 
     private void Escape_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
@@ -85,10 +119,12 @@ public class UIManager : MonoBehaviour
             case PlayerState.SteeringWheel:
             case PlayerState.Throttle:
             case PlayerState.Fleet:
-            case PlayerState.Command:
                 SetState(UIState.HUD);
                 CameraManager.Instance.SetState(CameraState.Player);
                 FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
+                return;
+            case PlayerState.Formation:
+                ExitFormationView();
                 return;
         }
 
@@ -100,8 +136,6 @@ public class UIManager : MonoBehaviour
 
             case UIState.Pause:
                 SetState(UIState.HUD);
-                CameraManager.Instance.SetState(CameraState.Player);
-                FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
                 return;
         }
     }
@@ -115,5 +149,5 @@ public enum UIState
     Options,
     PostCombat,
     Fleet,
-    Command
+    Formation
 }

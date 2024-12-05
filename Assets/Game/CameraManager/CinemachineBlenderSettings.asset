@@ -134,7 +134,7 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
-  - From: CommandCamera_First
+  - From: FormationCamera_First
     To: PF_PlayerCamera
     Blend:
       Style: 1
@@ -145,7 +145,7 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
-  - From: CommandCamera_Second
+  - From: FormationCamera_Second
     To: PF_PlayerCamera
     Blend:
       Style: 1
@@ -157,7 +157,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: PF_PlayerCamera
-    To: CommandCamera_First
+    To: FleetCamera_First
     Blend:
       Style: 1
       Time: 1
@@ -168,7 +168,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: PF_PlayerCamera
-    To: CommandCamera_Second
+    To: FleetCamera_Second
     Blend:
       Style: 1
       Time: 1
@@ -178,8 +178,8 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
-  - From: CommandCamera_First
-    To: CommandCamera_Second
+  - From: FormationCamera_First
+    To: FormationCamera_Second
     Blend:
       Style: 1
       Time: 0.5
@@ -189,8 +189,8 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
-  - From: CommandCamera_Second
-    To: CommandCamera_First
+  - From: FormationCamera_Second
+    To: FormationCamera_First
     Blend:
       Style: 1
       Time: 0.5

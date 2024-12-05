@@ -219,5 +219,5 @@ public enum PlayerState
     Cannon,
     Throttle,
     Fleet,
-    Command
+    Formation
 }
