@@ -15,13 +15,11 @@
 }
 
 .command-top-button-container {
-	justify-content: space-between;
-
 	width: 100%;
-	height: 30%;
 }
 
 .command-top-button {
+	margin-bottom: 5%;
 	border-width: 5px;
 	border-radius: 10px;
 }

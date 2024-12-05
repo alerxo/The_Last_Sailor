@@ -180,7 +180,7 @@ public class CommandScreen : UIScreen
         button.AddToClassList("main-button");
         button.AddToClassList("command-top-button");
         button.pickingMode = PickingMode.Position;
-        SetFontSize(button, 22);
+        SetFontSize(button, 26);
         button.text = _name;
         _parent.Add(button);
 
@@ -192,7 +192,7 @@ public class CommandScreen : UIScreen
         changeViewButton = new(OnChangeView);
         changeViewButton.AddToClassList("command-change-view-button");
         changeViewButton.pickingMode = PickingMode.Position;
-        SetFontSize(changeViewButton, 26);
+        SetFontSize(changeViewButton, 30);
         changeViewButton.text = GetChangeViewText();
         _parent.Add(changeViewButton);
     }
