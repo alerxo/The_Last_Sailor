@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerCannonController : MonoBehaviour, IInteractable
@@ -37,6 +38,8 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
         if (rotation.magnitude == 0)
         {
             rotation = input.Player.Look.ReadValue<Vector2>();
+            rotation.x = Mathf.Clamp(rotation.x, -ROTATION_SPEED, ROTATION_SPEED) / 1.5f;
+            rotation.y = Mathf.Clamp(rotation.y, -ROTATION_SPEED, ROTATION_SPEED) / 1.5f;
         }
 
         if (rotation.magnitude > 0)
