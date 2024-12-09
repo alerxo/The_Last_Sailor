@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
@@ -36,9 +35,6 @@ public class PostCombatScreen : UIScreen
     private VisualElement navigationButtonContainer;
     private readonly List<VisualElement> opacityElements = new();
 
-    private readonly List<PostCombatButton> postCombatButtons = new();
-    private readonly List<Action> scrapActions = new();
-
     private void Awake()
     {
         Assert.IsNull(Instance);
@@ -59,7 +55,6 @@ public class PostCombatScreen : UIScreen
         if (resourceCount == null) return;
 
         resourceCount.text = ((int)_amount).ToString();
-        EvaluateButtons();
     }
 
     private void CombatManager_OnBattleConcluded(BattleResult _result)
@@ -78,16 +73,8 @@ public class PostCombatScreen : UIScreen
         container.Add(background);
     }
 
-    private void EvaluateButtons()
-    {
-        Assert.IsTrue(postCombatButtons.All((b) => b != null));
-        postCombatButtons.ForEach((b) => b.Evaluate());
-    }
-
     public void CreateBattleResults(EnemyAdmiralController _enemyAdmiralController, BattleResult _result)
     {
-        postCombatButtons.Clear();
-        scrapActions.Clear();
         background.Clear();
         opacityElements.Clear();
 
@@ -97,12 +84,11 @@ public class PostCombatScreen : UIScreen
             CreateResoureContainer(background);
 
             Box resultsBackground = CreateBattleResultsContainer(background);
-            CreatePlayerColumn(resultsBackground, true);
-            CreateEnemyColumn(resultsBackground, _enemyAdmiralController, true);
+            CreatePlayerColumn(resultsBackground);
+            CreateEnemyColumn(resultsBackground, _enemyAdmiralController);
 
             navigationButtonContainer = CreateNavigationButtonContainer(background);
             CreateContinueButton(navigationButtonContainer, _enemyAdmiralController);
-            CreateScrapAllButton(navigationButtonContainer, _enemyAdmiralController);
 
             StartCoroutine(ShowPostCombatScreen());
         }
@@ -112,8 +98,8 @@ public class PostCombatScreen : UIScreen
             CreateHeader(background, _result);
 
             Box resultsBackground = CreateBattleResultsContainer(background);
-            CreatePlayerColumn(resultsBackground, false);
-            CreateEnemyColumn(resultsBackground, _enemyAdmiralController, false);
+            CreatePlayerColumn(resultsBackground);
+            CreateEnemyColumn(resultsBackground, _enemyAdmiralController);
 
             navigationButtonContainer = CreateNavigationButtonContainer(background);
             CreateDefeatButton(navigationButtonContainer);
@@ -177,108 +163,45 @@ public class PostCombatScreen : UIScreen
 
     // Player
 
-    private void CreatePlayerColumn(VisualElement _parent, bool _shoulCreateButtons)
+    private void CreatePlayerColumn(VisualElement _parent)
     {
         VisualElement columnContainer = CreateColumnContainer(_parent);
         CreateColumnHeader(columnContainer, $"{PlayerBoatController.Instance.AdmiralController.Name}'s Fleet");
         ScrollView rowContainer = CreateRowScrollView(columnContainer);
 
-        CreatePlayerRow(rowContainer, PlayerBoatController.Instance.Boat, _shoulCreateButtons);
+        CreatePlayerRow(rowContainer, PlayerBoatController.Instance.Boat);
 
         foreach (AIBoatController boatController in PlayerBoatController.Instance.AdmiralController.Subordinates)
         {
-            CreatePlayerRow(rowContainer, boatController.Boat, _shoulCreateButtons);
+            CreatePlayerRow(rowContainer, boatController.Boat);
         }
     }
 
-    private void CreatePlayerRow(VisualElement _parent, Boat _boat, bool _shoulCreateButtons)
+    private void CreatePlayerRow(VisualElement _parent, Boat _boat)
     {
         VisualElement container = CreateRow(_parent);
-        Label description = CreateRowDescription(container, _boat);
-        VisualElement buttonContainer = CreateButtonContainer(container);
-
-        if (_shoulCreateButtons)
-        {
-            Button button = CreateRowButton(buttonContainer, "Repair", -ResourceManager.GetRepairCost(_boat), () => CanRepair(_boat));
-            button.clicked += () => OnRepaired(description, _boat);
-            button.clicked += () => OnBoatRepaired?.Invoke();
-        }
-    }
-
-    private bool CanRepair(Boat _boat)
-    {
-        return _boat.IsDamaged && ResourceManager.Instance.CanRepair(_boat);
-    }
-
-    private void OnRepaired(Label _description, Boat _boat)
-    {
-        int cost = ResourceManager.GetRepairCost(_boat);
-        _boat.Repair();
-        _description.text = $"{_boat.Name}: Repaired";
-        ResourceManager.Instance.BoatWasRepaired(cost);
+        CreateRowDescription(container, _boat);
     }
 
     // Enemy
 
-    private void CreateEnemyColumn(VisualElement _parent, EnemyAdmiralController _admiral, bool _shoulCreateButtons)
+    private void CreateEnemyColumn(VisualElement _parent, EnemyAdmiralController _admiral)
     {
         VisualElement columnContainer = CreateColumnContainer(_parent);
         CreateColumnHeader(columnContainer, $"{_admiral.Name}'s Fleet");
         ScrollView rowContainer = CreateRowScrollView(columnContainer);
-        CreateEnemyRow(rowContainer, _admiral.AIBoatController, _shoulCreateButtons);
+        CreateEnemyRow(rowContainer, _admiral.AIBoatController);
 
         foreach (AIBoatController boatController in _admiral.Subordinates)
         {
-            CreateEnemyRow(rowContainer, boatController, _shoulCreateButtons);
+            CreateEnemyRow(rowContainer, boatController);
         }
     }
 
-    private void CreateEnemyRow(VisualElement _parent, AIBoatController _boatController, bool _shoulCreateButtons)
+    private void CreateEnemyRow(VisualElement _parent, AIBoatController _boatController)
     {
         VisualElement container = CreateRow(_parent);
-        Label description = CreateRowDescription(container, _boatController.Boat);
-        VisualElement buttonContainer = CreateButtonContainer(container);
-
-        if (_shoulCreateButtons)
-        {
-            Button seizeButton = CreateRowButton(buttonContainer, "Seize", -ResourceManager.GetRepairCost(_boatController.Boat), () => CanSeize(_boatController));
-            Button scrapButton = CreateRowButton(buttonContainer, "Scrap", ResourceManager.GAIN_FROM_SCRAPPING_AMOUNT, () => CanScrap(_boatController));
-
-            seizeButton.clicked += () => OnSeized(description, _boatController);
-            seizeButton.clicked += () => OnBoatSeized?.Invoke();
-            scrapButton.clicked += () => OnScrapped(description, _boatController);
-            scrapButton.clicked += () => OnBoatScrapped?.Invoke();
-
-            scrapActions.Add(() => OnScrapped(description, _boatController));
-        }
-    }
-
-    private bool CanScrap(AIBoatController _boatController)
-    {
-        return _boatController.Boat.IsSunk && _boatController.State == AIBoatControllerState.Active;
-    }
-
-    private bool CanSeize(AIBoatController _boatController)
-    {
-        return _boatController.Boat.IsSunk && _boatController.State == AIBoatControllerState.Active && ResourceManager.Instance.CanSeize(_boatController.Boat);
-    }
-
-    private void OnSeized(Label _description, AIBoatController _boatController)
-    {
-        int cost = ResourceManager.GetRepairCost(_boatController.Boat);
-        _boatController.Seize(PlayerBoatController.Instance.AdmiralController);
-        _description.text = $"{_boatController.Boat.Name}: Seized";
-        ResourceManager.Instance.BoatWasSeized(cost);
-    }
-
-    private void OnScrapped(Label _description, AIBoatController _boatController)
-    {
-        if (CanScrap(_boatController))
-        {
-            _boatController.Scrap();
-            _description.text = $"{_boatController.Boat.Name}: Scrapped";
-            ResourceManager.Instance.BoatWasScrapped();
-        }
+        CreateRowDescription(container, _boatController.Boat);
     }
 
     // Components
@@ -333,27 +256,6 @@ public class PostCombatScreen : UIScreen
         return description;
     }
 
-    private VisualElement CreateButtonContainer(VisualElement container)
-    {
-        VisualElement buttonContainer = new();
-        buttonContainer.AddToClassList("post-combat-row-button-container");
-        container.Add(buttonContainer);
-        return buttonContainer;
-    }
-
-    private Button CreateRowButton(VisualElement _parent, string _text, int _resource, Func<bool> _isEnabled)
-    {
-        Button button = new();
-        button.AddToClassList("post-combat-button");
-        button.AddToClassList("post-combat-row-button");
-        SetFontSize(button, 17);
-        button.text = $"{_text} ({(_resource > 0 ? "+" : "-")} {Mathf.Abs(_resource)} R)";
-        postCombatButtons.Add(new(button, _isEnabled));
-        _parent.Add(button);
-
-        return button;
-    }
-
     // Navigation
 
     private VisualElement CreateNavigationButtonContainer(VisualElement _parent)
@@ -377,40 +279,7 @@ public class PostCombatScreen : UIScreen
         button.AddToClassList("post-combat-navigation-button");
         SetFontSize(button, 35);
         button.text = "Continue";
-        postCombatButtons.Add(new(button, () => CanContinue(_admiral)));
         _parent.Add(button);
-    }
-
-    private bool CanContinue(EnemyAdmiralController _admiral)
-    {
-        return (_admiral.AIBoatController == null || !CanScrap(_admiral.AIBoatController)) && _admiral.Subordinates.All((s) => !CanScrap(s));
-    }
-
-    private void CreateScrapAllButton(VisualElement _parent, EnemyAdmiralController _admiral)
-    {
-        Button button = new(OnScrapAll);
-        button.AddToClassList("post-combat-button");
-        button.AddToClassList("post-combat-navigation-button");
-        SetFontSize(button, 35);
-        postCombatButtons.Add(new(button, () => CanScrapAll(_admiral)));
-        button.text = "Scrap all";
-
-        _parent.Add(button);
-    }
-
-    private bool CanScrapAll(EnemyAdmiralController _admiral)
-    {
-        return (_admiral.AIBoatController != null && CanScrap(_admiral.AIBoatController)) || _admiral.Subordinates.Any((s) => CanScrap(s));
-    }
-
-    private void OnScrapAll()
-    {
-        foreach (Action action in scrapActions)
-        {
-            action();
-        }
-
-        OnBoatScrapped?.Invoke();
     }
 
     private void CreateDefeatButton(VisualElement _parent)

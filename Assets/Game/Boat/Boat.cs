@@ -19,6 +19,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     [SerializeField] private float MaxHealth;
     [SerializeField] Transform COM;
+
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioSource destroyedAudioSource;
     [SerializeField] AudioSource burningAudioSource;
@@ -98,6 +99,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
             burningAudioSource.loop = false;
             burningAudioSource.Stop();
         }
+
         StopAllCoroutines();
         SetDefault();
         Buoyancy.SetDefault();

@@ -106,20 +106,6 @@ public class AIBoatController : MonoBehaviour
         Boat.StartSinkAtSurface();
     }
 
-    public void Seize(Admiral _admiral)
-    {
-        RemoveFromFleet();
-        Boat.SetName(PlayerBoatController.Instance.AdmiralController.GetSubordinateName());
-        Boat.Repair();
-        TrySetCommand(_admiral.Command);
-        _admiral.AddSubordinate(Boat);
-    }
-
-    public void Scrap()
-    {
-        SinkToBottom();
-    }
-
     public void SinkToBottom()
     {
         RemoveFromFleet();

@@ -19,4 +19,12 @@ public class PlayerAdmiralController : Admiral
 
         return $"Allied Boat {++subordinateNumber}";
     }
+
+    public void BuildBoat()
+    {
+        AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController>(transform.position + -transform.forward * 40, transform.rotation);
+        AddSubordinate(subordinate.Boat);
+        subordinate.Boat.SetName(GetSubordinateName());
+        subordinate.TrySetCommand(Command);
+    }
 }

@@ -10,6 +10,7 @@ public class ResourceManager : MonoBehaviour
 
     public const int GAIN_FROM_SCRAPPING_AMOUNT = 10;
     private const float COST_FOR_REPAIR_PER_DURABILITY = 0.1f;
+    private const int COST_FOR_BUILD = 10;
     public float Amount { get; private set; } = 1000;
 
     private void Awake()
@@ -18,30 +19,15 @@ public class ResourceManager : MonoBehaviour
         Instance = this;
     }
 
-    public void BoatWasScrapped()
-    {
-        AddResource(GAIN_FROM_SCRAPPING_AMOUNT);
-    }
-
-    public void BoatWasSeized(int _cost)
-    {
-        BoatWasRepaired(_cost);
-    }
-
-    public void BoatWasRepaired(int _cost)
-    {
-        AddResource(-_cost);
-    }
-
     public void AddResource(float _amount)
     {
         Amount += _amount;
         OnResourceAmountChanged?.Invoke(Amount);
     }
 
-    public bool CanSeize(Boat _boat)
+    public static int GetRepairCost(Boat _boat)
     {
-        return CanRepair(_boat);
+        return (int)((100 - _boat.GetPercentageHealth()) * COST_FOR_REPAIR_PER_DURABILITY);
     }
 
     public bool CanRepair(Boat _boat)
@@ -49,8 +35,23 @@ public class ResourceManager : MonoBehaviour
         return Amount >= GetRepairCost(_boat);
     }
 
-    public static int GetRepairCost(Boat _boat)
+    public void BoatWasRepaired(Boat _boat)
     {
-        return (int)((100 - _boat.GetPercentageHealth()) * COST_FOR_REPAIR_PER_DURABILITY);
+        AddResource(-GetRepairCost(_boat));
+    }
+
+    public int GetBuildCost()
+    {
+        return COST_FOR_BUILD;
+    }
+
+    public bool CanBuild()
+    {
+        return Amount >= GetBuildCost();
+    }
+
+    public void BoatWasBuilt()
+    {
+        AddResource(-COST_FOR_BUILD);
     }
 }
