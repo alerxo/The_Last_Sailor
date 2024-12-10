@@ -77,7 +77,6 @@ public class BuoyancyManager : MonoBehaviour
 
         GetTargets();
         UpdateTargetsDepthValues();
-        targets.Clear();
     }
 
     private IEnumerator CheckQuality()
@@ -136,6 +135,8 @@ public class BuoyancyManager : MonoBehaviour
 
     private void GetTargets()
     {
+        targets.Clear();
+
         for (int i = targets.Count; i < HIGH_QUALITY_UPDATE_COUNT; i++)
         {
             if (highQualityIndex >= highQuality.Count)

@@ -104,6 +104,8 @@ public class FleetScreen : UIScreen
         CreateUpgradeButton(buttonContainer, boat, UpgradeType.Hull).clicked += () => boat.Repair();
         CreateUpgradeButton(buttonContainer, boat, UpgradeType.Cannons);
         CreateUpgradeButton(buttonContainer, boat, UpgradeType.Engine);
+
+        UIManager.DisableTab(boatContainer);
     }
 
     private void CreateTopRow(Boat _boat)

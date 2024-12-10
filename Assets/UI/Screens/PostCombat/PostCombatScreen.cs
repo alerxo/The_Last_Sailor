@@ -30,10 +30,11 @@ public class PostCombatScreen : UIScreen
     private const float RESULTS_HEIGHT = 500f;
     private VisualElement battleResultsContainer;
     private Box battleResultsBackground;
+    private readonly List<VisualElement> battleResultItemsPlayer = new();
+    private readonly List<VisualElement> battleResultItemsEnemy = new();
 
     private const float NAVIGATION_HEIGHT = 140f;
     private VisualElement navigationButtonContainer;
-    private readonly List<VisualElement> opacityElements = new();
 
     private void Awake()
     {
@@ -76,7 +77,8 @@ public class PostCombatScreen : UIScreen
     public void CreateBattleResults(EnemyAdmiralController _enemyAdmiralController, BattleResult _result)
     {
         background.Clear();
-        opacityElements.Clear();
+        battleResultItemsPlayer.Clear();
+        battleResultItemsEnemy.Clear();
 
         if (_result != BattleResult.Defeat)
         {
@@ -108,6 +110,8 @@ public class PostCombatScreen : UIScreen
         }
 
         ResourceManager_OnResourceAmountChanged(ResourceManager.Instance.Amount);
+
+        UIManager.DisableTab(background);
     }
 
     private void CreateHeader(VisualElement _parent, BattleResult _battleResult)
@@ -181,6 +185,9 @@ public class PostCombatScreen : UIScreen
     {
         VisualElement container = CreateRow(_parent);
         CreateRowDescription(container, _boat);
+
+        container.SetEnabled(false);
+        battleResultItemsPlayer.Add(container);
     }
 
     // Enemy
@@ -190,6 +197,7 @@ public class PostCombatScreen : UIScreen
         VisualElement columnContainer = CreateColumnContainer(_parent);
         CreateColumnHeader(columnContainer, $"{_admiral.Name}'s Fleet");
         ScrollView rowContainer = CreateRowScrollView(columnContainer);
+
         CreateEnemyRow(rowContainer, _admiral.AIBoatController);
 
         foreach (AIBoatController boatController in _admiral.Subordinates)
@@ -202,6 +210,9 @@ public class PostCombatScreen : UIScreen
     {
         VisualElement container = CreateRow(_parent);
         CreateRowDescription(container, _boatController.Boat);
+
+        container.SetEnabled(false);
+        battleResultItemsEnemy.Add(container);
     }
 
     // Components
@@ -231,8 +242,6 @@ public class PostCombatScreen : UIScreen
         container.verticalScroller.lowButton.RemoveFromHierarchy();
         container.horizontalScroller.RemoveFromHierarchy();
         _parent.Add(container);
-
-        opacityElements.Add(container.verticalScroller);
 
         return container;
     }
@@ -275,7 +284,7 @@ public class PostCombatScreen : UIScreen
     private void CreateContinueButton(VisualElement _parent, EnemyAdmiralController _admiral)
     {
         Button button = new(() => CombatManager.Instance.BattleResultsCompleted());
-        button.AddToClassList("post-combat-button");
+        button.AddToClassList("main-button");
         button.AddToClassList("post-combat-navigation-button");
         SetFontSize(button, 35);
         button.text = "Continue";
@@ -285,7 +294,7 @@ public class PostCombatScreen : UIScreen
     private void CreateDefeatButton(VisualElement _parent)
     {
         Button button = new(() => SceneManager.LoadScene("Game"));
-        button.AddToClassList("post-combat-button");
+        button.AddToClassList("main-button");
         button.AddToClassList("post-combat-navigation-button");
         SetFontSize(button, 35);
         button.text = "Return to main menu";
@@ -305,8 +314,6 @@ public class PostCombatScreen : UIScreen
 
         const float HEIGHT_DURATION = 2f;
 
-        const float OPACITY_DURATION = 0.4f;
-
         SetWidth(background, 0);
         SetBorder(background, 0);
         SetHeight(headerContainer, 0);
@@ -317,12 +324,6 @@ public class PostCombatScreen : UIScreen
         SetHeight(battleResultsContainer, 0);
         SetHeight(navigationButtonContainer, 0);
 
-        foreach (VisualElement opacityElement in opacityElements)
-        {
-            opacityElement.style.opacity = 0;
-            opacityElement.enabledSelf = false;
-        }
-
         yield return AnimateBorder(background, BACKGROUND_BORDER_DURATION, 0, BACKGROUND_BORDER_WIDTH);
         yield return AnimateHeight(headerContainer, HEADER_HEIGHT_DURATION, 0, HEADER_HEIGHT);
 
@@ -330,7 +331,7 @@ public class PostCombatScreen : UIScreen
 
         yield return AnimateWidth(background, BACKGROUND_WIDTH_DURATION, 0, BACKGROUND_WIDTH);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         yield return AnimateBorder(battleResultsBackground, RESULTS_BORDER_DURATION, 0, RESULTS_BORDER_WIDTH);
 
@@ -342,12 +343,20 @@ public class PostCombatScreen : UIScreen
 
         yield return new WaitForSeconds(0.5f);
 
-        foreach (VisualElement opacityElement in opacityElements)
+        for (int i = 0; i < Mathf.Max(battleResultItemsPlayer.Count, battleResultItemsEnemy.Count); i++)
         {
-            opacityElement.enabledSelf = true;
-        }
+            if (battleResultItemsPlayer.Count > i)
+            {
+                battleResultItemsPlayer[i].SetEnabled(true);
+            }
 
-        yield return AnimateOpacity(opacityElements, OPACITY_DURATION, 0, 1);
+            if (battleResultItemsEnemy.Count > i)
+            {
+                battleResultItemsEnemy[i].SetEnabled(true);
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 
     private class PostCombatButton

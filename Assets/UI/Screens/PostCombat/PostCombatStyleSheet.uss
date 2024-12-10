@@ -90,6 +90,7 @@
 .post-combat-row-container {
 	width: 100%;
 
+	overflow: hidden;
 	border-width: 2px;
 	border-radius: 5px;
 }
@@ -105,6 +106,19 @@
 
 	border-bottom-width: 2px;
 	border-bottom-color: black;
+
+	transition-property: scale;
+    transition-duration: 50ms;
+	transition-timing-function: ease-in-out;
+}
+
+
+.post-combat-row:disabled {
+	scale: 0;
+
+	transition-property: scale;
+    transition-duration: 50ms;
+	transition-timing-function: ease-in-out;
 }
 
 .post-combat-row-desciption { }
@@ -141,30 +155,6 @@
 	height: 60%;
 	border-width: 5px;
 	border-radius: 16px;
-}
-
-/* Button */
-
-.post-combat-button {
-	transition-property: scale;
-    transition-duration: 50ms;
-	transition-timing-function: ease-in-out;
-}
-
-.post-combat-button:hover {
-	scale: 1.20;
-
-	transition-property: scale;
-    transition-duration: 200ms;
-	transition-timing-function: ease-in-out;
-}
-
-.post-combat-button:active {
-	scale: 1.35;
-
-	transition-property: scale;
-    transition-duration: 100ms;
-	transition-timing-function: ease-in-out;
 }
 
 /* ScrollView */

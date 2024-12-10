@@ -1,4 +1,3 @@
-using Unity.Behavior;
 using UnityEngine;
 
 public class AIBoatController : MonoBehaviour

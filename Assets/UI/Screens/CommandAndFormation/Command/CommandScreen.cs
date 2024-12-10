@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -12,7 +11,7 @@ public class CommandScreen : UIScreen
 
     public CommandScreenState State { get; private set; } = CommandScreenState.Hidden;
     private float stateTimer = 0;
-    private const float TIME_SHOWING = 4f;
+    private const float TIME_SHOWING = 2f;
     private const float TIME_FADING = 1f;
 
     private PlayerAdmiralController admiralController;
@@ -102,6 +101,11 @@ public class CommandScreen : UIScreen
         buttonContainer.style.opacity = 0;
     }
 
+    public void ForceHide()
+    {
+        State = CommandScreenState.Hidden;
+    }
+
     private void UIManager_OnStateChanged(UIState _state)
     {
         changeViewButton.text = GetChangeViewText();
@@ -171,7 +175,7 @@ public class CommandScreen : UIScreen
         CreateTopButton(container, $"2: {Command.Hold}", Command.Hold);
         CreateTopButton(container, $"3: {Command.Charge}", Command.Charge);
 
-        AdmiralController_OnCommandChanged(Command.Unassigned);
+        AdmiralController_OnCommandChanged(PlayerBoatController.Instance.AdmiralController.Command);
     }
 
     private void CreateTopButton(VisualElement _parent, string _name, Command _command)

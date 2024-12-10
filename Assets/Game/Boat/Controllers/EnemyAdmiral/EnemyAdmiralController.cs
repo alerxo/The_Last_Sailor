@@ -58,7 +58,7 @@ public class EnemyAdmiralController : Admiral
 
     public void SetFleetFormation()
     {
-        Vector3[] positions = GetFleetPositions();
+        Vector3[] positions = Formations.GetFleetPositions(formation, Subordinates.Count);
 
         float distance = 0;
 
@@ -74,25 +74,6 @@ public class EnemyAdmiralController : Admiral
         }
 
         longestSubordinateDistance = distance;
-    }
-
-    private Vector3[] GetFleetPositions()
-    {
-        switch (formation)
-        {
-            case Formation.Line:
-                return Formations.GetLine(Subordinates.Count);
-
-            case Formation.Spearhead:
-                return Formations.GetSpearhead(Subordinates.Count);
-
-            case Formation.Ring:
-                return Formations.GetRing(Subordinates.Count);
-
-            default:
-                Debug.LogError($"Defaulted for case {formation}");
-                return null;
-        }
     }
 
     public override string GetSubordinateName()

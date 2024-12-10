@@ -50,7 +50,7 @@ public class UIManager : MonoBehaviour
         SetState(UIState.TitleScreen);
     }
 
-    private void DisableTab(VisualElement _target)
+    public static void DisableTab(VisualElement _target)
     {
         _target.tabIndex = -1;
 
@@ -70,6 +70,7 @@ public class UIManager : MonoBehaviour
     public void ExitFormationView()
     {
         SetState(UIState.HUD);
+        CommandScreen.Instance.ForceHide();
         FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
         CameraManager.Instance.SetState(CameraState.Player);
     }
@@ -113,6 +114,12 @@ public class UIManager : MonoBehaviour
 
     private void Escape_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
+        if (CommandScreen.Instance.State != CommandScreenState.Hidden)
+        {
+            CommandScreen.Instance.ForceHide();
+            return;
+        }
+
         switch (FirstPersonController.Instance.State)
         {
             case PlayerState.Cannon:
