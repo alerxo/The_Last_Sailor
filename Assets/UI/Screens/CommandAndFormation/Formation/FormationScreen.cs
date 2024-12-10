@@ -95,6 +95,7 @@ public class FormationScreen : UIScreen
         boatItemContainer.RegisterCallback<MouseLeaveEvent>(evt => canClickWater = true);
         boatItemContainer.verticalScroller.highButton.RemoveFromHierarchy();
         boatItemContainer.verticalScroller.lowButton.RemoveFromHierarchy();
+        boatItemContainer.horizontalScroller.RemoveFromHierarchy();
         background.Add(boatItemContainer);
 
         CreatePlayerItem(boatItemContainer, PlayerBoatController.Instance.Boat);

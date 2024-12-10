@@ -32,6 +32,7 @@ public class PostCombatScreen : UIScreen
     private Box battleResultsBackground;
     private readonly List<VisualElement> battleResultItemsPlayer = new();
     private readonly List<VisualElement> battleResultItemsEnemy = new();
+    private readonly List<VisualElement> scrollers = new();
 
     private const float NAVIGATION_HEIGHT = 140f;
     private VisualElement navigationButtonContainer;
@@ -79,6 +80,7 @@ public class PostCombatScreen : UIScreen
         background.Clear();
         battleResultItemsPlayer.Clear();
         battleResultItemsEnemy.Clear();
+        scrollers.Clear();
 
         if (_result != BattleResult.Defeat)
         {
@@ -236,14 +238,16 @@ public class PostCombatScreen : UIScreen
 
     private ScrollView CreateRowScrollView(VisualElement _parent)
     {
-        ScrollView container = new();
-        container.AddToClassList("post-combat-row-container");
-        container.verticalScroller.highButton.RemoveFromHierarchy();
-        container.verticalScroller.lowButton.RemoveFromHierarchy();
-        container.horizontalScroller.RemoveFromHierarchy();
-        _parent.Add(container);
+        ScrollView scrollView = new();
+        scrollView.AddToClassList("post-combat-row-container");
+        scrollView.verticalScroller.highButton.RemoveFromHierarchy();
+        scrollView.verticalScroller.lowButton.RemoveFromHierarchy();
+        scrollView.horizontalScroller.RemoveFromHierarchy();
+        _parent.Add(scrollView);
 
-        return container;
+        scrollers.Add(scrollView);
+
+        return scrollView;
     }
 
     private VisualElement CreateRow(VisualElement _parent)
@@ -324,6 +328,11 @@ public class PostCombatScreen : UIScreen
         SetHeight(battleResultsContainer, 0);
         SetHeight(navigationButtonContainer, 0);
 
+        foreach (VisualElement scroller in scrollers)
+        {
+            scroller.SetEnabled(false);
+        }
+
         yield return AnimateBorder(background, BACKGROUND_BORDER_DURATION, 0, BACKGROUND_BORDER_WIDTH);
         yield return AnimateHeight(headerContainer, HEADER_HEIGHT_DURATION, 0, HEADER_HEIGHT);
 
@@ -355,7 +364,12 @@ public class PostCombatScreen : UIScreen
                 battleResultItemsEnemy[i].SetEnabled(true);
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        foreach (VisualElement scroller in scrollers)
+        {
+            scroller.SetEnabled(true);
         }
     }
 

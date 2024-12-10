@@ -197,7 +197,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         switch (_type)
         {
             case UpgradeType.Hull:
-                return "Health";
+                return "Durability";
 
             case UpgradeType.Cannons:
                 return "Damage";
