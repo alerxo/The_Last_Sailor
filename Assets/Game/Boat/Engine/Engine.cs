@@ -15,14 +15,8 @@ public class Engine : MonoBehaviour, IUpgradeable
     [SerializeField] private AudioSource paddleAudioSource;
     [SerializeField] private AudioClip paddleAudioClip;
 
-    [SerializeField] private AudioSource throttleAudioSource;
-    [SerializeField] private AudioSource clickAudioSource;
-    [SerializeField] private AudioClip throttleAudioClip;
-    [SerializeField] private AudioClip maxOrMinThrottleAudioClip;
-
     private SteeringWheel steeringWheel;
     private Throttle throttle;
-    private bool playedClick;
     public float Rudder { get; private set; }
     public float Throttle { get; private set; }
 
@@ -41,8 +35,6 @@ public class Engine : MonoBehaviour, IUpgradeable
         target = GetComponentInParent<Rigidbody>();
         steeringWheel = transform.parent.GetComponentInChildren<SteeringWheel>();
         throttle = transform.parent.GetComponentInChildren<Throttle>();
-        throttleAudioSource.clip = throttleAudioClip;
-        playedClick = false;
     }
 
     private void FixedUpdate()
@@ -112,22 +104,6 @@ public class Engine : MonoBehaviour, IUpgradeable
     {
         Throttle = Mathf.Clamp01(Throttle + (_throttle * THROTTLE_ACCELERATION * Time.deltaTime));
         throttle.SetRotation(Throttle);
-        if (Throttle >= 1 || Throttle <= 0)
-        {
-            throttleAudioSource.Stop();
-            if (playedClick == false)
-            {
-                clickAudioSource.pitch = Random.Range(0.25f, 0.35f);
-                clickAudioSource.PlayOneShot(maxOrMinThrottleAudioClip);
-                playedClick = true;
-            }
-        }
-        else if (!throttleAudioSource.isPlaying)
-        {
-            throttleAudioSource.pitch = Random.Range(0.65f, 0.8f);
-            throttleAudioSource.Play();
-            playedClick = false;
-        }
     }
 
     public void ChangeTowardsThrottle(float _throttle)
