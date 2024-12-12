@@ -261,7 +261,7 @@ public class PostCombatScreen : UIScreen
 
     private Label CreateRowDescription(VisualElement _parent, Boat _boat)
     {
-        Label description = new($"{_boat.Name}: {(_boat.IsSunk ? "Sunk" : $"Durability {_boat.GetPercentageHealth()}%")}");
+        Label description = new($"{_boat.Name}: {(_boat.IsSunk ? "Sunk" : $"Durability {_boat.GetPercentageDurability()}%")}");
         description.AddToClassList("post-combat-row-desciption");
         SetFontSize(description, 19);
         _parent.Add(description);

@@ -87,7 +87,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         }
     }
 
-    public int GetPercentageHealth()
+    public int GetPercentageDurability()
     {
         return (int)(Health / GetUpgradeValue * 100);
     }

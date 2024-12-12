@@ -54,12 +54,57 @@ public abstract class UIScreen : MonoBehaviour
         _target.style.fontSize = GetScaledValue(_value);
     }
 
+    protected void SetMargin(VisualElement _target, float _value)
+    {
+        _target.style.marginTop = GetScaledValue(_value);
+        _target.style.marginBottom = GetScaledValue(_value);
+        _target.style.marginLeft = GetScaledValue(_value);
+        _target.style.marginRight = GetScaledValue(_value);
+    }
+
+    protected void SetMargin(VisualElement _target, float _top, float _bottom, float _left, float _right)
+    {
+        _target.style.marginTop = GetScaledValue(_top);
+        _target.style.marginBottom = GetScaledValue(_bottom);
+        _target.style.marginLeft = GetScaledValue(_left);
+        _target.style.marginRight = GetScaledValue(_right);
+    }
+
+    protected void SetPadding(VisualElement _target, float _value)
+    {
+        _target.style.paddingTop = GetScaledValue(_value);
+        _target.style.paddingBottom = GetScaledValue(_value);
+        _target.style.paddingLeft = GetScaledValue(_value);
+        _target.style.paddingRight = GetScaledValue(_value);
+    }
+
+    protected void SetPadding(VisualElement _target, float _top, float _bottom, float _left, float _right)
+    {
+        _target.style.paddingTop = GetScaledValue(_top);
+        _target.style.paddingBottom = GetScaledValue(_bottom);
+        _target.style.paddingLeft = GetScaledValue(_left);
+        _target.style.paddingRight = GetScaledValue(_right);
+    }
+
     protected void SetBorder(VisualElement _target, float _value)
     {
         _target.style.borderTopWidth = GetScaledValue(_value);
         _target.style.borderBottomWidth = GetScaledValue(_value);
         _target.style.borderLeftWidth = GetScaledValue(_value);
         _target.style.borderRightWidth = GetScaledValue(_value);
+    }
+
+    protected void SetBorder(VisualElement _target, float _width, float _radius)
+    {
+        _target.style.borderTopWidth = GetScaledValue(_width);
+        _target.style.borderBottomWidth = GetScaledValue(_width);
+        _target.style.borderLeftWidth = GetScaledValue(_width);
+        _target.style.borderRightWidth = GetScaledValue(_width);
+
+        _target.style.borderTopLeftRadius = GetScaledValue(_radius);
+        _target.style.borderTopRightRadius = GetScaledValue(_radius);
+        _target.style.borderBottomLeftRadius = GetScaledValue(_radius);
+        _target.style.borderBottomRightRadius = GetScaledValue(_radius);
     }
 
     public static void SetBorder(VisualElement _target, Color _color)

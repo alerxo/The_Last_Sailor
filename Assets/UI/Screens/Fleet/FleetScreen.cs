@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -80,6 +79,8 @@ public class FleetScreen : UIScreen
     {
         Box boatListBackground = new();
         boatListBackground.AddToClassList("fleet-boat-list-background");
+        SetMargin(boatListBackground, 0, 100, 0, 20);
+        SetBorder(boatListBackground, 0, 10);
         _parent.Add(boatListBackground);
 
         ScrollView boatListContainer = new();
@@ -102,6 +103,8 @@ public class FleetScreen : UIScreen
         Button button = new(() => OnBuild());
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-boat-list-item");
+        SetMargin(button, 0, 10, 0, 0);
+        SetBorder(button, 5, 10);
         SetFontSize(button, 25);
         button.text = $"Build New Boat (-{ResourceManager.Instance.GetBuildCost()} R)";
         button.SetEnabled(ResourceManager.Instance.CanBuild());
@@ -110,20 +113,19 @@ public class FleetScreen : UIScreen
 
     private Button CreateBoatItem(VisualElement _parent, Boat _boat, int _index)
     {
-        Button button = new(() => OnBoatItem(_boat, _index));
+        Button button = new(() => OnBoatItem(_index));
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-boat-list-item");
+        SetMargin(button, 0, 10, 0, 0);
+        SetBorder(button, 5, 10);
+        SetFontSize(button, 25);
+        button.text = $"{_boat.Name} (Durability: {_boat.GetPercentageDurability()}%)";
         _parent.Add(button);
-
-        Label header = new($"{_boat.Name} (Durability: {_boat.GetPercentageHealth()})");
-        header.AddToClassList("fleet-boat-list-header");
-        SetFontSize(header, 25);
-        button.Add(header);
 
         return button;
     }
 
-    private void OnBoatItem(Boat _boat, int _index)
+    private void OnBoatItem(int _index)
     {
         currentIndex = _index;
         Draw();
@@ -139,26 +141,28 @@ public class FleetScreen : UIScreen
     {
         VisualElement menuContainer = new();
         menuContainer.AddToClassList("fleet-current-container");
+        SetMargin(menuContainer, 0, 20, 0, 0);
         _parent.Add(menuContainer);
 
         if (PlayerBoatController.Instance.AdmiralController.Fleet.Count > 1)
         {
-            CreateNavigatioButton(menuContainer, "<", -1);
+            CreateNavigationButton(menuContainer, "<", -1);
         }
 
         CreateBoatContainer(menuContainer);
 
         if (PlayerBoatController.Instance.AdmiralController.Fleet.Count > 1)
         {
-            CreateNavigatioButton(menuContainer, ">", 1);
+            CreateNavigationButton(menuContainer, ">", 1);
         }
     }
 
-    private void CreateNavigatioButton(VisualElement _parent, string _text, int _index)
+    private void CreateNavigationButton(VisualElement _parent, string _text, int _index)
     {
         Button button = new(() => OnNavigationArrow(_index));
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-navigation-arrow-button");
+        SetBorder(button, 3, 7);
         SetFontSize(button, 40);
         button.text = _text;
         _parent.Add(button);
@@ -176,21 +180,25 @@ public class FleetScreen : UIScreen
 
     private void CreateBoatContainer(VisualElement _parent)
     {
-        Box currentContainer = new();
-        currentContainer.AddToClassList("fleet-current-boat");
-        _parent.Add(currentContainer);
+        Box container = new();
+        container.AddToClassList("fleet-current-boat");
+        SetMargin(container, 0, 0, 25, 25);
+        SetPadding(container, 20);
+        SetBorder(container, 0, 10);
+        _parent.Add(container);
 
         Boat boat = PlayerBoatController.Instance.AdmiralController.Fleet[currentIndex];
         CameraManager.Instance.SetFleetCamera(boat.transform);
 
-        CreateTopRow(currentContainer, boat);
-        CreateUpgradeButtons(currentContainer, boat);
+        CreateTopRow(container, boat);
+        CreateUpgradeButtons(container, boat);
     }
 
     private void CreateTopRow(VisualElement _parent, Boat _boat)
     {
         VisualElement container = new();
         container.AddToClassList("fleet-current-top-row");
+        SetMargin(container, 0, 30, 0, 0);
         _parent.Add(container);
 
         Label resourceLabel = new($"Resources: {ResourceManager.Instance.Amount}");
@@ -198,7 +206,7 @@ public class FleetScreen : UIScreen
         SetFontSize(resourceLabel, 28);
         container.Add(resourceLabel);
 
-        Label header = new($"{_boat.Name} (Durability: {_boat.GetPercentageHealth()})");
+        Label header = new($"{_boat.Name} (Durability: {_boat.GetPercentageDurability()})");
         header.AddToClassList("fleet-current-header");
         SetFontSize(header, 40);
         container.Add(header);
@@ -209,6 +217,7 @@ public class FleetScreen : UIScreen
 
         Button exitButton = new(() => OnExit());
         exitButton.AddToClassList("fleet-current-exit-button");
+        SetBorder(exitButton, 3, 7);
         SetFontSize(exitButton, 32);
         exitButton.text = "X";
         exitButtonContainer.Add(exitButton);
@@ -236,14 +245,18 @@ public class FleetScreen : UIScreen
 
     private void CreateRepairButton(VisualElement _parent, Boat _boat)
     {
-        Button repairButton = new(() => OnRepair(_boat));
-        repairButton.AddToClassList("main-button");
-        repairButton.AddToClassList("fleet-current-upgrade-button");
-        repairButton.AddToClassList("fleet-current-repair-button");
-        SetFontSize(repairButton, 26);
-        repairButton.text = "Repair (-10 R)";
-        repairButton.SetEnabled(_boat.IsDamaged && ResourceManager.Instance.CanRepair(_boat));
-        _parent.Add(repairButton);
+        VisualElement container = new();
+        container.AddToClassList("fleet-current-upgrade");
+        _parent.Add(container);
+
+        Button button = new(() => OnRepair(_boat));
+        button.AddToClassList("main-button");
+        button.AddToClassList("fleet-current-upgrade-button");
+        SetBorder(button, 3, 7);
+        SetFontSize(button, 26);
+        button.text = "Repair (-10 R)";
+        button.SetEnabled(_boat.IsDamaged && ResourceManager.Instance.CanRepair(_boat));
+        container.Add(button);
     }
 
     private void OnRepair(Boat _boat)
@@ -256,6 +269,7 @@ public class FleetScreen : UIScreen
     {
         VisualElement container = new();
         container.AddToClassList("fleet-current-upgrade");
+        SetMargin(container, 0, 0, 10, 0);
         _parent.Add(container);
 
         Label description = new($"Tier {_boat.GetTierOfUpgradeAsString(_type)} {_type} ({_boat.GetUpgradeModifierPercentage(_type)}% {_boat.GetModifierDescription(_type)})");
@@ -266,6 +280,7 @@ public class FleetScreen : UIScreen
         Button button = new(() => OnUpgrade(_boat, _type));
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-current-upgrade-button");
+        SetBorder(button, 3, 7);
         SetFontSize(button, 22);
         button.text = $"+ {_boat.GetUpgradeIncreasePercentage(_type)}% {_boat.GetModifierDescription(_type)} (-{Boat.UPGRADE_COST} R)";
         button.SetEnabled(_boat.CanUpgrade(_type));

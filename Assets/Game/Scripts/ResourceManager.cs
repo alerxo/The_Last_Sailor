@@ -27,7 +27,7 @@ public class ResourceManager : MonoBehaviour
 
     public static int GetRepairCost(Boat _boat)
     {
-        return (int)((100 - _boat.GetPercentageHealth()) * COST_FOR_REPAIR_PER_DURABILITY);
+        return (int)((100 - _boat.GetPercentageDurability()) * COST_FOR_REPAIR_PER_DURABILITY);
     }
 
     public bool CanRepair(Boat _boat)
