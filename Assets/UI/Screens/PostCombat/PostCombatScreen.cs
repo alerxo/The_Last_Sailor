@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -250,12 +249,12 @@ public class PostCombatScreen : UIScreen
 
         yield return new WaitForSeconds(0.25f);
 
-        yield return AnimateBorderWidth(background, 0.1f, 0, 5);
+        yield return AnimateBorderWidth(background, 0.1f, 0, 5);// Background border width
         yield return AnimateWidth(background, 1f, 0, 1000); // Background width
 
         yield return new WaitForSeconds(1f);
 
-        yield return AnimateHeight(content, 1f, 0, 700); // Content height
+        yield return AnimateHeight(content, 0.7f, 0, 700); // Content height
 
         yield return new WaitForSeconds(0.1f);
 
