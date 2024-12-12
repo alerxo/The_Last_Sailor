@@ -6,54 +6,20 @@
 	height: 100%;
 }
 
-.pause-background {
-	justify-content: space-around;
-	align-items: center;
-
-	width: 35%;
-	height: 50%;
-}
+.pause-background { }
 
 .pause-header {
-	margin-top: 10%;
-
 	-unity-text-align: middle-center;
 	color: white;
 }
 
 /* Button */
 
-.pause-button-container { 
-	align-items: center;
-
-	width: 70%;
-	margin-bottom: 10%;
-}
+.pause-button-container {  }
 
 .pause-button {
-	margin: 0px;
 	border-width: 0px;
 
 	background-color: rgba(0, 0, 0, 0.0);
 	color: white;
-
-	transition-property: scale;
-    transition-duration: 50ms;
-	transition-timing-function: ease-in-out;
-}
-
-.pause-button:hover {
-	scale: 1.20;
-
-	transition-property: scale;
-    transition-duration: 200ms;
-	transition-timing-function: ease-in-out;
-}
-
-.pause-button:active {
-	scale: 1.35;
-
-	transition-property: scale;
-    transition-duration: 100ms;
-	transition-timing-function: ease-in-out;
 }
