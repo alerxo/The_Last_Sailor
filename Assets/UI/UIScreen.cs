@@ -86,7 +86,7 @@ public abstract class UIScreen : MonoBehaviour
         _target.style.paddingRight = GetScaledValue(_right);
     }
 
-    protected void SetBorder(VisualElement _target, float _value)
+    protected void SetBorderWidth(VisualElement _target, float _value)
     {
         _target.style.borderTopWidth = GetScaledValue(_value);
         _target.style.borderBottomWidth = GetScaledValue(_value);
@@ -94,7 +94,15 @@ public abstract class UIScreen : MonoBehaviour
         _target.style.borderRightWidth = GetScaledValue(_value);
     }
 
-    protected void SetBorder(VisualElement _target, float _width, float _radius)
+    protected void SetBorderRadius(VisualElement _target, float _value)
+    {
+        _target.style.borderTopWidth = GetScaledValue(_value);
+        _target.style.borderBottomWidth = GetScaledValue(_value);
+        _target.style.borderLeftWidth = GetScaledValue(_value);
+        _target.style.borderRightWidth = GetScaledValue(_value);
+    }
+
+    protected void SetBorderWidthRadius(VisualElement _target, float _width, float _radius)
     {
         _target.style.borderTopWidth = GetScaledValue(_width);
         _target.style.borderBottomWidth = GetScaledValue(_width);
@@ -107,7 +115,7 @@ public abstract class UIScreen : MonoBehaviour
         _target.style.borderBottomRightRadius = GetScaledValue(_radius);
     }
 
-    public static void SetBorder(VisualElement _target, Color _color)
+    public static void SetBorderColor(VisualElement _target, Color _color)
     {
         _target.style.borderBottomColor = _color;
         _target.style.borderTopColor = _color;
@@ -120,18 +128,18 @@ public abstract class UIScreen : MonoBehaviour
         return _value * UIManager.UIScale;
     }
 
-    protected IEnumerator AnimateBorder(VisualElement _target, float _duration, float _start, float _end)
+    protected IEnumerator AnimateBorderWidth(VisualElement _target, float _duration, float _start, float _end)
     {
         float timer = 0;
 
         while ((timer += Time.unscaledDeltaTime) < _duration)
         {
-            SetBorder(_target, Mathf.Lerp(_start, _end, timer / _duration));
+            SetBorderWidth(_target, Mathf.Lerp(_start, _end, timer / _duration));
 
             yield return null;
         }
 
-        SetBorder(_target, _end);
+        SetBorderWidth(_target, _end);
     }
 
     protected IEnumerator AnimateWidth(VisualElement _target, float _duration, float _start, float _end)

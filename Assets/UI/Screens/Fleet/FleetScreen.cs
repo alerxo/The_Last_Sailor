@@ -80,11 +80,12 @@ public class FleetScreen : UIScreen
         Box boatListBackground = new();
         boatListBackground.AddToClassList("fleet-boat-list-background");
         SetMargin(boatListBackground, 0, 100, 0, 20);
-        SetBorder(boatListBackground, 0, 10);
+        SetBorderWidthRadius(boatListBackground, 0, 10);
         _parent.Add(boatListBackground);
 
         ScrollView boatListContainer = new();
         boatListContainer.AddToClassList("fleet-boat-list-container");
+        SetPadding(boatListContainer, 10);
         boatListContainer.verticalScroller.highButton.RemoveFromHierarchy();
         boatListContainer.verticalScroller.lowButton.RemoveFromHierarchy();
         boatListContainer.horizontalScroller.RemoveFromHierarchy();
@@ -104,7 +105,7 @@ public class FleetScreen : UIScreen
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-boat-list-item");
         SetMargin(button, 0, 10, 0, 0);
-        SetBorder(button, 5, 10);
+        SetBorderWidthRadius(button, 5, 10);
         SetFontSize(button, 25);
         button.text = $"Build New Boat (-{ResourceManager.Instance.GetBuildCost()} R)";
         button.SetEnabled(ResourceManager.Instance.CanBuild());
@@ -117,7 +118,7 @@ public class FleetScreen : UIScreen
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-boat-list-item");
         SetMargin(button, 0, 10, 0, 0);
-        SetBorder(button, 5, 10);
+        SetBorderWidthRadius(button, 5, 10);
         SetFontSize(button, 25);
         button.text = $"{_boat.Name} (Durability: {_boat.GetPercentageDurability()}%)";
         _parent.Add(button);
@@ -162,7 +163,7 @@ public class FleetScreen : UIScreen
         Button button = new(() => OnNavigationArrow(_index));
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-navigation-arrow-button");
-        SetBorder(button, 3, 7);
+        SetBorderWidthRadius(button, 3, 7);
         SetFontSize(button, 40);
         button.text = _text;
         _parent.Add(button);
@@ -184,7 +185,7 @@ public class FleetScreen : UIScreen
         container.AddToClassList("fleet-current-boat");
         SetMargin(container, 0, 0, 25, 25);
         SetPadding(container, 20);
-        SetBorder(container, 0, 10);
+        SetBorderWidthRadius(container, 0, 10);
         _parent.Add(container);
 
         Boat boat = PlayerBoatController.Instance.AdmiralController.Fleet[currentIndex];
@@ -216,8 +217,9 @@ public class FleetScreen : UIScreen
         container.Add(exitButtonContainer);
 
         Button exitButton = new(() => OnExit());
+        exitButton.AddToClassList("main-button");
         exitButton.AddToClassList("fleet-current-exit-button");
-        SetBorder(exitButton, 3, 7);
+        SetBorderWidthRadius(exitButton, 3, 7);
         SetFontSize(exitButton, 32);
         exitButton.text = "X";
         exitButtonContainer.Add(exitButton);
@@ -252,7 +254,7 @@ public class FleetScreen : UIScreen
         Button button = new(() => OnRepair(_boat));
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-current-upgrade-button");
-        SetBorder(button, 3, 7);
+        SetBorderWidthRadius(button, 3, 7);
         SetFontSize(button, 26);
         button.text = "Repair (-10 R)";
         button.SetEnabled(_boat.IsDamaged && ResourceManager.Instance.CanRepair(_boat));
@@ -280,7 +282,7 @@ public class FleetScreen : UIScreen
         Button button = new(() => OnUpgrade(_boat, _type));
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-current-upgrade-button");
-        SetBorder(button, 3, 7);
+        SetBorderWidthRadius(button, 3, 7);
         SetFontSize(button, 22);
         button.text = $"+ {_boat.GetUpgradeIncreasePercentage(_type)}% {_boat.GetModifierDescription(_type)} (-{Boat.UPGRADE_COST} R)";
         button.SetEnabled(_boat.CanUpgrade(_type));

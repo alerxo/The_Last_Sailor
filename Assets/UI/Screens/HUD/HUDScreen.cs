@@ -102,7 +102,7 @@ public class HUDScreen : UIScreen
         admiralContainer = new();
         admiralContainer.AddToClassList("hud-admiral-container");
         SetWidth(admiralContainer, 0);
-        SetBorder(admiralContainer, 0);
+        SetBorderWidth(admiralContainer, 0);
         _parent.Add(admiralContainer);
 
         Box admiralBackground = new();
@@ -124,15 +124,15 @@ public class HUDScreen : UIScreen
         const float BACKGROUND_DURATION = 0.5f;
 
         SetWidth(admiralContainer, 0);
-        SetBorder(admiralContainer, 0);
+        SetBorderWidth(admiralContainer, 0);
 
-        yield return AnimateBorder(admiralContainer, BORDER_DURATION, 0, BORDER_WIDTH);
+        yield return AnimateBorderWidth(admiralContainer, BORDER_DURATION, 0, BORDER_WIDTH);
         yield return AnimateWidth(admiralContainer, BACKGROUND_DURATION, 0, BACKGROUND_WIDTH);
 
         yield return new WaitForSeconds(WAIT_DURATION);
 
         yield return AnimateWidth(admiralContainer, BACKGROUND_DURATION, BACKGROUND_WIDTH, 0);
-        yield return AnimateBorder(admiralContainer, BORDER_DURATION, BORDER_WIDTH, 0);
+        yield return AnimateBorderWidth(admiralContainer, BORDER_DURATION, BORDER_WIDTH, 0);
     }
 
     private void CreateInteraction(VisualElement _parent)
@@ -145,7 +145,7 @@ public class HUDScreen : UIScreen
         interactionBackground = new();
         interactionBackground.AddToClassList("hud-interaction-background");
         SetSize(interactionBackground, 0, 0);
-        SetBorder(interactionBackground, 0);
+        SetBorderWidth(interactionBackground, 0);
         interactionContainer.Add(interactionBackground);
 
         interactionText = new(InputControlPath.ToHumanReadableString(interactionAsset.action.bindings[0].effectivePath, InputControlPath.HumanReadableStringOptions.OmitDevice));

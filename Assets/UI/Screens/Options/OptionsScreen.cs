@@ -16,13 +16,13 @@ public class OptionsScreen : UIScreen
         Box background = new();
         background.AddToClassList("options-background");
         SetPadding(background, 50);
-        SetBorder(background, 0, 10);
+        SetBorderWidthRadius(background, 0, 10);
         container.Add(background);
 
         Button returnButton = new(() => UIManager.Instance.ReturnFromOptions());
         returnButton.AddToClassList("options-return-button");
         SetMargin(returnButton, 0, 50, 0, 0);
-        SetBorder(returnButton, 5, 10);
+        SetBorderWidthRadius(returnButton, 5, 10);
         SetFontSize(returnButton, 30);
         returnButton.text = "Return";
         background.Add(returnButton);

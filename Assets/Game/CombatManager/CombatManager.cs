@@ -19,8 +19,8 @@ public class CombatManager : MonoBehaviour
     private const int MAX_ADMIRAL_COUNT = 1;
     private const float SPAWN_COOLDOWN = 5f;
     private const float SPAWN_PAUSE_DURATION = 0.1f;
-    private const float MIN_FLEET_SIZE = 0.8f;
-    private const float MAX_FLEET_SIZE = 1.2f;
+    private const float MIN_FLEET_SIZE = 0f;
+    private const float MAX_FLEET_SIZE = 0f;
     private CombatManagerSpawnState spawnState = CombatManagerSpawnState.SpawningFirstAdmiral;
 
     private readonly List<EnemyAdmiralController> admirals = new();

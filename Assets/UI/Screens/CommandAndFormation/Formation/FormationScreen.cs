@@ -161,7 +161,7 @@ public class FormationScreen : UIScreen
     {
         Button button = new(() => OnPlayerItem(_boat));
         button.AddToClassList("formation-boat-item");
-        SetBorder(button, playerMaterial.color);
+        SetBorderColor(button, playerMaterial.color);
         _parent.Add(button);
 
         Label header = new(_boat.Name);
@@ -174,7 +174,7 @@ public class FormationScreen : UIScreen
     {
         Button button = new(() => OnSubordinateItem(_boatController));
         button.AddToClassList("formation-boat-item");
-        SetBorder(button, formationMaterial.color);
+        SetBorderColor(button, formationMaterial.color);
         _parent.Add(button);
 
         Label header = new(_boatController.Boat.Name);
@@ -322,7 +322,7 @@ public class FormationScreen : UIScreen
             {
                 Highlight.material = _material;
                 WayPoint.material = _material;
-                SetBorder(Button, _material.color);
+                SetBorderColor(Button, _material.color);
             }
         }
 
@@ -419,7 +419,7 @@ public class FormationScreen : UIScreen
             Highlight.gameObject.SetActive(false);
             Highlight.material = _material;
             WayPoint.material = _material;
-            SetBorder(Button, _material.color);
+            SetBorderColor(Button, _material.color);
             StopMoveTrail();
         }
 

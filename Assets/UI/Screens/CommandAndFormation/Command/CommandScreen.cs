@@ -117,13 +117,13 @@ public class CommandScreen : UIScreen
         {
             if (command == _command)
             {
-                SetBorder(commandButtons[command], GetMaterial(command).color);
+                SetBorderColor(commandButtons[command], GetMaterial(command).color);
                 commandButtons[command].SetEnabled(false);
             }
 
             else
             {
-                SetBorder(commandButtons[command], defaultMaterial.color);
+                SetBorderColor(commandButtons[command], defaultMaterial.color);
                 commandButtons[command].SetEnabled(true);
             }
         }
