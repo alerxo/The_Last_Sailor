@@ -48,6 +48,10 @@ MonoBehaviour:
   paddleWheel: {fileID: 0}
   paddleAudioSource: {fileID: 8780139714971514353}
   paddleAudioClip: {fileID: 8300000, guid: fccc70440f769ce46847e6cd46a88bfa, type: 3}
+  throttleAudioSource: {fileID: 0}
+  clickAudioSource: {fileID: 0}
+  throttleAudioClip: {fileID: 8300000, guid: 143be080bbf703748b8b883cb2c0cd5d, type: 3}
+  maxOrMinThrottleAudioClip: {fileID: 8300000, guid: e0fd756c8086b51418baeb2811d44363, type: 3}
   isDebugMode: 0
 --- !u!82 &8780139714971514353
 AudioSource:

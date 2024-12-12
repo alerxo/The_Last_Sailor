@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using Unity.Cinemachine;
+using System.Threading;
 
 public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
 {
@@ -16,6 +17,14 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
     private FirstPersonController player;
     private CinemachineCamera playerCamera;
 
+    [SerializeField] AudioSource turningAudioSource;
+    [SerializeField] AudioSource stopTurningAudioSource;
+    [SerializeField] AudioClip stopTurningAudioClip;
+    [SerializeField] AudioClip turningAudioClip;
+
+    bool stopTurningPlayed;
+    bool allowSqueekPlayed;
+
     private void Awake()
     {
         Boat = GetComponentInParent<Boat>();
@@ -25,6 +34,12 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
         input.Player.ChangeCamera.performed += ChangeCamera_performed;
 
         FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
+
+        turningAudioSource.clip = turningAudioClip;
+        stopTurningAudioSource.clip = stopTurningAudioClip; 
+
+        stopTurningPlayed = false;
+        allowSqueekPlayed = true;
     }
 
     private void Start()
@@ -45,11 +60,45 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
         if (input.Player.Move.ReadValue<Vector2>().x != 0)
         {
             Boat.Engine.ChangeRudder(input.Player.Move.ReadValue<Vector2>().x);
+            if (!turningAudioSource.isPlaying && allowSqueekPlayed)
+            {
+                turningAudioSource.volume = 0.7f;
+                turningAudioSource.pitch = Random.Range(0.8f, 1.0f);
+                 turningAudioSource.Play();
+            }
         }
 
         else if (Mathf.Abs(Boat.Engine.Rudder) < FORCE_STRAIGHTEN_UP_MARGIN)
         {
+            turningAudioSource.volume = turningAudioSource.volume - 0.02f;
+            if (turningAudioSource.volume == 0) 
+            { 
+                turningAudioSource.Stop();
+            }
             Boat.Engine.ChangeTowardsRudder(0);
+        }
+        else 
+        {
+            turningAudioSource.volume = turningAudioSource.volume - 0.02f;
+            if (turningAudioSource.volume == 0)
+            {
+                turningAudioSource.Stop();
+            }
+        }
+        if (Boat.Engine.Rudder >= 1f || Boat.Engine.Rudder <= -1f) 
+        {
+            if (!stopTurningAudioSource.isPlaying && stopTurningPlayed == false) 
+            { 
+                stopTurningPlayed = true;
+                allowSqueekPlayed = false;
+                turningAudioSource.Stop();
+                stopTurningAudioSource.Play(); 
+            }
+        }
+        if (Boat.Engine.Rudder < 1f && Boat.Engine.Rudder > -1f)
+        {
+            allowSqueekPlayed = true;
+            stopTurningPlayed = false;
         }
     }
 
