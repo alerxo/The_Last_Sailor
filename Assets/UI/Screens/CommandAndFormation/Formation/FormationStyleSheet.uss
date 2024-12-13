@@ -7,30 +7,17 @@
 }
 
 .formation-background {
-	justify-content: center;
 	align-items: center;
 
-	width: 20%;
-	height: 90%;
-	
-	margin-right: 1%;
-
+	height: 80%;
 	border-width: 0px;
+
 	background-color: rgba(50, 50, 50, 0.7);
 }
 
-.formation-boat-item-container {
-	width: 92%;
-	height: 97%;
-}
+.formation-boat-item-container { }
 
 .formation-boat-item {
-	width: 98%;
-
-	margin-bottom: 3%;
-
-	border-width: 5px;
-	border-radius: 10px;
 	background-color: rgba(150, 150, 150, 0.8);
 }
 
@@ -40,32 +27,4 @@
 
 .formation-boat-item-description {
 	margin: 0px;
-}
-
-/* ScrollView */
-
-.unity-base-slider {
-	margin: 0px;
-}
-
-.unity-base-slider__tracker {
-	border-width: 0px;
-
-	background-color: rgba(0, 0, 0, 0);
-}
-
-.unity-base-slider__dragger {
-	border-width: 0px;
-
-	background-color: black;
-
-	width: 15px;
-}
-
-.unity-scroll-view__vertical-scroller {
-	margin-top: 1%;
-	margin-bottom: 1%;
-	margin-right: 0.5%;
-
-	background-color: rgba(0, 0, 0, 0);
 }

@@ -63,8 +63,8 @@ public class HUDScreen : UIScreen
         if (_admiral != null)
         {
             admiralText.text = _admiral.Name;
-            StopCoroutine(ShowAdmiral());
-            StartCoroutine(ShowAdmiral());
+            StopCoroutine(ShowAdmiralContainer());
+            StartCoroutine(ShowAdmiralContainer());
         }
     }
 
@@ -95,57 +95,61 @@ public class HUDScreen : UIScreen
         CreateAdmiral(container);
         CreateInteraction(container);
         CreateExitInteraction(container);
+
+        HideAdmiral();
+        HideInteraction();
     }
 
     private void CreateAdmiral(VisualElement _parent)
     {
         admiralContainer = new();
         admiralContainer.AddToClassList("hud-admiral-container");
-        SetWidth(admiralContainer, 0);
-        SetBorder(admiralContainer, 0);
+        SetMargin(admiralContainer, 50, 0, 0, 0);
+        SetBorderRadius(admiralContainer, 10);
         _parent.Add(admiralContainer);
 
-        Box admiralBackground = new();
-        admiralBackground.AddToClassList("hud-admiral-background");
-        SetWidth(admiralBackground, BACKGROUND_WIDTH);
-        admiralContainer.Add(admiralBackground);
-
         admiralText = new("Admiral");
-        admiralText.AddToClassList("hud-interaction-text");
+        admiralText.AddToClassList("hud-admiral-text");
+        SetPadding(admiralText, 10);
         SetFontSize(admiralText, 50);
-        admiralBackground.Add(admiralText);
+        admiralContainer.Add(admiralText);
     }
 
-    private IEnumerator ShowAdmiral()
+    private IEnumerator ShowAdmiralContainer()
     {
         const float BORDER_WIDTH = 5f;
-        const float WAIT_DURATION = 10f;
         const float BORDER_DURATION = 0.1f;
         const float BACKGROUND_DURATION = 0.5f;
 
-        SetWidth(admiralContainer, 0);
-        SetBorder(admiralContainer, 0);
+        HideAdmiral();
 
-        yield return AnimateBorder(admiralContainer, BORDER_DURATION, 0, BORDER_WIDTH);
+        yield return AnimateBorderWidth(admiralContainer, BORDER_DURATION, 0, 5f);
         yield return AnimateWidth(admiralContainer, BACKGROUND_DURATION, 0, BACKGROUND_WIDTH);
 
-        yield return new WaitForSeconds(WAIT_DURATION);
+        yield return new WaitForSeconds(10f);
 
         yield return AnimateWidth(admiralContainer, BACKGROUND_DURATION, BACKGROUND_WIDTH, 0);
-        yield return AnimateBorder(admiralContainer, BORDER_DURATION, BORDER_WIDTH, 0);
+        yield return AnimateBorderWidth(admiralContainer, BORDER_DURATION, BORDER_WIDTH, 0);
+    }
+
+    private void HideAdmiral()
+    {
+        SetWidth(admiralContainer, 0);
+        SetBorderWidth(admiralContainer, 0);
     }
 
     private void CreateInteraction(VisualElement _parent)
     {
         VisualElement interactionContainer = new();
         interactionContainer.AddToClassList("hud-interaction-container");
+        SetMargin(interactionContainer, 0, 100, 0, 0);
         SetSize(interactionContainer, INTERACTION_BUTTON_SIZE, INTERACTION_BUTTON_SIZE);
         _parent.Add(interactionContainer);
 
         interactionBackground = new();
         interactionBackground.AddToClassList("hud-interaction-background");
         SetSize(interactionBackground, 0, 0);
-        SetBorder(interactionBackground, 0);
+        SetBorderWidth(interactionBackground, 0);
         interactionContainer.Add(interactionBackground);
 
         interactionText = new(InputControlPath.ToHumanReadableString(interactionAsset.action.bindings[0].effectivePath, InputControlPath.HumanReadableStringOptions.OmitDevice));
@@ -156,8 +160,7 @@ public class HUDScreen : UIScreen
 
     private IEnumerator ShowInteractionButton()
     {
-        SetSize(interactionBackground, 0, 0);
-        SetFontSize(interactionText, 0);
+        HideInteraction();
 
         float duration = 0;
 
@@ -171,14 +174,12 @@ public class HUDScreen : UIScreen
             yield return null;
         }
 
-        SetSize(interactionBackground, INTERACTION_BUTTON_SIZE, INTERACTION_BUTTON_SIZE);
-        SetFontSize(interactionText, INTERACTION_BUTTON_FONT_SIZE);
+        ShowInteraction();
     }
 
     private IEnumerator HideInteractionButton()
     {
-        SetSize(interactionBackground, INTERACTION_BUTTON_SIZE, INTERACTION_BUTTON_SIZE);
-        SetFontSize(interactionText, INTERACTION_BUTTON_FONT_SIZE);
+        ShowInteraction();
 
         float duration = 0;
 
@@ -192,6 +193,17 @@ public class HUDScreen : UIScreen
             yield return null;
         }
 
+        HideInteraction();
+    }
+
+    private void ShowInteraction()
+    {
+        SetSize(interactionBackground, INTERACTION_BUTTON_SIZE, INTERACTION_BUTTON_SIZE);
+        SetFontSize(interactionText, INTERACTION_BUTTON_FONT_SIZE);
+    }
+
+    private void HideInteraction()
+    {
         SetSize(interactionBackground, 0, 0);
         SetFontSize(interactionText, 0);
     }
@@ -200,6 +212,9 @@ public class HUDScreen : UIScreen
     {
         exitInteractionBackground = new();
         exitInteractionBackground.AddToClassList("hud-exit-interaction-background");
+        SetMargin(exitInteractionBackground, 0, 100, 0, 0);
+        SetPadding(exitInteractionBackground, 10);
+        SetBorderWidthRadius(exitInteractionBackground, 0, 10);
         _parent.Add(exitInteractionBackground);
 
         Label text = new("Press E to exit");

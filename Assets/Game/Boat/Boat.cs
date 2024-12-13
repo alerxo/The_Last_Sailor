@@ -19,6 +19,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     [SerializeField] private float MaxHealth;
     [SerializeField] Transform COM;
+
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioSource destroyedAudioSource;
     [SerializeField] AudioSource burningAudioSource;
@@ -86,7 +87,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         }
     }
 
-    public int GetPercentageHealth()
+    public int GetPercentageDurability()
     {
         return (int)(Health / GetUpgradeValue * 100);
     }
@@ -98,6 +99,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
             burningAudioSource.loop = false;
             burningAudioSource.Stop();
         }
+
         StopAllCoroutines();
         SetDefault();
         Buoyancy.SetDefault();
@@ -195,7 +197,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         switch (_type)
         {
             case UpgradeType.Hull:
-                return "Health";
+                return "Durability";
 
             case UpgradeType.Cannons:
                 return "Damage";

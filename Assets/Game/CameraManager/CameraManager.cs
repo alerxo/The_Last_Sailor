@@ -146,7 +146,7 @@ public class CameraManager : MonoBehaviour
         Vector2 inputVector = input.Player.Move.ReadValue<Vector2>();
 
         float movementSpeed = COMMAND_MOVEMENT_SPEED * Mathf.Lerp(1, 2, commandCameraMovement.y / MAX_COMMAND_ZOOM);
-        Vector3 movement = new(inputVector.x * movementSpeed, input.Player.CameraZoom.ReadValue<float>() * COMMAND_SROLL_SPEED, inputVector.y * movementSpeed);
+        Vector3 movement = new(inputVector.x * movementSpeed, input.Player.CameraZoom.ReadValue<float>() * COMMAND_SROLL_SPEED * (FormationScreen.IsHoverinfBoatList ? 0 : 1), inputVector.y * movementSpeed);
         movement *= Time.deltaTime;
         movement += commandCameraMovement;
 

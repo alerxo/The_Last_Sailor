@@ -78,7 +78,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "CommandSelect",
+                    "name": "WayPointSelect",
                     "type": "Button",
                     "id": "708da9f7-b261-4680-a91c-e8412e2ce2e5",
                     "expectedControlType": "",
@@ -87,7 +87,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "CommandDeselect",
+                    "name": "WayPointDeselect",
                     "type": "Button",
                     "id": "db47538e-fd6b-4ce6-9004-e712ae6846b2",
                     "expectedControlType": "",
@@ -444,7 +444,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "CommandSelect",
+                    "action": "WayPointSelect",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -455,7 +455,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "CommandDeselect",
+                    "action": "WayPointDeselect",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

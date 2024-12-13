@@ -1,27 +1,19 @@
 .command-container {
 	justify-content: flex-end;
+	align-items: flex-start;
 
 	width: 100%;
 	height: 100%;
 }
 
-.command-button-container {
-	justify-content: space-between;
+.command-button-container { }
 
-	width: 17%;
-	height: 70%;
-	margin-bottom: 5%;
-	margin-left: 2%;
-}
+.command-top-button-container { }
 
-.command-top-button-container {
-	width: 100%;
-}
+.command-top-button { }
 
-.command-top-button {
-	margin-bottom: 5%;
-	border-width: 5px;
-	border-radius: 10px;
+.command-top-button-text { 
+	margin: 0px;
 }
 
 .command-top-button:disabled {
@@ -34,9 +26,6 @@
 }
 
 .command-change-view-button {
-	width: 100%;
-	height: 10%;
-
 	border-width: 5px;
 	border-radius: 10px;
 }

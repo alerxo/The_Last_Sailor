@@ -22,7 +22,7 @@ public partial class IsInCombatAction : Action
 
     private bool IsInCombat()
     {
-        return Agent.Value == CombatManager.Instance.AdmiralInRingOfFireBuffer;
+        return Agent.Value.Enemy != null;
     }
 }
 

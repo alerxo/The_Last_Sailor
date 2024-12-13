@@ -6,83 +6,84 @@
 	height: 100%;
 }
 
-.fleet-menu-container {
-	flex-direction: row;
-	justify-content: space-around;
+/* boat list */
+
+.fleet-boat-list-background {
 	align-items: center;
+	align-self: flex-end;
 
-	width: 55%;
-	height: 25%;
-	margin-bottom: 1%;
-}
-
-.fleet-boat-container {
-	justify-content: space-between;
-	align-items: center;
-
-	height: 100%;
-	width: 80%;
-	padding: 1%;
+	width: 20%;
+	height: 60%;
 
 	background-color: rgba(200, 200, 200, 0.5);
-	border-radius: 10px;
-	border-width: 0px;
 }
 
-.fleet-boat-header { 
-	margin: 0px;
-	padding: 0px;
+.fleet-boat-list-container { }
+
+.fleet-boat-list-item {
+	background-color: rgba(150, 150, 150, 0.8);
+
+	transition-property: border-color;
 }
 
-.fleet-resource-count {
-	margin: 0px;
-	padding: 0px;
+.fleet-boat-list-item:hover {
+	scale: 1;
+	border-color: black;
+
+	transition-property: border-color;
 }
 
-.fleet-boat-button-container {
+.fleet-boat-list-item:active {
+	scale: 1;
+
+	transition-property: border-color;
+}
+
+/* Current */
+
+.fleet-current-container {
 	flex-direction: row;
-	justify-content: space-around;
-
-	width: 100%;
-}
-
-.fleet-boat-upgrade-container {
-	justify-content: space-between;
 	align-items: center;
 }
 
-.fleet-boat-upgrade-description { }
+/* navigation */
 
-.fleet-boat-button {
-	border-color: black;
-	border-width: 3px;
-	border-radius: 7px;
+.fleet-navigation-arrow-button { }
+
+.fleet-current-boat {
+	background-color: rgba(200, 200, 200, 0.5);
 }
 
-.fleet-navigation-arrow-button {
-	padding-top: 0.2%;
-	padding-bottom: 0.2%;
+/* top */
 
-	border-width: 3px;
-	border-radius: 7px;
+.fleet-current-top-row {
+	flex-direction: row;
+	justify-content: space-between;
 }
 
-.fleet-exit-button-container {
-	position: absolute;
-	
-	justify-content: flex-start;
+.fleet-current-resource-label { }
+
+.fleet-current-header { }
+
+.fleet-current-exit-container {
 	align-items: flex-end;
-
-	width: 100%;
-	height: 100%;
 }
 
-.fleet-exit-button {
-	margin-right: 1.1%;
-	padding-top: 0.2%;
-	padding-bottom: 0.2%;
-
+.fleet-current-exit-button {
 	border-color: black;
-	border-width: 3px;
-	border-radius: 7px;
+}
+
+/* Upgrade */
+
+.fleet-current-upgrade-container {
+	flex-direction: row;
+	align-items: flex-end;
+}
+
+.fleet-current-upgrade { }
+
+.fleet-current-upgrade-description { }
+
+.fleet-current-upgrade-button {
+	border-color: black;
 }

@@ -100,7 +100,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""CommandSelect"",
+                    ""name"": ""WayPointSelect"",
                     ""type"": ""Button"",
                     ""id"": ""708da9f7-b261-4680-a91c-e8412e2ce2e5"",
                     ""expectedControlType"": """",
@@ -109,7 +109,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""CommandDeselect"",
+                    ""name"": ""WayPointDeselect"",
                     ""type"": ""Button"",
                     ""id"": ""db47538e-fd6b-4ce6-9004-e712ae6846b2"",
                     ""expectedControlType"": """",
@@ -466,7 +466,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""CommandSelect"",
+                    ""action"": ""WayPointSelect"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -477,7 +477,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""CommandDeselect"",
+                    ""action"": ""WayPointDeselect"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1161,8 +1161,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_CameraZoom = m_Player.FindAction("CameraZoom", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_CannonFire = m_Player.FindAction("CannonFire", throwIfNotFound: true);
-        m_Player_CommandSelect = m_Player.FindAction("CommandSelect", throwIfNotFound: true);
-        m_Player_CommandDeselect = m_Player.FindAction("CommandDeselect", throwIfNotFound: true);
+        m_Player_WayPointSelect = m_Player.FindAction("WayPointSelect", throwIfNotFound: true);
+        m_Player_WayPointDeselect = m_Player.FindAction("WayPointDeselect", throwIfNotFound: true);
         m_Player_FirstCommand = m_Player.FindAction("FirstCommand", throwIfNotFound: true);
         m_Player_SecondCommand = m_Player.FindAction("SecondCommand", throwIfNotFound: true);
         m_Player_ThirdCommand = m_Player.FindAction("ThirdCommand", throwIfNotFound: true);
@@ -1256,8 +1256,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_CameraZoom;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_CannonFire;
-    private readonly InputAction m_Player_CommandSelect;
-    private readonly InputAction m_Player_CommandDeselect;
+    private readonly InputAction m_Player_WayPointSelect;
+    private readonly InputAction m_Player_WayPointDeselect;
     private readonly InputAction m_Player_FirstCommand;
     private readonly InputAction m_Player_SecondCommand;
     private readonly InputAction m_Player_ThirdCommand;
@@ -1276,8 +1276,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @CameraZoom => m_Wrapper.m_Player_CameraZoom;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @CannonFire => m_Wrapper.m_Player_CannonFire;
-        public InputAction @CommandSelect => m_Wrapper.m_Player_CommandSelect;
-        public InputAction @CommandDeselect => m_Wrapper.m_Player_CommandDeselect;
+        public InputAction @WayPointSelect => m_Wrapper.m_Player_WayPointSelect;
+        public InputAction @WayPointDeselect => m_Wrapper.m_Player_WayPointDeselect;
         public InputAction @FirstCommand => m_Wrapper.m_Player_FirstCommand;
         public InputAction @SecondCommand => m_Wrapper.m_Player_SecondCommand;
         public InputAction @ThirdCommand => m_Wrapper.m_Player_ThirdCommand;
@@ -1317,12 +1317,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @CannonFire.started += instance.OnCannonFire;
             @CannonFire.performed += instance.OnCannonFire;
             @CannonFire.canceled += instance.OnCannonFire;
-            @CommandSelect.started += instance.OnCommandSelect;
-            @CommandSelect.performed += instance.OnCommandSelect;
-            @CommandSelect.canceled += instance.OnCommandSelect;
-            @CommandDeselect.started += instance.OnCommandDeselect;
-            @CommandDeselect.performed += instance.OnCommandDeselect;
-            @CommandDeselect.canceled += instance.OnCommandDeselect;
+            @WayPointSelect.started += instance.OnWayPointSelect;
+            @WayPointSelect.performed += instance.OnWayPointSelect;
+            @WayPointSelect.canceled += instance.OnWayPointSelect;
+            @WayPointDeselect.started += instance.OnWayPointDeselect;
+            @WayPointDeselect.performed += instance.OnWayPointDeselect;
+            @WayPointDeselect.canceled += instance.OnWayPointDeselect;
             @FirstCommand.started += instance.OnFirstCommand;
             @FirstCommand.performed += instance.OnFirstCommand;
             @FirstCommand.canceled += instance.OnFirstCommand;
@@ -1369,12 +1369,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @CannonFire.started -= instance.OnCannonFire;
             @CannonFire.performed -= instance.OnCannonFire;
             @CannonFire.canceled -= instance.OnCannonFire;
-            @CommandSelect.started -= instance.OnCommandSelect;
-            @CommandSelect.performed -= instance.OnCommandSelect;
-            @CommandSelect.canceled -= instance.OnCommandSelect;
-            @CommandDeselect.started -= instance.OnCommandDeselect;
-            @CommandDeselect.performed -= instance.OnCommandDeselect;
-            @CommandDeselect.canceled -= instance.OnCommandDeselect;
+            @WayPointSelect.started -= instance.OnWayPointSelect;
+            @WayPointSelect.performed -= instance.OnWayPointSelect;
+            @WayPointSelect.canceled -= instance.OnWayPointSelect;
+            @WayPointDeselect.started -= instance.OnWayPointDeselect;
+            @WayPointDeselect.performed -= instance.OnWayPointDeselect;
+            @WayPointDeselect.canceled -= instance.OnWayPointDeselect;
             @FirstCommand.started -= instance.OnFirstCommand;
             @FirstCommand.performed -= instance.OnFirstCommand;
             @FirstCommand.canceled -= instance.OnFirstCommand;
@@ -1583,8 +1583,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnCameraZoom(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnCannonFire(InputAction.CallbackContext context);
-        void OnCommandSelect(InputAction.CallbackContext context);
-        void OnCommandDeselect(InputAction.CallbackContext context);
+        void OnWayPointSelect(InputAction.CallbackContext context);
+        void OnWayPointDeselect(InputAction.CallbackContext context);
         void OnFirstCommand(InputAction.CallbackContext context);
         void OnSecondCommand(InputAction.CallbackContext context);
         void OnThirdCommand(InputAction.CallbackContext context);

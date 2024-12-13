@@ -15,11 +15,15 @@ public class OptionsScreen : UIScreen
 
         Box background = new();
         background.AddToClassList("options-background");
+        SetPadding(background, 50);
+        SetBorderWidthRadius(background, 0, 10);
         container.Add(background);
 
         Button returnButton = new(() => UIManager.Instance.ReturnFromOptions());
         returnButton.AddToClassList("options-return-button");
-        SetFontSize(returnButton, 22);
+        SetMargin(returnButton, 0, 50, 0, 0);
+        SetBorderWidthRadius(returnButton, 5, 10);
+        SetFontSize(returnButton, 30);
         returnButton.text = "Return";
         background.Add(returnButton);
 
@@ -42,7 +46,7 @@ public class OptionsScreen : UIScreen
     {
         Label label = new(_text);
         label.AddToClassList("options-item-label");
-        SetFontSize(label, 22);
+        SetFontSize(label, 24);
         _parent.Add(label);
     }
 

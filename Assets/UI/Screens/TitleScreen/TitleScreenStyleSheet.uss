@@ -1,16 +1,13 @@
-.title-screen-background {
-	justify-content: space-around;
-	align-items: center;
+.title-screen-container {
+	align-items: flex-start;
 
-	width: 35%;
-	height: 50%;
-	margin-top: 7%;
-	margin-left: 5%;
+	width: 100%;
+	height: 100%;
 }
 
-.title-screen-title {
-	margin-top: 10%;
+.title-screen-background { }
 
+.title-screen-title {
 	-unity-font-definition: url("project://database/Assets/UI/Fonts/UnifrakturCook/UnifrakturCook-Bold.ttf");
 	-unity-text-align: middle-center;
 	color: white;
@@ -18,37 +15,11 @@
 
 /* Button */
 
-.title-screen-button-container {
-	align-items: center;
-
-	width: 70%;
-	margin-bottom: 10%;
-}
+.title-screen-button-container { }
 
 .title-screen-button {
-	margin: 0px;
 	border-width: 0px;
 
 	background-color: rgba(0, 0, 0, 0.0);
 	color: white;
-
-	transition-property: scale;
-    transition-duration: 50ms;
-	transition-timing-function: ease-in-out;
-}
-
-.title-screen-button:hover {
-	scale: 1.20;
-
-	transition-property: scale;
-    transition-duration: 200ms;
-	transition-timing-function: ease-in-out;
-}
-
-.title-screen-button:active {
-	scale: 1.35;
-
-	transition-property: scale;
-    transition-duration: 100ms;
-	transition-timing-function: ease-in-out;
 }
