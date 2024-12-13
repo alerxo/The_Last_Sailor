@@ -50,7 +50,7 @@ public class ThrottlePlayerController : MonoBehaviour, IInteractable
             Boat.Engine.ChangeThrottle(input.Player.Move.ReadValue<Vector2>().x);
             if (!throttleAudioSource.isPlaying && allowThrottleSqueekPlayed) 
             {
-                throttleAudioSource.volume = 0.3f;
+                throttleAudioSource.volume = 0.1f;
                 throttleAudioSource.pitch = Random.Range(0.7f, 0.8f);
                 throttleAudioSource.Play();
             }
