@@ -3,7 +3,10 @@ using UnityEngine;
 
 public class PlayerCannonController : MonoBehaviour, IInteractable
 {
-    private const float ROTATION_SPEED = 1.6f;
+    private const float ROTATION_SPEED = 1f;
+    private const float MOUSE_SPEED = 0.7f;
+    private const float MOUSE_ACCELERATION = 10f;
+    private Vector2 smoothedMouseMovement;
 
     [Tooltip("Target for the cannon camera")]
     [SerializeField] private Transform cameraTarget;
@@ -33,26 +36,23 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        Vector2 rotation = input.Player.Move.ReadValue<Vector2>();
+        Vector2 keyboardMovement = input.Player.Move.ReadValue<Vector2>();
 
-        if (rotation.magnitude == 0)
+        Vector2 mouseMovement = input.Player.Look.ReadValue<Vector2>();
+        mouseMovement.x = Mathf.Clamp(mouseMovement.x, -1, 1) * MOUSE_SPEED;
+        mouseMovement.y = Mathf.Clamp(mouseMovement.y, -1, 1) * MOUSE_SPEED;
+        smoothedMouseMovement = Vector2.Lerp(smoothedMouseMovement, mouseMovement, MOUSE_ACCELERATION * Time.deltaTime);
+
+        Vector2 movement = keyboardMovement.magnitude == 0 ? smoothedMouseMovement : keyboardMovement;
+
+        if (movement.x != 0)
         {
-            rotation = input.Player.Look.ReadValue<Vector2>();
-            rotation.x = Mathf.Clamp(rotation.x, -ROTATION_SPEED, ROTATION_SPEED) / 1.5f;
-            rotation.y = Mathf.Clamp(rotation.y, -ROTATION_SPEED, ROTATION_SPEED) / 1.5f;
+            cannon.ChangeYaw(movement.x * ROTATION_SPEED);
         }
 
-        if (rotation.magnitude > 0)
+        if (movement.y != 0)
         {
-            if (rotation.x != 0)
-            {
-                cannon.ChangeYaw(Mathf.Clamp(rotation.x, -ROTATION_SPEED, ROTATION_SPEED));
-            }
-
-            if (rotation.y != 0)
-            {
-                cannon.ChangePitch(Mathf.Clamp(rotation.y, -ROTATION_SPEED, ROTATION_SPEED));
-            }
+            cannon.ChangePitch(movement.y * ROTATION_SPEED);
         }
     }
 

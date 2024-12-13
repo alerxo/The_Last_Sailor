@@ -12,6 +12,25 @@ public static class Formations
     private const int RING_GROWTH_SIZE = 4;
     private const float RING_MARGIN = 200f;
 
+    public static Vector3[] GetFleetPositions(Formation _formation, int _count)
+    {
+        switch (_formation)
+        {
+            case Formation.Line:
+                return GetLine(_count);
+
+            case Formation.Spearhead:
+                return GetSpearhead(_count);
+
+            case Formation.Ring:
+                return GetRing(_count);
+
+            default:
+                Debug.LogError($"Defaulted for case {_formation}");
+                return null;
+        }
+    }
+
     public static Vector3[] GetLine(int _count)
     {
         Vector3[] positions = new Vector3[_count];

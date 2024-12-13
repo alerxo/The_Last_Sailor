@@ -6,11 +6,15 @@ public class PlayerAdmiralController : Admiral
 
     private int subordinateNumber = 0;
 
+    private Formation defaultFormation;
+
     public void Awake()
     {
         PlayerBoatController = GetComponent<PlayerBoatController>();
 
         SetName("Player");
+        SetDefaultFormation(Formation.Line);
+        SetCommandForSubordinates(Command.Follow);
     }
 
     public override string GetSubordinateName()
@@ -18,5 +22,34 @@ public class PlayerAdmiralController : Admiral
         if (subordinateNumber == int.MaxValue) subordinateNumber = 0;
 
         return $"Allied Boat {++subordinateNumber}";
+    }
+
+    public void BuildBoat()
+    {
+        Vector3 formationPosition = GetNextSubordinateForrmationPosition();
+        Vector3 position = transform.position + transform.TransformVector(formationPosition);
+        position.y = transform.position.y;
+
+        AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController>(position, transform.rotation);
+        subordinate.Boat.SetName(GetSubordinateName());
+        subordinate.SetFormationPosition(formationPosition);
+        subordinate.TrySetCommand(Command);
+        AddSubordinate(subordinate.Boat);
+    }
+
+    public void SetDefaultFormation(Formation _formation)
+    {
+        defaultFormation = _formation;
+        Vector3[] positions = Formations.GetFleetPositions(defaultFormation, Subordinates.Count);
+
+        for (int i = 0; i < Subordinates.Count; i++)
+        {
+            Subordinates[i].SetFormationPosition(positions[i]);
+        }
+    }
+
+    private Vector3 GetNextSubordinateForrmationPosition()
+    {
+        return Formations.GetFleetPositions(defaultFormation, Subordinates.Count + 1)[Subordinates.Count];
     }
 }

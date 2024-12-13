@@ -7,41 +7,26 @@
 }
 
 .hud-admiral-container {
-	justify-content: center;
-	align-items: center;
-
-	margin-top: 3%;
-
-	background-color: rgba(0, 0, 0, 0);
-	border-radius: 10px;
 	overflow: hidden;
 }
 
-.hud-admiral-background {
-	justify-content: center;
-	align-items: center;
-
-	padding: 1%;
-	border-width: 0px;
+.hud-admiral-text { 
+	-unity-text-align: middle-center;
 }
-
-.hud-admiral-text { }
 
 .hud-interaction-container {
 	justify-content: center;
 	align-items: center;
-
-	margin-bottom: 6%;
 }
 
 .hud-interaction-background {
 	justify-content: center;
 	align-items: center;
 
-	background-color: rgba(200, 200, 200, 0.7);
-
 	border-radius: 100%;
 	border-width: 0px;
+
+	background-color: rgba(200, 200, 200, 0.7);
 }
 
 .hud-interaction-text { 
@@ -50,13 +35,7 @@
 }
 
 .hud-exit-interaction-background {
-	margin-bottom: 6%;
-
 	background-color: rgba(200, 200, 200, 0.4);
-
-	padding: 0.6%;
-	border-radius: 10px;
-	border-width: 0px;
 }
 
 .hud-exit-interaction-text { }

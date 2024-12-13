@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UIElements;
@@ -10,28 +11,33 @@ public class FormationScreen : UIScreen
     private ScrollView boatItemContainer;
 
     private const float Y_POSITION_FOR_HIGHLIGHTS = 7f;
+    [SerializeField] private LayerMask wayPointLayer;
 
     [SerializeField] private MeshRenderer highlightPrefab, wayPointPrefab;
     [SerializeField] private Transform trailPrefab;
-    [SerializeField] private Material defaultMaterial, selectedMaterial, formationMaterial, holdMaterial, chargeMaterial;
+    [SerializeField] private Material playerMaterial, formationMaterial, holdMaterial, chargeMaterial;
 
     private MeshRenderer playerHighlight;
     private readonly Dictionary<AIBoatController, CommandItem> commandItems = new();
-    private AIBoatController current;
-    private bool canClickWater = true;
 
     private InputSystem_Actions input;
+    public static bool IsHoverinfBoatList { get; private set; }
+    private readonly List<CommandItem> SelectedWayPoints = new();
+    private Vector3 wayPointMoveOrigin;
 
     private void Awake()
     {
+        IsHoverinfBoatList = false;
+
         UIManager.OnStateChanged += UIManager_OnStateChanged;
 
         input = new();
-        input.Player.CommandSelect.performed += CommandSelect_performed;
-        input.Player.CommandDeselect.performed += CommandDeselect_performed;
+        input.Player.WayPointSelect.started += WayPointSelect_started;
+        input.Player.WayPointSelect.canceled += WayPointSelect_canceled;
+        input.Player.WayPointDeselect.performed += WayPointDeselect_performed;
 
         playerHighlight = Instantiate(highlightPrefab, transform);
-        playerHighlight.material = defaultMaterial;
+        playerHighlight.material = playerMaterial;
         playerHighlight.gameObject.SetActive(false);
     }
 
@@ -52,9 +58,10 @@ public class FormationScreen : UIScreen
             PlayerBoatController.Instance.AdmiralController.OnSubordinateChanged -= AdmiralController_OnSubordinateChanged;
         }
 
-        input.Player.CommandSelect.performed -= CommandSelect_performed;
-        input.Player.CommandDeselect.performed -= CommandDeselect_performed;
         input.Player.Disable();
+        input.Player.WayPointSelect.started -= WayPointSelect_started;
+        input.Player.WayPointSelect.canceled -= WayPointSelect_canceled;
+        input.Player.WayPointDeselect.performed -= WayPointDeselect_performed;
     }
 
     private void Update()
@@ -65,77 +72,75 @@ public class FormationScreen : UIScreen
 
             foreach (CommandItem item in commandItems.Values)
             {
-                item.Update(current, defaultMaterial, selectedMaterial, formationMaterial, holdMaterial, chargeMaterial);
+                item.Update(formationMaterial, holdMaterial, chargeMaterial);
+            }
+
+            if (SelectedWayPoints.Count > 0)
+            {
+                Vector3 movement = GetRayHitOnWaterSurface(Camera.main.ScreenPointToRay(Input.mousePosition)) - wayPointMoveOrigin;
+
+                foreach (CommandItem item in SelectedWayPoints)
+                {
+                    item.SetWayPointMovePosition(movement);
+                }
             }
         }
+
+        else if (SelectedWayPoints.Count > 0)
+        {
+            foreach (CommandItem item in SelectedWayPoints)
+            {
+                item.SetWayPointMovePosition(null);
+            }
+
+            SelectedWayPoints.Clear();
+        }
     }
 
-    private void CommandSelect_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    private void WayPointSelect_started(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
+        if (IsHoverinfBoatList || PlayerBoatController.Instance.AdmiralController.Command != Command.Follow) return;
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out RaycastHit assignmentHit))
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, wayPointLayer))
         {
-            TryAssignCurrent(assignmentHit);
-        }
-
-        else if (current != null && canClickWater)
-        {
-            SetCurrentFormation(ray);
+            wayPointMoveOrigin = GetRayHitOnWaterSurface(ray);
+            SelectedWayPoints.Add(commandItems.Values.ToList().Find((c) => hit.transform == c.WayPoint.transform));
         }
     }
 
-    private void TryAssignCurrent(RaycastHit _hit)
-    {
-        AIBoatController boatController = _hit.transform.GetComponentInParent<AIBoatController>();
-
-        if (boatController != null && boatController != current && boatController.Admiral == PlayerBoatController.Instance.AdmiralController)
-        {
-            TryRemoveCurrent();
-            AssignCurrent(boatController);
-        }
-    }
-
-    private void AssignCurrent(AIBoatController _boatController)
-    {
-        current = _boatController;
-    }
-
-    private void SetCurrentFormation(Ray _ray)
+    private Vector3 GetRayHitOnWaterSurface(Ray _ray)
     {
         float theta = Vector3.Angle(-Vector3.up, _ray.direction);
         float adjacent = Camera.main.transform.position.y;
         float hypotenuse = adjacent / Mathf.Cos(theta * Mathf.Deg2Rad);
+
         Vector3 hit = _ray.origin + (_ray.direction * hypotenuse);
+        hit = PlayerBoatController.Instance.transform.InverseTransformVector(hit - PlayerBoatController.Instance.transform.position);
+        hit.y = 0;
 
-        current.SetFormationPosition(PlayerBoatController.Instance.transform.InverseTransformVector(hit - PlayerBoatController.Instance.transform.position));
+        return hit;
+    }
 
-        if (current.Command == Command.Unassigned)
+    private void WayPointSelect_canceled(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    {
+        foreach (CommandItem item in SelectedWayPoints)
         {
-            current.TrySetCommand(Command.Formation);
+            item.ApplyWayPointMovePosition();
         }
 
-        commandItems[current].StopMoveTrail();
+        SelectedWayPoints.Clear();
     }
 
-    private void CommandDeselect_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    private void WayPointDeselect_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        TryRemoveCurrent();
-    }
-
-    private void TryRemoveCurrent()
-    {
-        if (current != null)
+        foreach (CommandItem item in SelectedWayPoints)
         {
-            current = null;
+            item.SetWayPointMovePosition(null);
         }
-    }
 
-    public static Vector3 GetPositionAboveWater(Vector3 _position)
-    {
-        _position.y = Y_POSITION_FOR_HIGHLIGHTS;
-
-        return _position;
+        SelectedWayPoints.Clear();
     }
 
     public override void Generate()
@@ -146,14 +151,18 @@ public class FormationScreen : UIScreen
 
         Box background = new();
         background.AddToClassList("formation-background");
+        SetMargin(background, 0, 0, 0, 50);
+        SetPadding(background, 10);
+        SetBorderRadius(background, 10);
         container.Add(background);
 
         boatItemContainer = new();
         boatItemContainer.AddToClassList("formation-boat-item-container");
-        boatItemContainer.RegisterCallback<MouseEnterEvent>(evt => canClickWater = false);
-        boatItemContainer.RegisterCallback<MouseLeaveEvent>(evt => canClickWater = true);
+        boatItemContainer.RegisterCallback<MouseEnterEvent>(evt => IsHoverinfBoatList = true);
+        boatItemContainer.RegisterCallback<MouseLeaveEvent>(evt => IsHoverinfBoatList = false);
         boatItemContainer.verticalScroller.highButton.RemoveFromHierarchy();
         boatItemContainer.verticalScroller.lowButton.RemoveFromHierarchy();
+        boatItemContainer.horizontalScroller.RemoveFromHierarchy();
         background.Add(boatItemContainer);
 
         CreatePlayerItem(boatItemContainer, PlayerBoatController.Instance.Boat);
@@ -163,7 +172,9 @@ public class FormationScreen : UIScreen
     {
         Button button = new(() => OnPlayerItem(_boat));
         button.AddToClassList("formation-boat-item");
-        SetBorder(button, defaultMaterial.color);
+        SetPadding(button, 5, 5, 50, 50);
+        SetBorderWidthRadius(button, 5, 10);
+        SetBorderColor(button, playerMaterial.color);
         _parent.Add(button);
 
         Label header = new(_boat.Name);
@@ -176,7 +187,10 @@ public class FormationScreen : UIScreen
     {
         Button button = new(() => OnSubordinateItem(_boatController));
         button.AddToClassList("formation-boat-item");
-        SetBorder(button, formationMaterial.color);
+        SetMargin(button, 10, 0, 0, 0);
+        SetPadding(button, 5, 5, 50, 50);
+        SetBorderWidthRadius(button, 5, 10);
+        SetBorderColor(button, formationMaterial.color);
         _parent.Add(button);
 
         Label header = new(_boatController.Boat.Name);
@@ -199,8 +213,6 @@ public class FormationScreen : UIScreen
 
     private void OnSubordinateItem(AIBoatController _boatController)
     {
-        TryRemoveCurrent();
-        AssignCurrent(_boatController);
         CameraManager.Instance.FocusFormationCamera(_boatController.transform.position);
     }
 
@@ -219,13 +231,12 @@ public class FormationScreen : UIScreen
 
         else
         {
-            current = null;
             input.Player.Disable();
             playerHighlight.gameObject.SetActive(false);
 
             foreach (CommandItem item in commandItems.Values)
             {
-                item.Deactivate(defaultMaterial);
+                item.Deactivate(playerMaterial);
             }
         }
     }
@@ -241,7 +252,7 @@ public class FormationScreen : UIScreen
                 Instantiate(wayPointPrefab, transform),
                 Instantiate(trailPrefab, transform),
                 CreateSuborinateItem(boatItemContainer, _boatController)));
-            commandItems[_boatController].Deactivate(defaultMaterial);
+            commandItems[_boatController].Deactivate(playerMaterial);
         }
 
         else
@@ -252,77 +263,71 @@ public class FormationScreen : UIScreen
         }
     }
 
+    public static Vector3 GetPositionAboveWater(Vector3 _position)
+    {
+        _position.y = Y_POSITION_FOR_HIGHLIGHTS;
+
+        return _position;
+    }
+
     private class CommandItem
     {
         public AIBoatController BoatController;
         public MeshRenderer Highlight;
-        public MeshRenderer Waypoint;
+        public MeshRenderer WayPoint;
+        public MeshRenderer WayPointMove;
         public Transform Trail;
         public Button Button;
         public Label Header;
         public Label Description;
+        public Vector3? WayPointMovePosition;
 
         private const float TRAIL_SPEED = 170f;
         public bool IsTrailMoving { get; private set; } = false;
 
-        public CommandItem(AIBoatController _boatController, MeshRenderer _highlight, MeshRenderer _waypoint, Transform _trail, Button _button)
+        public CommandItem(AIBoatController _boatController, MeshRenderer _highlight, MeshRenderer _wayPoint, Transform _trail, Button _button)
         {
             BoatController = _boatController;
             Highlight = _highlight;
-            Waypoint = _waypoint;
+            WayPoint = _wayPoint;
             Trail = _trail;
             Button = _button;
             Header = Button.ElementAt(0) as Label;
             Description = Button.ElementAt(1) as Label;
         }
 
-        public void SetDescription()
+        public void Update(Material _formationMaterial, Material _holdMaterial, Material _chargeMaterial)
         {
-            Description.text = $"{BoatController.Command}";
-        }
-
-        public void Update(AIBoatController _current, Material _defaultMaterial, Material _selectedMaterial, Material _formationMaterial, Material _holdMaterial, Material _chargeMaterial)
-        {
-            if (Description.text != $"{BoatController.Command}")
+            if (Description.text != $"Durability: {BoatController.Boat.GetPercentageDurability()}")
             {
-                Description.text = $"{BoatController.Command}";
+                Description.text = $"Durability: {BoatController.Boat.GetPercentageDurability()}";
             }
 
             switch (BoatController.Command)
             {
-                case Command.Unassigned when _current == BoatController:
-                    SetMaterial(_selectedMaterial);
-                    SetHighlightPosition();
-                    HideWaypoint();
-                    StopMoveTrail();
-                    break;
-
-                case Command.Formation when BoatController.FormationPosition.HasValue:
-                    SetMaterial(_current == BoatController ? _selectedMaterial : _formationMaterial);
+                case Command.Follow:
+                    SetMaterial(_formationMaterial);
                     SetHighlightPosition();
                     SetWaypointPositionAtFormation();
                     MoveTrail();
                     break;
 
-                case Command.Hold when BoatController.HoldPosition.HasValue:
-                    SetMaterial(_current == BoatController ? _selectedMaterial : _holdMaterial);
+                case Command.Wait:
+                    SetMaterial(_holdMaterial);
                     SetHighlightPosition();
                     SetWaypointPositionAtHold();
                     MoveTrail();
                     break;
 
                 case Command.Charge:
-                    SetMaterial(_current == BoatController ? _selectedMaterial : _chargeMaterial);
+                    SetMaterial(_chargeMaterial);
                     SetHighlightPosition();
                     HideWaypoint();
                     StopMoveTrail();
                     break;
 
                 default:
-                    SetMaterial(_defaultMaterial);
-                    HideHighlight();
-                    HideWaypoint();
-                    StopMoveTrail();
+                    Debug.LogWarning("Defaulted");
                     break;
             }
         }
@@ -332,8 +337,8 @@ public class FormationScreen : UIScreen
             if (_material != Highlight.material)
             {
                 Highlight.material = _material;
-                Waypoint.material = _material;
-                SetBorder(Button, _material.color);
+                WayPoint.material = _material;
+                SetBorderColor(Button, _material.color);
             }
         }
 
@@ -345,14 +350,14 @@ public class FormationScreen : UIScreen
 
         private void SetWaypointPositionAtFormation()
         {
-            Waypoint.transform.position = GetPositionAboveWater(BoatController.GetFormationPositionInWorld());
-            ShowWaypoint();
+            WayPoint.transform.position = GetPositionAboveWater(BoatController.GetPositionRelativeToAdmiral(BoatController.FormationPosition.Value + (WayPointMovePosition ?? Vector3.zero)));
+            ShowWayPoint();
         }
 
         private void SetWaypointPositionAtHold()
         {
-            Waypoint.transform.position = GetPositionAboveWater(BoatController.HoldPosition.Value);
-            ShowWaypoint();
+            WayPoint.transform.position = GetPositionAboveWater(BoatController.HoldPosition.Value + (WayPointMovePosition ?? Vector3.zero));
+            ShowWayPoint();
         }
 
         private void ShowHighlight()
@@ -360,20 +365,16 @@ public class FormationScreen : UIScreen
             Highlight.gameObject.SetActive(true);
         }
 
-        private void HideHighlight()
+        private void ShowWayPoint()
         {
-            Highlight.gameObject.SetActive(false);
-        }
-
-        private void ShowWaypoint()
-        {
-            Waypoint.gameObject.SetActive(true);
+            WayPoint.transform.localScale = WayPointMovePosition.HasValue ? Vector3.one * 1.5f : Vector3.one;
+            WayPoint.gameObject.SetActive(true);
             Trail.gameObject.SetActive(true);
         }
 
         private void HideWaypoint()
         {
-            Waypoint.gameObject.SetActive(false);
+            WayPoint.gameObject.SetActive(false);
             Trail.gameObject.SetActive(false);
         }
 
@@ -381,7 +382,7 @@ public class FormationScreen : UIScreen
 
         private void MoveTrail()
         {
-            if (!CanMoveTrail() || Vector3.Distance(Trail.transform.position, Waypoint.transform.position) < 1)
+            if (!CanMoveTrail() || Vector3.Distance(Trail.transform.position, WayPoint.transform.position) < 1)
             {
                 StopMoveTrail();
                 return;
@@ -389,7 +390,7 @@ public class FormationScreen : UIScreen
 
             if (IsTrailMoving)
             {
-                Trail.transform.position = GetPositionAboveWater(Vector3.MoveTowards(Trail.transform.position, Waypoint.transform.position, TRAIL_SPEED * Time.deltaTime));
+                Trail.transform.position = GetPositionAboveWater(Vector3.MoveTowards(Trail.transform.position, WayPoint.transform.position, TRAIL_SPEED * Time.deltaTime));
             }
 
             else if (CanMoveTrail())
@@ -409,28 +410,39 @@ public class FormationScreen : UIScreen
             }
         }
 
+        public void SetWayPointMovePosition(Vector3? _point)
+        {
+            WayPointMovePosition = _point;
+        }
+
+        public void ApplyWayPointMovePosition()
+        {
+            BoatController.SetFormationPosition(BoatController.FormationPosition + WayPointMovePosition);
+            WayPointMovePosition = null;
+        }
+
         public void Activate()
         {
-            Waypoint.gameObject.SetActive(true);
+            WayPoint.gameObject.SetActive(true);
             Trail.gameObject.SetActive(true);
             Highlight.gameObject.SetActive(true);
         }
 
         public void Deactivate(Material _material)
         {
-            Waypoint.gameObject.SetActive(false);
+            WayPoint.gameObject.SetActive(false);
             Trail.gameObject.SetActive(false);
             Highlight.gameObject.SetActive(false);
             Highlight.material = _material;
-            Waypoint.material = _material;
-            SetBorder(Button, _material.color);
+            WayPoint.material = _material;
+            SetBorderColor(Button, _material.color);
             StopMoveTrail();
         }
 
         public void Dispose()
         {
             Button.RemoveFromHierarchy();
-            Destroy(Waypoint.gameObject);
+            Destroy(WayPoint.gameObject);
             Destroy(Trail.gameObject);
         }
     }

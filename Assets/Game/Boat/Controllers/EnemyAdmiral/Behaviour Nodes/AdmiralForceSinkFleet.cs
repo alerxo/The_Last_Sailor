@@ -11,10 +11,7 @@ public partial class ForceSinkAction : Action
     [SerializeReference] public BlackboardVariable<EnemyAdmiralController> Agent;
     protected override Status OnStart()
     {
-        foreach (Boat boat in Agent.Value.Fleet.ToArray())
-        {
-            boat.GetComponent<AIBoatController>().SinkToBottom();
-        }
+        CombatManager.Instance.ForceSinkEnemy();
 
         return Status.Running;
     }
