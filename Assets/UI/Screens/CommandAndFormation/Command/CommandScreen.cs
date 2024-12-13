@@ -133,10 +133,10 @@ public class CommandScreen : UIScreen
     {
         switch (_command)
         {
-            case Command.Formation:
+            case Command.Follow:
                 return formationMaterial;
 
-            case Command.Hold:
+            case Command.Wait:
                 return holdMaterial;
 
             case Command.Charge:
@@ -157,36 +157,49 @@ public class CommandScreen : UIScreen
 
         buttonContainer = new();
         buttonContainer.AddToClassList("command-button-container");
-        buttonContainer.style.opacity = 0;
+        SetMargin(buttonContainer, 0, 50, 50, 0);
         buttonContainer.pickingMode = PickingMode.Ignore;
         container.Add(buttonContainer);
 
         CreateTopButtons(buttonContainer);
         CreateChangeViewButton(buttonContainer);
+
+        HiddenState();
     }
 
     private void CreateTopButtons(VisualElement _parent)
     {
         VisualElement container = new();
         container.AddToClassList("command-top-button-container");
+        SetMargin(container, 0, 250, 0, 0);
         _parent.Add(container);
 
-        CreateTopButton(container, $"1: {Command.Formation}", Command.Formation);
-        CreateTopButton(container, $"2: {Command.Hold}", Command.Hold);
-        CreateTopButton(container, $"3: {Command.Charge}", Command.Charge);
+        CreateTopButton(container, $"1: {Command.Follow}", "Ships in fleet will follow the\nplayer in given formation", Command.Follow);
+        CreateTopButton(container, $"2: {Command.Wait}", "Ships in fleet will wait at\ncurrent position in given formation ", Command.Wait);
+        CreateTopButton(container, $"3: {Command.Charge}", "Ships in fleet will charge the\nclosest enemy", Command.Charge);
 
         AdmiralController_OnCommandChanged(PlayerBoatController.Instance.AdmiralController.Command);
     }
 
-    private void CreateTopButton(VisualElement _parent, string _name, Command _command)
+    private void CreateTopButton(VisualElement _parent, string _name, string _description, Command _command)
     {
         Button button = new(() => admiralController.SetCommandForSubordinates(_command));
         button.AddToClassList("main-button");
         button.AddToClassList("command-top-button");
         button.pickingMode = PickingMode.Position;
-        SetFontSize(button, 26);
-        button.text = _name;
+        SetMargin(button, 0, 30, 0, 0);
+        SetBorderWidthRadius(button, 5, 10);
         _parent.Add(button);
+
+        Label header = new(_name);
+        header.AddToClassList("command-top-button-text");
+        SetFontSize(header, 26);
+        button.Add(header);
+
+        Label description = new(_description);
+        description.AddToClassList("command-top-button-text");
+        SetFontSize(description, 19);
+        button.Add(description);
 
         commandButtons[_command] = button;
     }
@@ -196,6 +209,7 @@ public class CommandScreen : UIScreen
         changeViewButton = new(OnChangeView);
         changeViewButton.AddToClassList("command-change-view-button");
         changeViewButton.pickingMode = PickingMode.Position;
+        SetBorderWidthRadius(changeViewButton, 5, 10);
         SetFontSize(changeViewButton, 30);
         changeViewButton.text = GetChangeViewText();
         _parent.Add(changeViewButton);

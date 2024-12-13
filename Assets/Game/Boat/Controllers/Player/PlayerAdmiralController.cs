@@ -14,7 +14,7 @@ public class PlayerAdmiralController : Admiral
 
         SetName("Player");
         SetDefaultFormation(Formation.Line);
-        SetCommandForSubordinates(Command.Formation);
+        SetCommandForSubordinates(Command.Follow);
     }
 
     public override string GetSubordinateName()

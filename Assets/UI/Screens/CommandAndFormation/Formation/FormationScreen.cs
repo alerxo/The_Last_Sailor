@@ -289,14 +289,14 @@ public class FormationScreen : UIScreen
 
             switch (BoatController.Command)
             {
-                case Command.Formation:
+                case Command.Follow:
                     SetMaterial(_formationMaterial);
                     SetHighlightPosition();
                     SetWaypointPositionAtFormation();
                     MoveTrail();
                     break;
 
-                case Command.Hold:
+                case Command.Wait:
                     SetMaterial(_holdMaterial);
                     SetHighlightPosition();
                     SetWaypointPositionAtHold();

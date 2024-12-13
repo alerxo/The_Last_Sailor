@@ -63,13 +63,13 @@ public class PlayerCommandController : MonoBehaviour
 
     private void FirstCommand_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        admiralController.SetCommandForSubordinates(Command.Formation);
+        admiralController.SetCommandForSubordinates(Command.Follow);
         UIManager.Instance.ShowCommandView();
     }
 
     private void SecondCommand_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        admiralController.SetCommandForSubordinates(Command.Hold);
+        admiralController.SetCommandForSubordinates(Command.Wait);
         UIManager.Instance.ShowCommandView();
     }
 

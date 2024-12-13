@@ -192,12 +192,12 @@ public class AIBoatController : MonoBehaviour
                 SetCommand(Command.Unassigned);
                 break;
 
-            case Command.Formation when FormationPosition.HasValue:
-                SetCommand(Command.Formation);
+            case Command.Follow when FormationPosition.HasValue:
+                SetCommand(Command.Follow);
                 break;
 
-            case Command.Hold when FormationPosition.HasValue:
-                SetCommand(Command.Hold);
+            case Command.Wait when FormationPosition.HasValue:
+                SetCommand(Command.Wait);
                 break;
 
             case Command.Charge:
@@ -221,12 +221,12 @@ public class AIBoatController : MonoBehaviour
                 SetDestination(null);
                 break;
 
-            case Command.Formation:
+            case Command.Follow:
                 SetHoldPosition(null);
                 SetDestination(null);
                 break;
 
-            case Command.Hold:
+            case Command.Wait:
                 SetHoldPosition(GetFormationPositionInWorld());
                 SetDestination(null);
                 break;
