@@ -27,7 +27,10 @@ public class PlayerAdmiralController : Admiral
     public void BuildBoat()
     {
         Vector3 formationPosition = GetNextSubordinateForrmationPosition();
-        AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController>(transform.position + transform.TransformVector(formationPosition), transform.rotation);
+        Vector3 position = transform.position + transform.TransformVector(formationPosition);
+        position.y = transform.position.y;
+
+        AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController>(position, transform.rotation);
         subordinate.Boat.SetName(GetSubordinateName());
         subordinate.SetFormationPosition(formationPosition);
         subordinate.TrySetCommand(Command);

@@ -17,24 +17,10 @@ public class FleetScreen : UIScreen
         UIManager.OnStateChanged += UIManager_OnStateChanged;
     }
 
-    private void Start()
-    {
-        if (PlayerBoatController.Instance != null && PlayerBoatController.Instance.AdmiralController != null)
-        {
-            PlayerBoatController.Instance.AdmiralController.OnSubordinateChanged += AdmiralController_OnSubordinateChanged;
-        }
-    }
-
     private void OnDestroy()
     {
         UIManager.OnStateChanged -= UIManager_OnStateChanged;
-
-        if (PlayerBoatController.Instance != null && PlayerBoatController.Instance.AdmiralController != null)
-        {
-            PlayerBoatController.Instance.AdmiralController.OnSubordinateChanged -= AdmiralController_OnSubordinateChanged;
-        }
     }
-
 
     private void UIManager_OnStateChanged(UIState _state)
     {
@@ -43,11 +29,6 @@ public class FleetScreen : UIScreen
             currentIndex = 0;
             Draw();
         }
-    }
-
-    private void AdmiralController_OnSubordinateChanged(AIBoatController _boatController, bool _wasAdded)
-    {
-        Draw();
     }
 
     public override void Generate()

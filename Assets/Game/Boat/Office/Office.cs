@@ -4,7 +4,7 @@ public class Office : MonoBehaviour, IInteractable
 {
     public Transform Transform => transform;
     public Vector3 Position => transform.position;
-    public bool CanInteract => CombatManager.Instance.AdmiralInCombat == null;
+    public bool CanInteract => PlayerBoatController.Instance.AdmiralController.Enemy == null;
 
     private void Awake()
     {

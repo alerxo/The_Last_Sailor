@@ -14,16 +14,6 @@ public class EnemyAdmiralController : Admiral
 
     private Formation formation;
 
-    private void OnEnable()
-    {
-        CombatManager.Instance.AddAdmiral(this);
-    }
-
-    private void OnDisable()
-    {
-        CombatManager.Instance.RemoveAdmiral(this);
-    }
-
     public void Awake()
     {
         behaviourAgent = GetComponent<BehaviorGraphAgent>();

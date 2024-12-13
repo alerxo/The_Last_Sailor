@@ -47,7 +47,7 @@ public class PostCombatScreen : UIScreen
 
     private void CombatManager_OnBattleConcluded(BattleResult _result)
     {
-        CreateBattleResults(CombatManager.Instance.AdmiralInCombat, _result);
+        CreateBattleResults(CombatManager.Instance.Enemy, _result);
     }
 
     public override void Generate()
