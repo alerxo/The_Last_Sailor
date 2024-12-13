@@ -11,6 +11,7 @@ public class FormationScreen : UIScreen
     private ScrollView boatItemContainer;
 
     private const float Y_POSITION_FOR_HIGHLIGHTS = 7f;
+    [SerializeField] private LayerMask wayPointLayer;
 
     [SerializeField] private MeshRenderer highlightPrefab, wayPointPrefab;
     [SerializeField] private Transform trailPrefab;
@@ -76,10 +77,11 @@ public class FormationScreen : UIScreen
 
             if (SelectedWayPoints.Count > 0)
             {
+                Vector3 movement = GetRayHitOnWaterSurface(Camera.main.ScreenPointToRay(Input.mousePosition)) - wayPointMoveOrigin;
+
                 foreach (CommandItem item in SelectedWayPoints)
                 {
-                    Vector3 movement = GetRayHitOnWaterSurface(Camera.main.ScreenPointToRay(Input.mousePosition));
-                    item.SetWayPointMovePosition(wayPointMoveOrigin + movement);
+                    item.SetWayPointMovePosition(movement);
                 }
             }
         }
@@ -101,7 +103,7 @@ public class FormationScreen : UIScreen
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out RaycastHit hit) && hit.transform.CompareTag("CommandWayPoint"))
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, wayPointLayer))
         {
             wayPointMoveOrigin = GetRayHitOnWaterSurface(ray);
             SelectedWayPoints.Add(commandItems.Values.ToList().Find((c) => hit.transform == c.WayPoint.transform));
@@ -114,7 +116,10 @@ public class FormationScreen : UIScreen
         float adjacent = Camera.main.transform.position.y;
         float hypotenuse = adjacent / Mathf.Cos(theta * Mathf.Deg2Rad);
 
-        return _ray.origin + (_ray.direction * hypotenuse);
+        Vector3 hit = _ray.origin + (_ray.direction * hypotenuse);
+        hit.y = 0;
+
+        return hit;
     }
 
     private void WayPointSelect_canceled(UnityEngine.InputSystem.InputAction.CallbackContext _obj)

@@ -15,7 +15,6 @@ TagManager:
   - SteeringWheelCameraTarget
   - FormationCamera
   - FormationCameraTarget
-  - CommandWayPoint
   layers:
   - Default
   - TransparentFX
@@ -28,7 +27,7 @@ TagManager:
   - Ground
   - 
   - 
-  - 
+  - CommandWayPoint
   - 
   - 
   - 

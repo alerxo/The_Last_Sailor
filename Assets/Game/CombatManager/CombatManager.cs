@@ -40,7 +40,7 @@ public class CombatManager : MonoBehaviour
 
     private void Update()
     {
-        TrySpawnEnemyAdmiral();
+        //TrySpawnEnemyAdmiral();
 
         switch (combatState)
         {
