@@ -20,12 +20,14 @@ public class FormationScreen : UIScreen
     private readonly Dictionary<AIBoatController, CommandItem> commandItems = new();
 
     private InputSystem_Actions input;
-    private bool canClickWater = true;
+    public static bool IsHoverinfBoatList { get; private set; }
     private readonly List<CommandItem> SelectedWayPoints = new();
     private Vector3 wayPointMoveOrigin;
 
     private void Awake()
     {
+        IsHoverinfBoatList = false;
+
         UIManager.OnStateChanged += UIManager_OnStateChanged;
 
         input = new();
@@ -95,7 +97,7 @@ public class FormationScreen : UIScreen
 
     private void WayPointSelect_started(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        if (!canClickWater) return;
+        if (IsHoverinfBoatList) return;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -143,12 +145,15 @@ public class FormationScreen : UIScreen
 
         Box background = new();
         background.AddToClassList("formation-background");
+        SetMargin(background, 0, 0, 0, 50);
+        SetPadding(background, 10);
+        SetBorderRadius(background, 10);
         container.Add(background);
 
         boatItemContainer = new();
         boatItemContainer.AddToClassList("formation-boat-item-container");
-        boatItemContainer.RegisterCallback<MouseEnterEvent>(evt => canClickWater = false);
-        boatItemContainer.RegisterCallback<MouseLeaveEvent>(evt => canClickWater = true);
+        boatItemContainer.RegisterCallback<MouseEnterEvent>(evt => IsHoverinfBoatList = true);
+        boatItemContainer.RegisterCallback<MouseLeaveEvent>(evt => IsHoverinfBoatList = false);
         boatItemContainer.verticalScroller.highButton.RemoveFromHierarchy();
         boatItemContainer.verticalScroller.lowButton.RemoveFromHierarchy();
         boatItemContainer.horizontalScroller.RemoveFromHierarchy();
@@ -161,6 +166,8 @@ public class FormationScreen : UIScreen
     {
         Button button = new(() => OnPlayerItem(_boat));
         button.AddToClassList("formation-boat-item");
+        SetPadding(button, 5, 5, 50, 50);
+        SetBorderWidthRadius(button, 5, 10);
         SetBorderColor(button, playerMaterial.color);
         _parent.Add(button);
 
@@ -174,6 +181,9 @@ public class FormationScreen : UIScreen
     {
         Button button = new(() => OnSubordinateItem(_boatController));
         button.AddToClassList("formation-boat-item");
+        SetMargin(button, 10, 0, 0, 0);
+        SetPadding(button, 5, 5, 50, 50);
+        SetBorderWidthRadius(button, 5, 10);
         SetBorderColor(button, formationMaterial.color);
         _parent.Add(button);
 

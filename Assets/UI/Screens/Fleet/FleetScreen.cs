@@ -15,7 +15,6 @@ public class FleetScreen : UIScreen
     private void Awake()
     {
         UIManager.OnStateChanged += UIManager_OnStateChanged;
-        ResourceManager.OnResourceAmountChanged += ResourceManager_OnResourceAmountChanged;
     }
 
     private void Start()
@@ -29,7 +28,6 @@ public class FleetScreen : UIScreen
     private void OnDestroy()
     {
         UIManager.OnStateChanged -= UIManager_OnStateChanged;
-        ResourceManager.OnResourceAmountChanged -= ResourceManager_OnResourceAmountChanged;
 
         if (PlayerBoatController.Instance != null && PlayerBoatController.Instance.AdmiralController != null)
         {
@@ -37,14 +35,6 @@ public class FleetScreen : UIScreen
         }
     }
 
-
-    private void ResourceManager_OnResourceAmountChanged(float _amount)
-    {
-        if (container != null && UIManager.Instance.State == UIState.Fleet)
-        {
-            Draw();
-        }
-    }
 
     private void UIManager_OnStateChanged(UIState _state)
     {
@@ -80,12 +70,12 @@ public class FleetScreen : UIScreen
         Box boatListBackground = new();
         boatListBackground.AddToClassList("fleet-boat-list-background");
         SetMargin(boatListBackground, 0, 100, 0, 20);
+        SetPadding(boatListBackground, 10);
         SetBorderWidthRadius(boatListBackground, 0, 10);
         _parent.Add(boatListBackground);
 
         ScrollView boatListContainer = new();
         boatListContainer.AddToClassList("fleet-boat-list-container");
-        SetPadding(boatListContainer, 10);
         boatListContainer.verticalScroller.highButton.RemoveFromHierarchy();
         boatListContainer.verticalScroller.lowButton.RemoveFromHierarchy();
         boatListContainer.horizontalScroller.RemoveFromHierarchy();
@@ -112,6 +102,15 @@ public class FleetScreen : UIScreen
         _parent.Add(button);
     }
 
+    private void OnBuild()
+    {
+        PlayerBoatController.Instance.AdmiralController.BuildBoat();
+        ResourceManager.Instance.BoatWasBuilt();
+
+        currentIndex = PlayerBoatController.Instance.AdmiralController.Fleet.Count - 1;
+        Draw();
+    }
+
     private Button CreateBoatItem(VisualElement _parent, Boat _boat, int _index)
     {
         Button button = new(() => OnBoatItem(_index));
@@ -130,12 +129,6 @@ public class FleetScreen : UIScreen
     {
         currentIndex = _index;
         Draw();
-    }
-
-    private void OnBuild()
-    {
-        PlayerBoatController.Instance.AdmiralController.BuildBoat();
-        ResourceManager.Instance.BoatWasBuilt();
     }
 
     private void CreateCurrentContainer(VisualElement _parent)
@@ -265,6 +258,7 @@ public class FleetScreen : UIScreen
     {
         _boat.Repair();
         ResourceManager.Instance.BoatWasRepaired(_boat);
+        Draw();
     }
 
     private Button CreateUpgradeButton(VisualElement _parent, Boat _boat, UpgradeType _type)
@@ -291,9 +285,10 @@ public class FleetScreen : UIScreen
         return button;
     }
 
-    private static void OnUpgrade(Boat _boat, UpgradeType _type)
+    private void OnUpgrade(Boat _boat, UpgradeType _type)
     {
         _boat.Upgrade(_type);
         OnBoatUpgraded?.Invoke();
+        Draw();
     }
 }
