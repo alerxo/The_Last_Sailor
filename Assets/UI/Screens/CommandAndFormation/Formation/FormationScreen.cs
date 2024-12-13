@@ -99,7 +99,7 @@ public class FormationScreen : UIScreen
 
     private void WayPointSelect_started(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        if (IsHoverinfBoatList) return;
+        if (IsHoverinfBoatList || PlayerBoatController.Instance.AdmiralController.Command != Command.Follow) return;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -117,6 +117,7 @@ public class FormationScreen : UIScreen
         float hypotenuse = adjacent / Mathf.Cos(theta * Mathf.Deg2Rad);
 
         Vector3 hit = _ray.origin + (_ray.direction * hypotenuse);
+        hit = PlayerBoatController.Instance.transform.InverseTransformVector(hit - PlayerBoatController.Instance.transform.position);
         hit.y = 0;
 
         return hit;
@@ -349,7 +350,7 @@ public class FormationScreen : UIScreen
 
         private void SetWaypointPositionAtFormation()
         {
-            WayPoint.transform.position = GetPositionAboveWater(BoatController.GetFormationPositionInWorld() + (WayPointMovePosition ?? Vector3.zero));
+            WayPoint.transform.position = GetPositionAboveWater(BoatController.GetPositionRelativeToAdmiral(BoatController.FormationPosition.Value + (WayPointMovePosition ?? Vector3.zero)));
             ShowWayPoint();
         }
 

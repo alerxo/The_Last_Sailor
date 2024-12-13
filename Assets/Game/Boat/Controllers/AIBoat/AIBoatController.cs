@@ -93,7 +93,12 @@ public class AIBoatController : MonoBehaviour
 
     public Vector3 GetFormationPositionInWorld()
     {
-        return Admiral.transform.position + Admiral.transform.TransformVector(FormationPosition.Value);
+        return GetPositionRelativeToAdmiral(FormationPosition.Value);
+    }
+
+    public Vector3 GetPositionRelativeToAdmiral(Vector3 _position)
+    {
+        return Admiral.transform.position + Admiral.transform.TransformVector(_position);
     }
 
     private void Boat_OnDestroyed()
