@@ -247,5 +247,4 @@ public enum BattleResult
 {
     Defeat,
     Victory,
-    Inconclusive
 }

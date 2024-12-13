@@ -2,16 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class PostCombatScreen : UIScreen
 {
-    public static event UnityAction OnBoatScrapped;
-    public static event UnityAction OnBoatSeized;
-    public static event UnityAction OnBoatRepaired;
-
     public static PostCombatScreen Instance { get; private set; }
 
     protected override List<UIState> ActiveStates => new() { UIState.PostCombat };
