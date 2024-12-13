@@ -11,24 +11,20 @@ public class BuoyancyManager : MonoBehaviour
 {
     public static BuoyancyManager Instance { get; private set; }
 
-    private const int MAX_UPDATE_COUNT = 30;
-    private const int HIGH_QUALITY_UPDATE_COUNT = 22;
-    private const int MEDIUM_QUALITY_UPDATE_COUNT = 5;
+    private const int MAX_UPDATE_COUNT = 35;
+    private const int HIGH_QUALITY_UPDATE_COUNT = 30;
 
     [SerializeField] private BuoyancyPoints buoyancyPoints;
 
     private readonly List<Buoyancy> targets = new();
 
     private readonly List<Buoyancy> highQuality = new();
-    private readonly List<Buoyancy> mediumQuality = new();
     private readonly List<Buoyancy> lowQuality = new();
 
     private int highQualityIndex = 0;
-    private int mediumQualityIndex = 0;
     private int lowQualityIndex = 0;
 
-    private const int HIGH_QUALITY_RANGE = 500;
-    private const int MEDIUM_QUALITY_RANGE = 1000;
+    private const int HIGH_QUALITY_RANGE = 700;
 
     private bool isQualityCheckRunning = false;
 
@@ -85,31 +81,10 @@ public class BuoyancyManager : MonoBehaviour
         {
             float distance = Vector3.Distance(player.position, lowQuality[i].transform.position);
 
-            if (distance <= MEDIUM_QUALITY_RANGE)
+            if (distance <= HIGH_QUALITY_RANGE)
             {
-                mediumQuality.Add(lowQuality[i]);
+                highQuality.Add(lowQuality[i]);
                 lowQuality.RemoveAt(i);
-                i--;
-            }
-
-            yield return null;
-        }
-
-        for (int i = 0; i < mediumQuality.Count; i++)
-        {
-            float distance = Vector3.Distance(player.position, mediumQuality[i].transform.position);
-
-            if (distance > MEDIUM_QUALITY_RANGE)
-            {
-                lowQuality.Add(mediumQuality[i]);
-                mediumQuality.RemoveAt(i);
-                i--;
-            }
-
-            else if (distance <= HIGH_QUALITY_RANGE)
-            {
-                highQuality.Add(mediumQuality[i]);
-                mediumQuality.RemoveAt(i);
                 i--;
             }
 
@@ -122,7 +97,7 @@ public class BuoyancyManager : MonoBehaviour
 
             if (distance > HIGH_QUALITY_RANGE)
             {
-                mediumQuality.Add(highQuality[i]);
+                lowQuality.Add(highQuality[i]);
                 highQuality.RemoveAt(i);
                 i--;
             }
@@ -137,7 +112,7 @@ public class BuoyancyManager : MonoBehaviour
     {
         targets.Clear();
 
-        for (int i = targets.Count; i < HIGH_QUALITY_UPDATE_COUNT; i++)
+        for (int i = 0; i < HIGH_QUALITY_UPDATE_COUNT; i++)
         {
             if (highQualityIndex >= highQuality.Count)
             {
@@ -147,18 +122,6 @@ public class BuoyancyManager : MonoBehaviour
 
             targets.Add(highQuality[highQualityIndex]);
             highQualityIndex++;
-        }
-
-        for (int i = targets.Count; i < HIGH_QUALITY_UPDATE_COUNT + MEDIUM_QUALITY_UPDATE_COUNT; i++)
-        {
-            if (mediumQualityIndex >= mediumQuality.Count)
-            {
-                mediumQualityIndex = 0;
-                break;
-            }
-
-            targets.Add(mediumQuality[mediumQualityIndex]);
-            mediumQualityIndex++;
         }
 
         for (int i = targets.Count; i < MAX_UPDATE_COUNT; i++)
@@ -173,7 +136,7 @@ public class BuoyancyManager : MonoBehaviour
             lowQualityIndex++;
         }
 
-        Assert.IsTrue(targets.Count < MAX_UPDATE_COUNT);
+        Assert.IsTrue(targets.Count <= MAX_UPDATE_COUNT);
     }
 
     private void UpdateTargetsDepthValues()
@@ -228,7 +191,7 @@ public class BuoyancyManager : MonoBehaviour
 
     public void AddTarget(Buoyancy _buoyancy)
     {
-        if (!lowQuality.Contains(_buoyancy) && !mediumQuality.Contains(_buoyancy) && !highQuality.Contains(_buoyancy))
+        if (!lowQuality.Contains(_buoyancy) && !highQuality.Contains(_buoyancy))
         {
             lowQuality.Add(_buoyancy);
         }
@@ -239,11 +202,6 @@ public class BuoyancyManager : MonoBehaviour
         if (lowQuality.Contains(_buoyancy))
         {
             lowQuality.Remove(_buoyancy);
-        }
-
-        if (mediumQuality.Contains(_buoyancy))
-        {
-            mediumQuality.Remove(_buoyancy);
         }
 
         if (highQuality.Contains(_buoyancy))
