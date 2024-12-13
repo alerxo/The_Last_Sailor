@@ -249,16 +249,16 @@ public class PostCombatScreen : UIScreen
 
         yield return new WaitForSeconds(0.25f);
 
-        yield return AnimateBorderWidth(background, 0.1f, 0, 5);// Background border width
-        yield return AnimateWidth(background, 1f, 0, 1000); // Background width
+        yield return AnimateBorderWidth(background, 0.1f, 0, 5);
+        yield return AnimateWidth(background, 1f, 0, 1000);
 
         yield return new WaitForSeconds(1f);
 
-        yield return AnimateHeight(content, 0.7f, 0, 700); // Content height
+        yield return AnimateHeight(content, 0.7f, 0, 700);
 
         yield return new WaitForSeconds(0.1f);
 
-        for (int i = 0; i < Mathf.Max(playerColumnItems.Count, enemyColumnItems.Count); i++) // Items enabled
+        for (int i = 0; i < Mathf.Max(playerColumnItems.Count, enemyColumnItems.Count); i++)
         {
             if (playerColumnItems.Count > i)
             {
@@ -273,7 +273,7 @@ public class PostCombatScreen : UIScreen
             yield return new WaitForSeconds(0.1f);
         }
 
-        foreach (ScrollView scrollView in resultColumns) // Slider visiblity
+        foreach (ScrollView scrollView in resultColumns)
         {
             scrollView.verticalScrollerVisibility = ScrollerVisibility.Auto;
         }
