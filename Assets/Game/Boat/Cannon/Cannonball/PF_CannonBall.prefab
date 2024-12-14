@@ -555,6 +555,7 @@ MonoBehaviour:
   waterImpact: {fileID: 6710568974709871637}
   explosion: {fileID: 7949005730559079955, guid: cf8a666820f28ab4c97edffb71ba6738, type: 3}
   waterSplash: {fileID: 5528013579338106430, guid: efb23b4426cdfbf479cb6be20a5a5be5, type: 3}
+  particleTrail: {fileID: 7285732778914082419, guid: 553378e6ea9c8ea44b2ab58e0bffd6df, type: 3}
 --- !u!54 &7300662342679320267
 Rigidbody:
   m_ObjectHideFlags: 0
