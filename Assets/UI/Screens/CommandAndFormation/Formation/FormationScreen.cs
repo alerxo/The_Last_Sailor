@@ -236,7 +236,7 @@ public class FormationScreen : UIScreen
 
             foreach (CommandItem item in commandItems.Values)
             {
-                item.Deactivate(playerMaterial);
+                item.Deactivate();
             }
         }
     }
@@ -252,7 +252,7 @@ public class FormationScreen : UIScreen
                 Instantiate(wayPointPrefab, transform),
                 Instantiate(trailPrefab, transform),
                 CreateSuborinateItem(boatItemContainer, _boatController)));
-            commandItems[_boatController].Deactivate(playerMaterial);
+            commandItems[_boatController].Deactivate();
         }
 
         else
@@ -298,6 +298,15 @@ public class FormationScreen : UIScreen
 
         public void Update(Material _formationMaterial, Material _holdMaterial, Material _chargeMaterial)
         {
+            if (BoatController.Boat.IsSunk)
+            {
+                Description.text = "Sunk";
+                HideWaypoint();
+                Deactivate();
+
+                return;
+            }
+
             if (Description.text != $"Durability: {BoatController.Boat.GetPercentageDurability()}")
             {
                 Description.text = $"Durability: {BoatController.Boat.GetPercentageDurability()}";
@@ -428,14 +437,11 @@ public class FormationScreen : UIScreen
             Highlight.gameObject.SetActive(true);
         }
 
-        public void Deactivate(Material _material)
+        public void Deactivate()
         {
             WayPoint.gameObject.SetActive(false);
             Trail.gameObject.SetActive(false);
             Highlight.gameObject.SetActive(false);
-            Highlight.material = _material;
-            WayPoint.material = _material;
-            SetBorderColor(Button, _material.color);
             StopMoveTrail();
         }
 
