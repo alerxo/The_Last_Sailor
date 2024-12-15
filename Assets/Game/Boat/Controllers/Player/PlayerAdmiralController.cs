@@ -4,7 +4,7 @@ public class PlayerAdmiralController : Admiral
 {
     public PlayerBoatController PlayerBoatController { get; private set; }
 
-    private static readonly int[] subodinateCaps = { 0, 3, 7, 15, 15 };
+    private static readonly int[] subodinateCaps = { 0, 3, 7, 16, 32 };
     private static readonly int[] subodinateUpgradeCosts = { 0, 10, 30, 50, 50 };
     public const int MAX_SUBORDINATE_UPGRADE = 3;
     public int SuborinateUpgradeIndex { get; private set; } = 1;

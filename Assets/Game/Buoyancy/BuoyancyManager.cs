@@ -11,8 +11,8 @@ public class BuoyancyManager : MonoBehaviour
 {
     public static BuoyancyManager Instance { get; private set; }
 
-    private const int MAX_UPDATE_COUNT = 35;
-    private const int HIGH_QUALITY_UPDATE_COUNT = 30;
+    private const int MAX_UPDATE_COUNT = 36;
+    private const int HIGH_QUALITY_UPDATE_COUNT = 34;
 
     [SerializeField] private BuoyancyPoints buoyancyPoints;
 

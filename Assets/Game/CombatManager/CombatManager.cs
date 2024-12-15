@@ -18,7 +18,7 @@ public class CombatManager : MonoBehaviour
     private const float RING_OF_FIRE_BUFFER_SIZE = 300f;
     private const float DE_SPAWN_SIZE = 300f;
 
-    private static readonly int[] ENEMY_FLEET_SIZES = { 0, 1, 2, 3, 5, 7, 9, 11, 14 };
+    private static readonly int[] ENEMY_FLEET_SIZES = { 0, 1, 2, 3, 5, 7, 9, 12, 16 };
     private int round = 0;
 
     private PlayerBoatController player;

@@ -88,3 +88,38 @@
 /* Navigation */
 
 .post-combat-navigation-button { }
+
+/* Scroll view */
+
+.unity-scroll-view__vertical-scroller {
+	margin: 0px;
+}
+
+.unity-base-slider {
+	margin: 0px;
+}
+
+.unity-base-slider__drag-container {
+	align-items: center;
+}
+
+.unity-base-slider__tracker {
+	border-width: 0px;
+
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.unity-base-slider__dragger {
+	width: 70%;
+	border-width: 0px;
+
+	background-color: black;
+}
+
+.unity-scroll-view__vertical-scroller {
+	margin-top: 1%;
+	margin-bottom: 1%;
+	margin-right: 0.5%;
+
+	background-color: rgba(0, 0, 0, 0);
+}

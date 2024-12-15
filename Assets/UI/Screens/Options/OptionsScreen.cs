@@ -15,6 +15,7 @@ public class OptionsScreen : UIScreen
 
         Box background = new();
         background.AddToClassList("options-background");
+        SetSize(background, 503, 521);
         SetPadding(background, 50);
         SetBorderWidthRadius(background, 0, 10);
         container.Add(background);

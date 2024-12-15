@@ -3,7 +3,6 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
 
 public class CameraManager : MonoBehaviour
 {
@@ -13,10 +12,10 @@ public class CameraManager : MonoBehaviour
 
     private InputSystem_Actions input;
 
-    private const float MAX_COMMAND_ZOOM = 150;
-    private const float COMMAND_SROLL_SPEED = 350;
-    private const float MAX_COMMAND_MOVEMENT = 100;
-    private const float COMMAND_MOVEMENT_SPEED = 150;
+    private const float MAX_COMMAND_ZOOM = 500;
+    private const float COMMAND_SROLL_SPEED = 1000;
+    private const float MAX_COMMAND_MOVEMENT = 1300;
+    private const float COMMAND_MOVEMENT_SPEED = 350;
     private Vector3 commandCameraMovement;
 
     private CinemachineCamera mainMenuCamera;
