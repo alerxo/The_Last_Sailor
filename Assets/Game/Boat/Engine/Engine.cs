@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Windows;
 
-public class Engine : MonoBehaviour, IUpgradeable
+public class Engine : MonoBehaviour
 {
     private const float POWER = 100000f;
     private const float THROTTLE_ACCELERATION = 0.9f;
@@ -20,11 +20,8 @@ public class Engine : MonoBehaviour, IUpgradeable
     public float Rudder { get; private set; }
     public float Throttle { get; private set; }
 
-    public UpgradeTier UpgradeTier { get; set; }
-    public float UpgradeIncrease => 0.2f;
-    public float GetUpgradeValue => POWER + (POWER * ((int)UpgradeTier * UpgradeIncrease));
-
     private Rigidbody target;
+    private Boat boat;
 
 #if UNITY_EDITOR
     [SerializeField] private bool isDebugMode;
@@ -33,12 +30,15 @@ public class Engine : MonoBehaviour, IUpgradeable
     private void Awake()
     {
         target = GetComponentInParent<Rigidbody>();
+        boat = GetComponentInParent<Boat>();
         steeringWheel = transform.parent.GetComponentInChildren<SteeringWheel>();
         throttle = transform.parent.GetComponentInChildren<Throttle>();
     }
 
     private void FixedUpdate()
     {
+        if (boat.IsSunk) return;
+
         float rudder = Mathf.Clamp(Rudder * TURN_RADIUS, -TURN_RADIUS, TURN_RADIUS);
         transform.localPosition = new Vector3(rudder, transform.localPosition.y, transform.localPosition.z);
 
@@ -47,13 +47,13 @@ public class Engine : MonoBehaviour, IUpgradeable
             target.AddTorque(0, -rudder * RUDDER_PASSIVE_TORQUE, 0, ForceMode.Force);
         }
 
-        float throttle = Mathf.Clamp(Throttle * GetUpgradeValue, 0, GetUpgradeValue);
+        float throttle = Mathf.Clamp(Throttle, 0, 1);
 
         if (throttle > 0)
         {
             target.AddForceAtPosition(throttle * transform.forward, transform.position, ForceMode.Force);
 
-            paddleWheel.Rotate(new Vector3(throttle * PADDLE_WHEEL_SPEED * Time.fixedDeltaTime, 0, 0));     
+            paddleWheel.Rotate(new Vector3(throttle * PADDLE_WHEEL_SPEED * Time.fixedDeltaTime, 0, 0));
 
             TryPlayerPaddleWheelAudio();
         }

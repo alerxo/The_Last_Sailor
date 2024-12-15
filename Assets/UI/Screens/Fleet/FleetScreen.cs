@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -79,7 +80,7 @@ public class FleetScreen : UIScreen
         SetBorderWidthRadius(button, 5, 10);
         SetFontSize(button, 25);
         button.text = $"Build New Boat (-{ResourceManager.Instance.GetBuildCost()} R)";
-        button.SetEnabled(ResourceManager.Instance.CanBuild());
+        button.SetEnabled(ResourceManager.Instance.CanBuild() && PlayerBoatController.Instance.AdmiralController.CanBuild);
         _parent.Add(button);
     }
 
@@ -166,7 +167,7 @@ public class FleetScreen : UIScreen
         CameraManager.Instance.SetFleetCamera(boat.transform);
 
         CreateTopRow(container, boat);
-        CreateUpgradeButtons(container, boat);
+        CreateUpgradeButtons(container, boat, currentIndex == 0);
     }
 
     private void CreateTopRow(VisualElement _parent, Boat _boat)
@@ -206,7 +207,7 @@ public class FleetScreen : UIScreen
         FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
     }
 
-    private void CreateUpgradeButtons(VisualElement _parent, Boat _boat)
+    private void CreateUpgradeButtons(VisualElement _parent, Boat _boat, bool _isPlayer)
     {
         VisualElement buttonContainer = new();
         buttonContainer.AddToClassList("fleet-current-upgrade-container");
@@ -214,9 +215,13 @@ public class FleetScreen : UIScreen
 
         CreateRepairButton(buttonContainer, _boat);
 
+        if (_isPlayer)
+        {
+            CreateFleetCapUpgradeButton(buttonContainer, _boat.GetComponent<PlayerAdmiralController>());
+        }
+
         CreateUpgradeButton(buttonContainer, _boat, UpgradeType.Hull).clicked += () => _boat.Repair();
         CreateUpgradeButton(buttonContainer, _boat, UpgradeType.Cannons);
-        CreateUpgradeButton(buttonContainer, _boat, UpgradeType.Engine);
     }
 
     private void CreateRepairButton(VisualElement _parent, Boat _boat)
@@ -239,6 +244,37 @@ public class FleetScreen : UIScreen
     {
         _boat.Repair();
         ResourceManager.Instance.BoatWasRepaired(_boat);
+        Draw();
+    }
+
+    private Button CreateFleetCapUpgradeButton(VisualElement _parent, PlayerAdmiralController _admiral)
+    {
+        VisualElement container = new();
+        container.AddToClassList("fleet-current-upgrade");
+        SetMargin(container, 0, 0, 10, 0);
+        _parent.Add(container);
+
+        Label description = new($"Tier {string.Concat(Enumerable.Repeat("I", _admiral.SuborinateUpgradeIndex))} Fleet Size ({_admiral.GetSubordinateCap})");
+        description.AddToClassList("fleet-current-upgrade-description");
+        SetFontSize(description, 22);
+        container.Add(description);
+
+        Button button = new(() => OnSubordinateCap(_admiral));
+        button.AddToClassList("main-button");
+        button.AddToClassList("fleet-current-upgrade-button");
+        SetBorderWidthRadius(button, 3, 7);
+        SetFontSize(button, 22);
+        button.text = $"+ {_admiral.GetSubordinateCapIncrease} Fleet Size (-{_admiral.GetSubordinateUpgradeCost} R)";
+        button.SetEnabled(ResourceManager.Instance.Amount >= _admiral.GetSubordinateUpgradeCost && _admiral.CanUpgradeSubodinateCap);
+        container.Add(button);
+
+        return button;
+    }
+
+    private void OnSubordinateCap(PlayerAdmiralController _admiral)
+    {
+        _admiral.UpgradeSuborniateCap();
+        OnBoatUpgraded?.Invoke();
         Draw();
     }
 

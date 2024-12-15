@@ -53,7 +53,6 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
         Upgradeables.Add(UpgradeType.Hull, new IUpgradeable[] { this });
         Upgradeables.Add(UpgradeType.Cannons, GetComponentsInChildren<Cannon>());
-        Upgradeables.Add(UpgradeType.Engine, new IUpgradeable[] { Engine });
 
         SetDefault();
     }
@@ -62,7 +61,6 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
     {
         SetUpgrade(UpgradeType.Hull, UpgradeTier.One);
         SetUpgrade(UpgradeType.Cannons, UpgradeTier.One);
-        SetUpgrade(UpgradeType.Engine, UpgradeTier.One);
     }
 
     public void Damage(float _damage)
@@ -201,9 +199,6 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
             case UpgradeType.Cannons:
                 return "Damage";
-
-            case UpgradeType.Engine:
-                return "Speed";
 
             default:
                 Debug.LogError("Defaulted");

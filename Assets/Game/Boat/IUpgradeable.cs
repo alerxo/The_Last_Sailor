@@ -17,6 +17,5 @@ public enum UpgradeTier
 public enum UpgradeType
 {
     Hull,
-    Engine,
-    Cannons
+    Cannons,
 }
