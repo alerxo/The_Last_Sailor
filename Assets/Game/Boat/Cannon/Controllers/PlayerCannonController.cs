@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -6,7 +7,6 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
     private const float ROTATION_SPEED = 1f;
     private const float MOUSE_SPEED = 0.7f;
     private const float MOUSE_ACCELERATION = 10f;
-    private Vector2 smoothedMouseMovement;
 
     [Tooltip("Target for the cannon camera")]
     [SerializeField] private Transform cameraTarget;
@@ -37,13 +37,8 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
     private void Update()
     {
         Vector2 keyboardMovement = input.Player.Move.ReadValue<Vector2>();
-
-        Vector2 mouseMovement = input.Player.Look.ReadValue<Vector2>();
-        mouseMovement.x = Mathf.Clamp(mouseMovement.x, -1, 1) * MOUSE_SPEED;
-        mouseMovement.y = Mathf.Clamp(mouseMovement.y, -1, 1) * MOUSE_SPEED;
-        smoothedMouseMovement = Vector2.Lerp(smoothedMouseMovement, mouseMovement, MOUSE_ACCELERATION * Time.deltaTime);
-
-        Vector2 movement = keyboardMovement.magnitude == 0 ? smoothedMouseMovement : keyboardMovement;
+        Vector2 mouseMovement = input.Player.Look.ReadValue<Vector2>() / 100f * MOUSE_SPEED;
+        Vector2 movement = keyboardMovement.magnitude != 0 ? keyboardMovement : mouseMovement;
 
         if (movement.x != 0)
         {
@@ -63,6 +58,7 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
             cannon.Fire();
             CameraManager.Instance.SetState(CameraState.Player);
             FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
+            CameraManager.Instance.ShakeCamera(0.1f, 2f, 0.1f, 0.25f);
         }
     }
 
