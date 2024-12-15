@@ -8,7 +8,7 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
     private const float FORCE_PLAYER_POSITION_DURATION = 0.1f;
     private const float FORCE_STRAIGHTEN_UP_MARGIN = 0.1f;
 
-    public Vector3 Position => transform.position + transform.TransformVector(new(0, 0, -1.5f));// kamera offset
+    public Vector3 Position => transform.position + transform.TransformVector(new(0, 0, -0.85f));// kamera offset
     public bool CanInteract => true;
     public Transform Transform => transform;
 
