@@ -1,14 +1,13 @@
 using System.Collections;
 using UnityEngine;
 using Unity.Cinemachine;
-using System.Threading;
 
 public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
 {
     private const float FORCE_PLAYER_POSITION_DURATION = 0.1f;
     private const float FORCE_STRAIGHTEN_UP_MARGIN = 0.1f;
 
-    public Vector3 Position => transform.position + transform.TransformVector(new(0, 0, -0.85f));// kamera offset
+    public Vector3 Position => transform.position + transform.TransformVector(new(0, 0, -0.85f)); // kamera offset
     public bool CanInteract => true;
     public Transform Transform => transform;
 
@@ -36,7 +35,7 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
         FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
 
         turningAudioSource.clip = turningAudioClip;
-        stopTurningAudioSource.clip = stopTurningAudioClip; 
+        stopTurningAudioSource.clip = stopTurningAudioClip;
 
         stopTurningPlayed = false;
         allowSqueekPlayed = true;
@@ -64,20 +63,20 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
             {
                 turningAudioSource.volume = 0.7f;
                 turningAudioSource.pitch = Random.Range(0.8f, 1.0f);
-                 turningAudioSource.Play();
+                turningAudioSource.Play();
             }
         }
 
         else if (Mathf.Abs(Boat.Engine.Rudder) < FORCE_STRAIGHTEN_UP_MARGIN)
         {
             turningAudioSource.volume = turningAudioSource.volume - 0.02f;
-            if (turningAudioSource.volume == 0) 
-            { 
+            if (turningAudioSource.volume == 0)
+            {
                 turningAudioSource.Stop();
             }
             Boat.Engine.ChangeTowardsRudder(0);
         }
-        else 
+        else
         {
             turningAudioSource.volume = turningAudioSource.volume - 0.02f;
             if (turningAudioSource.volume == 0)
@@ -85,14 +84,14 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
                 turningAudioSource.Stop();
             }
         }
-        if (Boat.Engine.Rudder >= 1f || Boat.Engine.Rudder <= -1f) 
+        if (Boat.Engine.Rudder >= 1f || Boat.Engine.Rudder <= -1f)
         {
-            if (!stopTurningAudioSource.isPlaying && stopTurningPlayed == false) 
-            { 
+            if (!stopTurningAudioSource.isPlaying && stopTurningPlayed == false)
+            {
                 stopTurningPlayed = true;
                 allowSqueekPlayed = false;
                 turningAudioSource.Stop();
-                stopTurningAudioSource.Play(); 
+                stopTurningAudioSource.Play();
             }
         }
         if (Boat.Engine.Rudder < 1f && Boat.Engine.Rudder > -1f)
@@ -142,6 +141,9 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
 
     private IEnumerator ForcePlayerAtPosition()
     {
+        player.Rigidbody.angularVelocity = Vector3.zero;
+        player.Rigidbody.linearVelocity = Vector3.zero;
+
         float duration = 0;
         player.transform.GetPositionAndRotation(out Vector3 startPosition, out Quaternion startRotation);
 
@@ -150,10 +152,12 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
 
         while (input.Player.enabled && (duration += Time.deltaTime) < FORCE_PLAYER_POSITION_DURATION)
         {
+            player.Rigidbody.angularVelocity = Vector3.zero;
+            player.Rigidbody.linearVelocity = Vector3.zero;
+
             float percentage = duration / FORCE_PLAYER_POSITION_DURATION;
 
             nextPosition = Vector3.Lerp(startPosition, Position, percentage);
-            nextPosition.y = player.transform.position.y;
             nextRotation = Quaternion.Lerp(startRotation, transform.rotation, percentage);
 
             playerCamera.ForceCameraPosition(playerCamera.transform.position, nextRotation);
@@ -162,8 +166,10 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
             yield return null;
         }
 
+        player.Rigidbody.angularVelocity = Vector3.zero;
+        player.Rigidbody.linearVelocity = Vector3.zero;
+
         nextPosition = Position;
-        nextPosition.y = player.transform.position.y;
         nextRotation = transform.rotation;
 
         playerCamera.ForceCameraPosition(playerCamera.transform.position, nextRotation);

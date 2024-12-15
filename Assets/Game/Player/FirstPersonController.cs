@@ -85,7 +85,11 @@ public class FirstPersonController : MonoBehaviour
     {
         CheckSlope();
         ApplyGravity();
-        ApplyMovement();
+
+        if (State == PlayerState.FirstPerson)
+        {
+            ApplyMovement();
+        }
     }
 
     public void SetState(PlayerState _state)
