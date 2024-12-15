@@ -74,7 +74,7 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
             {
                 turningAudioSource.Stop();
             }
-            Boat.Engine.ChangeTowardsRudder(0);
+            Boat.Engine.ChangeRudderTowards(0);
         }
         else
         {
@@ -141,8 +141,9 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
 
     private IEnumerator ForcePlayerAtPosition()
     {
-        player.Rigidbody.angularVelocity = Vector3.zero;
-        player.Rigidbody.linearVelocity = Vector3.zero;
+        Vector3 velocity = player.Rigidbody.linearVelocity;
+        velocity.y = velocity.y > 0 ? 0 : velocity.y;
+        player.Rigidbody.linearVelocity = velocity;
 
         float duration = 0;
         player.transform.GetPositionAndRotation(out Vector3 startPosition, out Quaternion startRotation);
@@ -152,27 +153,34 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
 
         while (input.Player.enabled && (duration += Time.deltaTime) < FORCE_PLAYER_POSITION_DURATION)
         {
-            player.Rigidbody.angularVelocity = Vector3.zero;
-            player.Rigidbody.linearVelocity = Vector3.zero;
-
             float percentage = duration / FORCE_PLAYER_POSITION_DURATION;
-
             nextPosition = Vector3.Lerp(startPosition, Position, percentage);
-            nextRotation = Quaternion.Lerp(startRotation, transform.rotation, percentage);
 
+            if (player.transform.position.y > nextPosition.y)
+            {
+                nextPosition.y = player.transform.position.y;
+            }
+
+            nextRotation = Quaternion.Lerp(startRotation, transform.rotation, percentage);
             playerCamera.ForceCameraPosition(playerCamera.transform.position, nextRotation);
             player.Rigidbody.Move(nextPosition, playerCamera.transform.rotation);
 
             yield return null;
         }
 
-        player.Rigidbody.angularVelocity = Vector3.zero;
-        player.Rigidbody.linearVelocity = Vector3.zero;
-
         nextPosition = Position;
-        nextRotation = transform.rotation;
 
+        if (player.transform.position.y > nextPosition.y)
+        {
+            nextPosition.y = player.transform.position.y;
+        }
+
+        nextRotation = transform.rotation;
         playerCamera.ForceCameraPosition(playerCamera.transform.position, nextRotation);
         player.Rigidbody.Move(nextPosition, playerCamera.transform.rotation);
+
+        velocity = player.Rigidbody.linearVelocity;
+        velocity.y = velocity.y > 0 ? 0 : velocity.y;
+        player.Rigidbody.linearVelocity = velocity;
     }
 }

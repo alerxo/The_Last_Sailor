@@ -58,6 +58,8 @@ public class AIBoatController : MonoBehaviour
                 PendingDestructionState();
                 break;
         }
+
+        Boat.Engine.SetOverCharge(Admiral != null && Admiral.Enemy != null ? 1f : 1.2f);
     }
 
     private void TryCheckForCollisions()

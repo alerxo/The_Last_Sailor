@@ -1,13 +1,12 @@
 using UnityEngine;
-using UnityEngine.Windows;
 
 public class Engine : MonoBehaviour
 {
     private const float POWER = 100000f;
     private const float THROTTLE_ACCELERATION = 0.9f;
     private const float RUDDER_ACCELERATION = 0.9f;
-    private const float TURN_RADIUS = 3f;
-    private const float RUDDER_PASSIVE_TORQUE = 20000f;
+    private const float TURN_RADIUS = 2f;
+    private const float RUDDER_PASSIVE_TORQUE = 30000f;
     private const float PADDLE_WHEEL_SPEED = 0.0015f;
 
     [Tooltip("The rotating paddlewheel")]
@@ -19,6 +18,8 @@ public class Engine : MonoBehaviour
     private Throttle throttle;
     public float Rudder { get; private set; }
     public float Throttle { get; private set; }
+
+    public float OverCharge { get; private set; } = 1f;
 
     private Rigidbody target;
     private Boat boat;
@@ -51,7 +52,7 @@ public class Engine : MonoBehaviour
 
         if (throttle > 0)
         {
-            target.AddForceAtPosition(throttle * transform.forward, transform.position, ForceMode.Force);
+            target.AddForceAtPosition(throttle * POWER * OverCharge * transform.forward, transform.position, ForceMode.Force);
 
             paddleWheel.Rotate(new Vector3(throttle * PADDLE_WHEEL_SPEED * Time.fixedDeltaTime, 0, 0));
 
@@ -94,7 +95,7 @@ public class Engine : MonoBehaviour
         steeringWheel.SetRotation(Rudder);
     }
 
-    public void ChangeTowardsRudder(float _rudder)
+    public void ChangeRudderTowards(float _rudder)
     {
         Rudder = Mathf.Clamp(Mathf.Lerp(Rudder, -_rudder, RUDDER_ACCELERATION * Time.deltaTime), -1, 1);
         steeringWheel.SetRotation(Rudder);
@@ -106,9 +107,14 @@ public class Engine : MonoBehaviour
         throttle.SetRotation(Throttle);
     }
 
-    public void ChangeTowardsThrottle(float _throttle)
+    public void ChangeThrottleTowards(float _throttle)
     {
         Throttle = Mathf.Clamp(Mathf.Lerp(Throttle, _throttle, THROTTLE_ACCELERATION * Time.deltaTime), 0, 1);
         throttle.SetRotation(Throttle);
+    }
+
+    public void SetOverCharge(float _value)
+    {
+        OverCharge = _value;
     }
 }

@@ -12,8 +12,6 @@ public class FirstPersonController : MonoBehaviour
     private const float CAPSULE_RADIUS = 0.5f;
     private const float CAPSULE_MARGIN = 0.6f;
 
-    private WalkFoleyScript walkFoleyScript;
-
     public static FirstPersonController Instance { get; private set; }
 
     public static event UnityAction<PlayerState> OnPlayerStateChanged;
@@ -36,6 +34,8 @@ public class FirstPersonController : MonoBehaviour
 #if UNITY_EDITOR
     [SerializeField] private bool isDebugMode;
 #endif
+
+    private WalkFoleyScript walkFoleyScript;
 
     private void Awake()
     {
