@@ -4,6 +4,11 @@ public class PlayerAdmiralController : Admiral
 {
     public PlayerBoatController PlayerBoatController { get; private set; }
 
+    private static readonly int[] subodinateCaps = { 0, 3, 7, 15, 15 };
+    private static readonly int[] subodinateUpgradeCosts = { 0, 10, 30, 50, 50 };
+    public const int MAX_SUBORDINATE_UPGRADE = 3;
+    public int SuborinateUpgradeIndex { get; private set; } = 1;
+
     private int subordinateNumber = 0;
 
     private Formation defaultFormation;
@@ -51,5 +56,17 @@ public class PlayerAdmiralController : Admiral
     private Vector3 GetNextSubordinateForrmationPosition()
     {
         return Formations.GetFleetPositions(defaultFormation, Subordinates.Count + 1)[Subordinates.Count];
+    }
+
+    public int GetSubordinateCap => subodinateCaps[SuborinateUpgradeIndex];
+    public int GetSubordinateCapIncrease => subodinateCaps[SuborinateUpgradeIndex + 1] - subodinateCaps[SuborinateUpgradeIndex];
+    public int GetSubordinateUpgradeCost => subodinateUpgradeCosts[SuborinateUpgradeIndex];
+    public bool CanUpgradeSubodinateCap => SuborinateUpgradeIndex < MAX_SUBORDINATE_UPGRADE;
+    public bool CanBuild => Subordinates.Count < GetSubordinateCap;
+
+    public void UpgradeSuborniateCap()
+    {
+        ResourceManager.Instance.AddResource(GetSubordinateUpgradeCost);
+        SuborinateUpgradeIndex++;
     }
 }

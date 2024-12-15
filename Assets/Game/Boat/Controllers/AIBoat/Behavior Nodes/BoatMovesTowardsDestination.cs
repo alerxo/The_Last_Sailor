@@ -37,10 +37,10 @@ public partial class BoatMovesTowardsDestination : Action
     {
         float throttle = Mathf.Clamp01((Agent.Value.ForwardCollisionDistance - STOP_DISTANCE) / (APROACH_DISTANCE - STOP_DISTANCE));
         throttle = Mathf.Clamp(Mathf.Pow(throttle, 3), 0.1f, 1);
-        Agent.Value.Boat.Engine.ChangeTowardsThrottle(throttle * Agent.Value.Speed);
+        Agent.Value.Boat.Engine.ChangeThrottleTowards(throttle * Agent.Value.Speed);
 
         Vector3 cross = Vector3.Cross((Agent.Value.transform.position - Agent.Value.Destination.Value).normalized, Agent.Value.transform.forward);
-        Agent.Value.Boat.Engine.ChangeTowardsRudder(cross.y);
+        Agent.Value.Boat.Engine.ChangeRudderTowards(cross.y);
     }
 
     private void SetDistance()

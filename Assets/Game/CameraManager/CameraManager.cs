@@ -265,15 +265,21 @@ public class CameraManager : MonoBehaviour
         {
             foreach (CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin in cinemachineBasicMultiChannelPerlins)
             {
-                cinemachineBasicMultiChannelPerlin.AmplitudeGain = Mathf.Lerp(0, _amplitude, duration / windUp);
-                cinemachineBasicMultiChannelPerlin.FrequencyGain = Mathf.Lerp(0, _frequency, duration / windUp);
+                if (cinemachineBasicMultiChannelPerlin.VirtualCamera.enabled)
+                {
+                    cinemachineBasicMultiChannelPerlin.AmplitudeGain = Mathf.Lerp(0, _amplitude, duration / windUp);
+                    cinemachineBasicMultiChannelPerlin.FrequencyGain = Mathf.Lerp(0, _frequency, duration / windUp);
+                }
             }
         }
 
         foreach (CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin in cinemachineBasicMultiChannelPerlins)
         {
-            cinemachineBasicMultiChannelPerlin.AmplitudeGain = _amplitude;
-            cinemachineBasicMultiChannelPerlin.FrequencyGain = _frequency;
+            if (cinemachineBasicMultiChannelPerlin.VirtualCamera.enabled)
+            {
+                cinemachineBasicMultiChannelPerlin.AmplitudeGain = _amplitude;
+                cinemachineBasicMultiChannelPerlin.FrequencyGain = _frequency;
+            }
         }
 
         yield return new WaitForSeconds(_time);
@@ -284,8 +290,11 @@ public class CameraManager : MonoBehaviour
         {
             foreach (CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin in cinemachineBasicMultiChannelPerlins)
             {
-                cinemachineBasicMultiChannelPerlin.AmplitudeGain = Mathf.Lerp(_amplitude, 0, duration / windUp);
-                cinemachineBasicMultiChannelPerlin.FrequencyGain = Mathf.Lerp(_frequency, 0, duration / windUp);
+                if (cinemachineBasicMultiChannelPerlin.VirtualCamera.enabled)
+                {
+                    cinemachineBasicMultiChannelPerlin.AmplitudeGain = Mathf.Lerp(_amplitude, 0, duration / windUp);
+                    cinemachineBasicMultiChannelPerlin.FrequencyGain = Mathf.Lerp(_frequency, 0, duration / windUp);
+                }
             }
         }
 

@@ -138,7 +138,7 @@ MonoBehaviour:
     To: PF_PlayerCamera
     Blend:
       Style: 1
-      Time: 1
+      Time: 0.7
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -149,7 +149,7 @@ MonoBehaviour:
     To: PF_PlayerCamera
     Blend:
       Style: 1
-      Time: 1
+      Time: 0.7
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -157,10 +157,10 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: PF_PlayerCamera
-    To: FleetCamera_First
+    To: FormationCamera_First
     Blend:
       Style: 1
-      Time: 1
+      Time: 0.7
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -168,10 +168,10 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: PF_PlayerCamera
-    To: FleetCamera_Second
+    To: FormationCamera_Second
     Blend:
       Style: 1
-      Time: 1
+      Time: 0.7
       CustomCurve:
         serializedVersion: 2
         m_Curve: []

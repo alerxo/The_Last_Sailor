@@ -16,6 +16,7 @@ public abstract class Admiral : MonoBehaviour
     public readonly List<Boat> Fleet = new();
     public readonly List<AIBoatController> Subordinates = new();
     public Command Command { get; private set; }
+
     public void SetOwner(Boat boat)
     {
         Owner = boat;
