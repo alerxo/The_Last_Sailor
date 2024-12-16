@@ -7,7 +7,7 @@ public class Engine : MonoBehaviour
     private const float RUDDER_ACCELERATION = 0.9f;
     private const float TURN_RADIUS = 2f;
     private const float RUDDER_PASSIVE_TORQUE = 30000f;
-    private const float PADDLE_WHEEL_SPEED = 0.0015f;
+    private const float PADDLE_WHEEL_SPEED = 0.0015f * POWER;
 
     [Tooltip("The rotating paddlewheel")]
     [SerializeField] private Transform paddleWheel;
