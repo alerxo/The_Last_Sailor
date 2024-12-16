@@ -215,7 +215,7 @@ MonoBehaviour:
   rays:
   - {fileID: 3702751647370380070}
   - {fileID: 5094315258674555366}
-  IsDebugMode: 1
+  IsDebugMode: 0
 --- !u!114 &3960747803573023257
 MonoBehaviour:
   m_ObjectHideFlags: 0
