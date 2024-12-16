@@ -250,6 +250,7 @@ public class AIBoatController : MonoBehaviour
     public void SetAdmiral(Admiral _admiral)
     {
         Admiral = _admiral;
+        Boat.SetCannonBallOwner(_admiral == PlayerBoatController.Instance.AdmiralController ? CannonballOwner.Allied : CannonballOwner.Enemy);
     }
 
     public void SetFormationPosition(Vector3? _position)

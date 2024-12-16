@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AICannonController : MonoBehaviour
@@ -86,7 +87,7 @@ public class AICannonController : MonoBehaviour
         {
             float distance = Vector3.Distance(cannonTransform.position, boat.transform.position);
 
-            if (distance < closest && IsValidTarget(boat, distance))
+            if (distance < closest && IsValidTarget(boat))
             {
                 target = boat;
                 closest = distance;
@@ -96,20 +97,10 @@ public class AICannonController : MonoBehaviour
 
     private void CheckIfValidTarget()
     {
-        if (target != null && !target.IsSunk)
+        if (IsValidTarget(target))
         {
             SetState(AICannonControllerState.Aiming);
         }
-    }
-
-    private bool IsValidTarget(Boat _boat, float _distance)
-    {
-        return !_boat.IsSunk && _distance < CombatManager.RING_OF_FIRE_SIZE && GetCurrentAngle(_boat.transform.position) <= MAX_TARGET_ANGLE;
-    }
-
-    private float GetCurrentAngle(Vector3 position)
-    {
-        return Vector3.Angle(cannonTransform.forward, (position - cannonTransform.position).normalized);
     }
 
     private void TryUpdatePredictions()
@@ -118,12 +109,42 @@ public class AICannonController : MonoBehaviour
 
         predictionTimer = 0f;
 
-        float speed = Cannon.CANNONBALL_FORCE / Cannon.CANNONBALL_MASS;
-        float distance = Vector3.Distance(cannonTransform.position, target.transform.position);
-        float estimatedTime = distance / speed * CANNONBALL_DRAG_ESTIMATION;
+        predictedTrajectory = cannon.GetHitPrediction(GetObstacles(), target, predictedTargetPosition);
+        predictedTargetPosition = GetPredictedPosition(target);
+    }
 
-        predictedTrajectory = cannon.GetHitPrediction(target, predictedTargetPosition);
-        predictedTargetPosition = target.transform.position + (target.RigidBody.linearVelocity * estimatedTime);
+    private List<Vector3> GetObstacles()
+    {
+        List<Vector3> obstacles = new();
+
+        foreach (Boat boat in owner.Admiral.Fleet)
+        {
+            if (IsValidTarget(boat))
+            {
+                obstacles.Add(GetPredictedPosition(boat));
+            }
+        }
+
+        return obstacles;
+    }
+
+    private bool IsValidTarget(Boat _boat)
+    {
+        return _boat != null && !_boat.IsSunk && GetAngleAt(_boat.transform.position) <= MAX_TARGET_ANGLE;
+    }
+
+    private float GetAngleAt(Vector3 position)
+    {
+        return Vector3.Angle(cannonTransform.forward, (position - cannonTransform.position).normalized);
+    }
+
+    private Vector3 GetPredictedPosition(Boat _boat)
+    {
+        float speed = Cannon.CANNONBALL_FORCE / Cannon.CANNONBALL_MASS;
+        float distance = Vector3.Distance(cannonTransform.position, _boat.transform.position);
+        float time = distance / speed * CANNONBALL_DRAG_ESTIMATION;
+
+        return _boat.transform.position + (_boat.RigidBody.linearVelocity * time);
     }
 
     private void RotatePitch()
@@ -146,9 +167,7 @@ public class AICannonController : MonoBehaviour
 
     private void RotateYaw()
     {
-        cross = Vector3.Cross((cannonTransform.position - predictedTargetPosition).normalized, cannonTransform.forward).y;
-
-        cannon.ChangeYaw(cross);
+        cannon.ChangeYaw(Vector3.Cross((cannonTransform.position - predictedTargetPosition).normalized, cannonTransform.forward).y);
     }
 
     private void CheckIfCanFire()
@@ -176,7 +195,7 @@ public class AICannonController : MonoBehaviour
 
     private void FireAtTarget()
     {
-        cannon.Fire();
+        cannon.Fire(owner.Boat.CannonballOwner);
     }
 
     private void SetState(AICannonControllerState _state)

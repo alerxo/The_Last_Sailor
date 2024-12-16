@@ -66,7 +66,7 @@ public class PlayerAdmiralController : Admiral
 
     public void UpgradeSuborniateCap()
     {
-        ResourceManager.Instance.AddResource(GetSubordinateUpgradeCost);
+        ResourceManager.Instance.AddResource(-GetSubordinateUpgradeCost);
         SuborinateUpgradeIndex++;
     }
 }

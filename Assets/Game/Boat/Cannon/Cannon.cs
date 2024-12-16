@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Cannon : MonoBehaviour, IUpgradeable
@@ -97,11 +98,11 @@ public class Cannon : MonoBehaviour, IUpgradeable
         mount.localRotation = Quaternion.Euler(localRotation);
     }
 
-    public void Fire()
+    public void Fire(CannonballOwner _cannonballOwner)
     {
         Cannonball cannonball = ObjectPoolManager.Instance.Spawn<Cannonball>(explosionPoint.position, Quaternion.identity);
         cannonball.GetComponent<Rigidbody>().AddForce(-barrel.up * CANNONBALL_FORCE, ForceMode.Impulse);
-        cannonball.SetValues(GetComponentInParent<IDamageable>(), GetUpgradeValue);
+        cannonball.SetValues(GetComponentInParent<IDamageable>(), GetUpgradeValue, _cannonballOwner);
 
         foreach (ParticleSystem particleSystem in particleSystems)
         {
@@ -155,7 +156,7 @@ public class Cannon : MonoBehaviour, IUpgradeable
         barrelRenderer.SetPropertyBlock(propertyBlock);
     }
 
-    public CannonPrediction GetHitPrediction(Boat _target, Vector3 _predictedPosition)
+    public CannonPrediction GetHitPrediction(List<Vector3> _obstacles, Boat _target, Vector3 _predictedPosition)
     {
         Vector3 directon = -barrel.up;
         Vector3 startPosition = explosionPoint.position;
@@ -169,7 +170,13 @@ public class Cannon : MonoBehaviour, IUpgradeable
         Vector3 nextPosition;
         float overlap;
 
-        Bounds bounds = new(_predictedPosition + new Vector3(0, BOAT_HEIGHT_OFFSET, 0), new Vector3(BOAT_WIDTH, BOAT_HEIGHT, BOAT_LENGTH));
+        Bounds target = new(_predictedPosition + new Vector3(0, BOAT_HEIGHT_OFFSET, 0), new Vector3(BOAT_WIDTH, BOAT_HEIGHT, BOAT_LENGTH));
+        Bounds[] obstacles = new Bounds[_obstacles.Count];
+
+        for (int i = 0; i < _obstacles.Count; i++)
+        {
+            obstacles[i] = new(_obstacles[i] + new Vector3(0, BOAT_HEIGHT_OFFSET * 2, 0), new Vector3(BOAT_WIDTH, BOAT_HEIGHT * 2.5f, BOAT_LENGTH * 1.5f));
+        }
 
         for (int i = 0; i < MAX_PREDICTION_ITERATIONS; i++)
         {
@@ -180,21 +187,19 @@ public class Cannon : MonoBehaviour, IUpgradeable
 
             Ray ray = new(position, velocity.normalized);
 
-            if (Physics.Raycast(ray, out RaycastHit hit, overlap))
+            foreach (Bounds bounds in obstacles)
             {
-                Boat boat = hit.rigidbody.GetComponentInParent<Boat>();
-
-                if (boat != _target)
+                if (bounds.IntersectRay(ray, out float obstacleDistance) && obstacleDistance <= overlap)
                 {
                     return new CannonPrediction
                     {
-                        Hit = boat,
+                        Hit = null,
                         Point = nextPosition,
                     };
                 }
             }
 
-            if (bounds.IntersectRay(ray, out float boundsDistance) && boundsDistance <= overlap)
+            if (target.IntersectRay(ray, out float targetDistance) && targetDistance <= overlap)
             {
                 return new CannonPrediction
                 {

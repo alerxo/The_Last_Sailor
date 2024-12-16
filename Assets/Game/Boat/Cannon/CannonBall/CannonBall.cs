@@ -1,5 +1,4 @@
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Cannonball : MonoBehaviour
@@ -11,6 +10,7 @@ public class Cannonball : MonoBehaviour
 
     private CannonballState state;
     private IDamageable ignore;
+    private CannonballOwner owner;
 
     private float destructionTimer;
 
@@ -18,16 +18,17 @@ public class Cannonball : MonoBehaviour
     [SerializeField] private GameObject explosion;
     [SerializeField] private GameObject waterSplash;
 
-
     private Rigidbody rb;
     private MeshRenderer meshRenderer;
+
+#if UNITY_EDITOR
+    [SerializeField] private bool isDebugMode;
+#endif
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         meshRenderer = rb.GetComponentInChildren<MeshRenderer>();
-  
-        
     }
 
     private void OnEnable()
@@ -66,8 +67,8 @@ public class Cannonball : MonoBehaviour
     {
         if (state == CannonballState.Active && transform.position.y < WATER_HEIGHT)
         {
-            Destroy(Instantiate(waterSplash,transform.position,quaternion.Euler(0,0,0)),10); // lär behöva enablas / disablas med canon kulan så det poolas. Jag vet inte riktigt hur jag gör det med din kod /viktor
-            
+            Destroy(Instantiate(waterSplash, transform.position, quaternion.Euler(0, 0, 0)), 10); // lär behöva enablas / disablas med canon kulan så det poolas. Jag vet inte riktigt hur jag gör det med din kod /viktor
+
             waterImpact.Play();
             SetState(CannonballState.PendingDestruction);
         }
@@ -81,18 +82,35 @@ public class Cannonball : MonoBehaviour
 
         if (_damageable != ignore && _damageable != null)
         {
-            Destroy(Instantiate(explosion,transform.position,transform.rotation),5); // lär behöva enablas / disablas med canon kulan så det poolas. Jag vet inte riktigt hur jag gör det med din kod /viktor
+            Destroy(Instantiate(explosion, transform.position, transform.rotation), 5); // lär behöva enablas / disablas med canon kulan så det poolas. Jag vet inte riktigt hur jag gör det med din kod /viktor
 
-            _damageable.Damage(damage);
+            float actualDamage = 0;
+
+            if (_damageable.CanDamage && (owner == CannonballOwner.Player ||
+                (owner >= CannonballOwner.Allied && _damageable.CannonballOwner == CannonballOwner.Enemy) ||
+                (owner == CannonballOwner.Enemy && _damageable.CannonballOwner >= CannonballOwner.Allied)))
+            {
+                actualDamage = damage;
+            }
+
+#if UNITY_EDITOR
+            else if (isDebugMode && _damageable.CanDamage)
+            {
+                Debug.LogWarning($"Friendly fire ({owner}) and ({_damageable.CannonballOwner})");
+            }
+#endif
+            _damageable.Damage(actualDamage);
+
             boatImpact.Play();
             SetState(CannonballState.PendingDestruction);
         }
     }
 
-    public void SetValues(IDamageable _ignore, float _damage)
+    public void SetValues(IDamageable _ignore, float _damage, CannonballOwner _owner)
     {
         ignore = _ignore;
         damage = _damage;
+        owner = _owner;
     }
 
     public void SetState(CannonballState _state)
@@ -130,4 +148,11 @@ public enum CannonballState
     Active,
     PendingDestruction,
     Destruction
+}
+
+public enum CannonballOwner
+{
+    Enemy,
+    Allied,
+    Player,
 }
