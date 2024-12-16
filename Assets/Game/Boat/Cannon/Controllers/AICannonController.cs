@@ -2,28 +2,27 @@ using UnityEngine;
 
 public class AICannonController : MonoBehaviour
 {
-    private const float MAX_TARGET_ANGLE = 100f;
-    private const float MAX_FIRE_YAW_DIFFERENCE = 7f;
-    private const float BOAT_LENGTH = 15f;
+    private const float MAX_TARGET_ANGLE = 30f;
     private const float CANNONBALL_DRAG_ESTIMATION = 1.03f;
 
     private AICannonControllerState state;
 
     private AIBoatController owner;
     private Cannon cannon;
+    [SerializeField] private Transform cannonTransform;
+
     private Boat target;
+    private float targetingTimer;
+    private const float TARGETING_COOLDOWN = 1f;
 
-    Vector3 targetPredictedPosition;
-    float predictionDistance;
+    private CannonPrediction predictedTrajectory;
+    private Vector3 predictedTargetPosition;
     private float predictionTimer;
-    private const float PREDICTION_COOLDOWN = 0.2f;
-
-#if UNITY_EDITOR
-    [SerializeField] private bool isDebugMode;
-#endif
+    private const float PREDICTION_COOLDOWN = 0.1f;
 
     private void Awake()
     {
+        targetingTimer = Random.Range(0, TARGETING_COOLDOWN);
         predictionTimer = Random.Range(0, PREDICTION_COOLDOWN);
 
         cannon = GetComponentInParent<Cannon>();
@@ -37,12 +36,22 @@ public class AICannonController : MonoBehaviour
         if (state == AICannonControllerState.Targeting)
         {
             TryGetTarget();
+            CheckIfValidTarget();
         }
 
         if (state == AICannonControllerState.Aiming)
         {
             TryUpdatePredictions();
-            AimAtTarget();
+            RotatePitch();
+            RotateYaw();
+            CheckIfCanFire();
+
+#if UNITY_EDITOR
+            if (owner.IsDebugMode && target != null)
+            {
+                cannon.DebugDrawTrajectory(target, predictedTargetPosition);
+            }
+#endif
         }
 
         if (state == AICannonControllerState.Shooting)
@@ -66,12 +75,16 @@ public class AICannonController : MonoBehaviour
 
     private void TryGetTarget()
     {
+        if ((targetingTimer += Time.deltaTime) < TARGETING_COOLDOWN) return;
+
+        targetingTimer = 0f;
+
         float closest = float.MaxValue;
         target = null;
 
         foreach (Boat boat in owner.Admiral.Enemy.Fleet)
         {
-            float distance = Vector3.Distance(transform.position, boat.transform.position);
+            float distance = Vector3.Distance(cannonTransform.position, boat.transform.position);
 
             if (distance < closest && IsValidTarget(boat, distance))
             {
@@ -79,8 +92,11 @@ public class AICannonController : MonoBehaviour
                 closest = distance;
             }
         }
+    }
 
-        if (target != null)
+    private void CheckIfValidTarget()
+    {
+        if (target != null && !target.IsSunk)
         {
             SetState(AICannonControllerState.Aiming);
         }
@@ -88,82 +104,74 @@ public class AICannonController : MonoBehaviour
 
     private bool IsValidTarget(Boat _boat, float _distance)
     {
-        return _boat.Health > 0 && _distance < CombatManager.RING_OF_FIRE_SIZE && GetCurrentAngle(_boat.transform.position) <= MAX_TARGET_ANGLE;
-    }
-
-    private void TryUpdatePredictions()
-    {
-        if ((predictionTimer += Time.deltaTime) > PREDICTION_COOLDOWN)
-        {
-            predictionTimer = 0f;
-            CalculatePredictions();
-        }
-    }
-
-    private void CalculatePredictions()
-    {
-        float speed = Cannon.CANNONBALL_FORCE / Cannon.CANNONBALL_MASS;
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        float estimatedTime = distance / speed * CANNONBALL_DRAG_ESTIMATION;
-
-        Vector3 velocity = target.RigidBody.linearVelocity;
-        velocity.y = 0;
-
-        targetPredictedPosition = target.transform.position + (velocity * estimatedTime);
-        predictionDistance = Vector3.Distance(transform.position, cannon.GetHitPrediction(targetPredictedPosition.y));
-    }
-
-    private void AimAtTarget()
-    {
-        RotatePitch(targetPredictedPosition);
-        bool hasAcceptableYaw = RotateYaw(targetPredictedPosition);
-
-        if (cannon.State == CannonState.Ready && hasAcceptableYaw)
-        {
-            SetState(AICannonControllerState.Shooting);
-        }
-
-#if UNITY_EDITOR
-        if (isDebugMode)
-        {
-            float distance = Vector3.Distance(transform.position, target.transform.position) + (BOAT_LENGTH / 2);
-
-            cannon.GetHitPrediction_IsDebugMode(target.transform.position.y);
-            DebugUtil.DrawBox(targetPredictedPosition, target.transform.rotation, new Vector3(7, 7, BOAT_LENGTH), Color.red, Time.deltaTime);
-        }
-#endif
-    }
-
-    private void RotatePitch(Vector3 predictedPosition)
-    {
-        float actual = Vector3.Distance(transform.position, predictedPosition);
-        float difference = 1 - Mathf.Clamp(predictionDistance / actual, 0, 2);
-        cannon.ChangePitchTowards(difference);
-    }
-
-    private bool RotateYaw(Vector3 predictedPosition)
-    {
-        cannon.ChangeYawTowards(Vector3.Cross((transform.position - predictedPosition).normalized, transform.forward).y);
-
-        return GetCurrentAngle(predictedPosition) < GetAcceptableFireAngle(target, predictedPosition);
+        return !_boat.IsSunk && _distance < CombatManager.RING_OF_FIRE_SIZE && GetCurrentAngle(_boat.transform.position) <= MAX_TARGET_ANGLE;
     }
 
     private float GetCurrentAngle(Vector3 position)
     {
-        return Vector3.Angle(transform.forward, (position - transform.position).normalized);
+        return Vector3.Angle(cannonTransform.forward, (position - cannonTransform.position).normalized);
     }
 
-    private float GetAcceptableFireAngle(Boat _boat, Vector3 position)
+    private void TryUpdatePredictions()
     {
-        Vector3 front = (GetOffsetPosition(_boat, position, BOAT_LENGTH / 2) - transform.position).normalized;
-        Vector3 rear = (GetOffsetPosition(_boat, position, -BOAT_LENGTH / 2) - transform.position).normalized;
+        if ((predictionTimer += Time.deltaTime) < PREDICTION_COOLDOWN) return;
 
-        return (Vector3.Angle(front, rear) / 2) + MAX_FIRE_YAW_DIFFERENCE;
+        predictionTimer = 0f;
+
+        float speed = Cannon.CANNONBALL_FORCE / Cannon.CANNONBALL_MASS;
+        float distance = Vector3.Distance(cannonTransform.position, target.transform.position);
+        float estimatedTime = distance / speed * CANNONBALL_DRAG_ESTIMATION;
+
+        predictedTrajectory = cannon.GetHitPrediction(target, predictedTargetPosition);
+        predictedTargetPosition = target.transform.position + (target.RigidBody.linearVelocity * estimatedTime);
     }
 
-    private Vector3 GetOffsetPosition(Boat _boat, Vector3 position, float _offset)
+    private void RotatePitch()
     {
-        return position + _boat.transform.TransformVector(new Vector3(0, 0, _offset));
+        if (IsPredictedHitEnemy())
+        {
+            float difference = predictedTargetPosition.y - predictedTrajectory.Point.y;
+            cannon.ChangePitch(difference);
+        }
+
+        else
+        {
+            float distance = Vector3.Distance(cannonTransform.position, predictedTargetPosition);
+            float difference = 1 - Mathf.Clamp(Vector3.Distance(cannonTransform.position, predictedTrajectory.Point) / distance, 0, 2);
+            cannon.ChangePitch(difference);
+        }
+    }
+
+    public float cross;
+
+    private void RotateYaw()
+    {
+        cross = Vector3.Cross((cannonTransform.position - predictedTargetPosition).normalized, cannonTransform.forward).y;
+
+        cannon.ChangeYaw(cross);
+    }
+
+    private void CheckIfCanFire()
+    {
+        if (cannon.State == CannonState.Ready && IsPredictedHitEnemy())
+        {
+            SetState(AICannonControllerState.Shooting);
+        }
+    }
+
+    private bool IsPredictedHitEnemy()
+    {
+        if (predictedTrajectory.Hit == null) return false;
+
+        foreach (Boat boat in owner.Admiral.Fleet)
+        {
+            if (predictedTrajectory.Hit == boat)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void FireAtTarget()

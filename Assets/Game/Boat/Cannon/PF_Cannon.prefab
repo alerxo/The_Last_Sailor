@@ -74,7 +74,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5066895043485006966}
   - component: {fileID: 1940036712897292052}
-  - component: {fileID: 4988635767359330143}
   - component: {fileID: 1198445798081274420}
   m_Layer: 8
   m_Name: PF_Cannon
@@ -111,26 +110,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff7a9fad963e1634096a967681ca8a06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  barrelRenderer: {fileID: 838025317353491392}
   mount: {fileID: 7361179214610117608}
   barrel: {fileID: 7843689175986286469}
   explosionPoint: {fileID: 5561453162842683808}
   reloadClip: {fileID: 8300000, guid: ecf7e9df405b08840a4d932fb520270e, type: 3}
   sizzlingClip: {fileID: 8300000, guid: 72526fdc511c036418bbd220868bab0c, type: 3}
   fireClip: {fileID: 8300000, guid: dcc531ab45243f64b8e5e4ffcea719f4, type: 3}
---- !u!114 &4988635767359330143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3863041188724273540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdfe7558d2443f849ad9af33a505fd47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraTarget: {fileID: 4699530071793064676}
+  barrelRenderer: {fileID: 838025317353491392}
 --- !u!82 &1198445798081274420
 AudioSource:
   m_ObjectHideFlags: 0

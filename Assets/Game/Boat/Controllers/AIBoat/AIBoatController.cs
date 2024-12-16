@@ -23,7 +23,7 @@ public class AIBoatController : MonoBehaviour
     private const float DESTRUCTION_COOLDOWN = 1f;
 
 #if UNITY_EDITOR
-    [SerializeField] protected bool isDebugMode;
+    public bool IsDebugMode;
 #endif
 
     public void Awake()
@@ -82,7 +82,7 @@ public class AIBoatController : MonoBehaviour
                 distance = Mathf.Min(hit.distance, distance);
 
 #if UNITY_EDITOR
-                if (isDebugMode)
+                if (IsDebugMode)
                 {
                     Debug.DrawLine(ray.position, hit.point, Color.yellow, FORWARD_COLLISION_COOLDOWN);
                 }
@@ -280,7 +280,7 @@ public class AIBoatController : MonoBehaviour
     private void DrawDebug()
     {
 #if UNITY_EDITOR
-        if (isDebugMode && Destination != null)
+        if (IsDebugMode && Destination != null)
         {
             Color color = Color.green;
             if (Admiral == null) color = Color.yellow;
