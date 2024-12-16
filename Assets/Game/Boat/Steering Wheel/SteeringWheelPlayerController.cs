@@ -69,7 +69,7 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
 
         else if (Mathf.Abs(Boat.Engine.Rudder) < FORCE_STRAIGHTEN_UP_MARGIN)
         {
-            turningAudioSource.volume = turningAudioSource.volume - 0.02f;
+            turningAudioSource.volume = turningAudioSource.volume - 0.04f;
             if (turningAudioSource.volume == 0)
             {
                 turningAudioSource.Stop();
@@ -78,7 +78,7 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
         }
         else
         {
-            turningAudioSource.volume = turningAudioSource.volume - 0.02f;
+            turningAudioSource.volume = turningAudioSource.volume - 0.03f;
             if (turningAudioSource.volume == 0)
             {
                 turningAudioSource.Stop();
