@@ -32,6 +32,11 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
     public float Health { get; private set; }
     public bool IsDamaged => Health < MaxHealth;
     public bool IsSunk => Health <= 0;
+
+    public CannonballOwner CannonballOwner => cannonballOwner;
+    private CannonballOwner cannonballOwner;
+    public bool CanDamage => !IsSunk;
+
     public Engine Engine { get; private set; }
     public Buoyancy Buoyancy { get; private set; }
     public Rigidbody RigidBody { get; private set; }
@@ -209,6 +214,11 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
     public void SetName(string _name)
     {
         Name = _name;
+    }
+
+    public void SetCannonBallOwner(CannonballOwner _cannonballOwner)
+    {
+        cannonballOwner = _cannonballOwner;
     }
 
     public void SetDefault()

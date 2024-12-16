@@ -18,6 +18,7 @@ public class PlayerBoatController : MonoBehaviour
         AdmiralController.SetOwner(Boat);
 
         Boat.SetName("Player Boat");
+        Boat.SetCannonBallOwner(CannonballOwner.Player);
 
         Boat.OnDamaged += Boat_OnDamaged;
         Boat.OnDestroyed += Boat_OnDestroyed;

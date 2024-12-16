@@ -1,8 +1,15 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Cannon : MonoBehaviour, IUpgradeable
 {
+    private const float BOAT_LENGTH = 22f;
+    private const float BOAT_HEIGHT = 10f;
+    private const float BOAT_HEIGHT_OFFSET = 2f;
+    private const float BOAT_WIDTH = 10f;
+    private const float MIN_HEIGHT_OFFSET = -2f;
+
     public const float CANNONBALL_DAMAGE = 10f;
 
     public const float CANNONBALL_FORCE = 300;
@@ -11,18 +18,15 @@ public class Cannon : MonoBehaviour, IUpgradeable
 
     private const float COOLDOWN = 5;
 
-    [SerializeField] private Renderer barrelRenderer;
-
     private const float PITCH_ROTATION_SPEED = 20f;
     private const float YAW_ROTATION_SPEED = 30f;
     private const float MAX_PITCH = 7.5f;
     private const float PITCH_OFFSET = -4;
     public const float MAX_YAW = 20;
 
-    private const int PREDICTION_ITERATIONS = 1000;
+    private const int MAX_PREDICTION_ITERATIONS = 1000;
     private const float PREDICTION_INCREMENT = 0.1f;
-
-    private bool firstReload;
+    private const float ITERATION_OVERLAP = 0.1f;
 
     public CannonState State { get; private set; }
 
@@ -40,10 +44,14 @@ public class Cannon : MonoBehaviour, IUpgradeable
     [SerializeField] private AudioClip sizzlingClip;
     [SerializeField] private AudioClip fireClip;
 
+    [SerializeField] private Renderer barrelRenderer;
+
     private ParticleSystem[] particleSystems;
     private AudioSource audioSource;
 
     private Vector3 localRotation, barrelRotation;
+
+    private bool firstReload;
 
     private void Awake()
     {
@@ -90,11 +98,11 @@ public class Cannon : MonoBehaviour, IUpgradeable
         mount.localRotation = Quaternion.Euler(localRotation);
     }
 
-    public void Fire()
+    public void Fire(CannonballOwner _cannonballOwner)
     {
         Cannonball cannonball = ObjectPoolManager.Instance.Spawn<Cannonball>(explosionPoint.position, Quaternion.identity);
         cannonball.GetComponent<Rigidbody>().AddForce(-barrel.up * CANNONBALL_FORCE, ForceMode.Impulse);
-        cannonball.SetValues(GetComponentInParent<IDamageable>(), GetUpgradeValue);
+        cannonball.SetValues(GetComponentInParent<IDamageable>(), GetUpgradeValue, _cannonballOwner);
 
         foreach (ParticleSystem particleSystem in particleSystems)
         {
@@ -118,6 +126,7 @@ public class Cannon : MonoBehaviour, IUpgradeable
             audioSource.PlayOneShot(sizzlingClip);
             yield return new WaitForSeconds(1);
         }
+
         else
         {
             yield return new WaitForSeconds(COOLDOWN);
@@ -126,12 +135,14 @@ public class Cannon : MonoBehaviour, IUpgradeable
 
         State = CannonState.Ready;
     }
-    private IEnumerator CooldownShader()// ändra namn
+
+    private IEnumerator CooldownShader()
     {
-        MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
+        MaterialPropertyBlock propertyBlock = new();
         barrelRenderer.GetPropertyBlock(propertyBlock);
         float f;
         float duration = 0;
+
         while ((duration += Time.deltaTime) < COOLDOWN)
         {
             f = Mathf.Lerp(1f, 0f, duration / COOLDOWN);
@@ -139,31 +150,71 @@ public class Cannon : MonoBehaviour, IUpgradeable
             barrelRenderer.SetPropertyBlock(propertyBlock);
             yield return null;
         }
+
         f = 0;
         propertyBlock.SetFloat("_EmissionStrength", f);
         barrelRenderer.SetPropertyBlock(propertyBlock);
     }
 
-    public Vector3 GetHitPrediction(float minYPos)
+    public CannonPrediction GetHitPrediction(List<Vector3> _obstacles, Boat _target, Vector3 _predictedPosition)
     {
         Vector3 directon = -barrel.up;
         Vector3 startPosition = explosionPoint.position;
         float speed = CANNONBALL_FORCE;
         float mass = CANNONBALL_MASS;
         float drag = CANNONBALL_DRAG;
+        float minHeight = _target.transform.position.y + MIN_HEIGHT_OFFSET;
 
         Vector3 velocity = directon * (speed / mass);
         Vector3 position = startPosition;
         Vector3 nextPosition;
+        float overlap;
 
-        for (int i = 0; i < PREDICTION_ITERATIONS; i++)
+        Bounds target = new(_predictedPosition + new Vector3(0, BOAT_HEIGHT_OFFSET, 0), new Vector3(BOAT_WIDTH, BOAT_HEIGHT, BOAT_LENGTH));
+        Bounds[] obstacles = new Bounds[_obstacles.Count];
+
+        for (int i = 0; i < _obstacles.Count; i++)
+        {
+            obstacles[i] = new(_obstacles[i] + new Vector3(0, BOAT_HEIGHT_OFFSET * 2, 0), new Vector3(BOAT_WIDTH, BOAT_HEIGHT * 2.5f, BOAT_LENGTH * 1.5f));
+        }
+
+        for (int i = 0; i < MAX_PREDICTION_ITERATIONS; i++)
         {
             velocity = GetNextVelocity(velocity, drag, PREDICTION_INCREMENT);
             nextPosition = position + velocity * PREDICTION_INCREMENT;
 
-            if (nextPosition.y < minYPos)
+            overlap = Vector3.Distance(position, nextPosition) * ITERATION_OVERLAP;
+
+            Ray ray = new(position, velocity.normalized);
+
+            foreach (Bounds bounds in obstacles)
             {
-                return nextPosition;
+                if (bounds.IntersectRay(ray, out float obstacleDistance) && obstacleDistance <= overlap)
+                {
+                    return new CannonPrediction
+                    {
+                        Hit = null,
+                        Point = nextPosition,
+                    };
+                }
+            }
+
+            if (target.IntersectRay(ray, out float targetDistance) && targetDistance <= overlap)
+            {
+                return new CannonPrediction
+                {
+                    Hit = _target,
+                    Point = nextPosition,
+                };
+            }
+
+            if (nextPosition.y < minHeight)
+            {
+                return new CannonPrediction
+                {
+                    Hit = null,
+                    Point = nextPosition,
+                };
             }
 
             position = nextPosition;
@@ -171,30 +222,39 @@ public class Cannon : MonoBehaviour, IUpgradeable
 
         Debug.LogWarning("Reached end of prediction iterations");
 
-        return position;
+        return new CannonPrediction
+        {
+            Hit = null,
+            Point = position,
+        };
     }
 
 #if UNITY_EDITOR
-    public void GetHitPrediction_IsDebugMode(float minYPos)
+    public void DebugDrawTrajectory(Boat _target, Vector3 _predictedPosition)
     {
         Vector3 directon = -barrel.up;
         Vector3 startPosition = explosionPoint.position;
         float speed = CANNONBALL_FORCE;
         float mass = CANNONBALL_MASS;
         float drag = CANNONBALL_DRAG;
+        float minHeight = _target.transform.position.y + MIN_HEIGHT_OFFSET;
 
         Vector3 velocity = directon * (speed / mass);
         Vector3 position = startPosition;
         Vector3 nextPosition;
 
-        for (int i = 0; i < PREDICTION_ITERATIONS; i++)
+        Bounds bounds = new(_predictedPosition + new Vector3(0, BOAT_HEIGHT_OFFSET, 0), new Vector3(BOAT_WIDTH, BOAT_HEIGHT, BOAT_LENGTH));
+
+        DebugUtil.DrawBox(bounds.center, _target.transform.rotation, bounds.size, Color.red, Time.deltaTime);
+
+        for (int i = 0; i < MAX_PREDICTION_ITERATIONS; i++)
         {
             velocity = GetNextVelocity(velocity, drag, PREDICTION_INCREMENT);
             nextPosition = position + velocity * PREDICTION_INCREMENT;
 
             Debug.DrawLine(position, nextPosition, Color.yellow, Time.deltaTime);
 
-            if (nextPosition.y < minYPos)
+            if (nextPosition.y < minHeight)
             {
                 return;
             }
@@ -204,13 +264,19 @@ public class Cannon : MonoBehaviour, IUpgradeable
     }
 #endif
 
-    private Vector3 GetNextVelocity(Vector3 velocity, float drag, float increment)
+    private Vector3 GetNextVelocity(Vector3 _velocity, float _drag, float _increment)
     {
-        velocity += Physics.gravity * increment;
-        velocity *= Mathf.Clamp01(1f - (drag * increment));
+        _velocity += Physics.gravity * _increment;
+        _velocity *= Mathf.Clamp01(1f - (_drag * _increment));
 
-        return velocity;
+        return _velocity;
     }
+}
+
+public struct CannonPrediction
+{
+    public Boat Hit;
+    public Vector3 Point;
 }
 
 public enum CannonState

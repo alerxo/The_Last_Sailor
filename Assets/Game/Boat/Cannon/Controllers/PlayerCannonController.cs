@@ -1,12 +1,10 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerCannonController : MonoBehaviour, IInteractable
 {
     private const float ROTATION_SPEED = 1f;
     private const float MOUSE_SPEED = 0.7f;
-    private const float MOUSE_ACCELERATION = 10f;
 
     [Tooltip("Target for the cannon camera")]
     [SerializeField] private Transform cameraTarget;
@@ -55,7 +53,7 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
     {
         if (cannon.State == CannonState.Ready)
         {
-            cannon.Fire();
+            cannon.Fire(CannonballOwner.Player);
             CameraManager.Instance.SetState(CameraState.Player);
             FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
             CameraManager.Instance.ShakeCamera(0.1f, 2f, 0.1f, 0.25f);

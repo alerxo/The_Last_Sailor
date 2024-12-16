@@ -12,7 +12,6 @@ public partial class StopMovingAction : Action
 
     protected override Status OnStart()
     {
-        Agent.Value.SetDistance(0);
         Agent.Value.Boat.Engine.ChangeThrottleTowards(0);
         Agent.Value.Boat.Engine.ChangeRudderTowards(0);
 
