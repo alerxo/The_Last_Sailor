@@ -584,6 +584,10 @@ PrefabInstance:
       propertyPath: m_ProbeSettings.influence.m_BoxBlendDistancePositive.z
       value: 0.685
       objectReference: {fileID: 0}
+    - target: {fileID: 5656455445754827648, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6176918098115149062, guid: b2df911dad1d59e4491a671107d633e0, type: 3}
       propertyPath: m_LocalPosition.y
       value: 5.1540003
