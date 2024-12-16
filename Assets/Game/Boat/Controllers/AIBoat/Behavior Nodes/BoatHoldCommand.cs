@@ -17,7 +17,7 @@ public partial class BoatDisperseCommandAction : Action
             return Status.Failure;
         }
 
-        Agent.Value.SetDestination(Agent.Value.HoldPosition);
+        Agent.Value.SetDestination(Agent.Value.HoldPosition.Value);
 
         return Status.Running;
     }

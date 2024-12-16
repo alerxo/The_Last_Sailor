@@ -110,7 +110,7 @@ public class CombatManager : MonoBehaviour
         if ((stateTimer -= Time.deltaTime) <= 0)
         {
             State = CombatManagerState.PreCombat;
-            Enemy.AIBoatController.SetDestination(null);
+            Enemy.AIBoatController.ClearTrail();
         }
     }
 

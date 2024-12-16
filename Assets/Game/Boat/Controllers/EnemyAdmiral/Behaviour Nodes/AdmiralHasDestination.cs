@@ -22,6 +22,6 @@ public partial class AdmiralHasDestinationAction : Action
 
     private bool HasDestination()
     {
-        return Agent.Value.AIBoatController.Destination != null;
+        return Agent.Value.AIBoatController.HasDestination();
     }
 }
