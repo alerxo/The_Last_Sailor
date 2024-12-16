@@ -31,8 +31,12 @@ public class WalkFoleyScript : MonoBehaviour
         {
             if(Time.time - timeSinceLastFootstep >= Random.Range(minTimeBetweenFootsteps,maxTimeBetweenFootsteps))
             {
-                AudioClip footstepSound = audioClips[Random.Range(0, audioClips.Length)];
-                audioSource.PlayOneShot(footstepSound);
+                int n = Random.Range(1, audioClips.Length);
+                AudioClip clip = audioClips[n];
+                audioSource.clip = clip;
+                audioSource.PlayOneShot(clip);
+                audioClips[n] = audioClips[0];
+                audioClips[0] = clip;
                 timeSinceLastFootstep = Time.time;
             }
         }
