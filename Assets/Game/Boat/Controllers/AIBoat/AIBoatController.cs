@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ public class AIBoatController : MonoBehaviour
     private readonly List<Vector3> Trail = new();
     public const int TRAIL_DISTANCE = 50;
     private int maxTrailCount = 10;
+    private const int MIN_TRAIL_ANGLE = 90;
 
     public float Speed { get; private set; } = 1f;
     public float Distance { get; private set; }
@@ -57,7 +59,7 @@ public class AIBoatController : MonoBehaviour
         {
             case AIBoatControllerState.Active:
                 SetDistance();
-                TryAddTrail();
+                UpdateTrail();
                 TryCheckForCollisions();
                 DebugDrawTrail();
                 break;
@@ -72,16 +74,23 @@ public class AIBoatController : MonoBehaviour
 
     private void SetDistance()
     {
-        Distance = Destination.HasValue 
-            ? Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(Destination.Value.x, Destination.Value.z)) 
+        Distance = Destination.HasValue
+            ? Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(Destination.Value.x, Destination.Value.z))
             : 0;
     }
 
-    private void TryAddTrail()
+    private void UpdateTrail()
     {
         if (Trail.Count > maxTrailCount)
         {
             ConsumeTrail();
+            return;
+        }
+
+        if (Trail.Count > 2 && HasBadTrail())
+        {
+            Trail.RemoveRange(0, 2);
+            return;
         }
 
         if (!HasDestination() || maxTrailCount == 0) return;
@@ -89,6 +98,11 @@ public class AIBoatController : MonoBehaviour
         if (Trail.Count > 0 && Vector3.Distance(Destination.Value, Trail[^1]) < TRAIL_DISTANCE) return;
 
         Trail.Add(Destination.Value);
+    }
+
+    private bool HasBadTrail()
+    {
+        return Vector3.Angle((transform.position - Trail[0]).normalized, (Trail[1] - Trail[0]).normalized) < MIN_TRAIL_ANGLE;
     }
 
     private void TryCheckForCollisions()

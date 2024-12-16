@@ -32,7 +32,7 @@ public partial class BoatMovesTowardsDestination : Action
             return Status.Failure;
         }
 
-        SetEngine();
+        MoveTowardsTrail();
 
         return Status.Success;
     }
@@ -52,31 +52,8 @@ public partial class BoatMovesTowardsDestination : Action
         return (Agent.Value.HasNextTrail() && distance <= AIBoatController.TRAIL_DISTANCE) || distance <= STOP_DISTANCE;
     }
 
-    private void SetEngine()
+    private void MoveTowardsTrail()
     {
-        if (IsTrailInFrontOfAgent()) MoveForward();
-        else TurnAround();
-    }
-
-    private bool IsTrailInFrontOfAgent()
-    {
-        return Vector3.Dot((Agent.Value.transform.position - Agent.Value.GetCurrentTrail()).normalized, Agent.Value.transform.forward) < 0;
-    }
-
-    private void TurnAround()
-    {
-        Agent.Value.Boat.Engine.ChangeThrottleTowards(0);
-        float cross = Vector3.Cross((Agent.Value.transform.position - Agent.Value.GetCurrentTrail()).normalized, Agent.Value.transform.forward).y;
-        cross = cross > 0 ? 1 : -1;
-        Agent.Value.Boat.Engine.ChangeRudderTowards(cross);
-    }
-
-    private void MoveForward()
-    {
-        float throttle = Mathf.Clamp01((Agent.Value.ForwardCollisionDistance - STOP_DISTANCE) / (APROACH_DISTANCE - STOP_DISTANCE));
-        throttle = Mathf.Clamp(Mathf.Pow(throttle, 3), 0.1f, 1);
-        Agent.Value.Boat.Engine.ChangeThrottleTowards(throttle * Agent.Value.Speed);
-
         float cross = Vector3.Cross((Agent.Value.transform.position - Agent.Value.GetCurrentTrail()).normalized, Agent.Value.transform.forward).y;
 
         if (Agent.Value.HasNextTrail())
@@ -86,5 +63,9 @@ public partial class BoatMovesTowardsDestination : Action
         }
 
         Agent.Value.Boat.Engine.ChangeRudderTowards(cross);
+
+        float throttle = Mathf.Clamp01((Agent.Value.ForwardCollisionDistance - STOP_DISTANCE) / (APROACH_DISTANCE - STOP_DISTANCE));
+        throttle = Mathf.Clamp(Mathf.Pow(throttle, 3), 0.1f, 1);
+        Agent.Value.Boat.Engine.ChangeThrottleTowards(throttle * Agent.Value.Speed * (1 - Mathf.Max(0.2f, Mathf.Abs(Agent.Value.Boat.Engine.Rudder))));
     }
 }
