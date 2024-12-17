@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Audio;
 using Random = UnityEngine.Random;
 
 public class WalkFoleyScript : MonoBehaviour
@@ -34,6 +35,7 @@ public class WalkFoleyScript : MonoBehaviour
                 int n = Random.Range(1, audioClips.Length);
                 AudioClip clip = audioClips[n];
                 audioSource.clip = clip;
+                audioSource.pitch = Random.Range(0.6f, 1.2f);
                 audioSource.PlayOneShot(clip);
                 audioClips[n] = audioClips[0];
                 audioClips[0] = clip;
