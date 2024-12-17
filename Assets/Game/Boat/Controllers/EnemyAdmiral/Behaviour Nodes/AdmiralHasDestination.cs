@@ -10,6 +10,9 @@ public partial class AdmiralHasDestinationAction : Action
 {
     [SerializeReference] public BlackboardVariable<EnemyAdmiralController> Agent;
     [SerializeReference] public BlackboardVariable<bool> IsInverted;
+
+    private const int CLEAR_TRAIL_DISTANCE = 100;
+
     protected override Status OnStart()
     {
         if (IsInverted)
@@ -22,6 +25,11 @@ public partial class AdmiralHasDestinationAction : Action
 
     private bool HasDestination()
     {
+        if (Agent.Value.AIBoatController.Distance < CLEAR_TRAIL_DISTANCE)
+        {
+            Agent.Value.AIBoatController.ClearTrail();
+        }
+
         return Agent.Value.AIBoatController.HasDestination();
     }
 }
