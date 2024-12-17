@@ -86,9 +86,7 @@ public class FleetScreen : UIScreen
 
     private void OnBuild()
     {
-        PlayerBoatController.Instance.AdmiralController.BuildBoat();
-        ResourceManager.Instance.BoatWasBuilt();
-
+        ResourceManager.Instance.BuildPlayerBoat();
         currentIndex = PlayerBoatController.Instance.AdmiralController.Fleet.Count - 1;
         Draw();
     }
@@ -242,8 +240,7 @@ public class FleetScreen : UIScreen
 
     private void OnRepair(Boat _boat)
     {
-        _boat.Repair();
-        ResourceManager.Instance.BoatWasRepaired(_boat);
+        ResourceManager.Instance.ReparBoat(_boat);
         Draw();
     }
 

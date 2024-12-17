@@ -247,17 +247,18 @@ public class PostCombatScreen : UIScreen
         yield return AnimateBorderWidth(background, 0.1f, 0, 5);
         yield return AnimateWidth(background, 1f, 0, 1000);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.75f);
 
         yield return AnimateHeight(content, 0.7f, 0, 700);
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.25f);
 
         for (int i = 0; i < Mathf.Max(playerColumnItems.Count, enemyColumnItems.Count); i++)
         {
             if (playerColumnItems.Count > i)
             {
                 playerColumnItems[i].SetEnabled(true);
+
             }
 
             if (enemyColumnItems.Count > i)
@@ -265,8 +266,22 @@ public class PostCombatScreen : UIScreen
                 enemyColumnItems[i].SetEnabled(true);
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return AnimateScrollviewScrollDown(resultColumns, 0.2f);
         }
+
+        yield return new WaitForSeconds(0.5f);
+
+        yield return AnimateScrollviewScrollUp(resultColumns, 0.5f);
+
+        yield return new WaitForSeconds(0.25f);
+
+        float gain = ResourceManager.Instance.GetEnemyFleetWorth();
+
+        yield return AnimateNumber(resourceCount, 1.5f, ResourceManager.Instance.Amount, ResourceManager.Instance.Amount + gain);
+
+        ResourceManager.Instance.AddResource(gain);
+
+        yield return new WaitForSeconds(0.25f);
 
         foreach (ScrollView scrollView in resultColumns)
         {

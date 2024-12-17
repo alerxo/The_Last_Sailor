@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -155,6 +156,59 @@ public abstract class UIScreen : MonoBehaviour
         }
 
         SetHeight(_target, _end);
+    }
+
+    protected IEnumerator AnimateNumber(Label _target, float _duration, float _start, float _end)
+    {
+        float timer = 0;
+
+        while ((timer += Time.unscaledDeltaTime) < _duration)
+        {
+            _target.text = FormatAnimatedNumber(Mathf.Lerp(_start, _end, timer / _duration));
+            yield return null;
+        }
+
+        _target.text = FormatAnimatedNumber(_end);
+    }
+
+    private string FormatAnimatedNumber(float _value)
+    {
+        return string.Format("{0:F1}", _value).Replace(".0", "");
+    }
+
+    protected IEnumerator AnimateScrollviewScrollUp(List<ScrollView> _targets, float _duration)
+    {
+        float timer = 0;
+
+        while ((timer += Time.unscaledDeltaTime) < _duration)
+        {
+            foreach (ScrollView scrollView in _targets)
+            {
+                scrollView.verticalScroller.value = Mathf.Lerp(scrollView.verticalScroller.highValue, scrollView.verticalScroller.lowValue, timer / _duration);
+            }
+
+            yield return null;
+        }
+
+        foreach (ScrollView scrollView in _targets)
+        {
+            scrollView.verticalScroller.value = scrollView.verticalScroller.lowValue;
+        }
+    }
+
+    protected IEnumerator AnimateScrollviewScrollDown(List<ScrollView> _targets, float _duration)
+    {
+        float timer = 0;
+
+        while ((timer += Time.unscaledDeltaTime) < _duration)
+        {
+            foreach (ScrollView scrollView in _targets)
+            {
+                scrollView.verticalScroller.ScrollPageDown(Time.unscaledDeltaTime * 5);
+            }
+
+            yield return null;
+        }
     }
 
     protected IEnumerator AnimateOpacity(List<VisualElement> _targets, float _duration, float _start, float _end)
