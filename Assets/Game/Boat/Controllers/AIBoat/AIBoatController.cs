@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,11 +8,6 @@ public class AIBoatController : MonoBehaviour
     public Boat Boat { get; private set; }
     public Admiral Admiral { get; private set; }
 
-    [SerializeField] private Transform[] rays;
-    private float forwardCollisionTimer;
-    private const float FORWARD_COLLISION_COOLDOWN = 1f;
-    public float ForwardCollisionDistance { get; private set; }
-
     public Command Command { get; private set; } = Command.Unassigned;
     public Vector3? FormationPosition { get; private set; }
     public Vector3? HoldPosition { get; private set; }
@@ -21,8 +15,10 @@ public class AIBoatController : MonoBehaviour
     private Vector3? Destination;
     private readonly List<Vector3> Trail = new();
     public const int TRAIL_DISTANCE = 50;
-    private int maxTrailCount = 10;
     private const int MIN_TRAIL_ANGLE = 90;
+    private int maxTrailCount = 0;
+
+    public Transform[] CollisionRays;
 
     public float Speed { get; private set; } = 1f;
     public float Distance { get; private set; }
@@ -36,8 +32,6 @@ public class AIBoatController : MonoBehaviour
 
     public void Awake()
     {
-        forwardCollisionTimer = Random.Range(0, FORWARD_COLLISION_COOLDOWN);
-
         Boat = GetComponent<Boat>();
 
         Boat.OnDestroyed += Boat_OnDestroyed;
@@ -60,7 +54,6 @@ public class AIBoatController : MonoBehaviour
             case AIBoatControllerState.Active:
                 SetDistance();
                 UpdateTrail();
-                TryCheckForCollisions();
                 DebugDrawTrail();
                 break;
 
@@ -81,7 +74,7 @@ public class AIBoatController : MonoBehaviour
 
     private void UpdateTrail()
     {
-        if (Trail.Count > maxTrailCount)
+        if (Trail.Count > maxTrailCount || (Trail.Count > 0 && Vector3.Distance(transform.position, Trail[0]) < TRAIL_DISTANCE))
         {
             ConsumeTrail();
             return;
@@ -97,43 +90,15 @@ public class AIBoatController : MonoBehaviour
         if (Trail.Count == 0 && Vector3.Distance(Destination.Value, transform.position) < BoatMovesTowardsDestination.STOP_DISTANCE) return;
         if (Trail.Count > 0 && Vector3.Distance(Destination.Value, Trail[^1]) < TRAIL_DISTANCE) return;
 
-        Trail.Add(Destination.Value);
+        if (Vector3.Distance(transform.position, Destination.Value) > TRAIL_DISTANCE)
+        {
+            Trail.Add(Destination.Value);
+        }
     }
 
     private bool HasBadTrail()
     {
         return Vector3.Angle((transform.position - Trail[0]).normalized, (Trail[1] - Trail[0]).normalized) < MIN_TRAIL_ANGLE;
-    }
-
-    private void TryCheckForCollisions()
-    {
-        if ((forwardCollisionTimer += Time.deltaTime) > FORWARD_COLLISION_COOLDOWN)
-        {
-            forwardCollisionTimer = 0f;
-            CheckForwardCollision();
-        }
-    }
-
-    private void CheckForwardCollision()
-    {
-        float distance = Distance;
-
-        foreach (Transform ray in rays)
-        {
-            if (Physics.Raycast(ray.position, ray.forward, out RaycastHit hit, BoatMovesTowardsDestination.APROACH_DISTANCE))
-            {
-                distance = Mathf.Min(hit.distance, distance);
-
-#if UNITY_EDITOR
-                if (IsDebugMode)
-                {
-                    Debug.DrawLine(ray.position, hit.point, Color.yellow, FORWARD_COLLISION_COOLDOWN);
-                }
-#endif
-            }
-        }
-
-        ForwardCollisionDistance = distance;
     }
 
     public Vector3 GetFormationPositionInWorld()
@@ -313,6 +278,9 @@ public class AIBoatController : MonoBehaviour
     public void SetDestination(Vector3 _destination)
     {
         _destination.y = 5;
+
+        if (Destination.HasValue && Vector3.Distance(_destination, Destination.Value) < 25) return;
+
         Destination = _destination;
     }
 

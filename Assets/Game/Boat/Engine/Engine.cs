@@ -95,9 +95,9 @@ public class Engine : MonoBehaviour
         steeringWheel.SetRotation(Rudder);
     }
 
-    public void ChangeRudderTowards(float _rudder)
+    public void ChangeRudderTowards(float _rudder, float _speed = 1)
     {
-        Rudder = Mathf.Clamp(Mathf.Lerp(Rudder, -_rudder, RUDDER_ACCELERATION * Time.deltaTime), -1, 1);
+        Rudder = Mathf.Clamp(Mathf.Lerp(Rudder, -_rudder, RUDDER_ACCELERATION * Time.deltaTime * _speed), -1, 1);
         steeringWheel.SetRotation(Rudder);
     }
 
@@ -107,9 +107,9 @@ public class Engine : MonoBehaviour
         throttle.SetRotation(Throttle);
     }
 
-    public void ChangeThrottleTowards(float _throttle)
+    public void ChangeThrottleTowards(float _throttle, float _speed = 1)
     {
-        Throttle = Mathf.Clamp(Mathf.Lerp(Throttle, _throttle, THROTTLE_ACCELERATION * Time.deltaTime), 0, 1);
+        Throttle = Mathf.Clamp(Mathf.Lerp(Throttle, _throttle, THROTTLE_ACCELERATION * Time.deltaTime * _speed), 0, 1);
         throttle.SetRotation(Throttle);
     }
 
