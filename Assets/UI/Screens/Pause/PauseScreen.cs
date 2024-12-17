@@ -44,6 +44,8 @@ public class PauseScreen : UIScreen
         SetMargin(button, 7, 0, 0, 0);
         SetFontSize(button, 35);
         button.text = _text;
+        button.clicked += UIManager.InvokeOnUIButtonClicked;
+        button.RegisterCallback<MouseEnterEvent>(evt => UIManager.InvokeOnUIButtonHovered());
         _parent.Add(button);
     }
 

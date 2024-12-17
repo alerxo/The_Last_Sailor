@@ -9,6 +9,10 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; }
 
     public static event UnityAction<UIState> OnStateChanged;
+    public static event UnityAction OnUIButtonClicked;
+    public static void InvokeOnUIButtonClicked() => OnUIButtonClicked?.Invoke();
+    public static event UnityAction OnUIButtonHovered;
+    public static void InvokeOnUIButtonHovered() => OnUIButtonHovered.Invoke();
 
     public UIState State { get; private set; } = UIState.TitleScreen;
     private readonly List<UIState> pauseScreens = new() { UIState.Pause, UIState.Options };

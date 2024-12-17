@@ -7,11 +7,12 @@ using UnityEngine.UIElements;
 public class FleetScreen : UIScreen
 {
     public static event UnityAction OnBoatUpgraded;
+    public static event UnityAction OnBoatBuilt;
+    public static event UnityAction OnBoatRepaired;
     protected override List<UIState> ActiveStates => new() { UIState.Fleet };
 
     private VisualElement container;
     private int currentIndex;
-
 
     private void Awake()
     {
@@ -86,9 +87,8 @@ public class FleetScreen : UIScreen
 
     private void OnBuild()
     {
-        PlayerBoatController.Instance.AdmiralController.BuildBoat();
-        ResourceManager.Instance.BoatWasBuilt();
-
+        ResourceManager.Instance.BuildPlayerBoat();
+        OnBoatBuilt?.Invoke();
         currentIndex = PlayerBoatController.Instance.AdmiralController.Fleet.Count - 1;
         Draw();
     }
@@ -242,8 +242,8 @@ public class FleetScreen : UIScreen
 
     private void OnRepair(Boat _boat)
     {
-        _boat.Repair();
-        ResourceManager.Instance.BoatWasRepaired(_boat);
+        ResourceManager.Instance.ReparBoat(_boat);
+        OnBoatRepaired?.Invoke();
         Draw();
     }
 

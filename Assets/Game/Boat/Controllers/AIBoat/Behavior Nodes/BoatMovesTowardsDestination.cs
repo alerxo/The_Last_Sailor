@@ -3,13 +3,15 @@ using Unity.Behavior;
 using UnityEngine;
 using Action = Unity.Behavior.Action;
 using Unity.Properties;
+using Unity.VisualScripting;
+using Unity.AppUI.UI;
 
 [Serializable, GeneratePropertyBag]
 [NodeDescription(name: "BoatMovesTowardsDestination", story: "[Agent] moves towards destination", category: "Action", id: "afc8648216910974edd7c9623d54b904")]
 public partial class BoatMovesTowardsDestination : Action
 {
     [SerializeReference] public BlackboardVariable<AIBoatController> Agent;
-    public const float APROACH_DISTANCE = 100f;
+    public const float APROACH_DISTANCE = 50f;
     public const float STOP_DISTANCE = 5f;
     private float trailDistance;
     private RaycastHit obstacle;
@@ -67,17 +69,22 @@ public partial class BoatMovesTowardsDestination : Action
                 {
                     closestHit = hit;
                 }
-#if UNITY_EDITOR
-                if (Agent.Value.IsDebugMode)
-                {
-                    Debug.DrawLine(ray.position, hit.point, Color.yellow, 0.2f);
-                }
-#endif
             }
         }
 
-        float angle = Vector3.Angle(Agent.Value.transform.forward, (closestHit.point - Agent.Value.transform.position).normalized);
-        closestHit.distance *= Mathf.Lerp(1f, 3f, angle / 90f);
+        if (closestHit.distance < APROACH_DISTANCE)
+        {
+            float angle = Vector3.Angle(Agent.Value.transform.forward, (closestHit.point - Agent.Value.transform.position).normalized);
+            float brake = Mathf.Lerp(1f, 4f, Mathf.Clamp01(angle / 90f));
+            closestHit.distance *= brake;
+
+#if UNITY_EDITOR
+            if (Agent.Value.IsDebugMode)
+            {
+                Debug.DrawLine(Agent.Value.transform.position, closestHit.point, Color.Lerp(Color.red, Color.green, closestHit.distance / APROACH_DISTANCE), 0.1f);
+            }
+#endif
+        }
 
         obstacle = closestHit;
     }
@@ -94,7 +101,9 @@ public partial class BoatMovesTowardsDestination : Action
 
         if (obstacle.distance < APROACH_DISTANCE)
         {
-            cross -= Vector3.Cross((Agent.Value.transform.position - obstacle.point).normalized, Agent.Value.transform.forward).y;
+            float obstacleCross = -Vector3.Cross((Agent.Value.transform.position - obstacle.point).normalized, Agent.Value.transform.forward).y;
+            obstacleCross = obstacleCross > 0 ? 1 : -1;
+            cross += obstacleCross;
             cross /= 2;
         }
 
@@ -103,8 +112,9 @@ public partial class BoatMovesTowardsDestination : Action
 
     private void SetThrottle()
     {
-        float throttle = Mathf.Clamp01((Mathf.Min(obstacle.distance, trailDistance) - STOP_DISTANCE) / (APROACH_DISTANCE - STOP_DISTANCE));
-        throttle = Mathf.Clamp(Mathf.Pow(throttle, 3), 0.1f, 1);
-        Agent.Value.Boat.Engine.ChangeThrottleTowards(throttle * Agent.Value.Speed * (1 - Mathf.Max(0.2f, Mathf.Abs(Agent.Value.Boat.Engine.Rudder))), 5);
+        float approach = Mathf.Clamp01((Mathf.Min(obstacle.distance, trailDistance) - STOP_DISTANCE) / (APROACH_DISTANCE - STOP_DISTANCE));
+        approach = Mathf.Clamp(Mathf.Pow(approach, 3), 0.1f, 1);
+        float rudder = Mathf.Lerp(1f, 0.5f, Mathf.Abs(Mathf.Clamp01(Agent.Value.Boat.Engine.Rudder - 0.5f)));
+        Agent.Value.Boat.Engine.ChangeThrottleTowards(approach * Agent.Value.Speed * rudder, 10);
     }
 }
