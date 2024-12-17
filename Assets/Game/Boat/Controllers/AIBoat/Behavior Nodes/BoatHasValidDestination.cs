@@ -13,12 +13,11 @@ public partial class IsAtDestinationAction : Action
 
     protected override Status OnStart()
     {
-
-
-        
+        if (!Agent.Value.HasTrail())
+        {
+            return Status.Failure;
+        }
 
         return  Status.Success;
     }
-
-
 }

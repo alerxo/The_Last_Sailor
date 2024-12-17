@@ -57,6 +57,6 @@ public partial class BoatRotatesTowardsEnemyAction : Action
         float cross = Vector3.Cross((Agent.Value.transform.position - _position).normalized, Agent.Value.transform.forward).y;
         float rotation = Vector3.Cross((Agent.Value.transform.position - _position).normalized, cross > 0 ? Agent.Value.transform.right : -Agent.Value.transform.right).y;
 
-        Agent.Value.Boat.Engine.ChangeRudderTowards(rotation);
+        Agent.Value.Boat.Engine.ChangeRudderTowards(rotation, 10);
     }
 }

@@ -1,5 +1,129 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1460788294029791015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4218100189589345645}
+  m_Layer: 0
+  m_Name: Ray (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4218100189589345645
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460788294029791015}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.70090926, z: 0, w: 0.71325046}
+  m_LocalPosition: {x: 6, y: 0, z: -9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3997585563649847492}
+  m_LocalEulerAnglesHint: {x: 0, y: 89, z: 0}
+--- !u!1 &4154954077558108926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7168352752804050128}
+  m_Layer: 0
+  m_Name: Ray (5)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7168352752804050128
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4154954077558108926}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.70090926, z: 0, w: 0.7132505}
+  m_LocalPosition: {x: -6, y: 0, z: -9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3997585563649847492}
+  m_LocalEulerAnglesHint: {x: 0, y: -89, z: 0}
+--- !u!1 &4428244655556601710
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8083981624853687286}
+  m_Layer: 0
+  m_Name: Ray (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8083981624853687286
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4428244655556601710}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: 6, y: 0, z: -9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3997585563649847492}
+  m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
+--- !u!1 &5645994824029051447
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8669648066041300892}
+  m_Layer: 0
+  m_Name: Ray (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8669648066041300892
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5645994824029051447}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.3907311, z: 0, w: 0.9205049}
+  m_LocalPosition: {x: -6, y: 0, z: -9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3997585563649847492}
+  m_LocalEulerAnglesHint: {x: 0, y: -46, z: 0}
 --- !u!1 &6611362575055380612
 GameObject:
   m_ObjectHideFlags: 0
@@ -25,12 +149,16 @@ Transform:
   m_GameObject: {fileID: 6611362575055380612}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 20}
+  m_LocalPosition: {x: 0, y: 0, z: 18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3702751647370380070}
   - {fileID: 5094315258674555366}
+  - {fileID: 8083981624853687286}
+  - {fileID: 8669648066041300892}
+  - {fileID: 4218100189589345645}
+  - {fileID: 7168352752804050128}
   m_Father: {fileID: 7573212441424928559}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8508910299540153640
@@ -212,9 +340,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9aefac43a7bee04ea7dc50f1e6a518d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rays:
+  CollisionRays:
   - {fileID: 3702751647370380070}
   - {fileID: 5094315258674555366}
+  - {fileID: 8083981624853687286}
+  - {fileID: 8669648066041300892}
+  - {fileID: 4218100189589345645}
+  - {fileID: 7168352752804050128}
   IsDebugMode: 0
 --- !u!114 &3960747803573023257
 MonoBehaviour:
@@ -269,7 +401,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cannonTransform: {fileID: 6410993336311919162}
-  cross: 0
 --- !u!4 &996366773861597307 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7828946233949179286, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
@@ -293,7 +424,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cannonTransform: {fileID: 4659793805286063072}
-  cross: 0
 --- !u!1 &1442890225233989954 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8463356959374777519, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
@@ -312,7 +442,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cannonTransform: {fileID: 5166265403327599406}
-  cross: 0
 --- !u!4 &1482854403082071584 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8494324817124467661, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
@@ -336,7 +465,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cannonTransform: {fileID: 8212071800093495036}
-  cross: 0
 --- !u!4 &4659793805286063072 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2440711946405525005, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
@@ -360,7 +488,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cannonTransform: {fileID: 1482854403082071584}
-  cross: 0
 --- !u!4 &5166265403327599406 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2794356371893706435, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
@@ -389,7 +516,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cannonTransform: {fileID: 996366773861597307}
-  cross: 0
 --- !u!4 &7573212441424928559 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 607066503725585090, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}

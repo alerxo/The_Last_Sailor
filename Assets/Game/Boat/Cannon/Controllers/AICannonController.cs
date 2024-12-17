@@ -131,6 +131,8 @@ public class AICannonController : MonoBehaviour
 
     private void GetNewAimOffset()
     {
+        if (target == null) return;
+
         float t = Mathf.Clamp(Vector3.Distance(transform.position, target.transform.position) - MIN_DISTANCE_AIM_OFFSET, 0, MAX_DISTANCE_AIM_OFFSET);
         currentAimOffset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)) * Mathf.Lerp(0, Random.Range(0f, aimOffset), t);
     }
