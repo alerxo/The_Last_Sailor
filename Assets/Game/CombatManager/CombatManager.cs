@@ -122,6 +122,7 @@ public class CombatManager : MonoBehaviour
             Enemy.SetEnemy(player.AdmiralController);
             OnAdmiralInCombatChanged?.Invoke(Enemy);
 
+            Enemy.AIBoatController.ClearTrail();
             State = CombatManagerState.Combat;
         }
     }

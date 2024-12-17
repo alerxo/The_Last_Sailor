@@ -20,8 +20,8 @@ public class AIBoatController : MonoBehaviour
     private Vector3? Destination;
     private readonly List<Vector3> Trail = new();
     public const int TRAIL_DISTANCE = 50;
-    private int maxTrailCount = 10;
     private const int MIN_TRAIL_ANGLE = 90;
+    private int maxTrailCount = 0;
 
     public float Speed { get; private set; } = 1f;
     public float Distance { get; private set; }
