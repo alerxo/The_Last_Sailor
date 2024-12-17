@@ -206,7 +206,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -303,13 +303,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioClips:
-  - {fileID: 8300000, guid: 241b458c59b05844f807bcc8aed112d3, type: 3}
-  - {fileID: 8300000, guid: 5fa26e2832515db4fafb04c1d747d3fd, type: 3}
-  - {fileID: 8300000, guid: 052c11e3c5f4c5044bc506a6c8ebefa4, type: 3}
-  - {fileID: 8300000, guid: 6c5a3d4f6ed75914f9b8050ccd86d101, type: 3}
-  - {fileID: 8300000, guid: eeb12d4f87bea4d4ba06865de2041ab0, type: 3}
-  - {fileID: 8300000, guid: d668f1a0daf8084479fde4b74f646909, type: 3}
-  - {fileID: 8300000, guid: 6f04b201fecb8b1409fd2bb35bb2520f, type: 3}
+  - {fileID: 8300000, guid: a3fc0d0c2674eea4b99f57f27a23a721, type: 3}
+  - {fileID: 8300000, guid: aad1fe8b624a14b46825ebb52dd10e8c, type: 3}
+  - {fileID: 8300000, guid: 6f2d818553e775a418ac5d87a62401db, type: 3}
+  - {fileID: 8300000, guid: 61352a84fd043754aaf51e7f41272dbc, type: 3}
   minTimeBetweenFootsteps: 0.3
   maxTimeBetweenFootsteps: 0.6
   minTimeBetweenFootstepsNormal: 0.3
