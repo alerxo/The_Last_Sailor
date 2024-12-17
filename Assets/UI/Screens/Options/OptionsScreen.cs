@@ -65,6 +65,7 @@ public class OptionsScreen : UIScreen
         slider.AddToClassList("options-item-slider");
         slider.SetValueWithoutNotify(_current);
         slider.RegisterValueChangedCallback(evt => _onSet(evt.newValue));
+        slider.RegisterCallback<MouseEnterEvent>(evt => UIManager.InvokeOnUIButtonHovered());
         sliderContainer.Add(slider);
     }
 }
