@@ -1,5 +1,5 @@
 .command-container {
-	justify-content: flex-end;
+	justify-content: center;
 	align-items: flex-start;
 
 	width: 100%;
@@ -8,27 +8,21 @@
 
 .command-button-container { }
 
-.command-top-container { 
-
-	justify-content: flex-start;
-	align-items: flex-start;
-}
-
-.command-top-follow-container {
+.command-follow-container {
 	flex-direction: row-reverse;
 }
 
-.command-top-formation-container {
+.command-formation-container {
 	justify-content: space-around;
 }
 
-.command-top-formation-button { 
+.command-formation-button { 
 	transition-property: scale, translate;
 	transition-duration: 250ms;
 }
 
-.command-top-formation-button:disabled {
-	opacity: 1;
+.command-formation-button:disabled {
+	opacity: 0;
 	translate: -200%, 0px;
 
 	transition-property: scale, translate;
@@ -36,9 +30,9 @@
 	transition-timing-function: ease-in-out;
 }
 
-.command-top-button { }
+.command-button { }
 
-.command-top-button:disabled {
+.command-button:disabled {
 	opacity: 1;
 	scale: 1.10;
 
@@ -47,8 +41,23 @@
 	transition-timing-function: ease-in-out;
 }
 
-.command-top-button-text { 
-	margin: 0px;
+.command-button-header-container {
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	width: 100%;
 }
 
-.command-change-view-button { }
+.command-button-input {
+	color: #e3e3e3;
+	border-color: #e3e3e3;
+	background-color: rgba(0, 0, 0, 0.9);
+	-unity-text-align: middle-center;
+}
+
+.command-button-text { 
+	margin: 0px;
+		
+	color: #2b2b2b;
+}

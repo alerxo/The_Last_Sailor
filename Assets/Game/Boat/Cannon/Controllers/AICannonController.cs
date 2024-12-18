@@ -22,10 +22,10 @@ public class AICannonController : MonoBehaviour
     private const float PREDICTION_COOLDOWN = 0.1f;
 
     private Vector3 currentAimOffset;
-    private const float MAX_AIM_OFFSET = 200f;
+    private const float MAX_AIM_OFFSET = 300f;
+    private const float MIN_AIM_OFFSET = 50f;
     private const float MAX_DISTANCE_AIM_OFFSET = 300f;
-    private const int MIN_DISTANCE_AIM_OFFSET = 50;
-    private const float MIN_AIM_OFFSET = 0.2f;
+    private const float MIN_DISTANCE_AIM_OFFSET = 50f;
     private const float ZERO_IN_SPEED = 0.8f;
     private float aimOffset;
 
@@ -133,7 +133,7 @@ public class AICannonController : MonoBehaviour
     {
         if (target == null) return;
 
-        float t = Mathf.Clamp(Vector3.Distance(transform.position, target.transform.position) - MIN_DISTANCE_AIM_OFFSET, 0, MAX_DISTANCE_AIM_OFFSET);
+        float t = Mathf.Clamp(Vector3.Distance(transform.position, target.transform.position) - MIN_DISTANCE_AIM_OFFSET, MIN_AIM_OFFSET, MAX_DISTANCE_AIM_OFFSET);
         currentAimOffset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)) * Mathf.Lerp(0, Random.Range(0f, aimOffset), t);
     }
 
@@ -222,7 +222,7 @@ public class AICannonController : MonoBehaviour
 
     private void ZeroInAimOffset()
     {
-        aimOffset = Mathf.Clamp(aimOffset * ZERO_IN_SPEED, MIN_AIM_OFFSET, 1);
+        aimOffset = Mathf.Clamp(aimOffset * ZERO_IN_SPEED, 0, 1);
         GetNewAimOffset();
     }
 

@@ -65,6 +65,7 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
         if (_state != PlayerState.Cannon)
         {
             input.Player.Disable();
+            TutorialScreen.Instance.HideTutorial(TutorialType.Cannon);
         }
     }
 
@@ -75,6 +76,7 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
             CameraManager.Instance.SetInteractionCamera(cameraTarget, this);
             FirstPersonController.Instance.SetState(PlayerState.Cannon);
             input.Player.Enable();
+            TutorialScreen.Instance.ShowInputTooltip(TutorialType.Cannon);
         }
     }
 }

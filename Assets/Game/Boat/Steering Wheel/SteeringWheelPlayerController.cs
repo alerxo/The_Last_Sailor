@@ -59,6 +59,7 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
         if (input.Player.Move.ReadValue<Vector2>().x != 0)
         {
             Boat.Engine.ChangeRudder(input.Player.Move.ReadValue<Vector2>().x);
+
             if (!turningAudioSource.isPlaying && allowSqueekPlayed)
             {
                 turningAudioSource.volume = 0.7f;
@@ -70,20 +71,25 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
         else if (Mathf.Abs(Boat.Engine.Rudder) < FORCE_STRAIGHTEN_UP_MARGIN)
         {
             turningAudioSource.volume = turningAudioSource.volume - 0.04f;
+
             if (turningAudioSource.volume == 0)
             {
                 turningAudioSource.Stop();
             }
+
             Boat.Engine.ChangeRudderTowards(0);
         }
+
         else
         {
             turningAudioSource.volume = turningAudioSource.volume - 0.03f;
+
             if (turningAudioSource.volume == 0)
             {
                 turningAudioSource.Stop();
             }
         }
+
         if (Boat.Engine.Rudder >= 1f || Boat.Engine.Rudder <= -1f)
         {
             if (!stopTurningAudioSource.isPlaying && stopTurningPlayed == false)
@@ -94,6 +100,7 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
                 stopTurningAudioSource.Play();
             }
         }
+
         if (Boat.Engine.Rudder < 1f && Boat.Engine.Rudder > -1f)
         {
             allowSqueekPlayed = true;
@@ -131,11 +138,13 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
         {
             input.Player.Enable();
             StartCoroutine(ForcePlayerAtPosition());
+            TutorialScreen.Instance.ShowInputTooltip(TutorialType.Steering);
         }
 
         else
         {
             input.Player.Disable();
+            TutorialScreen.Instance.HideTutorial(TutorialType.Steering);
         }
     }
 

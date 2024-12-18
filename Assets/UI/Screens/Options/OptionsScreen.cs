@@ -7,25 +7,26 @@ public class OptionsScreen : UIScreen
 {
     protected override List<UIState> ActiveStates => new() { UIState.Options };
 
+    [SerializeField] private Texture2D backgroundImage;
+
     public override void Generate()
     {
         VisualElement container = new();
         container.AddToClassList("options-container");
         Root.Add(container);
 
-        Box background = new();
+        VisualElement background = new();
         background.AddToClassList("options-background");
         SetSize(background, 503, 521);
         SetPadding(background, 50);
-        SetBorderWidthRadius(background, 0, 10);
+        background.style.backgroundImage = backgroundImage;
         container.Add(background);
 
         Button returnButton = new(() => UIManager.Instance.ReturnFromOptions());
         returnButton.AddToClassList("options-return-button");
-        SetMargin(returnButton, 0, 50, 0, 0);
-        SetBorderWidthRadius(returnButton, 5, 10);
-        SetFontSize(returnButton, 30);
-        returnButton.text = "Return";
+        SetMargin(returnButton, 7, 0, 0, 0);
+        SetFontSize(returnButton, 35);
+        returnButton.text = "-Return-";
         background.Add(returnButton);
 
         CreateSlider(background, "Master Volume", SoundSettingsManager.Instance.GetMasterVolume(), (f) => SoundSettingsManager.Instance.SetMasterVolume(f));

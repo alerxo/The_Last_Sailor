@@ -11,10 +11,13 @@
 	justify-content: center;
 	align-items: center;
 
+	border-color: #2b2b2b;
+
 	overflow: hidden;
 }
 
 .hud-admiral-text { 
+	color: #2b2b2b;
 	-unity-text-align: middle-center;
 }
 
@@ -42,6 +45,8 @@
 .hud-interaction-text { 
 	margin: 0px;
 	padding: 0px;
+
+	color: #2b2b2b;
 }
 
 .hud-exit-interaction-background {

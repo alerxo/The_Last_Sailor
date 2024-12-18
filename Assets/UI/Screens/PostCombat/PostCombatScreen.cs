@@ -244,6 +244,9 @@ public class PostCombatScreen : UIScreen
         Button button = new(() => SceneManager.LoadScene("Game"));
         button.AddToClassList("main-button");
         button.AddToClassList("post-combat-navigation-button");
+        SetMargin(button, 40, 40, 0, 0);
+        SetPadding(button, 20, 20, 50, 50);
+        SetBorderWidthRadius(button, 5, 16);
         SetFontSize(button, 35);
         button.text = "Return to main menu";
         _parent.Add(button);

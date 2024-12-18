@@ -118,21 +118,6 @@ public class UIManager : MonoBehaviour
 
     private void Escape_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        switch (State)
-        {
-            case UIState.HUD when CommandScreen.Instance.State != CommandScreenState.Hidden:
-                CommandScreen.Instance.ForceHide();
-                return;
-
-            case UIState.HUD:
-                SetState(UIState.Pause);
-                return;
-
-            case UIState.Pause:
-                SetState(UIState.HUD);
-                return;
-        }
-
         switch (FirstPersonController.Instance.State)
         {
             case PlayerState.Cannon:
@@ -145,6 +130,21 @@ public class UIManager : MonoBehaviour
                 return;
             case PlayerState.Formation:
                 ExitFormationView();
+                return;
+        }
+
+        switch (State)
+        {
+            case UIState.HUD when CommandScreen.Instance.State != CommandScreenState.Hidden:
+                CommandScreen.Instance.ForceHide();
+                return;
+
+            case UIState.HUD:
+                SetState(UIState.Pause);
+                return;
+
+            case UIState.Pause:
+                SetState(UIState.HUD);
                 return;
         }
     }
