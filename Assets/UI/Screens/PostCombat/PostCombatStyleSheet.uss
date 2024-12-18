@@ -87,6 +87,10 @@
 
 /* Navigation */
 
+.post-combat-navigation-button-container {
+	flex-direction: row;
+}
+
 .post-combat-navigation-button { }
 
 /* Scroll view */

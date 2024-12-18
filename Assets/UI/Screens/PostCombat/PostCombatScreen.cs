@@ -74,8 +74,20 @@ public class PostCombatScreen : UIScreen
         CreatePlayerColumn(resultsContainer);
         CreateEnemyColumn(resultsContainer, _enemyAdmiralController);
 
-        if (_result != BattleResult.Defeat) CreateContinueButton(content);
-        else CreateDefeatButton(content);
+        switch (_result)
+        {
+            case BattleResult.Defeat:
+                CreateDefeatButton(content);
+                break;
+
+            case BattleResult.Victory:
+                CreateContinueButton(content);
+                break;
+
+            case BattleResult.BossDefeated:
+                CreateBossDefeatedContainer(content);
+                break;
+        }
 
         StartCoroutine(ShowPostCombatScreen());
         ResourceManager_OnResourceAmountChanged(ResourceManager.Instance.Amount);
@@ -84,11 +96,23 @@ public class PostCombatScreen : UIScreen
 
     private void CreateHeader(VisualElement _parent, BattleResult _battleResult)
     {
-        Label header = new(_battleResult.ToString());
+        Label header = new();
         header.AddToClassList("post-combat-header");
         SetMargin(header, 20);
         SetFontSize(header, 70);
         _parent.Add(header);
+
+        switch (_battleResult)
+        {
+            case BattleResult.Defeat:
+            case BattleResult.Victory:
+                header.text = _battleResult.ToString();
+                break;
+
+            case BattleResult.BossDefeated:
+                header.text = "Final Admiral Defeated";
+                break;
+        }
     }
 
     private VisualElement CreateContentContainer()
@@ -215,6 +239,16 @@ public class PostCombatScreen : UIScreen
 
     // Navigation
 
+    private void CreateDefeatButton(VisualElement _parent)
+    {
+        Button button = new(() => SceneManager.LoadScene("Game"));
+        button.AddToClassList("main-button");
+        button.AddToClassList("post-combat-navigation-button");
+        SetFontSize(button, 35);
+        button.text = "Return to main menu";
+        _parent.Add(button);
+    }
+
     private void CreateContinueButton(VisualElement _parent)
     {
         Button button = new(() => CombatManager.Instance.BattleResultsCompleted());
@@ -228,14 +262,37 @@ public class PostCombatScreen : UIScreen
         _parent.Add(button);
     }
 
-    private void CreateDefeatButton(VisualElement _parent)
+    private void CreateBossDefeatedContainer(VisualElement _parent)
     {
-        Button button = new(() => SceneManager.LoadScene("Game"));
-        button.AddToClassList("main-button");
-        button.AddToClassList("post-combat-navigation-button");
-        SetFontSize(button, 35);
-        button.text = "Return to main menu";
-        _parent.Add(button);
+        VisualElement container = new();
+        container.AddToClassList("post-combat-navigation-button-container");
+        _parent.Add(container);
+
+        Button mainMenu = new(() => OnMainMenu());
+        mainMenu.AddToClassList("main-button");
+        mainMenu.AddToClassList("post-combat-navigation-button");
+        SetMargin(mainMenu, 40, 40, 0, 40);
+        SetPadding(mainMenu, 20, 20, 50, 50);
+        SetBorderWidthRadius(mainMenu, 5, 16);
+        SetFontSize(mainMenu, 35);
+        mainMenu.text = "Main Menu";
+        _parent.Add(mainMenu);
+
+        Button freeplay = new(() => CombatManager.Instance.BattleResultsCompleted());
+        freeplay.AddToClassList("main-button");
+        freeplay.AddToClassList("post-combat-navigation-button");
+        SetMargin(freeplay, 40, 40, 40, 0);
+        SetPadding(freeplay, 20, 20, 50, 50);
+        SetBorderWidthRadius(freeplay, 5, 16);
+        SetFontSize(freeplay, 35);
+        freeplay.text = "Endless Freeplay";
+        _parent.Add(freeplay);
+    }
+
+    private void OnMainMenu()
+    {
+        UIManager.Instance.SetState(UIState.TitleScreen);
+        SceneManager.LoadScene("Game");
     }
 
     public IEnumerator ShowPostCombatScreen()
