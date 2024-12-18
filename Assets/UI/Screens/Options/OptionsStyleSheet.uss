@@ -10,7 +10,12 @@
 	align-items: center;
 }
 
-.options-return-button { }
+.options-return-button { 
+	border-width: 0px;
+
+	background-color: rgba(0, 0, 0, 0.0);
+	color: #e3e3e3;
+}
 
 .options-item-container {
 	flex-direction: row;
@@ -20,7 +25,9 @@
 	width: 100%;
 }
 
-.options-item-label { }
+.options-item-label { 
+	color: #e3e3e3;
+}
 
 /* Slider */
 
@@ -42,12 +49,12 @@
 .unity-base-slider__tracker {
 	border-width: 0px;
 
-	background-color: black;
+	background-color: #e3e3e3;
 }
 
 .unity-base-slider__dragger {
 	border-width: 1px;
 
-	border-color: black;
-	background-color: white;
+	border-color: #2b2b2b;
+	background-color: #bfbdbd;
 }

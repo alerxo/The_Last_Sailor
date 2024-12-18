@@ -50,12 +50,14 @@
 }
 
 .command-button-input {
-	color: white;
-	border-color: white;
+	color: #e3e3e3;
+	border-color: #e3e3e3;
 	background-color: rgba(0, 0, 0, 0.9);
 	-unity-text-align: middle-center;
 }
 
 .command-button-text { 
 	margin: 0px;
+		
+	color: #2b2b2b;
 }

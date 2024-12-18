@@ -135,7 +135,7 @@ public class CommandScreen : UIScreen
 
             else
             {
-                SetBorderColor(commandButtons[command], defaultMaterial.color);
+                SetBorderColor(commandButtons[command], Color.black);
                 commandButtons[command].SetEnabled(true);
             }
         }

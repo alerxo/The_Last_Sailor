@@ -10,7 +10,7 @@
 .title-screen-title {
 	-unity-font-definition: url("project://database/Assets/UI/Fonts/UnifrakturCook/UnifrakturCook-Bold.ttf");
 	-unity-text-align: middle-center;
-	color: white;
+	color: #e3e3e3;
 }
 
 /* Button */
@@ -21,5 +21,5 @@
 	border-width: 0px;
 
 	background-color: rgba(0, 0, 0, 0.0);
-	color: white;
+	color: #e3e3e3;
 }
