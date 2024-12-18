@@ -9,16 +9,32 @@
 /* boat list */
 
 .fleet-boat-list-background {
+	justify-content: space-around;
 	align-items: center;
 	align-self: flex-end;
 
-	width: 20%;
 	height: 60%;
 
 	background-color: rgba(200, 200, 200, 0.5);
 }
 
-.fleet-boat-list-container { }
+/* Buttons */
+
+.fleet-boat-list-buttons { 
+	flex-direction: row;
+}
+
+.fleet-boat-list-button {
+	margin: 0px;
+}
+
+/* List */
+
+.fleet-boat-list-container { 
+	height: 80%;
+
+	border-color: black;
+}
 
 .fleet-boat-list-item {
 	background-color: rgba(150, 150, 150, 0.8);

@@ -310,25 +310,11 @@ public class PostCombatScreen : UIScreen
 
         yield return new WaitForSeconds(0.25f);
 
-        for (int i = 0; i < Mathf.Max(playerColumnItems.Count, enemyColumnItems.Count); i++)
-        {
-            if (playerColumnItems.Count > i)
-            {
-                playerColumnItems[i].SetEnabled(true);
+        yield return AnimateScrollviewScrollDown(resultColumns, playerColumnItems, enemyColumnItems, 0.25f);
 
-            }
+        yield return new WaitForSeconds(0.6f);
 
-            if (enemyColumnItems.Count > i)
-            {
-                enemyColumnItems[i].SetEnabled(true);
-            }
-
-            yield return AnimateScrollviewScrollDown(resultColumns, 0.2f);
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        yield return AnimateScrollviewScrollUp(resultColumns, 0.5f);
+        yield return AnimateScrollviewScrollUp(resultColumns, 1f);
 
         yield return new WaitForSeconds(0.25f);
 

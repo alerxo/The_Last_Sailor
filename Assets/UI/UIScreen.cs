@@ -196,18 +196,41 @@ public abstract class UIScreen : MonoBehaviour
         }
     }
 
-    protected IEnumerator AnimateScrollviewScrollDown(List<ScrollView> _targets, float _duration)
+    protected IEnumerator AnimateScrollviewScrollDown(List<ScrollView> _targets, List<VisualElement> _player, List<VisualElement> _enemy, float _durationPerItem)
     {
-        float timer = 0;
+        float totalTimer = 0;
+        float totalDuration = Mathf.Max(_enemy.Count, _player.Count) * _durationPerItem;
 
-        while ((timer += Time.unscaledDeltaTime) < _duration)
+        for (int i = 0; i < Mathf.Max(_player.Count, _enemy.Count); i++)
         {
-            foreach (ScrollView scrollView in _targets)
+            float timer = 0;
+
+            if (_player.Count > i)
             {
-                scrollView.verticalScroller.ScrollPageDown(Time.unscaledDeltaTime * 3.5f);
+                _player[i].SetEnabled(true);
             }
 
-            yield return null;
+            if (_enemy.Count > i)
+            {
+                _enemy[i].SetEnabled(true);
+            }
+
+            while ((timer += Time.unscaledDeltaTime) < _durationPerItem)
+            {
+                totalTimer += Time.unscaledDeltaTime;
+
+                foreach (ScrollView scrollView in _targets)
+                {
+                    scrollView.verticalScroller.value = Mathf.Lerp(scrollView.verticalScroller.lowValue, scrollView.verticalScroller.highValue, totalTimer / totalDuration);
+                }
+
+                yield return null;
+            }
+        }
+
+        foreach (ScrollView scrollView in _targets)
+        {
+            scrollView.verticalScroller.value = scrollView.verticalScroller.highValue;
         }
     }
 
