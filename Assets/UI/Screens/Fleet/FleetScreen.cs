@@ -265,7 +265,7 @@ public class FleetScreen : UIScreen
         SetBorderWidthRadius(button, 3, 7);
         SetFontSize(button, 22);
         button.text = $"+ {_admiral.GetSubordinateCapIncrease} Fleet Size (-{_admiral.GetSubordinateUpgradeCost} R)";
-        button.SetEnabled(ResourceManager.Instance.Amount >= _admiral.GetSubordinateUpgradeCost && _admiral.CanUpgradeSubodinateCap);
+        button.SetEnabled(_admiral.CanUpgradeSubodinateCap);
         container.Add(button);
 
         return button;
@@ -295,7 +295,7 @@ public class FleetScreen : UIScreen
         button.AddToClassList("fleet-current-upgrade-button");
         SetBorderWidthRadius(button, 3, 7);
         SetFontSize(button, 22);
-        button.text = $"+ {_boat.GetUpgradeIncreasePercentage(_type)}% {_boat.GetModifierDescription(_type)} (-{Boat.UPGRADE_COST} R)";
+        button.text = $"+ {_boat.GetUpgradeIncreasePercentage(_type)}% {_boat.GetModifierDescription(_type)} (-{ResourceManager.GetUpgradeCost()} R)";
         button.SetEnabled(_boat.CanUpgrade(_type));
         container.Add(button);
 
