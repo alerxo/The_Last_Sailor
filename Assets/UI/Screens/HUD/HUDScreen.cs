@@ -23,8 +23,6 @@ public class HUDScreen : UIScreen
     private Box interactionBackground;
     private Label interactionText;
 
-    private Box exitInteractionBackground;
-
     private void Awake()
     {
         InteractionCollider.OnInteractableChanged += InteractionCollider_OnInteractableChanged;
@@ -84,14 +82,12 @@ public class HUDScreen : UIScreen
         {
             case PlayerState.FirstPerson:
                 interactionBackground.style.display = DisplayStyle.Flex;
-                exitInteractionBackground.style.display = DisplayStyle.None;
                 break;
 
             case PlayerState.SteeringWheel:
             case PlayerState.Throttle:
             case PlayerState.Cannon:
                 interactionBackground.style.display = DisplayStyle.None;
-                exitInteractionBackground.style.display = DisplayStyle.Flex;
                 break;
         }
     }
@@ -104,7 +100,6 @@ public class HUDScreen : UIScreen
 
         CreateAdmiral(container);
         CreateInteraction(container);
-        CreateExitInteraction(container);
 
         HideAdmiral();
         HideInteraction();
@@ -231,20 +226,5 @@ public class HUDScreen : UIScreen
     {
         SetSize(interactionBackground, 0, 0);
         SetFontSize(interactionText, 0);
-    }
-
-    private void CreateExitInteraction(VisualElement _parent)
-    {
-        exitInteractionBackground = new();
-        exitInteractionBackground.AddToClassList("hud-exit-interaction-background");
-        SetMargin(exitInteractionBackground, 0, 100, 0, 0);
-        SetPadding(exitInteractionBackground, 10);
-        SetBorderWidthRadius(exitInteractionBackground, 0, 10);
-        _parent.Add(exitInteractionBackground);
-
-        Label text = new("Press E to exit");
-        text.AddToClassList("hud-exit-interaction-text");
-        SetFontSize(text, 35);
-        exitInteractionBackground.Add(text);
     }
 }

@@ -96,13 +96,31 @@ public class FirstPersonController : MonoBehaviour
     {
         State = _state;
         OnPlayerStateChanged?.Invoke(State);
-        EnableInput();
+        TryEnableInput();
     }
 
-    private void EnableInput()
+    private void TryEnableInput()
     {
-        if (UIManager.Instance.State == UIState.HUD && State == PlayerState.FirstPerson) input.Player.Enable();
-        else input.Player.Disable();
+        if (UIManager.Instance.State == UIState.HUD && State == PlayerState.FirstPerson)
+        {
+            input.Player.Enable();
+
+            if (PlayerBoatController.Instance.AdmiralController.Subordinates.Count > 0)
+            {
+                TutorialScreen.Instance.ShowInputTooltip(TutorialType.Player, TutorialType.Command);
+            }
+
+            else
+            {
+                TutorialScreen.Instance.ShowInputTooltip(TutorialType.Player);
+            }
+        }
+
+        else
+        {
+            input.Player.Disable();
+            TutorialScreen.Instance.HideTutorial(TutorialType.Player, TutorialType.Command);
+        }
     }
 
     private void GetMoveDirection()

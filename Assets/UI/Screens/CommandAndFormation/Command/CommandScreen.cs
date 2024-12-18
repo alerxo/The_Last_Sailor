@@ -18,7 +18,6 @@ public class CommandScreen : UIScreen
     [SerializeField] private Material defaultMaterial, formationMaterial, holdMaterial, chargeMaterial;
 
     private VisualElement buttonContainer;
-    private Button changeViewButton;
     private readonly Dictionary<Command, Button> commandButtons = new();
     private readonly Dictionary<Formation, Button> formationButtons = new();
 
@@ -119,9 +118,7 @@ public class CommandScreen : UIScreen
 
     private void SetContent()
     {
-        if (changeViewButton == null) return;
-
-        changeViewButton.text = GetChangeViewText();
+        if (buttonContainer == null) return;
 
         foreach (Formation formation in formationButtons.Keys)
         {
@@ -176,51 +173,52 @@ public class CommandScreen : UIScreen
         buttonContainer.pickingMode = PickingMode.Ignore;
         container.Add(buttonContainer);
 
-        CreateTopButtons(buttonContainer);
-        CreateChangeViewButton(buttonContainer);
+        VisualElement followContainer = new();
+        followContainer.AddToClassList("command-follow-container");
+        SetMargin(followContainer, 0, 30, 0, 0);
+        buttonContainer.Add(followContainer);
+
+        CreateFormationButtonContainer(followContainer);
+
+        CreateButton(followContainer, "1", $"{Command.Follow}", "Ships in fleet will follow the\nplayer in given formation", Command.Follow);
+        CreateButton(buttonContainer, "2", $"{Command.Wait}", "Ships in fleet will wait at\ncurrent position in given formation ", Command.Wait);
+        CreateButton(buttonContainer, "3", $"{Command.Charge}", "Ships in fleet will charge the\nclosest enemy", Command.Charge);
+
+        AdmiralController_OnCommandChanged(PlayerBoatController.Instance.AdmiralController.Command);
 
         HiddenState();
     }
 
-    private void CreateTopButtons(VisualElement _parent)
-    {
-        VisualElement container = new();
-        container.AddToClassList("command-top-container");
-        SetMargin(container, 0, 250, 0, 0);
-        _parent.Add(container);
-
-        VisualElement followContainer = new();
-        followContainer.AddToClassList("command-top-follow-container");
-        SetMargin(followContainer, 0, 30, 0, 0);
-        container.Add(followContainer);
-
-        CreateFormationButtonContainer(followContainer);
-
-        CreateTopButton(followContainer, $"1: {Command.Follow}", "Ships in fleet will follow the\nplayer in given formation", Command.Follow);
-        CreateTopButton(container, $"2: {Command.Wait}", "Ships in fleet will wait at\ncurrent position in given formation ", Command.Wait);
-        CreateTopButton(container, $"3: {Command.Charge}", "Ships in fleet will charge the\nclosest enemy", Command.Charge);
-
-        AdmiralController_OnCommandChanged(PlayerBoatController.Instance.AdmiralController.Command);
-    }
-
-    private void CreateTopButton(VisualElement _parent, string _name, string _description, Command _command)
+    private void CreateButton(VisualElement _parent, string _input, string _name, string _description, Command _command)
     {
         Button button = new(() => admiralController.SetCommandForSubordinates(_command));
         button.AddToClassList("main-button");
-        button.AddToClassList("command-top-button");
+        button.AddToClassList("command-button");
         button.pickingMode = PickingMode.Position;
         SetWidth(button, 300);
         SetMargin(button, 0, _command == Command.Follow ? 0 : 30, 0, 0);
         SetBorderWidthRadius(button, 5, 10);
         _parent.Add(button);
 
+        VisualElement headerContainer = new();
+        headerContainer.AddToClassList("command-button-header-container");
+        button.Add(headerContainer);
+
+        Label inputLabel = new(_input);
+        inputLabel.AddToClassList("command-button-input");
+        SetMargin(inputLabel, 0, 0, 0, 4);
+        SetPadding(inputLabel, 0, 0, 15, 15);
+        SetBorderWidthRadius(inputLabel, 4, 7);
+        SetFontSize(inputLabel, 30);
+        headerContainer.Add(inputLabel);
+
         Label header = new(_name);
-        header.AddToClassList("command-top-button-text");
+        header.AddToClassList("command-button-text");
         SetFontSize(header, 26);
-        button.Add(header);
+        headerContainer.Add(header);
 
         Label description = new(_description);
-        description.AddToClassList("command-top-button-text");
+        description.AddToClassList("command-button-text");
         SetFontSize(description, 19);
         button.Add(description);
 
@@ -230,7 +228,7 @@ public class CommandScreen : UIScreen
     private void CreateFormationButtonContainer(VisualElement _parent)
     {
         VisualElement container = new();
-        container.AddToClassList("command-top-formation-container");
+        container.AddToClassList("command-formation-container");
         SetMargin(container, 0, 0, 25, 0);
         _parent.Add(container);
 
@@ -243,7 +241,7 @@ public class CommandScreen : UIScreen
     {
         Button button = new(() => PlayerBoatController.Instance.AdmiralController.SetDefaultFormation(_formation));
         button.AddToClassList("main-button");
-        button.AddToClassList("command-top-formation-button");
+        button.AddToClassList("command-formation-button");
         SetSize(button, 32, 32);
         SetBorderWidthRadius(button, 3, 7);
         SetFontSize(button, 30);
@@ -254,25 +252,6 @@ public class CommandScreen : UIScreen
 
         formationButtons[_formation] = button;
     }
-
-    private void CreateChangeViewButton(VisualElement _parent)
-    {
-        changeViewButton = new(OnChangeView);
-        changeViewButton.AddToClassList("command-change-view-button");
-        changeViewButton.pickingMode = PickingMode.Position;
-        SetBorderWidthRadius(changeViewButton, 5, 10);
-        SetFontSize(changeViewButton, 30);
-        changeViewButton.text = GetChangeViewText();
-        _parent.Add(changeViewButton);
-    }
-
-    private void OnChangeView()
-    {
-        if (UIManager.Instance.State == UIState.Formation) UIManager.Instance.ExitFormationView();
-        else UIManager.Instance.EnterFormationView();
-    }
-
-    private string GetChangeViewText() => $"4: {(UIManager.Instance.State == UIState.Formation ? "Exit" : "Enter")} Formation View";
 }
 
 public enum CommandScreenState

@@ -48,7 +48,8 @@ public class ThrottlePlayerController : MonoBehaviour, IInteractable
         if (input.Player.Move.ReadValue<Vector2>().x != 0)
         {
             Boat.Engine.ChangeThrottle(input.Player.Move.ReadValue<Vector2>().x);
-            if (!throttleAudioSource.isPlaying && allowThrottleSqueekPlayed) 
+
+            if (!throttleAudioSource.isPlaying && allowThrottleSqueekPlayed)
             {
                 if (Boat.Engine.Throttle > 0f)
                 {
@@ -58,14 +59,17 @@ public class ThrottlePlayerController : MonoBehaviour, IInteractable
                 }
             }
         }
+
         else
         {
             throttleAudioSource.volume = throttleAudioSource.volume - 0.02f;
+
             if (throttleAudioSource.volume == 0)
             {
                 throttleAudioSource.Stop();
             }
         }
+
         if (Boat.Engine.Throttle >= 1f || Boat.Engine.Throttle <= 0f)
         {
             if (!stopThrottleAudioSource.isPlaying && allowStopTurningSoundPlayed == true)
@@ -73,12 +77,14 @@ public class ThrottlePlayerController : MonoBehaviour, IInteractable
                 allowStopTurningSoundPlayed = false;
                 allowThrottleSqueekPlayed = false;
                 throttleAudioSource.Stop();
+
                 if (skipfirstsqueek == true)
                 {
                     stopThrottleAudioSource.Play();
                 }
             }
         }
+
         if (Boat.Engine.Throttle < 1f && Boat.Engine.Throttle > 0f)
         {
             allowThrottleSqueekPlayed = true;
@@ -95,7 +101,16 @@ public class ThrottlePlayerController : MonoBehaviour, IInteractable
 
     private void FirstPersonController_OnPlayerStateChanged(PlayerState _state)
     {
-        if (_state == PlayerState.Throttle) input.Player.Enable();
-        else input.Player.Disable();
+        if (_state == PlayerState.Throttle)
+        {
+            input.Player.Enable();
+            TutorialScreen.Instance.ShowInputTooltip(TutorialType.Throttle);
+        }
+
+        else
+        {
+            input.Player.Disable();
+            TutorialScreen.Instance.HideTutorial(TutorialType.Throttle);
+        }
     }
 }

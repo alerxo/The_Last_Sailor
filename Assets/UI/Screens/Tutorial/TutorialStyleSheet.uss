@@ -1,0 +1,27 @@
+.tutorial-container {
+	justify-content: flex-end;
+	align-items: flex-start;
+	
+	width: 100%;
+	height: 100%;
+}
+
+.tutorial-input-container {
+	flex-direction: row;
+}
+
+.tutorial-input-item {
+	flex-direction: row;
+
+	background-color: rgba(0, 0, 0, 0.9);
+}
+
+.tutorial-input-item-input {
+	color: white;
+	border-color: white;
+	-unity-text-align: middle-center;
+}
+
+.tutorial-input-item-description { 
+	color: white;
+}
