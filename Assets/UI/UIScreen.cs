@@ -204,7 +204,7 @@ public abstract class UIScreen : MonoBehaviour
         {
             foreach (ScrollView scrollView in _targets)
             {
-                scrollView.verticalScroller.ScrollPageDown(Time.unscaledDeltaTime * 5);
+                scrollView.verticalScroller.ScrollPageDown(Time.unscaledDeltaTime * 3.5f);
             }
 
             yield return null;

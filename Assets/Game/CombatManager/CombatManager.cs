@@ -241,7 +241,7 @@ public class CombatManager : MonoBehaviour
 
     public int GetDifficulty()
     {
-        return Mathf.FloorToInt(Mathf.Lerp(1, 5, Round / ENEMY_FLEET_SIZES.Length));
+        return Mathf.RoundToInt(Mathf.Lerp(0, 5, (float)Round / ENEMY_FLEET_SIZES.Length));
     }
 }
 

@@ -18,7 +18,9 @@
 	-unity-text-align: middle-center;
 }
 
-.hud-admiral-icon-container { }
+.hud-admiral-icon-container { 
+	flex-direction: row;
+}
 
 .hud-admiral-icon { }
 

@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 public class HUDScreen : UIScreen
 {
-    private const float ADMIRAL_BACKGROUND_WIDTH = 900f;
+    private const float ADMIRAL_BACKGROUND_WIDTH = 1000f;
     private const float INTERACTION_BUTTON_SIZE = 100f;
     private const float INTERACTION_BUTTON_FONT_SIZE = 60;
     private const float INTERACTION_ANIMATION_DURATION = 0.1f;
@@ -115,7 +115,7 @@ public class HUDScreen : UIScreen
         admiralContainer = new();
         admiralContainer.AddToClassList("hud-admiral-container");
         SetMargin(admiralContainer, 50, 0, 0, 0);
-        SetHeight(admiralText, 85);
+        SetHeight(admiralContainer, 85);
         SetBorderRadius(admiralContainer, 10);
         _parent.Add(admiralContainer);
 
