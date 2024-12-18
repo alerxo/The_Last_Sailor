@@ -7,12 +7,22 @@
 }
 
 .hud-admiral-container {
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
 	overflow: hidden;
 }
 
 .hud-admiral-text { 
 	-unity-text-align: middle-center;
 }
+
+.hud-admiral-icon-container { 
+	flex-direction: row;
+}
+
+.hud-admiral-icon { }
 
 .hud-interaction-container {
 	justify-content: center;

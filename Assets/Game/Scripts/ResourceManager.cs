@@ -12,7 +12,7 @@ public class ResourceManager : MonoBehaviour
 
     private const int GAIN_PER_ENEMY_SUNK = 20;
     private const int COST_FOR_BUILD = 10;
-    private const float COST_FOR_REPAIR_PER_DURABILITY = 0.05f;
+    private const int REPAIR_COST = 5;
 
     private static readonly int[] subodinateUpgradeCosts = { 0, 10, 30, 50, 50 };
 
@@ -39,18 +39,43 @@ public class ResourceManager : MonoBehaviour
 
     public static int GetRepairCost(Boat _boat)
     {
-        return (int)((100 - _boat.GetPercentageDurability()) * COST_FOR_REPAIR_PER_DURABILITY);
+        return _boat.IsDamaged ? Mathf.FloorToInt(Mathf.Lerp(REPAIR_COST, 1, (float)_boat.GetPercentageDurability() / 100)) : 0;
     }
 
     public bool CanRepair(Boat _boat)
     {
-        return Amount >= GetRepairCost(_boat);
+        return GetRepairCost(_boat) != 0 && Amount >= GetRepairCost(_boat);
     }
 
-    public void ReparBoat(Boat _boat)
+    public void RepairBoat(Boat _boat)
     {
-        _boat.Repair();
         AddResource(-GetRepairCost(_boat));
+        _boat.Repair();
+    }
+
+    public static int GetRepairAllCost()
+    {
+        int total = 0;
+
+        foreach (Boat boat in PlayerBoatController.Instance.AdmiralController.Fleet)
+        {
+            total += GetRepairCost(boat);
+        }
+
+        return total;
+    }
+
+    public bool CanRepairAll()
+    {
+        return GetRepairAllCost() != 0 && Amount >= GetRepairAllCost();
+    }
+
+    public void RepairAll()
+    {
+        foreach (Boat boat in PlayerBoatController.Instance.AdmiralController.Fleet)
+        {
+            RepairBoat(boat);
+        }
     }
 
     #endregion

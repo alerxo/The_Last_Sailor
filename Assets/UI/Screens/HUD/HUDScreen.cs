@@ -6,17 +6,19 @@ using UnityEngine.UIElements;
 
 public class HUDScreen : UIScreen
 {
-    private const float BACKGROUND_WIDTH = 700f;
+    private const float ADMIRAL_BACKGROUND_WIDTH = 1000f;
     private const float INTERACTION_BUTTON_SIZE = 100f;
     private const float INTERACTION_BUTTON_FONT_SIZE = 60;
     private const float INTERACTION_ANIMATION_DURATION = 0.1f;
 
     [SerializeField] private InputActionReference interactionAsset;
+    [SerializeField] private Texture2D enemyIcon;
 
     protected override List<UIState> ActiveStates => new() { UIState.HUD };
 
     private Box admiralContainer;
     private Label admiralText;
+    private VisualElement admiralIconContainer;
 
     private Box interactionBackground;
     private Label interactionText;
@@ -62,7 +64,15 @@ public class HUDScreen : UIScreen
 
         if (_admiral != null)
         {
-            admiralText.text = _admiral.Name;
+            admiralText.text = $"{(CombatManager.Instance.Round <= CombatManager.ENEMY_FLEET_SIZES.Length ? $"({CombatManager.Instance.Round}/{CombatManager.ENEMY_FLEET_SIZES.Length})   " : "")}{_admiral.Name}";
+
+            admiralIconContainer.Clear();
+
+            for (int i = 0; i < CombatManager.Instance.GetDifficulty(); i++)
+            {
+                CreateAdmiralIcon();
+            }
+
             StopCoroutine(ShowAdmiralContainer());
             StartCoroutine(ShowAdmiralContainer());
         }
@@ -105,14 +115,29 @@ public class HUDScreen : UIScreen
         admiralContainer = new();
         admiralContainer.AddToClassList("hud-admiral-container");
         SetMargin(admiralContainer, 50, 0, 0, 0);
+        SetHeight(admiralContainer, 85);
         SetBorderRadius(admiralContainer, 10);
         _parent.Add(admiralContainer);
 
         admiralText = new("Admiral");
         admiralText.AddToClassList("hud-admiral-text");
+        SetMargin(admiralText, 0, 0, 0, 20);
         SetPadding(admiralText, 10);
         SetFontSize(admiralText, 50);
         admiralContainer.Add(admiralText);
+
+        admiralIconContainer = new();
+        admiralIconContainer.AddToClassList("hud-admiral-icon-container");
+        admiralContainer.Add(admiralIconContainer);
+    }
+
+    private void CreateAdmiralIcon()
+    {
+        Image image = new();
+        image.AddToClassList("hud-admiral-icon");
+        SetSize(image, 64, 64);
+        image.image = enemyIcon;
+        admiralIconContainer.Add(image);
     }
 
     private IEnumerator ShowAdmiralContainer()
@@ -124,11 +149,11 @@ public class HUDScreen : UIScreen
         HideAdmiral();
 
         yield return AnimateBorderWidth(admiralContainer, BORDER_DURATION, 0, 5f);
-        yield return AnimateWidth(admiralContainer, BACKGROUND_DURATION, 0, BACKGROUND_WIDTH);
+        yield return AnimateWidth(admiralContainer, BACKGROUND_DURATION, 0, ADMIRAL_BACKGROUND_WIDTH);
 
         yield return new WaitForSeconds(10f);
 
-        yield return AnimateWidth(admiralContainer, BACKGROUND_DURATION, BACKGROUND_WIDTH, 0);
+        yield return AnimateWidth(admiralContainer, BACKGROUND_DURATION, ADMIRAL_BACKGROUND_WIDTH, 0);
         yield return AnimateBorderWidth(admiralContainer, BORDER_DURATION, BORDER_WIDTH, 0);
     }
 

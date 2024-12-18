@@ -18,8 +18,8 @@ public class CombatManager : MonoBehaviour
     private const float RING_OF_FIRE_BUFFER_SIZE = 300f;
     private const float DE_SPAWN_SIZE = 300f;
 
-    private static readonly int[] ENEMY_FLEET_SIZES = { 0, 1, 2, 3, 5, 7, 9, 12, 16 };
-    private int round = 0;
+    public static readonly int[] ENEMY_FLEET_SIZES = { 0, 1, 2, 3, 5, 7, 9, 12, 16 };
+    public int Round { get; private set; } = 0;
 
     private PlayerBoatController player;
     public EnemyAdmiralController Enemy { get; private set; }
@@ -66,17 +66,17 @@ public class CombatManager : MonoBehaviour
 
             StartCoroutine(SpawnTimer(position, size));
 
-            round++;
-            stateTimer = round > 1 ? CALM_DURATION : 0;
+            Round++;
+            stateTimer = Round > 1 ? CALM_DURATION : 0;
             State = CombatManagerState.Calm;
         }
     }
 
     private int GetEnemyFleetSize()
     {
-        if (round < ENEMY_FLEET_SIZES.Length)
+        if (Round < ENEMY_FLEET_SIZES.Length)
         {
-            return ENEMY_FLEET_SIZES[round];
+            return ENEMY_FLEET_SIZES[Round];
         }
 
         return player.AdmiralController.Fleet.Count;
@@ -148,6 +148,11 @@ public class CombatManager : MonoBehaviour
             return BattleResult.Defeat;
         }
 
+        if (Round == ENEMY_FLEET_SIZES.Length)
+        {
+            return BattleResult.BossDefeated;
+        }
+
         return BattleResult.Victory;
     }
 
@@ -194,7 +199,7 @@ public class CombatManager : MonoBehaviour
         player.AdmiralController.SetEnemy(null);
         OnAdmiralInCombatChanged?.Invoke(null);
         Enemy = null;
-        round--;
+        Round--;
 
         State = CombatManagerState.Spawning;
     }
@@ -233,6 +238,11 @@ public class CombatManager : MonoBehaviour
     {
         return RING_OF_FIRE_SIZE + RING_OF_FIRE_BUFFER_SIZE + DE_SPAWN_SIZE;
     }
+
+    public int GetDifficulty()
+    {
+        return Mathf.RoundToInt(Mathf.Lerp(0, 5, (float)Round / ENEMY_FLEET_SIZES.Length));
+    }
 }
 
 public enum CombatManagerState
@@ -248,4 +258,5 @@ public enum BattleResult
 {
     Defeat,
     Victory,
+    BossDefeated
 }
