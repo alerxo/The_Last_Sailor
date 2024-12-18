@@ -5,7 +5,7 @@ public class PlayerAdmiralController : Admiral
     public PlayerBoatController PlayerBoatController { get; private set; }
 
     private static readonly int[] subodinateCaps = { 0, 3, 7, 16, 32 };
-    private static readonly int[] subodinateUpgradeCosts = { 0, 10, 30, 50, 50 };
+
     public const int MAX_SUBORDINATE_UPGRADE = 3;
     public int SuborinateUpgradeIndex { get; private set; } = 1;
 
@@ -60,8 +60,8 @@ public class PlayerAdmiralController : Admiral
 
     public int GetSubordinateCap => subodinateCaps[SuborinateUpgradeIndex];
     public int GetSubordinateCapIncrease => subodinateCaps[SuborinateUpgradeIndex + 1] - subodinateCaps[SuborinateUpgradeIndex];
-    public int GetSubordinateUpgradeCost => subodinateUpgradeCosts[SuborinateUpgradeIndex];
-    public bool CanUpgradeSubodinateCap => SuborinateUpgradeIndex < MAX_SUBORDINATE_UPGRADE;
+    public int GetSubordinateUpgradeCost => ResourceManager.GetSubordinateCapUpgradeCost(SuborinateUpgradeIndex);
+    public bool CanUpgradeSubodinateCap => ResourceManager.Instance.CanUpgradeSubordinateCap(SuborinateUpgradeIndex) && SuborinateUpgradeIndex < MAX_SUBORDINATE_UPGRADE;
     public bool CanBuild => Subordinates.Count < GetSubordinateCap;
 
     public void UpgradeSuborniateCap()

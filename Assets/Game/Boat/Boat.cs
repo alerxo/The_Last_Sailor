@@ -7,8 +7,6 @@ using UnityEngine.Events;
 
 public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 {
-    public const int UPGRADE_COST = 10;
-
     private const float SINK_DURATION = 20f;
     private const float SINK_BUOYANCY = 1.6f;
     private const float SINK_COM_MAX_X_CHANGE = 4f;
@@ -162,17 +160,17 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     public void Upgrade(UpgradeType _type)
     {
+        ResourceManager.Instance.UpgradeBoat();
+
         foreach (IUpgradeable upgradeable in Upgradeables[_type])
         {
             upgradeable.UpgradeTier++;
         }
-
-        ResourceManager.Instance.AddResource(-UPGRADE_COST);
     }
 
     public bool CanUpgrade(UpgradeType _type)
     {
-        return GetTierOfUpgrade(_type) < UpgradeTier.Three && ResourceManager.Instance.Amount >= UPGRADE_COST;
+        return GetTierOfUpgrade(_type) < UpgradeTier.Three && ResourceManager.Instance.CanUpgrade();
     }
 
     public UpgradeTier GetTierOfUpgrade(UpgradeType _type)

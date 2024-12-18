@@ -8,9 +8,13 @@ public class ResourceManager : MonoBehaviour
 
     public static event UnityAction<float> OnResourceAmountChanged;
 
+    public const int UPGRADE_COST = 10;
+
     private const int GAIN_PER_ENEMY_SUNK = 20;
     private const int COST_FOR_BUILD = 10;
     private const float COST_FOR_REPAIR_PER_DURABILITY = 0.05f;
+
+    private static readonly int[] subodinateUpgradeCosts = { 0, 10, 30, 50, 50 };
 
     public float Amount { get; private set; } = 1000f;
 
@@ -69,5 +73,34 @@ public class ResourceManager : MonoBehaviour
         AddResource(-COST_FOR_BUILD);
     }
 
-    #endregion 
+    #endregion
+
+    #region Upgrade
+
+    public static int GetUpgradeCost()
+    {
+        return UPGRADE_COST;
+    }
+
+    public static int GetSubordinateCapUpgradeCost(int _index)
+    {
+        return subodinateUpgradeCosts[_index];
+    }
+
+    public bool CanUpgradeSubordinateCap(int _index)
+    {
+        return Amount >= GetSubordinateCapUpgradeCost(_index);
+    }
+
+    public bool CanUpgrade()
+    {
+        return Amount >= GetUpgradeCost();
+    }
+
+    public void UpgradeBoat()
+    {
+        AddResource(GetUpgradeCost());
+    }
+
+    #endregion
 }
