@@ -144,10 +144,10 @@ public class TutorialScreen : UIScreen
         SetFontSize(header, 40);
         background.Add(header);
 
-        CreateMenuDescription(background, "This is the formation view, here you can get an overview of your fleets formation.");
-        CreateMenuDescription(background, "You can change what formations you would like to sue with the formation preset buttons placed right next to the formation button.");
-        CreateMenuDescription(background, "You can edit a formation preset by drag and dropping waypoints by selecting a waypoint with the left mouse button, moving the cursor, and releasing.");
-        CreateMenuDescription(background, "You can cancel a move with the right mouse button.");
+        CreateMenuDescription(background, "This is the formation view, here you can get an overview of your fleet's formation.");
+        CreateMenuDescription(background, "You can change what formation your fleet should use with the formation preset buttons that are placed right next to the follow command button.");
+        CreateMenuDescription(background, "You can edit a formation preset by drag and dropping waypoints. Select a waypoint with the left mouse button, move the cursor, and release the left mouse button.");
+        CreateMenuDescription(background, "You can cancel moving a waypoint with the right mouse button.");
 
         Button hide = new(() => OnHideMenu(TutorialType.FormationsMenu));
         hide.AddToClassList("main-button");
@@ -156,6 +156,7 @@ public class TutorialScreen : UIScreen
         SetMargin(hide, 30, 0, 0, 0);
         SetPadding(hide, 0, 0, 30, 30);
         SetFontSize(hide, 27);
+        SetBorderWidthRadius(hide, 3, 7);
         hide.text = "Hide this";
         background.Add(hide);
     }

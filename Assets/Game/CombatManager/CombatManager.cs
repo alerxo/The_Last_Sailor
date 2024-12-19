@@ -234,7 +234,7 @@ public class CombatManager : MonoBehaviour
 
     public static Vector3 GetSpawnPosition()
     {
-        return PlayerBoatController.Instance.transform.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * GetRingOfFireWithBufferSize();
+        return PlayerBoatController.Instance.transform.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * (Instance.Round == 0 ? GetRingOfFireSize() : GetRingOfFireWithBufferSize());
     }
 
     public static Vector3 GetClosestPositionOutSideRingOfFire(Vector3 position)
