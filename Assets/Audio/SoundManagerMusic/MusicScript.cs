@@ -13,6 +13,7 @@ public class MusicScript : MonoBehaviour
     [SerializeField] private float maxDelayBetweenTracks;
     bool turnOffMusic;
     bool turnOffBattleMusic;
+    bool isInCombat;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -22,6 +23,7 @@ public class MusicScript : MonoBehaviour
         battleMusicSource.clip = battleClip;
         turnOffMusic = true;
         turnOffBattleMusic = true;
+        isInCombat = false;
     }
 
     // Update is called once per frame
@@ -91,7 +93,14 @@ public class MusicScript : MonoBehaviour
     {
         if (state != UIState.TitleScreen)
         {
-            turnOffMusic = false;
+            if (isInCombat == false) 
+            {
+                turnOffMusic = false;
+            }
+            if (isInCombat == true)
+            {
+                turnOffBattleMusic = false;
+            }
         }
         if (state == UIState.TitleScreen)
         {
@@ -110,17 +119,20 @@ public class MusicScript : MonoBehaviour
         if (state == UIState.Pause)
         {
             turnOffMusic = true;
+            turnOffBattleMusic = true;
         }
     }
     private void CombatManager_OnAdmiralInCombatChanged(Admiral _admiral)
     {
         if (_admiral != null)
         {
+            isInCombat = true;
             turnOffMusic = true;
             turnOffBattleMusic = false;
         }
         if (_admiral == null)
         {
+            isInCombat = false;
             turnOffMusic = false;
             turnOffBattleMusic = true;
         }
