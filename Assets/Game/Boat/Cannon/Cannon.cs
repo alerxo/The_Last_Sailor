@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Cannon : MonoBehaviour, IUpgradeable
@@ -38,27 +39,33 @@ public class Cannon : MonoBehaviour, IUpgradeable
     [SerializeField] private Transform mount;
     [Tooltip("The barrel mesh")]
     [SerializeField] private Transform barrel;
+    [SerializeField] private float minLongRangeSoundBarrier;
+    [SerializeField] private float maxShortRangeSoundBarrier;
     [Tooltip("The explosion point, should be place in front of barrel and not colliding with it")]
     [SerializeField] private Transform explosionPoint;
     [SerializeField] private AudioClip reloadClip;
     [SerializeField] private AudioClip sizzlingClip;
-    [SerializeField] private AudioClip fireClip;
+    [SerializeField] private AudioClip fireShortClip;
+    [SerializeField] private AudioClip fireLongClip;
 
     [SerializeField] private Renderer barrelRenderer;
 
     private ParticleSystem[] particleSystems;
-    private AudioSource audioSource;
+    [SerializeField] private AudioSource audioReloadSource;
+    [SerializeField] private AudioSource audioShortSource;
+    [SerializeField] private AudioSource audioLongSource;
 
     private Vector3 localRotation, barrelRotation;
 
     private bool firstReload;
+    private GameObject player;
 
     private void Awake()
     {
         particleSystems = GetComponentsInChildren<ParticleSystem>();
-        audioSource = GetComponent<AudioSource>();
         firstReload = true;
 
+        player = GameObject.FindWithTag("Player");
         ChangePitchTowards(0);
         ChangeYawTowards(0);
     }
@@ -109,7 +116,16 @@ public class Cannon : MonoBehaviour, IUpgradeable
             particleSystem.Play();
         }
 
-        audioSource.PlayOneShot(fireClip);
+        if(Vector3.Distance(this.transform.position, player.transform.position) <= maxShortRangeSoundBarrier) 
+        {
+            audioLongSource.pitch = Random.Range(0.9f, 1.1f);
+            audioShortSource.PlayOneShot(fireShortClip);
+        }
+        if (Vector3.Distance(this.transform.position, player.transform.position) >= minLongRangeSoundBarrier)
+        {
+            audioLongSource.pitch = Random.Range(0.3f, 0.5f);
+            audioLongSource.PlayOneShot(fireLongClip);
+        }
 
         State = CannonState.Reloading;
         StartCoroutine(ReloadTimer());
@@ -121,9 +137,9 @@ public class Cannon : MonoBehaviour, IUpgradeable
         if (firstReload == false)
         {
             yield return new WaitForSeconds(1);
-            audioSource.PlayOneShot(reloadClip);
+            audioReloadSource.PlayOneShot(reloadClip);
             yield return new WaitForSeconds(COOLDOWN - 2);
-            audioSource.PlayOneShot(sizzlingClip);
+            audioReloadSource.PlayOneShot(sizzlingClip);
             yield return new WaitForSeconds(1);
         }
 
