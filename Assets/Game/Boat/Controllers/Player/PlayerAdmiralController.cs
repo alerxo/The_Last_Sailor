@@ -35,7 +35,7 @@ public class PlayerAdmiralController : Admiral
         Vector3 position = transform.position + transform.TransformVector(formationPosition);
         position.y = transform.position.y;
 
-        AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController>(position, transform.rotation);
+        AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController_Allied>(position, transform.rotation).GetComponent<AIBoatController>();
         subordinate.Boat.SetName(GetSubordinateName());
         subordinate.SetFormationPosition(formationPosition);
         subordinate.TrySetCommand(Command);

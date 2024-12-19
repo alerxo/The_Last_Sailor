@@ -708,8 +708,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabs:
   - {fileID: 2494986971297771465, guid: 97521ff32e65a684ca2de40f62194d34, type: 3}
-  - {fileID: 1304222455834577700, guid: 3bad0d0818fbf9e4b8125aa6dc3068de, type: 3}
   - {fileID: 564866446082053032, guid: 4eb76afa5b9da714594904dcf4d6db47, type: 3}
+  - {fileID: 6575691850422579695, guid: 3b846779c8b02e34d989b6621cd4c15d, type: 3}
+  - {fileID: -4466362818378185803, guid: ee5cd5bf77b396f489caf395bcbb1d71, type: 3}
 --- !u!114 &3197544527876440092
 MonoBehaviour:
   m_ObjectHideFlags: 0
