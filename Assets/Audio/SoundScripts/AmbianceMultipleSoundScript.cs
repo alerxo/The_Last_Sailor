@@ -12,13 +12,44 @@ public class AmbianceMultipleSoundScript : MonoBehaviour
 
     [SerializeField] float minPitch;
     [SerializeField] float maxPitch;
+
+    bool allowedPlay;
+
+    private void Awake()
+    {
+        UIManager.OnStateChanged += UImanager_OnUIStateChange;
+    }
+
+    private void OnDestroy()
+    {
+        UIManager.OnStateChanged -= UImanager_OnUIStateChange;
+    }
     void Update()
     {
         PlayAmbiance();
     }
+    private void UImanager_OnUIStateChange(UIState state)
+    {
+        if (state == UIState.Pause)
+        {
+            allowedPlay = false;
+        }
+        else if (state == UIState.Options)
+        {
+            allowedPlay = false;
+        }
+        else if (state == UIState.TitleScreen)
+        {
+            allowedPlay = false;
+        }
+        else
+        {
+            allowedPlay = true;
+        }
+    }
     public void PlayAmbiance()
     {
-        if (!audioSource.isPlaying)
+        if (!audioSource.isPlaying && allowedPlay)
         {
             int n = Random.Range(1, ambianceSounds.Length);
             AudioClip clip = ambianceSounds[n];

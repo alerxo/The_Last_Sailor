@@ -25,5 +25,9 @@ public class PostCombatSoundFX : MonoBehaviour
         {
             audioSource.PlayOneShot(defeatClip);
         }
+        if (result == BattleResult.BossDefeated)
+        {
+            audioSource.PlayOneShot(winClip);
+        }
     }
 }

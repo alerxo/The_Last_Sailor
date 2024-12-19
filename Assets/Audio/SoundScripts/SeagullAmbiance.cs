@@ -12,13 +12,46 @@ public class SeagullAmbiance : MonoBehaviour
 
     [SerializeField] float minPitch;
     [SerializeField] float maxPitch;
+
+    bool allowedPlay;
+
+    private void Awake()
+    {
+        UIManager.OnStateChanged += UImanager_OnUIStateChange;
+    }
+
+    private void OnDestroy()
+    {
+        UIManager.OnStateChanged -= UImanager_OnUIStateChange;
+    }
+
+    private void UImanager_OnUIStateChange(UIState state) 
+    {
+        if (state == UIState.Pause)
+        {
+            allowedPlay = false;
+        }
+        else if (state == UIState.Options)
+        {
+            allowedPlay = false;
+        }
+        else if (state == UIState.TitleScreen)
+        {
+            allowedPlay = false;
+        }
+        else 
+        {
+            allowedPlay = true;
+        }
+    }
+
     void Update()
     {
         PlayAmbiance();
     }
     public void PlayAmbiance()
     {
-        if (!audioSource.isPlaying)
+        if (!audioSource.isPlaying && allowedPlay)
         {
             int n = Random.Range(0, ambianceSounds.Length);
             AudioClip clip = ambianceSounds[n];

@@ -91,11 +91,25 @@ public class MusicScript : MonoBehaviour
     {
         if (state != UIState.TitleScreen)
         {
-        turnOffMusic = false;
+            turnOffMusic = false;
+        }
+        if (state == UIState.TitleScreen)
+        {
+            turnOffMusic = true;
+            turnOffBattleMusic = true;
+        }
+        if (state == UIState.Options)
+        {
+            turnOffMusic = true;
+            turnOffBattleMusic = true;
         }
         if (state == UIState.PostCombat)
         {
             turnOffBattleMusic = true;
+        }
+        if (state == UIState.Pause)
+        {
+            turnOffMusic = true;
         }
     }
     private void CombatManager_OnAdmiralInCombatChanged(Admiral _admiral)
