@@ -14,8 +14,8 @@ public class CombatManager : MonoBehaviour
     private float stateTimer = 0;
     private const float CALM_DURATION = 10f;
 
-    public const float RING_OF_FIRE_SIZE = 1000f;
-    private const float RING_OF_FIRE_BUFFER_SIZE = 250f;
+    public const float RING_OF_FIRE_SIZE = 750f;
+    private const float RING_OF_FIRE_BUFFER_SIZE = 500f;
     private const float DE_SPAWN_SIZE = 250f;
 
     public static readonly int[] ENEMY_FLEET_SIZES = { 0, 1, 2, 3, 5, 7, 9, 12, 16 };

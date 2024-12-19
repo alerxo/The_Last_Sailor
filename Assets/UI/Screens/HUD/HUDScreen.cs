@@ -190,6 +190,7 @@ public class HUDScreen : UIScreen
     {
         VisualElement container = new();
         container.AddToClassList("hud-container");
+        container.pickingMode = PickingMode.Ignore;
         Root.Add(container);
 
         CreateAdmiral(container);

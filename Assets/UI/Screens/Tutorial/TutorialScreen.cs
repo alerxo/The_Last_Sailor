@@ -152,6 +152,7 @@ public class TutorialScreen : UIScreen
         Button hide = new(() => OnHideMenu(TutorialType.FormationsMenu));
         hide.AddToClassList("main-button");
         hide.AddToClassList("tutorial-menu-button");
+        hide.pickingMode = PickingMode.Position;
         SetMargin(hide, 30, 0, 0, 0);
         SetPadding(hide, 0, 0, 30, 30);
         SetFontSize(hide, 27);
