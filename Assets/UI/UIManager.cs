@@ -74,7 +74,7 @@ public class UIManager : MonoBehaviour
     public void ExitFormationView()
     {
         SetState(UIState.HUD);
-        CommandScreen.Instance.ForceHide();
+        HUDScreen.Instance.ForceHideCommand();
         FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
         CameraManager.Instance.SetState(CameraState.Player);
     }
@@ -83,7 +83,7 @@ public class UIManager : MonoBehaviour
     {
         if (State != UIState.Formation)
         {
-            CommandScreen.Instance.Show();
+            HUDScreen.Instance.ShowCommand();
         }
     }
 
@@ -135,8 +135,8 @@ public class UIManager : MonoBehaviour
 
         switch (State)
         {
-            case UIState.HUD when CommandScreen.Instance.State != CommandScreenState.Hidden:
-                CommandScreen.Instance.ForceHide();
+            case UIState.HUD when HUDScreen.Instance.State != CommandScreenState.Hidden:
+                HUDScreen.Instance.ForceHideCommand();
                 return;
 
             case UIState.HUD:
