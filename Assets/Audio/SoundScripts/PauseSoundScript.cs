@@ -26,10 +26,6 @@ public class PauseSoundScript : MonoBehaviour
             }
             audioSource.PlayOneShot (pauseClip);
         }
-        if (state == UIState.Options) 
-        {
-            audioSource.PlayOneShot(pauseClip);
-        }
         if (state == UIState.HUD)
         {
             foreach (AudioSource audio in audios)
