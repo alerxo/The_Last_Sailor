@@ -331,7 +331,7 @@ public class HUDScreen : UIScreen
     {
         if (UIManager.Instance.State == UIState.Formation)
         {
-            ShowObjective();
+            ShowCommand();
         }
 
         switch (CommandState)

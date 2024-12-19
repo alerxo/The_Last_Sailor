@@ -86,7 +86,7 @@ public class FleetScreen : UIScreen
         button.AddToClassList("fleet-boat-list-button");
         SetBorderWidthRadius(button, 5, 10);
         SetFontSize(button, 25);
-        button.text = $"New (-{ResourceManager.Instance.GetBuildCost()} R)";
+        button.text = $"Build New Boat (-{ResourceManager.Instance.GetBuildCost()} R)";
         button.SetEnabled(ResourceManager.Instance.CanBuild() && PlayerBoatController.Instance.AdmiralController.CanBuild);
         _parent.Add(button);
     }
