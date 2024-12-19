@@ -35,6 +35,7 @@ public class UIManager : MonoBehaviour
 
         input = new();
         input.Player.Escape.performed += Escape_performed;
+        input.Player.Tab.performed += Tab_performed;
         input.Player.Enable();
     }
 
@@ -135,8 +136,12 @@ public class UIManager : MonoBehaviour
 
         switch (State)
         {
-            case UIState.HUD when HUDScreen.Instance.State != CommandScreenState.Hidden:
+            case UIState.HUD when HUDScreen.Instance.CommandState != CommandObjectiveState.Hidden:
                 HUDScreen.Instance.ForceHideCommand();
+                return;
+
+            case UIState.Options:
+                ReturnFromOptions();
                 return;
 
             case UIState.HUD:
@@ -147,6 +152,12 @@ public class UIManager : MonoBehaviour
                 SetState(UIState.HUD);
                 return;
         }
+    }
+
+    private void Tab_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    {
+        HUDScreen.Instance.ShowCommand();
+        HUDScreen.Instance.ShowObjective();
     }
 }
 

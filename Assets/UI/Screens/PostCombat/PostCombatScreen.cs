@@ -23,21 +23,12 @@ public class PostCombatScreen : UIScreen
         Assert.IsNull(Instance);
         Instance = this;
 
-        ResourceManager.OnResourceAmountChanged += ResourceManager_OnResourceAmountChanged;
         CombatManager.OnBattleConcluded += CombatManager_OnBattleConcluded;
     }
 
     private void OnDestroy()
     {
-        ResourceManager.OnResourceAmountChanged -= ResourceManager_OnResourceAmountChanged;
         CombatManager.OnBattleConcluded -= CombatManager_OnBattleConcluded;
-    }
-
-    private void ResourceManager_OnResourceAmountChanged(float _amount)
-    {
-        if (resourceCount == null) return;
-
-        resourceCount.text = ((int)_amount).ToString();
     }
 
     private void CombatManager_OnBattleConcluded(BattleResult _result)
@@ -89,8 +80,12 @@ public class PostCombatScreen : UIScreen
                 break;
         }
 
-        StartCoroutine(ShowPostCombatScreen());
-        ResourceManager_OnResourceAmountChanged(ResourceManager.Instance.Amount);
+        float resourceStart = ResourceManager.Instance.Amount;
+        float resourceGain = ResourceManager.Instance.GetEnemyFleetWorth();
+        ResourceManager.Instance.AddResource(resourceGain);
+        float resourceEnd = resourceStart + resourceGain;
+
+        StartCoroutine(ShowPostCombatScreen(resourceStart, resourceEnd));
         UIManager.DisableTab(background);
     }
 
@@ -139,7 +134,7 @@ public class PostCombatScreen : UIScreen
         SetFontSize(label, 30);
         resourceContainer.Add(label);
 
-        resourceCount = new();
+        resourceCount = new(ResourceManager.Instance.Amount.ToString());
         resourceCount.AddToClassList("post-combat-resource-label");
         SetFontSize(resourceCount, 30);
         resourceContainer.Add(resourceCount);
@@ -298,7 +293,7 @@ public class PostCombatScreen : UIScreen
         SceneManager.LoadScene("Game");
     }
 
-    public IEnumerator ShowPostCombatScreen()
+    public IEnumerator ShowPostCombatScreen(float _startResource, float _endResource)
     {
         HideAnimatedItems();
 
@@ -321,11 +316,7 @@ public class PostCombatScreen : UIScreen
 
         yield return new WaitForSeconds(0.25f);
 
-        float gain = ResourceManager.Instance.GetEnemyFleetWorth();
-
-        yield return AnimateNumber(resourceCount, 1.5f, ResourceManager.Instance.Amount, ResourceManager.Instance.Amount + gain);
-
-        ResourceManager.Instance.AddResource(gain);
+        yield return AnimateNumber(resourceCount, 1.5f, _startResource, _endResource);
 
         yield return new WaitForSeconds(0.25f);
 

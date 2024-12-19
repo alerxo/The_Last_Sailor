@@ -58,6 +58,8 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
     {
         if (input.Player.Move.ReadValue<Vector2>().x != 0)
         {
+            HUDScreen.Instance.CompleteObjective(ObjectiveType.Steer);
+
             Boat.Engine.ChangeRudder(input.Player.Move.ReadValue<Vector2>().x);
 
             if (!turningAudioSource.isPlaying && allowSqueekPlayed)

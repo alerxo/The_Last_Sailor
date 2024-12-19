@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.AppUI.UI;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UIElements;
@@ -68,7 +66,7 @@ public class TutorialScreen : UIScreen
         switch (_type)
         {
             case TutorialType.Player:
-                return new Tooltip[] { new("Walk", new TooltipInput("W", "A", "S", "D")), new("Sprint", new TooltipInput("LShift")), new("Jump", new TooltipInput("SPACE")), new("Interact", new TooltipInput("E")) };
+                return new Tooltip[] { new("Walk", new TooltipInput("W", "A", "S", "D")), new("Sprint", new TooltipInput("LShift")), new("Jump", new TooltipInput("SPACE")), new("Interact", new TooltipInput("E")), new("Objective", new TooltipInput("TAB")) };
 
             case TutorialType.Steering:
                 return new Tooltip[] { new("Steer", new TooltipInput("A", "D")), new("Camera view", new TooltipInput("C")), new("Exit", new TooltipInput("E"), new TooltipInput("ESC")) };
@@ -80,7 +78,7 @@ public class TutorialScreen : UIScreen
                 return new Tooltip[] { new("Aim", new TooltipInput("W", "A", "S", "D")), new("Fire", new TooltipInput("LMB")), new("Exit", new TooltipInput("E"), new TooltipInput("ESC")) };
 
             case TutorialType.Command:
-                return new Tooltip[] { new("Fleet follow", new TooltipInput("1")), new("Fleet wait", new TooltipInput("2")), new("Fleet charge", new TooltipInput("3")), new("Formation view", new TooltipInput("4")) };
+                return new Tooltip[] { new("Show Current", new TooltipInput("TAB")), new("Fleet follow", new TooltipInput("1")), new("Fleet wait", new TooltipInput("2")), new("Fleet charge", new TooltipInput("3")), new("Formation view", new TooltipInput("4")) };
 
             default:
                 Debug.LogError("Default");

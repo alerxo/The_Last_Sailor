@@ -15,7 +15,6 @@ public class PlayerCommandController : MonoBehaviour
         input.Player.FirstCommand.performed += FirstCommand_performed;
         input.Player.SecondCommand.performed += SecondCommand_performed;
         input.Player.ThirdCommand.performed += ThirdCommand_performed;
-        input.Player.EnterCommandView.performed += EnterCommandView_performed;
         input.Player.EnterFormationView.performed += EnterFormationView_performed;
 
         UIManager.OnStateChanged += UIManager_OnStateChanged;
@@ -63,30 +62,43 @@ public class PlayerCommandController : MonoBehaviour
 
     private void FirstCommand_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        admiralController.SetCommandForSubordinates(Command.Follow);
-        UIManager.Instance.ShowCommandView();
+        if (CanInspectFleet())
+        {
+            admiralController.SetCommandForSubordinates(Command.Follow);
+            UIManager.Instance.ShowCommandView();
+        }
     }
 
     private void SecondCommand_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        admiralController.SetCommandForSubordinates(Command.Wait);
-        UIManager.Instance.ShowCommandView();
+        if (CanInspectFleet())
+        {
+            admiralController.SetCommandForSubordinates(Command.Wait);
+            UIManager.Instance.ShowCommandView();
+        }
     }
 
     private void ThirdCommand_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        admiralController.SetCommandForSubordinates(Command.Charge);
-        UIManager.Instance.ShowCommandView();
-    }
-
-    private void EnterCommandView_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
-    {
-        UIManager.Instance.ShowCommandView();
+        if (CanInspectFleet())
+        {
+            admiralController.SetCommandForSubordinates(Command.Charge);
+            UIManager.Instance.ShowCommandView();
+        }
     }
 
     private void EnterFormationView_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        if (UIManager.Instance.State == UIState.Formation) UIManager.Instance.ExitFormationView();
-        else UIManager.Instance.EnterFormationView();
+        if (CanInspectFleet() && UIManager.Instance.State != UIState.Formation)
+        {
+            UIManager.Instance.EnterFormationView();
+        }
+
+        else UIManager.Instance.ExitFormationView();
+    }
+
+    private static bool CanInspectFleet()
+    {
+        return HUDScreen.Instance.CompletedObjectives.Contains(ObjectiveType.InspectFleet) || HUDScreen.Instance.CurrentObjectives.ContainsKey(ObjectiveType.InspectFleet);
     }
 }
