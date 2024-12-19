@@ -55,5 +55,6 @@ public class TitleScreen : UIScreen
         UIManager.Instance.SetState(UIState.HUD);
         CameraManager.Instance.SetState(CameraState.Player);
         FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
+        CombatManager.Instance.EnableSpawning();
     }
 }

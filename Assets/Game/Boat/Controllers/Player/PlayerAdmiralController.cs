@@ -1,4 +1,9 @@
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class PlayerAdmiralController : Admiral
 {
@@ -31,25 +36,79 @@ public class PlayerAdmiralController : Admiral
 
     public void BuildBoat()
     {
+        Quaternion rotation = transform.rotation;
+
         Vector3 formationPosition = GetNextSubordinateForrmationPosition();
-        Vector3 position = transform.position + transform.TransformVector(formationPosition);
+        Vector3 position = GetAvaliablePosition(formationPosition, rotation.eulerAngles);
         position.y = transform.position.y;
 
-        AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController_Allied>(position, transform.rotation).GetComponent<AIBoatController>();
+        AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController_Allied>(position, rotation).GetComponent<AIBoatController>();
         subordinate.Boat.SetName(GetSubordinateName());
         subordinate.SetFormationPosition(formationPosition);
         subordinate.TrySetCommand(Command);
         AddSubordinate(subordinate.Boat);
     }
 
+    private Vector3 GetAvaliablePosition(Vector3 _position, Vector3 _rotation)
+    {
+        Vector3 origin = transform.position + transform.TransformVector(_position);
+        Vector3 position = origin;
+
+        for (int i = 0; i < 1000; i++)
+        {
+            if (Physics.BoxCast(position, new Vector3(6f, 12f, 25f), _rotation))
+            {
+                position = origin + new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized * i;
+            }
+
+            else
+            {
+                return position;
+            }
+        }
+
+        Debug.LogWarning("No avaliable position found");
+
+        return origin;
+    }
+
     public void SetDefaultFormation(Formation _formation)
     {
         defaultFormation = _formation;
-        Vector3[] positions = Formations.GetFleetPositions(defaultFormation, Subordinates.Count);
 
-        for (int i = 0; i < Subordinates.Count; i++)
+        List<Vector3> positions = Formations.GetFleetPositions(defaultFormation, Subordinates.Count).ToList();
+        List<AIBoatController> unassigned = Subordinates.GetRange(0, positions.Count);
+
+        while (positions.Count > 0)
         {
-            Subordinates[i].SetFormationPosition(positions[i]);
+            float bestDistance = float.MaxValue;
+            AIBoatController bestBoatController = null;
+            Vector3? bestPosition = null;
+
+            foreach (AIBoatController boatController in unassigned)
+            {
+                foreach (Vector3 position in positions)
+                {
+                    float distance = Vector3.Distance(boatController.GetPositionRelativeToAdmiral(position), boatController.transform.position);
+
+                    if (distance < bestDistance)
+                    {
+                        bestDistance = distance;
+                        bestBoatController = boatController;
+                        bestPosition = position;
+                    }
+                }
+            }
+
+            if (bestBoatController == null || bestPosition == null)
+            {
+                Debug.LogError("Failed assigning formation");
+                break;
+            }
+
+            bestBoatController.SetFormationPosition(bestPosition);
+            positions.Remove(bestPosition.Value);
+            unassigned.Remove(bestBoatController);
         }
     }
 

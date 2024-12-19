@@ -22,10 +22,10 @@ public class AICannonController : MonoBehaviour
     private const float PREDICTION_COOLDOWN = 0.1f;
 
     private Vector3 currentAimOffset;
-    private const float MAX_AIM_OFFSET = 300f;
-    private const float MIN_AIM_OFFSET = 50f;
+    private const float MAX_AIM_OFFSET = 100f;
+    private const float MIN_AIM_OFFSET = 25f;
     private const float MAX_DISTANCE_AIM_OFFSET = 300f;
-    private const float MIN_DISTANCE_AIM_OFFSET = 50f;
+    private const float MIN_DISTANCE_AIM_OFFSET = 75f;
     private const float ZERO_IN_SPEED = 0.8f;
     private float aimOffset;
 

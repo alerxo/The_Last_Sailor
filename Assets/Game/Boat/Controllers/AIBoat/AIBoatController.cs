@@ -267,6 +267,7 @@ public class AIBoatController : MonoBehaviour
 
     public void SetFormationPosition(Vector3? _position)
     {
+        ClearTrail();
         FormationPosition = _position;
     }
 

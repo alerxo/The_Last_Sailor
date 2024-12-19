@@ -56,7 +56,6 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
             cannon.Fire(CannonballOwner.Player);
             CameraManager.Instance.SetState(CameraState.Player);
             FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
-            CameraManager.Instance.ShakeCamera(0.1f, 2f, 0.1f, 0.25f);
         }
     }
 

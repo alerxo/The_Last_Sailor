@@ -4,13 +4,13 @@ public static class Formations
 {
     private const float POSITION_FORWARD_OFFSET = 10f;
 
-    private const float LINE_MARGIN = 75f;
+    private const float LINE_MARGIN = 60f;
 
-    private const float SPEARHEAD_MARGIN = 100f;
+    private const float SPEARHEAD_MARGIN = 90f;
 
     private const int RING_START_COUNT = 6;
     private const int RING_GROWTH_SIZE = 4;
-    private const float RING_MARGIN = 200f;
+    private const float RING_MARGIN = 300f;
 
     public static Vector3[] GetFleetPositions(Formation _formation, int _count)
     {

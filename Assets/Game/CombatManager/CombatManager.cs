@@ -10,13 +10,13 @@ public class CombatManager : MonoBehaviour
     public static event UnityAction<BattleResult> OnBattleConcluded;
     public static event UnityAction<Admiral> OnAdmiralInCombatChanged;
 
-    public CombatManagerState State { get; private set; } = CombatManagerState.Spawning;
+    public CombatManagerState State { get; private set; } = CombatManagerState.None;
     private float stateTimer = 0;
     private const float CALM_DURATION = 10f;
 
-    public const float RING_OF_FIRE_SIZE = 700f;
-    private const float RING_OF_FIRE_BUFFER_SIZE = 300f;
-    private const float DE_SPAWN_SIZE = 300f;
+    public const float RING_OF_FIRE_SIZE = 1000f;
+    private const float RING_OF_FIRE_BUFFER_SIZE = 250f;
+    private const float DE_SPAWN_SIZE = 250f;
 
     public static readonly int[] ENEMY_FLEET_SIZES = { 0, 1, 2, 3, 5, 7, 9, 12, 16 };
     public int Round { get; private set; } = 0;
@@ -57,19 +57,21 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    public void EnableSpawning()
+    {
+        State = CombatManagerState.Spawning;
+    }
+
     private void SpawningState()
     {
-        if (UIManager.Instance.State != UIState.TitleScreen)
-        {
-            Vector3 position = GetSpawnPosition();
-            int size = GetEnemyFleetSize();
+        Vector3 position = GetSpawnPosition();
+        int size = GetEnemyFleetSize();
 
-            StartCoroutine(SpawnTimer(position, size));
+        StartCoroutine(SpawnTimer(position, size));
 
-            Round++;
-            stateTimer = Round > 1 ? CALM_DURATION : 0;
-            State = CombatManagerState.Calm;
-        }
+        Round++;
+        stateTimer = CALM_DURATION;
+        State = CombatManagerState.Calm;
     }
 
     private int GetEnemyFleetSize()
@@ -107,6 +109,11 @@ public class CombatManager : MonoBehaviour
 
     private void CalmState()
     {
+        if (UIManager.Instance.State == UIState.Fleet || UIManager.Instance.State == UIState.Formation)
+        {
+            stateTimer = CALM_DURATION;
+        }
+
         if ((stateTimer -= Time.deltaTime) <= 0)
         {
             State = CombatManagerState.PreCombat;
@@ -116,6 +123,12 @@ public class CombatManager : MonoBehaviour
 
     private void PreCombatState()
     {
+        if (!CanEnterCombat())
+        {
+            stateTimer = CALM_DURATION;
+            State = CombatManagerState.Calm;
+        }
+
         if (Vector3.Distance(player.transform.position, Enemy.transform.position) <= GetRingOfFireSize())
         {
             player.AdmiralController.SetEnemy(Enemy);
@@ -125,6 +138,11 @@ public class CombatManager : MonoBehaviour
             Enemy.AIBoatController.ClearTrail();
             State = CombatManagerState.Combat;
         }
+    }
+
+    public bool CanEnterCombat()
+    {
+        return UIManager.Instance.State != UIState.Fleet && UIManager.Instance.State != UIState.Formation && State == CombatManagerState.PreCombat;
     }
 
     private void CombatState()
@@ -221,7 +239,7 @@ public class CombatManager : MonoBehaviour
 
     public static Vector3 GetClosestPositionOutSideRingOfFire(Vector3 position)
     {
-        return position + ((position - PlayerBoatController.Instance.transform.position).normalized * GetRingOfFireSize());
+        return PlayerBoatController.Instance.transform.position + ((position - PlayerBoatController.Instance.transform.position).normalized * GetRingOfFireWithBufferSize());
     }
 
     public static float GetRingOfFireSize()
@@ -247,6 +265,7 @@ public class CombatManager : MonoBehaviour
 
 public enum CombatManagerState
 {
+    None,
     Spawning,
     Calm,
     PreCombat,

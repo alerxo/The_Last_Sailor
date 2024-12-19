@@ -22,7 +22,7 @@ public partial class CanEnterCombatAction : Action
 
     private bool CanEnterCombat()
     {
-        return CombatManager.Instance.State == CombatManagerState.PreCombat;
+        return CombatManager.Instance.CanEnterCombat();
     }
 }
 
