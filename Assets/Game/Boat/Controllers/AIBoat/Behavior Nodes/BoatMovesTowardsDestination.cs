@@ -63,7 +63,7 @@ public partial class BoatMovesTowardsDestination : Action
 
         foreach (Transform ray in Agent.Value.CollisionRays)
         {
-            if (Physics.Raycast(ray.position, ray.forward, out RaycastHit hit, APROACH_DISTANCE))
+            if (Physics.Raycast(ray.position, ray.forward, out RaycastHit hit, APROACH_DISTANCE, ~0, QueryTriggerInteraction.Ignore))
             {
                 if (hit.distance < closestHit.distance)
                 {

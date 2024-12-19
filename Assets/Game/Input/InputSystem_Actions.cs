@@ -145,7 +145,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""EnterCommandView"",
+                    ""name"": ""Tab"",
                     ""type"": ""Button"",
                     ""id"": ""19176c39-f113-4911-bb81-b9776b97a77c"",
                     ""expectedControlType"": """",
@@ -563,7 +563,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""EnterCommandView"",
+                    ""action"": ""Tab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1186,7 +1186,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_FirstCommand = m_Player.FindAction("FirstCommand", throwIfNotFound: true);
         m_Player_SecondCommand = m_Player.FindAction("SecondCommand", throwIfNotFound: true);
         m_Player_ThirdCommand = m_Player.FindAction("ThirdCommand", throwIfNotFound: true);
-        m_Player_EnterCommandView = m_Player.FindAction("EnterCommandView", throwIfNotFound: true);
+        m_Player_Tab = m_Player.FindAction("Tab", throwIfNotFound: true);
         m_Player_EnterFormationView = m_Player.FindAction("EnterFormationView", throwIfNotFound: true);
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
         m_Player_HideTooltip = m_Player.FindAction("HideTooltip", throwIfNotFound: true);
@@ -1282,7 +1282,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_FirstCommand;
     private readonly InputAction m_Player_SecondCommand;
     private readonly InputAction m_Player_ThirdCommand;
-    private readonly InputAction m_Player_EnterCommandView;
+    private readonly InputAction m_Player_Tab;
     private readonly InputAction m_Player_EnterFormationView;
     private readonly InputAction m_Player_Escape;
     private readonly InputAction m_Player_HideTooltip;
@@ -1303,7 +1303,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @FirstCommand => m_Wrapper.m_Player_FirstCommand;
         public InputAction @SecondCommand => m_Wrapper.m_Player_SecondCommand;
         public InputAction @ThirdCommand => m_Wrapper.m_Player_ThirdCommand;
-        public InputAction @EnterCommandView => m_Wrapper.m_Player_EnterCommandView;
+        public InputAction @Tab => m_Wrapper.m_Player_Tab;
         public InputAction @EnterFormationView => m_Wrapper.m_Player_EnterFormationView;
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
         public InputAction @HideTooltip => m_Wrapper.m_Player_HideTooltip;
@@ -1355,9 +1355,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ThirdCommand.started += instance.OnThirdCommand;
             @ThirdCommand.performed += instance.OnThirdCommand;
             @ThirdCommand.canceled += instance.OnThirdCommand;
-            @EnterCommandView.started += instance.OnEnterCommandView;
-            @EnterCommandView.performed += instance.OnEnterCommandView;
-            @EnterCommandView.canceled += instance.OnEnterCommandView;
+            @Tab.started += instance.OnTab;
+            @Tab.performed += instance.OnTab;
+            @Tab.canceled += instance.OnTab;
             @EnterFormationView.started += instance.OnEnterFormationView;
             @EnterFormationView.performed += instance.OnEnterFormationView;
             @EnterFormationView.canceled += instance.OnEnterFormationView;
@@ -1410,9 +1410,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ThirdCommand.started -= instance.OnThirdCommand;
             @ThirdCommand.performed -= instance.OnThirdCommand;
             @ThirdCommand.canceled -= instance.OnThirdCommand;
-            @EnterCommandView.started -= instance.OnEnterCommandView;
-            @EnterCommandView.performed -= instance.OnEnterCommandView;
-            @EnterCommandView.canceled -= instance.OnEnterCommandView;
+            @Tab.started -= instance.OnTab;
+            @Tab.performed -= instance.OnTab;
+            @Tab.canceled -= instance.OnTab;
             @EnterFormationView.started -= instance.OnEnterFormationView;
             @EnterFormationView.performed -= instance.OnEnterFormationView;
             @EnterFormationView.canceled -= instance.OnEnterFormationView;
@@ -1617,7 +1617,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnFirstCommand(InputAction.CallbackContext context);
         void OnSecondCommand(InputAction.CallbackContext context);
         void OnThirdCommand(InputAction.CallbackContext context);
-        void OnEnterCommandView(InputAction.CallbackContext context);
+        void OnTab(InputAction.CallbackContext context);
         void OnEnterFormationView(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
         void OnHideTooltip(InputAction.CallbackContext context);

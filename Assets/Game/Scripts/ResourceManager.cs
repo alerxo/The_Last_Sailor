@@ -124,7 +124,7 @@ public class ResourceManager : MonoBehaviour
 
     public void UpgradeBoat()
     {
-        AddResource(GetUpgradeCost());
+        AddResource(-GetUpgradeCost());
     }
 
     #endregion

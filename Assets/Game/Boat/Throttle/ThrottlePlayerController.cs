@@ -47,6 +47,8 @@ public class ThrottlePlayerController : MonoBehaviour, IInteractable
     {
         if (input.Player.Move.ReadValue<Vector2>().x != 0)
         {
+            HUDScreen.Instance.CompleteObjective(ObjectiveType.Engine);
+
             Boat.Engine.ChangeThrottle(input.Player.Move.ReadValue<Vector2>().x);
 
             if (!throttleAudioSource.isPlaying && allowThrottleSqueekPlayed)

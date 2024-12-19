@@ -147,6 +147,7 @@ public class FormationScreen : UIScreen
     {
         VisualElement container = new();
         container.AddToClassList("formation-container");
+        container.pickingMode = PickingMode.Ignore;
         Root.Add(container);
 
         Box background = new();
@@ -172,6 +173,7 @@ public class FormationScreen : UIScreen
     {
         Button button = new(() => OnPlayerItem(_boat));
         button.AddToClassList("formation-boat-item");
+        button.pickingMode = PickingMode.Position;
         SetPadding(button, 5, 5, 50, 50);
         SetBorderWidthRadius(button, 5, 10);
         SetBorderColor(button, playerMaterial.color);
@@ -187,6 +189,7 @@ public class FormationScreen : UIScreen
     {
         Button button = new(() => OnSubordinateItem(_boatController));
         button.AddToClassList("formation-boat-item");
+        button.pickingMode = PickingMode.Position;
         SetMargin(button, 10, 0, 0, 0);
         SetPadding(button, 5, 5, 50, 50);
         SetBorderWidthRadius(button, 5, 10);

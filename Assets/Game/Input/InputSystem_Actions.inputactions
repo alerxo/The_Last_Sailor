@@ -123,7 +123,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "EnterCommandView",
+                    "name": "Tab",
                     "type": "Button",
                     "id": "19176c39-f113-4911-bb81-b9776b97a77c",
                     "expectedControlType": "",
@@ -541,7 +541,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "EnterCommandView",
+                    "action": "Tab",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
