@@ -17,6 +17,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     [SerializeField] private float MaxHealth;
     [SerializeField] Transform COM;
+    [SerializeField] Transform DeathExplosion;
 
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioSource destroyedAudioSource;
@@ -75,10 +76,8 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
         if (Mathf.Clamp(Health -= _damage, 0, MaxHealth) <= 0)
         {
-            destroyedAudioSource.PlayOneShot(explodeSound);
-            burningAudioSource.clip = fireSound;
-            burningAudioSource.loop = true;
-            burningAudioSource.Play();
+            playDeathExplosion(); // Flyttade dina ljud till metoden, ta bort detta när du har läst Jacob. /V
+
             OnDestroyed?.Invoke();
         }
 
@@ -86,6 +85,19 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         {
             OnDamaged?.Invoke();
         }
+    }
+    private void playDeathExplosion()
+    {
+        destroyedAudioSource.PlayOneShot(explodeSound);
+        burningAudioSource.clip = fireSound;
+        burningAudioSource.loop = true;
+        burningAudioSource.Play();
+
+        foreach(ParticleSystem particle in DeathExplosion.GetComponentsInChildren<ParticleSystem>())
+        {
+            particle.Play();
+        }
+
     }
 
     public int GetPercentageDurability()
