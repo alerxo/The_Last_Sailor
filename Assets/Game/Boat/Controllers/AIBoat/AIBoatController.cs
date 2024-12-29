@@ -192,7 +192,10 @@ public class AIBoatController : MonoBehaviour
                 break;
 
             case AIBoatControllerState.Destruction:
-                ObjectPoolManager.Instance.Release(this);
+
+                if (TryGetComponent(out AIBoatController_Allied ally)) ObjectPoolManager.Instance.Release(ally);
+                else ObjectPoolManager.Instance.Release(this);
+
                 break;
         }
     }
