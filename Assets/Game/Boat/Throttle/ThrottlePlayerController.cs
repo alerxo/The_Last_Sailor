@@ -64,12 +64,9 @@ public class ThrottlePlayerController : MonoBehaviour, IInteractable
 
         else
         {
-            throttleAudioSource.volume = throttleAudioSource.volume - 0.02f;
+            throttleAudioSource.volume = 0;
+            throttleAudioSource.Stop();
 
-            if (throttleAudioSource.volume == 0)
-            {
-                throttleAudioSource.Stop();
-            }
         }
 
         if (Boat.Engine.Throttle >= 1f || Boat.Engine.Throttle <= 0f)

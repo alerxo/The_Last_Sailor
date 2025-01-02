@@ -126,9 +126,15 @@ public class TutorialScreen : UIScreen
         container.Add(description);
     }
 
+    bool canCreateFormation = true;
+
     public void CreateFormationsTutorial()
     {
         menuContainer.Clear();
+
+        if(!canCreateFormation) return;
+
+        canCreateFormation = false;
 
         PlayerBoatController.Instance.AdmiralController.SetCommandForSubordinates(Command.Follow);
 

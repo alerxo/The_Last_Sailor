@@ -91,7 +91,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: PF_PlayerCamera
-    To: FleetCamera_Second
+    To: FleetCamera_First
     Blend:
       Style: 1
       Time: 0.7
