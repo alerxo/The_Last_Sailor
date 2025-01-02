@@ -8,8 +8,6 @@ public class FormationScreen : UIScreen
 {
     protected override List<UIState> ActiveStates => new() { UIState.Formation };
 
-    private ScrollView boatItemContainer;
-
     private const float Y_POSITION_FOR_HIGHLIGHTS = 7f;
     [SerializeField] private LayerMask wayPointLayer;
 
@@ -149,74 +147,6 @@ public class FormationScreen : UIScreen
         container.AddToClassList("formation-container");
         container.pickingMode = PickingMode.Ignore;
         Root.Add(container);
-
-        Box background = new();
-        background.AddToClassList("formation-background");
-        SetMargin(background, 0, 0, 0, 50);
-        SetPadding(background, 10);
-        SetBorderRadius(background, 10);
-        container.Add(background);
-
-        boatItemContainer = new();
-        boatItemContainer.AddToClassList("formation-boat-item-container");
-        boatItemContainer.RegisterCallback<MouseEnterEvent>(evt => IsHoverinfBoatList = true);
-        boatItemContainer.RegisterCallback<MouseLeaveEvent>(evt => IsHoverinfBoatList = false);
-        boatItemContainer.verticalScroller.highButton.RemoveFromHierarchy();
-        boatItemContainer.verticalScroller.lowButton.RemoveFromHierarchy();
-        boatItemContainer.horizontalScroller.RemoveFromHierarchy();
-        background.Add(boatItemContainer);
-
-        CreatePlayerItem(boatItemContainer, PlayerBoatController.Instance.Boat);
-    }
-
-    private void CreatePlayerItem(VisualElement _parent, Boat _boat)
-    {
-        Button button = new(() => OnPlayerItem(_boat));
-        button.AddToClassList("formation-boat-item");
-        button.pickingMode = PickingMode.Position;
-        SetPadding(button, 5, 5, 50, 50);
-        SetBorderWidthRadius(button, 5, 10);
-        SetBorderColor(button, playerMaterial.color);
-        _parent.Add(button);
-
-        Label header = new(_boat.Name);
-        header.AddToClassList("formation-boat-item-header");
-        SetFontSize(header, 25);
-        button.Add(header);
-    }
-
-    private Button CreateSuborinateItem(VisualElement _parent, AIBoatController _boatController)
-    {
-        Button button = new(() => OnSubordinateItem(_boatController));
-        button.AddToClassList("formation-boat-item");
-        button.pickingMode = PickingMode.Position;
-        SetMargin(button, 10, 0, 0, 0);
-        SetPadding(button, 5, 5, 50, 50);
-        SetBorderWidthRadius(button, 5, 10);
-        SetBorderColor(button, formationMaterial.color);
-        _parent.Add(button);
-
-        Label header = new(_boatController.Boat.Name);
-        header.AddToClassList("formation-boat-item-header");
-        SetFontSize(header, 25);
-        button.Add(header);
-
-        Label description = new();
-        description.AddToClassList("formation-boat-item-description");
-        SetFontSize(description, 20);
-        button.Add(description);
-
-        return button;
-    }
-
-    private void OnPlayerItem(Boat _boat)
-    {
-        CameraManager.Instance.FocusFormationCamera(_boat.transform.position);
-    }
-
-    private void OnSubordinateItem(AIBoatController _boatController)
-    {
-        CameraManager.Instance.FocusFormationCamera(_boatController.transform.position);
     }
 
     private void UIManager_OnStateChanged(UIState _state)
@@ -253,8 +183,7 @@ public class FormationScreen : UIScreen
                 _boatController,
                 Instantiate(highlightPrefab, transform),
                 Instantiate(wayPointPrefab, transform),
-                Instantiate(trailPrefab, transform),
-                CreateSuborinateItem(boatItemContainer, _boatController)));
+                Instantiate(trailPrefab, transform)));
             commandItems[_boatController].Deactivate();
         }
 
@@ -280,39 +209,27 @@ public class FormationScreen : UIScreen
         public MeshRenderer WayPoint;
         public MeshRenderer WayPointMove;
         public Transform Trail;
-        public Button Button;
-        public Label Header;
-        public Label Description;
         public Vector3? WayPointMovePosition;
 
         private const float TRAIL_SPEED = 170f;
         public bool IsTrailMoving { get; private set; } = false;
 
-        public CommandItem(AIBoatController _boatController, MeshRenderer _highlight, MeshRenderer _wayPoint, Transform _trail, Button _button)
+        public CommandItem(AIBoatController _boatController, MeshRenderer _highlight, MeshRenderer _wayPoint, Transform _trail)
         {
             BoatController = _boatController;
             Highlight = _highlight;
             WayPoint = _wayPoint;
             Trail = _trail;
-            Button = _button;
-            Header = Button.ElementAt(0) as Label;
-            Description = Button.ElementAt(1) as Label;
         }
 
         public void Update(Material _formationMaterial, Material _holdMaterial, Material _chargeMaterial)
         {
             if (BoatController.Boat.IsSunk)
             {
-                Description.text = "Sunk";
                 HideWaypoint();
                 Deactivate();
 
                 return;
-            }
-
-            if (Description.text != $"Durability: {BoatController.Boat.GetPercentageDurability()}")
-            {
-                Description.text = $"Durability: {BoatController.Boat.GetPercentageDurability()}";
             }
 
             switch (BoatController.Command)
@@ -350,7 +267,6 @@ public class FormationScreen : UIScreen
             {
                 Highlight.material = _material;
                 WayPoint.material = _material;
-                SetBorderColor(Button, _material.color);
             }
         }
 
@@ -450,7 +366,6 @@ public class FormationScreen : UIScreen
 
         public void Dispose()
         {
-            Button.RemoveFromHierarchy();
             Destroy(WayPoint.gameObject);
             Destroy(Trail.gameObject);
         }

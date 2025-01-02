@@ -16,7 +16,7 @@ public class ResourceManager : MonoBehaviour
 
     private static readonly int[] subodinateUpgradeCosts = { 0, 10, 30, 50, 50 };
 
-    public float Amount { get; private set; } = 0f;
+    public float Amount { get; private set; } = 1000f;
 
     private void Awake()
     {

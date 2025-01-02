@@ -42,6 +42,7 @@ public class HUDScreen : UIScreen
 
     private VisualElement commandContainer;
     private readonly Dictionary<Command, Button> commandButtons = new();
+    private VisualElement formationContainer;
     private readonly Dictionary<Formation, Button> formationButtons = new();
 
     #endregion
@@ -77,6 +78,7 @@ public class HUDScreen : UIScreen
     {
         admiralController = PlayerBoatController.Instance.AdmiralController;
         admiralController.OnCommandChanged += AdmiralController_OnCommandChanged;
+        admiralController.OnFormationChanged += AdmiralController_OnFormationChanged;
     }
 
     private void OnDestroy()
@@ -115,6 +117,11 @@ public class HUDScreen : UIScreen
     }
 
     private void AdmiralController_OnCommandChanged(Command _command)
+    {
+        SetCommandContent();
+    }
+
+    private void AdmiralController_OnFormationChanged(Formation _formation)
     {
         SetCommandContent();
     }
@@ -410,9 +417,11 @@ public class HUDScreen : UIScreen
     {
         if (commandContainer == null) return;
 
+        formationContainer.SetEnabled(UIManager.Instance.State == UIState.Formation && PlayerBoatController.Instance.AdmiralController.Command != Command.Charge);
+
         foreach (Formation formation in formationButtons.Keys)
         {
-            formationButtons[formation].SetEnabled(UIManager.Instance.State == UIState.Formation && PlayerBoatController.Instance.AdmiralController.Command == Command.Follow);
+            formationButtons[formation].SetEnabled(PlayerBoatController.Instance.AdmiralController.DefaultFormation != formation);
         }
 
         foreach (Command command in commandButtons.Keys)
@@ -460,26 +469,40 @@ public class HUDScreen : UIScreen
         CreateCommandContainer(container);
     }
 
-    private void CreateCommandContainer(VisualElement container)
+    private void CreateCommandContainer(VisualElement _container)
     {
         commandContainer = new();
         commandContainer.AddToClassList("command-button-container");
         SetMargin(commandContainer, 0, 50, 50, 0);
         commandContainer.pickingMode = PickingMode.Ignore;
-        container.Add(commandContainer);
+        _container.Add(commandContainer);
 
-        VisualElement followContainer = new();
-        followContainer.AddToClassList("command-follow-container");
-        SetMargin(followContainer, 0, 30, 0, 0);
-        commandContainer.Add(followContainer);
+        VisualElement followWaitContainer = new();
+        followWaitContainer.AddToClassList("command-follow-wait-container");
+        SetMargin(followWaitContainer, 0, 30, 0, 0);
+        commandContainer.Add(followWaitContainer);
 
-        CreateFormationButtonContainer(followContainer);
+        CreateFormationButtonContainer(followWaitContainer);
 
-        CreateButton(followContainer, "1", $"{Command.Follow}", "Ships in fleet will follow the\nplayer in given formation", Command.Follow);
-        CreateButton(commandContainer, "2", $"{Command.Wait}", "Ships in fleet will wait at\ncurrent position in given formation ", Command.Wait);
-        CreateButton(commandContainer, "3", $"{Command.Charge}", "Ships in fleet will charge the\nclosest enemy", Command.Charge);
+        VisualElement followWaitButtons = CreateButtonBackground(followWaitContainer);
+        CreateButton(followWaitButtons, "1", $"{Command.Follow}", "Ships in fleet will follow the\nplayer in given formation", Command.Follow);
+        CreateButton(followWaitButtons, "2", $"{Command.Wait}", "Ships in fleet will wait at\ncurrent position in given formation ", Command.Wait);
+
+        VisualElement chargeButton = CreateButtonBackground(commandContainer);
+        CreateButton(chargeButton, "3", $"{Command.Charge}", "Ships in fleet will charge the\nclosest enemy", Command.Charge);
 
         AdmiralController_OnCommandChanged(PlayerBoatController.Instance.AdmiralController.Command);
+    }
+
+    private VisualElement CreateButtonBackground(VisualElement _parent)
+    {
+        VisualElement followWaitButtons = new();
+        followWaitButtons.AddToClassList("command-button-background");
+        SetPadding(followWaitButtons, 20);
+        SetBorderRadius(followWaitButtons, 10);
+        _parent.Add(followWaitButtons);
+
+        return followWaitButtons;
     }
 
     private void CreateButton(VisualElement _parent, string _input, string _name, string _description, Command _command)
@@ -489,7 +512,7 @@ public class HUDScreen : UIScreen
         button.AddToClassList("command-button");
         button.pickingMode = PickingMode.Position;
         SetWidth(button, 300);
-        SetMargin(button, 0, _command == Command.Follow ? 0 : 30, 0, 0);
+        SetMargin(button, 0, _command == Command.Follow ? 30 : 0, 0, 0);
         SetBorderWidthRadius(button, 5, 10);
         _parent.Add(button);
 
@@ -520,14 +543,14 @@ public class HUDScreen : UIScreen
 
     private void CreateFormationButtonContainer(VisualElement _parent)
     {
-        VisualElement container = new();
-        container.AddToClassList("command-formation-container");
-        SetMargin(container, 0, 0, 25, 0);
-        _parent.Add(container);
+        formationContainer = new();
+        formationContainer.AddToClassList("command-formation-container");
+        SetMargin(formationContainer, 0, 0, 25, 0);
+        _parent.Add(formationContainer);
 
-        CreateFormationButton(container, "-", Formation.Line);
-        CreateFormationButton(container, ">", Formation.Spearhead);
-        CreateFormationButton(container, "O", Formation.Ring);
+        CreateFormationButton(formationContainer, "Line [-]", Formation.Line);
+        CreateFormationButton(formationContainer, "Spearhead [>]", Formation.Spearhead);
+        CreateFormationButton(formationContainer, "Ring [O]", Formation.Ring);
     }
 
     private void CreateFormationButton(VisualElement _parent, string _text, Formation _formation)
@@ -535,12 +558,12 @@ public class HUDScreen : UIScreen
         Button button = new(() => PlayerBoatController.Instance.AdmiralController.SetDefaultFormation(_formation));
         button.AddToClassList("main-button");
         button.AddToClassList("command-formation-button");
-        SetSize(button, 32, 32);
+        SetSize(button, 256, 48);
         SetBorderWidthRadius(button, 3, 7);
         SetFontSize(button, 30);
         button.pickingMode = PickingMode.Position;
         button.text = _text;
-        button.SetEnabled(UIManager.Instance.State == UIState.Formation && PlayerBoatController.Instance.AdmiralController.Command == Command.Follow);
+        button.SetEnabled(UIManager.Instance.State == UIState.Formation && PlayerBoatController.Instance.AdmiralController.Command != Command.Charge);
         _parent.Add(button);
 
         formationButtons[_formation] = button;
