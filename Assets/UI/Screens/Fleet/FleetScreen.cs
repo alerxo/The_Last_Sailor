@@ -154,6 +154,7 @@ public class FleetScreen : UIScreen
     private void OnRepair(Boat _boat)
     {
         ResourceManager.Instance.RepairBoat(_boat);
+        HUDScreen.Instance.CompleteObjective(ObjectiveType.RepairShip);
         OnBoatRepaired?.Invoke();
         Draw();
     }
@@ -197,6 +198,7 @@ public class FleetScreen : UIScreen
 
     private void OnUpgrade(Boat _boat, UpgradeType _type, Action _action = null)
     {
+        HUDScreen.Instance.CompleteObjective(ObjectiveType.UpgradeShip);
         _boat.Upgrade(_type);
         _action?.Invoke();
         OnBoatUpgraded?.Invoke();
@@ -232,6 +234,7 @@ public class FleetScreen : UIScreen
     private void OnRepairAll()
     {
         ResourceManager.Instance.RepairAll();
+        HUDScreen.Instance.CompleteObjective(ObjectiveType.RepairShip);
         OnBoatRepaired?.Invoke();
         Draw();
     }
@@ -306,6 +309,7 @@ public class FleetScreen : UIScreen
 
     private void OnBuild()
     {
+        HUDScreen.Instance.CompleteObjective(ObjectiveType.BuildShip);
         ResourceManager.Instance.BuildPlayerBoat();
         OnBoatBuilt?.Invoke();
         currentIndex = PlayerBoatController.Instance.AdmiralController.Fleet.Count - 1;

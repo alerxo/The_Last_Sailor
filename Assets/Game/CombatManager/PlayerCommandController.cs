@@ -99,6 +99,6 @@ public class PlayerCommandController : MonoBehaviour
 
     private static bool CanInspectFleet()
     {
-        return HUDScreen.Instance.CompletedObjectives.Contains(ObjectiveType.InspectFleet) || HUDScreen.Instance.CurrentObjectives.ContainsKey(ObjectiveType.InspectFleet);
+        return HUDScreen.Instance.CompletedObjectives.Contains(ObjectiveType.BuildShip);
     }
 }

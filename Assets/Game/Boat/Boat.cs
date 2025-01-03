@@ -71,7 +71,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
         if (Mathf.Clamp(Health -= _damage, 0, MaxHealth) <= 0)
         {
-            playDeathExplosion(); // Flyttade dina ljud till metoden, ta bort detta när du har läst Jacob. /V
+            PlayDeathExplosion(); // Flyttade dina ljud till metoden, ta bort detta när du har läst Jacob. /V
 
             OnDestroyed?.Invoke();
         }
@@ -81,7 +81,13 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
             OnDamaged?.Invoke();
         }
     }
-    private void playDeathExplosion()
+
+    public void SetHealth(float _value)
+    {
+        Health = _value;
+    }
+
+    private void PlayDeathExplosion()
     {
         destroyedAudioSource.PlayOneShot(explodeSound);
         burningAudioSource.clip = fireSound;

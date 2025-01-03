@@ -15,7 +15,7 @@ public class CameraManager : MonoBehaviour
     private const float MAX_COMMAND_ZOOM = 500;
     private const float COMMAND_SROLL_SPEED = 1000;
     private const float MAX_COMMAND_MOVEMENT = 1300;
-    private const float COMMAND_MOVEMENT_SPEED = 350;
+    private const float COMMAND_MOVEMENT_SPEED = 150;
     private Vector3 commandCameraMovement;
 
     private CinemachineCamera mainMenuCamera;
@@ -132,19 +132,11 @@ public class CameraManager : MonoBehaviour
         return fleetCameras[0];
     }
 
-    public void FocusFormationCamera(Vector3 _position)
-    {
-        Vector3 position = PlayerBoatController.Instance.transform.InverseTransformVector(_position - PlayerBoatController.Instance.transform.position);
-        position.y = commandCameraMovement.y;
-        commandCameraMovement = position;
-        GetNextFormationCamera();
-    }
-
     public void GetFormationCameraMovement()
     {
         Vector2 inputVector = input.Player.Move.ReadValue<Vector2>();
 
-        float movementSpeed = COMMAND_MOVEMENT_SPEED * Mathf.Lerp(1, 2, commandCameraMovement.y / MAX_COMMAND_ZOOM);
+        float movementSpeed = COMMAND_MOVEMENT_SPEED * Mathf.Lerp(1, 3, commandCameraMovement.y / MAX_COMMAND_ZOOM);
         Vector3 movement = new(inputVector.x * movementSpeed, input.Player.CameraZoom.ReadValue<float>() * COMMAND_SROLL_SPEED * (FormationScreen.IsHoverinfBoatList ? 0 : 1), inputVector.y * movementSpeed);
         movement *= Time.deltaTime;
         movement += commandCameraMovement;

@@ -234,23 +234,17 @@ public abstract class UIScreen : MonoBehaviour
         }
     }
 
-    protected IEnumerator AnimateOpacity(List<VisualElement> _targets, float _duration, float _start, float _end)
+    protected IEnumerator AnimateOpacity(VisualElement _target, float _duration, float _start, float _end)
     {
         float timer = 0;
 
         while ((timer += Time.unscaledDeltaTime) < _duration)
         {
-            foreach (VisualElement target in _targets)
-            {
-                target.style.opacity = Mathf.Lerp(_start, _end, timer / _duration);
-            }
+            _target.style.opacity = Mathf.Lerp(_start, _end, timer / _duration);
 
             yield return null;
         }
 
-        foreach (VisualElement target in _targets)
-        {
-            target.style.opacity = _end;
-        }
+        _target.style.opacity = _end;
     }
 }
