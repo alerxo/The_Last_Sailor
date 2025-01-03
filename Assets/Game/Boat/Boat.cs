@@ -58,13 +58,8 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         Upgradeables.Add(UpgradeType.Hull, new IUpgradeable[] { this });
         Upgradeables.Add(UpgradeType.Cannons, GetComponentsInChildren<Cannon>());
 
+        ResetUpgrades();
         SetDefault();
-    }
-
-    private void OnEnable()
-    {
-        SetUpgrade(UpgradeType.Hull, UpgradeTier.One);
-        SetUpgrade(UpgradeType.Cannons, UpgradeTier.One);
     }
 
     public void Damage(float _damage)
@@ -182,7 +177,12 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     public bool CanUpgrade(UpgradeType _type)
     {
-        return GetTierOfUpgrade(_type) < UpgradeTier.Three && ResourceManager.Instance.CanUpgrade();
+        return !IsUpgradeMaxed(_type) && ResourceManager.Instance.CanUpgrade();
+    }
+
+    public bool IsUpgradeMaxed(UpgradeType _type)
+    {
+        return GetTierOfUpgrade(_type) >= UpgradeTier.Three;
     }
 
     public UpgradeTier GetTierOfUpgrade(UpgradeType _type)
@@ -202,7 +202,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     public float GetUpgradeModifierPercentage(UpgradeType _type)
     {
-        return (int)((int)Upgradeables[_type][0].UpgradeTier * Upgradeables[_type][0].UpgradeIncrease * 100);
+        return 100 + (int)((int)Upgradeables[_type][0].UpgradeTier * Upgradeables[_type][0].UpgradeIncrease * 100);
     }
 
     public string GetModifierDescription(UpgradeType _type)
@@ -210,7 +210,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         switch (_type)
         {
             case UpgradeType.Hull:
-                return "Durability";
+                return "HP";
 
             case UpgradeType.Cannons:
                 return "Damage";
@@ -235,5 +235,11 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
     {
         Health = GetUpgradeValue;
         RigidBody.centerOfMass = defaultCOM;
+    }
+
+    public void ResetUpgrades()
+    {
+        SetUpgrade(UpgradeType.Hull, UpgradeTier.One);
+        SetUpgrade(UpgradeType.Cannons, UpgradeTier.One);
     }
 }

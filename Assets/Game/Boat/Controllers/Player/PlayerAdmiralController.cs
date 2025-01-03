@@ -126,7 +126,7 @@ public class PlayerAdmiralController : Admiral
     public int GetSubordinateCap => subodinateCaps[SuborinateUpgradeIndex];
     public int GetSubordinateCapIncrease => subodinateCaps[SuborinateUpgradeIndex + 1] - subodinateCaps[SuborinateUpgradeIndex];
     public int GetSubordinateUpgradeCost => ResourceManager.GetSubordinateCapUpgradeCost(SuborinateUpgradeIndex);
-    public bool CanUpgradeSubodinateCap => ResourceManager.Instance.CanUpgradeSubordinateCap(SuborinateUpgradeIndex) && SuborinateUpgradeIndex < MAX_SUBORDINATE_UPGRADE;
+    public bool CanUpgradeSubodinateCap => ResourceManager.Instance.CanUpgradeSubordinateCap(SuborinateUpgradeIndex) && Subordinates.Count >= GetSubordinateCap && SuborinateUpgradeIndex < MAX_SUBORDINATE_UPGRADE;
     public bool CanBuild => Subordinates.Count < GetSubordinateCap;
 
     public void UpgradeSuborniateCap()

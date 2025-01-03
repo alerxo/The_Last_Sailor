@@ -186,6 +186,7 @@ public class AIBoatController : MonoBehaviour
                 break;
 
             case AIBoatControllerState.PendingDestruction:
+                Boat.ResetUpgrades();
                 Boat.Repair();
                 Boat.RigidBody.linearVelocity = Vector3.zero;
                 Boat.RigidBody.angularVelocity = Vector3.zero;
