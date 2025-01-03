@@ -27,4 +27,3 @@
     transition-duration: 100ms;
 	transition-timing-function: ease-in-out;
 }
-

@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerAdmiralController : Admiral
 {
+    public event UnityAction<Formation> OnFormationChanged;
+
     public PlayerBoatController PlayerBoatController { get; private set; }
 
     private static readonly int[] subodinateCaps = { 0, 3, 7, 16, 32 };
@@ -13,7 +16,7 @@ public class PlayerAdmiralController : Admiral
 
     private int subordinateNumber = 0;
 
-    private Formation defaultFormation;
+    public Formation DefaultFormation { get; private set; }
 
     public void Awake()
     {
@@ -34,6 +37,10 @@ public class PlayerAdmiralController : Admiral
     public void BuildBoat()
     {
         Quaternion rotation = transform.rotation;
+        Vector3 direction = rotation.eulerAngles;
+        direction.x = 0;
+        direction.z = 0;
+        rotation = Quaternion.Euler(direction);
 
         Vector3 formationPosition = GetNextSubordinateForrmationPosition();
         Vector3 position = GetAvaliablePosition(formationPosition, rotation.eulerAngles);
@@ -71,9 +78,9 @@ public class PlayerAdmiralController : Admiral
 
     public void SetDefaultFormation(Formation _formation)
     {
-        defaultFormation = _formation;
+        DefaultFormation = _formation;
 
-        List<Vector3> positions = Formations.GetFleetPositions(defaultFormation, Subordinates.Count).ToList();
+        List<Vector3> positions = Formations.GetFleetPositions(DefaultFormation, Subordinates.Count).ToList();
         List<AIBoatController> unassigned = Subordinates.GetRange(0, positions.Count);
 
         while (positions.Count > 0)
@@ -107,17 +114,19 @@ public class PlayerAdmiralController : Admiral
             positions.Remove(bestPosition.Value);
             unassigned.Remove(bestBoatController);
         }
+
+        OnFormationChanged?.Invoke(DefaultFormation);
     }
 
     private Vector3 GetNextSubordinateForrmationPosition()
     {
-        return Formations.GetFleetPositions(defaultFormation, Subordinates.Count + 1)[Subordinates.Count];
+        return Formations.GetFleetPositions(DefaultFormation, Subordinates.Count + 1)[Subordinates.Count];
     }
 
     public int GetSubordinateCap => subodinateCaps[SuborinateUpgradeIndex];
     public int GetSubordinateCapIncrease => subodinateCaps[SuborinateUpgradeIndex + 1] - subodinateCaps[SuborinateUpgradeIndex];
     public int GetSubordinateUpgradeCost => ResourceManager.GetSubordinateCapUpgradeCost(SuborinateUpgradeIndex);
-    public bool CanUpgradeSubodinateCap => ResourceManager.Instance.CanUpgradeSubordinateCap(SuborinateUpgradeIndex) && SuborinateUpgradeIndex < MAX_SUBORDINATE_UPGRADE;
+    public bool CanUpgradeSubodinateCap => ResourceManager.Instance.CanUpgradeSubordinateCap(SuborinateUpgradeIndex) && Subordinates.Count >= GetSubordinateCap && SuborinateUpgradeIndex < MAX_SUBORDINATE_UPGRADE;
     public bool CanBuild => Subordinates.Count < GetSubordinateCap;
 
     public void UpgradeSuborniateCap()

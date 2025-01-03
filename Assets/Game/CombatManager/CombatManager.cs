@@ -18,7 +18,7 @@ public class CombatManager : MonoBehaviour
     private const float RING_OF_FIRE_BUFFER_SIZE = 500f;
     private const float DE_SPAWN_SIZE = 250f;
 
-    public static readonly int[] ENEMY_FLEET_SIZES = { 0, 1, 2, 3, 5, 7, 9, 12, 16 };
+    public static readonly int[] ENEMY_FLEET_SIZES = { 0, 0, 1, 2, 3, 5, 7, 9, 12, 16 };
     public int Round { get; private set; } = 0;
 
     private PlayerBoatController player;
@@ -64,10 +64,7 @@ public class CombatManager : MonoBehaviour
 
     private void SpawningState()
     {
-        Vector3 position = GetSpawnPosition();
-        int size = GetEnemyFleetSize();
-
-        StartCoroutine(SpawnTimer(position, size));
+        StartCoroutine(SpawnTimer());
 
         Round++;
         stateTimer = CALM_DURATION;
@@ -84,27 +81,26 @@ public class CombatManager : MonoBehaviour
         return player.AdmiralController.Fleet.Count;
     }
 
-    private IEnumerator SpawnTimer(Vector3 _position, int _size)
+    private IEnumerator SpawnTimer()
     {
-        Quaternion rotation = Quaternion.LookRotation((player.transform.position - _position).normalized);
-        AIBoatController admiralBoat = ObjectPoolManager.Instance.Spawn<AIBoatController>(_position, rotation);
+        Vector3 origin = GetSpawnPosition();
+        int size = GetEnemyFleetSize();
+        Quaternion rotation = Quaternion.LookRotation((player.transform.position - origin).normalized);
+
+        AIBoatController admiralBoat = ObjectPoolManager.Instance.Spawn<AIBoatController>(origin, rotation);
         Enemy = admiralBoat.PromoteToAdmiral();
+        Enemy.GetRandomFormation();
 
         yield return null;
 
-        Vector3[] positions = Formations.GetLine(_size);
+        Vector3[] positions = Enemy.GetFormationPositions(size);
 
-        for (int i = 0; i < _size; i++)
+        for (int i = 0; i < size; i++)
         {
-            Vector3 position = admiralBoat.transform.position + admiralBoat.transform.TransformVector(positions[i]);
-            position.y = admiralBoat.transform.position.y;
-            Enemy.SpawnSubordinate(position);
+            Enemy.SpawnSubordinate(positions[i], rotation);
 
             yield return null;
         }
-
-        Enemy.GetRandomFormation();
-        Enemy.SetFleetFormation();
     }
 
     private void CalmState()
@@ -204,6 +200,21 @@ public class CombatManager : MonoBehaviour
         Enemy = null;
 
         State = CombatManagerState.Spawning;
+
+        switch (Round)
+        {
+            case 1:
+                HUDScreen.Instance.AddObjective(ObjectiveType.RepairShip);
+                break;
+
+            case 2:
+                HUDScreen.Instance.AddObjective(ObjectiveType.UpgradeShip);
+                break;
+
+            case 3:
+                HUDScreen.Instance.AddObjective(ObjectiveType.BuildShip);
+                break;
+        }
     }
 
     public void ForceSinkEnemy()

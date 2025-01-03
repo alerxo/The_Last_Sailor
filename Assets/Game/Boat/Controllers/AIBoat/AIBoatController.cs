@@ -186,13 +186,17 @@ public class AIBoatController : MonoBehaviour
                 break;
 
             case AIBoatControllerState.PendingDestruction:
+                Boat.ResetUpgrades();
                 Boat.Repair();
                 Boat.RigidBody.linearVelocity = Vector3.zero;
                 Boat.RigidBody.angularVelocity = Vector3.zero;
                 break;
 
             case AIBoatControllerState.Destruction:
-                ObjectPoolManager.Instance.Release(this);
+
+                if (TryGetComponent(out AIBoatController_Allied ally)) ObjectPoolManager.Instance.Release(ally);
+                else ObjectPoolManager.Instance.Release(this);
+
                 break;
         }
     }

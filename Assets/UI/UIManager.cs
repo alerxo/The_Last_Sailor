@@ -16,7 +16,6 @@ public class UIManager : MonoBehaviour
 
     public UIState State { get; private set; } = UIState.TitleScreen;
     private readonly List<UIState> pauseScreens = new() { UIState.Pause, UIState.Options };
-    private readonly List<UIState> slowmoScreens = new() { UIState.Formation, UIState.Fleet, UIState.PostCombat };
     private UIState optionsReturnState;
     private bool isInTitleScreen = true;
 
@@ -106,9 +105,7 @@ public class UIManager : MonoBehaviour
             isInTitleScreen = false;
         }
 
-        if (!isInTitleScreen && pauseScreens.Contains(_state)) Time.timeScale = 0;
-        else if (!isInTitleScreen && slowmoScreens.Contains(_state)) Time.timeScale = 0.4f;
-        else Time.timeScale = 1f;
+        Time.timeScale = (!isInTitleScreen && pauseScreens.Contains(_state)) ? 0 : 1;
 
         State = _state;
         OnStateChanged?.Invoke(State);

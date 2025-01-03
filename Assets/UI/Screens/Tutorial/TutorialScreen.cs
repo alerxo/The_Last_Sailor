@@ -44,7 +44,7 @@ public class TutorialScreen : UIScreen
         {
             case UIState.Formation:
                 ShowInputTooltip(TutorialType.Formations);
-                ShowMenuTooltip(TutorialType.Formations);
+                ShowMenuTooltip(TutorialType.FormationsMenu);
                 break;
 
             case UIState.Fleet:
@@ -126,17 +126,11 @@ public class TutorialScreen : UIScreen
         container.Add(description);
     }
 
-    bool canCreateFormation = true;
-
     public void CreateFormationsTutorial()
     {
-        menuContainer.Clear();
-
-        if(!canCreateFormation) return;
-
-        canCreateFormation = false;
-
         PlayerBoatController.Instance.AdmiralController.SetCommandForSubordinates(Command.Follow);
+
+        menuContainer.Clear();
 
         Box background = new();
         background.AddToClassList("tutorial-menu-background");
@@ -187,7 +181,7 @@ public class TutorialScreen : UIScreen
 
         switch (_type)
         {
-            case TutorialType.Formations:
+            case TutorialType.FormationsMenu:
                 CreateFormationsTutorial();
                 break;
 
@@ -241,7 +235,6 @@ public class TutorialScreen : UIScreen
 
             case TutorialType.Fleet:
                 return new Tooltip[] { new("Exit", new TooltipInput("ESC", "E")) };
-
 
             default:
                 Debug.LogError("Default");

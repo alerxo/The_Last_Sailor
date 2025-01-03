@@ -71,27 +71,47 @@
 	height: 100%;
 }
 
-.command-button-container { }
+.command-button-container { 
+	align-items: flex-start;}
 
-.command-follow-container {
+.command-follow-wait-container {
 	flex-direction: row-reverse;
+}
+
+.command-button-background {
+	background-color: rgba(0, 0, 0, 0.7);
+	border-radius: 10px;
+	padding: 20px;
 }
 
 .command-formation-container {
 	justify-content: space-around;
+
+	transition-property: scale, translate, opacity;
+	transition-duration: 150ms;
+}
+
+.command-formation-container:disabled {
+	opacity: 0;
+	scale: 0 0.7;
+	translate: -100% 0px;
+
+	transition-property: scale, translate, opacity;
+    transition-duration: 150ms;
+	transition-timing-function: ease-in-out;
 }
 
 .command-formation-button { 
-	transition-property: scale, translate;
-	transition-duration: 250ms;
+	transition-property: scale;
+	transition-duration: 50ms;
 }
 
 .command-formation-button:disabled {
-	opacity: 0;
-	translate: -200% 0px;
+	opacity: 1;
+	scale: 1.05;
 
-	transition-property: scale, translate;
-    transition-duration: 250ms;
+	transition-property: scale;
+    transition-duration: 50ms;
 	transition-timing-function: ease-in-out;
 }
 
@@ -99,7 +119,7 @@
 
 .command-button:disabled {
 	opacity: 1;
-	scale: 1.10;
+	scale: 1.05;
 
 	transition-property: scale;
     transition-duration: 50ms;
@@ -153,16 +173,48 @@
 
 .objective-item {
 	flex-direction: row;
-	align-items: center;
+	justify-content: space-between;
+
+	background-color: rgba(20, 20, 20, 0.9);
+
+	translate: -250% 0;
+
+	transition-property: translate, background-color;
+    transition-duration: 500ms;
+	transition-timing-function: ease-in-out;
+}
+
+.objective-item:disabled {
+	background-color: rgba(20, 20, 20, 0);
+	opacity: 1;
+	translate: 0% 0;
+
+	transition-property: translate, background-color;
+    transition-duration: 500ms;
+	transition-timing-function: ease-in-out;
 }
 
 .objective-mark {
+	justify-content: center;
+	align-items: center;
+
 	border-radius: 0px;
 
 	background-color: rgba(0, 0, 0, 0);
 	border-color: #e3e3e3;
 }
 
+.objective-mark-check {
+	width: 80%;
+	height: 80%;
+}
+
 .objective-label {
+	width: 85%;
+
+	margin: 0px;
+	padding: 0px;
+
 	color: #e3e3e3;
+	white-space: normal;
 }

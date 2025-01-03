@@ -42,6 +42,7 @@ public class HUDScreen : UIScreen
 
     private VisualElement commandContainer;
     private readonly Dictionary<Command, Button> commandButtons = new();
+    private VisualElement formationContainer;
     private readonly Dictionary<Formation, Button> formationButtons = new();
 
     #endregion
@@ -50,12 +51,14 @@ public class HUDScreen : UIScreen
 
     public CommandObjectiveState ObjectiveState { get; private set; } = CommandObjectiveState.Hidden;
     private float objectiveStateTimer = 0;
-    private const float OBJECTIVE_TIME_SHOWING = 6f;
+    private const float OBJECTIVE_TIME_SHOWING = 5f;
     private const float OBJECTIVE_TIME_FADING = 3f;
 
     private Box objectiveBackground;
     public readonly Dictionary<ObjectiveType, VisualElement> CurrentObjectives = new();
     public readonly List<ObjectiveType> CompletedObjectives = new();
+
+    [SerializeField] private Texture2D checkIcon;
 
     #endregion
 
@@ -68,7 +71,6 @@ public class HUDScreen : UIScreen
         InteractionCollider.OnInteractableChanged += InteractionCollider_OnInteractableChanged;
         CombatManager.OnAdmiralInCombatChanged += CombatManager_OnAdmiralInCombatChanged;
         FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
-        ResourceManager.OnResourceAmountChanged += ResourceManager_OnResourceAmountChanged;
         FleetScreen.OnBoatBuilt += FleetScreen_OnBoatBuilt;
         CombatManager.OnBattleConcluded += CombatManager_OnBattleConcluded;
     }
@@ -77,6 +79,7 @@ public class HUDScreen : UIScreen
     {
         admiralController = PlayerBoatController.Instance.AdmiralController;
         admiralController.OnCommandChanged += AdmiralController_OnCommandChanged;
+        admiralController.OnFormationChanged += AdmiralController_OnFormationChanged;
     }
 
     private void OnDestroy()
@@ -85,7 +88,6 @@ public class HUDScreen : UIScreen
         InteractionCollider.OnInteractableChanged -= InteractionCollider_OnInteractableChanged;
         CombatManager.OnAdmiralInCombatChanged -= CombatManager_OnAdmiralInCombatChanged;
         FirstPersonController.OnPlayerStateChanged -= FirstPersonController_OnPlayerStateChanged;
-        ResourceManager.OnResourceAmountChanged -= ResourceManager_OnResourceAmountChanged;
         FleetScreen.OnBoatBuilt -= FleetScreen_OnBoatBuilt;
         CombatManager.OnBattleConcluded -= CombatManager_OnBattleConcluded;
 
@@ -103,20 +105,26 @@ public class HUDScreen : UIScreen
 
     private void CombatManager_OnAdmiralInCombatChanged(Admiral _admiral)
     {
-        TryCompleteFindObjective(_admiral);
+        TryCompleteFindEnemy(_admiral);
         TryShowAdmiral(_admiral);
     }
 
     private void UIManager_OnStateChanged(UIState _state)
     {
         SetCommandContent();
-        TryCompleteInspectObjective(_state);
         SetObjectiveBackgroundState();
     }
 
     private void AdmiralController_OnCommandChanged(Command _command)
     {
         SetCommandContent();
+        TryCompleteChangeCommand();
+    }
+
+    private void AdmiralController_OnFormationChanged(Formation _formation)
+    {
+        SetCommandContent();
+        TryCompleteChangeFormation();
     }
 
     public override void Generate()
@@ -402,7 +410,7 @@ public class HUDScreen : UIScreen
     {
         if (commandContainer != null)
         {
-            commandContainer.visible = CompletedObjectives.Contains(ObjectiveType.InspectFleet) || CurrentObjectives.ContainsKey(ObjectiveType.InspectFleet);
+            commandContainer.visible = CompletedObjectives.Contains(ObjectiveType.BuildShip);
         }
     }
 
@@ -410,9 +418,11 @@ public class HUDScreen : UIScreen
     {
         if (commandContainer == null) return;
 
+        formationContainer.SetEnabled(UIManager.Instance.State == UIState.Formation && PlayerBoatController.Instance.AdmiralController.Command != Command.Charge);
+
         foreach (Formation formation in formationButtons.Keys)
         {
-            formationButtons[formation].SetEnabled(UIManager.Instance.State == UIState.Formation && PlayerBoatController.Instance.AdmiralController.Command == Command.Follow);
+            formationButtons[formation].SetEnabled(PlayerBoatController.Instance.AdmiralController.DefaultFormation != formation);
         }
 
         foreach (Command command in commandButtons.Keys)
@@ -460,26 +470,40 @@ public class HUDScreen : UIScreen
         CreateCommandContainer(container);
     }
 
-    private void CreateCommandContainer(VisualElement container)
+    private void CreateCommandContainer(VisualElement _container)
     {
         commandContainer = new();
         commandContainer.AddToClassList("command-button-container");
         SetMargin(commandContainer, 0, 50, 50, 0);
         commandContainer.pickingMode = PickingMode.Ignore;
-        container.Add(commandContainer);
+        _container.Add(commandContainer);
 
-        VisualElement followContainer = new();
-        followContainer.AddToClassList("command-follow-container");
-        SetMargin(followContainer, 0, 30, 0, 0);
-        commandContainer.Add(followContainer);
+        VisualElement followWaitContainer = new();
+        followWaitContainer.AddToClassList("command-follow-wait-container");
+        SetMargin(followWaitContainer, 0, 30, 0, 0);
+        commandContainer.Add(followWaitContainer);
 
-        CreateFormationButtonContainer(followContainer);
+        CreateFormationButtonContainer(followWaitContainer);
 
-        CreateButton(followContainer, "1", $"{Command.Follow}", "Ships in fleet will follow the\nplayer in given formation", Command.Follow);
-        CreateButton(commandContainer, "2", $"{Command.Wait}", "Ships in fleet will wait at\ncurrent position in given formation ", Command.Wait);
-        CreateButton(commandContainer, "3", $"{Command.Charge}", "Ships in fleet will charge the\nclosest enemy", Command.Charge);
+        VisualElement followWaitButtons = CreateButtonBackground(followWaitContainer);
+        CreateButton(followWaitButtons, "1", $"{Command.Follow}", "Ships in fleet will follow the\nplayer in given formation", Command.Follow);
+        CreateButton(followWaitButtons, "2", $"{Command.Wait}", "Ships in fleet will wait at\ncurrent position in given formation ", Command.Wait);
+
+        VisualElement chargeButton = CreateButtonBackground(commandContainer);
+        CreateButton(chargeButton, "3", $"{Command.Charge}", "Ships in fleet will charge the\nclosest enemy", Command.Charge);
 
         AdmiralController_OnCommandChanged(PlayerBoatController.Instance.AdmiralController.Command);
+    }
+
+    private VisualElement CreateButtonBackground(VisualElement _parent)
+    {
+        VisualElement followWaitButtons = new();
+        followWaitButtons.AddToClassList("command-button-background");
+        SetPadding(followWaitButtons, 20);
+        SetBorderRadius(followWaitButtons, 10);
+        _parent.Add(followWaitButtons);
+
+        return followWaitButtons;
     }
 
     private void CreateButton(VisualElement _parent, string _input, string _name, string _description, Command _command)
@@ -489,7 +513,7 @@ public class HUDScreen : UIScreen
         button.AddToClassList("command-button");
         button.pickingMode = PickingMode.Position;
         SetWidth(button, 300);
-        SetMargin(button, 0, _command == Command.Follow ? 0 : 30, 0, 0);
+        SetMargin(button, 0, _command == Command.Follow ? 30 : 0, 0, 0);
         SetBorderWidthRadius(button, 5, 10);
         _parent.Add(button);
 
@@ -520,14 +544,14 @@ public class HUDScreen : UIScreen
 
     private void CreateFormationButtonContainer(VisualElement _parent)
     {
-        VisualElement container = new();
-        container.AddToClassList("command-formation-container");
-        SetMargin(container, 0, 0, 25, 0);
-        _parent.Add(container);
+        formationContainer = new();
+        formationContainer.AddToClassList("command-formation-container");
+        SetMargin(formationContainer, 0, 0, 25, 0);
+        _parent.Add(formationContainer);
 
-        CreateFormationButton(container, "-", Formation.Line);
-        CreateFormationButton(container, ">", Formation.Spearhead);
-        CreateFormationButton(container, "O", Formation.Ring);
+        CreateFormationButton(formationContainer, "Line [-]", Formation.Line);
+        CreateFormationButton(formationContainer, "Spearhead [>]", Formation.Spearhead);
+        CreateFormationButton(formationContainer, "Ring [O]", Formation.Ring);
     }
 
     private void CreateFormationButton(VisualElement _parent, string _text, Formation _formation)
@@ -535,12 +559,12 @@ public class HUDScreen : UIScreen
         Button button = new(() => PlayerBoatController.Instance.AdmiralController.SetDefaultFormation(_formation));
         button.AddToClassList("main-button");
         button.AddToClassList("command-formation-button");
-        SetSize(button, 32, 32);
+        SetSize(button, 256, 48);
         SetBorderWidthRadius(button, 3, 7);
         SetFontSize(button, 30);
         button.pickingMode = PickingMode.Position;
         button.text = _text;
-        button.SetEnabled(UIManager.Instance.State == UIState.Formation && PlayerBoatController.Instance.AdmiralController.Command == Command.Follow);
+        button.SetEnabled(UIManager.Instance.State == UIState.Formation && PlayerBoatController.Instance.AdmiralController.Command != Command.Charge);
         _parent.Add(button);
 
         formationButtons[_formation] = button;
@@ -577,7 +601,9 @@ public class HUDScreen : UIScreen
 
     private void ObjectiveShowingState()
     {
-        if ((objectiveStateTimer -= Time.deltaTime) <= 0)
+        float step = CurrentObjectives.Count == 1 && CurrentObjectives.ContainsKey(ObjectiveType.FindAndEliminateRemaining) ? Time.deltaTime : 0;
+
+        if ((objectiveStateTimer -= step) <= 0)
         {
             objectiveStateTimer = OBJECTIVE_TIME_FADING;
             ObjectiveState = CommandObjectiveState.Fading;
@@ -623,7 +649,7 @@ public class HUDScreen : UIScreen
         }
     }
 
-    private void TryCompleteFindObjective(Admiral _admiral)
+    private void TryCompleteFindEnemy(Admiral _admiral)
     {
         if (_admiral != null)
         {
@@ -631,76 +657,25 @@ public class HUDScreen : UIScreen
         }
     }
 
-    private void TryCompleteInspectObjective(UIState _state)
+    private void TryCompleteChangeCommand()
     {
-        switch (_state)
+        if (CurrentObjectives.ContainsKey(ObjectiveType.ChangeCommand))
         {
-            case UIState.Fleet:
-                CompleteObjective(ObjectiveType.InspectBoat);
-                break;
-
-            case UIState.Formation:
-                CompleteObjective(ObjectiveType.InspectFleet);
-                break;
+            CompleteObjective(ObjectiveType.ChangeCommand);
         }
     }
 
-    private void ResourceManager_OnResourceAmountChanged(float _amount)
+    private void TryCompleteChangeFormation()
     {
-        if (_amount > 0)
+        if (CurrentObjectives.ContainsKey(ObjectiveType.ChangeFormation))
         {
-            AddObjective(ObjectiveType.InspectBoat);
+            CompleteObjective(ObjectiveType.ChangeFormation);
         }
     }
 
     private void FleetScreen_OnBoatBuilt()
     {
-        AddObjective(ObjectiveType.InspectFleet);
-    }
-
-    public void AddObjective(params ObjectiveType[] _types)
-    {
-        List<ObjectiveType> actual = new();
-
-        foreach (ObjectiveType type in _types)
-        {
-            if (!CompletedObjectives.Contains(type) && !CurrentObjectives.ContainsKey(type))
-            {
-                actual.Add(type);
-            }
-        }
-
-        if (actual.Count == 0) return;
-
-        foreach (ObjectiveType type in actual)
-        {
-            CurrentObjectives.Add(type, CreateObjective(objectiveBackground, type));
-        }
-
-        ShowObjective();
-    }
-
-    public void CompleteObjective(params ObjectiveType[] _types)
-    {
-        List<ObjectiveType> actual = new();
-
-        foreach (ObjectiveType type in _types)
-        {
-            if (CurrentObjectives.ContainsKey(type))
-            {
-                actual.Add(type);
-            }
-        }
-
-        if (actual.Count == 0) return;
-
-        foreach (ObjectiveType type in actual)
-        {
-            CurrentObjectives[type].RemoveFromHierarchy();
-            CurrentObjectives.Remove(type);
-            CompletedObjectives.Add(type);
-            OnObjectiveCompleted(type);
-        }
+        AddObjective(ObjectiveType.ChangeCommand, ObjectiveType.ChangeFormation);
     }
 
     public void CreateObjectiveContainer()
@@ -718,29 +693,99 @@ public class HUDScreen : UIScreen
 
         Label header = new("Objectives");
         header.AddToClassList("objective-header");
-        SetFontSize(header, 30);
+        SetFontSize(header, 40);
         objectiveBackground.Add(header);
+    }
+
+    public void AddObjective(params ObjectiveType[] _types)
+    {
+        List<ObjectiveType> toAdd = new();
+
+        foreach (ObjectiveType type in _types)
+        {
+            if (!CompletedObjectives.Contains(type) && !CurrentObjectives.ContainsKey(type))
+            {
+                toAdd.Add(type);
+            }
+        }
+
+        if (toAdd.Count == 0) return;
+
+        foreach (ObjectiveType type in toAdd)
+        {
+            VisualElement objective = CreateObjective(objectiveBackground, type);
+            CurrentObjectives.Add(type, objective);
+            StartCoroutine(AddAnimation(objective));
+        }
+
+        ShowObjective();
     }
 
     private VisualElement CreateObjective(VisualElement _parent, ObjectiveType _type)
     {
         VisualElement container = new();
         container.AddToClassList("objective-item");
+        SetWidth(container, 300);
+        SetPadding(container, 0, 0, 10, 10);
+        SetBorderRadius(container, 10);
         _parent.Add(container);
 
         Box mark = new();
         mark.AddToClassList("objective-mark");
-        SetSize(mark, 16, 16);
-        SetMargin(mark, 0, 0, 0, 3);
+        SetSize(mark, 26, 26);
+        SetMargin(mark, 4, 0, 0, 4);
         SetBorderWidth(mark, 3);
         container.Add(mark);
 
         Label label = new(GetObjectiveText(_type));
         label.AddToClassList("objective-label");
-        SetFontSize(label, 22);
+        SetFontSize(label, 26);
         container.Add(label);
 
         return container;
+    }
+
+    public IEnumerator AddAnimation(VisualElement _target)
+    {
+        yield return new WaitForSeconds(5);
+
+        _target.SetEnabled(false);
+    }
+
+    public void CompleteObjective(params ObjectiveType[] _types)
+    {
+        List<ObjectiveType> toRemove = new();
+
+        foreach (ObjectiveType type in _types)
+        {
+            if (CurrentObjectives.ContainsKey(type))
+            {
+                toRemove.Add(type);
+            }
+
+            CompletedObjectives.Add(type);
+        }
+
+        foreach (ObjectiveType type in toRemove)
+        {
+            StartCoroutine(RemoveAnimation(CurrentObjectives[type]));
+            CurrentObjectives.Remove(type);
+            OnObjectiveCompleted(type);
+        }
+    }
+
+    private IEnumerator RemoveAnimation(VisualElement _target)
+    {
+        Image image = new();
+        image.AddToClassList("objective-mark-check");
+        image.image = checkIcon;
+        _target.ElementAt(0).Add(image);
+
+        yield return new WaitForSeconds(5);
+
+        yield return AnimateOpacity(_target, 3, 1, 0);
+
+        _target.RemoveFromHierarchy();
     }
 
     private string GetObjectiveText(ObjectiveType _type)
@@ -748,25 +793,37 @@ public class HUDScreen : UIScreen
         switch (_type)
         {
             case ObjectiveType.Engine:
-                return "Start your engine";
+                return "Start your engine with the throttle";
 
             case ObjectiveType.Steer:
-                return "Steer your ship";
+                return "Steer your ship with the wheel";
 
             case ObjectiveType.FindFirstEnemy:
-                return "Find the enemy";
+                return "Find the enemy fleet";
 
             case ObjectiveType.EliminateFirst:
-                return "Eliminate the enemy";
+                return "Eliminate the enemy fleet";
+
+            case ObjectiveType.ShootCannon:
+                return "Shoot one of the cannons at the enemy";
 
             case ObjectiveType.FindAndEliminateRemaining:
-                return "Eliminate the remaining enemies";
+                return "Eliminate the remaining enemy fleets";
 
-            case ObjectiveType.InspectBoat:
-                return "Inspect your ship in your office";
+            case ObjectiveType.RepairShip:
+                return "Repair your fleet at your desk";
 
-            case ObjectiveType.InspectFleet:
-                return "Inspect your fleet inside the formation view";
+            case ObjectiveType.UpgradeShip:
+                return "Upgrade a ship at your desk";
+
+            case ObjectiveType.BuildShip:
+                return "Build a new ship at your desk";
+
+            case ObjectiveType.ChangeCommand:
+                return "Give your fleet a command";
+
+            case ObjectiveType.ChangeFormation:
+                return "Change your fleet's formation";
 
             default:
                 Debug.LogError("Defaulted");
@@ -789,6 +846,7 @@ public class HUDScreen : UIScreen
 
             case ObjectiveType.FindFirstEnemy:
                 AddObjective(ObjectiveType.EliminateFirst);
+                AddObjective(ObjectiveType.ShootCannon);
                 break;
 
             case ObjectiveType.EliminateFirst:
@@ -820,8 +878,14 @@ public enum ObjectiveType
     Engine,
     Steer,
     FindFirstEnemy,
+    ShootCannon,
     EliminateFirst,
     FindAndEliminateRemaining,
-    InspectBoat,
-    InspectFleet
+
+    RepairShip,
+    UpgradeShip,
+    BuildShip,
+
+    ChangeCommand,
+    ChangeFormation,
 }

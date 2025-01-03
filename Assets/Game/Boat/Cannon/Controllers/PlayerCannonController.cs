@@ -53,6 +53,7 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
     {
         if (cannon.State == CannonState.Ready)
         {
+            HUDScreen.Instance.CompleteObjective(ObjectiveType.ShootCannon);
             cannon.Fire(CannonballOwner.Player);
             CameraManager.Instance.SetState(CameraState.Player);
             FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
