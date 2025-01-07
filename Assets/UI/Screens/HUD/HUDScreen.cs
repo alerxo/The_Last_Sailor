@@ -285,8 +285,16 @@ public class HUDScreen : UIScreen
     private IEnumerator ShowInteractionButton()
     {
         HideInteraction();
-
         float duration = 0;
+        
+        Renderer[] interactableRenderers = new Renderer[1000]; // det är dem här jag vill att du ska hitta, glöm inte att det finns flera under throttle, samt wheel och cannons, Det är därför dem behöver ligga i en array
+
+
+        MaterialPropertyBlock[] propertyBlock = new MaterialPropertyBlock[interactableRenderers.Length];
+        for (int i = 0; i < interactableRenderers.Length; i++)
+        {
+            interactableRenderers[i].GetPropertyBlock(propertyBlock[i]);
+        }
 
         while ((duration += Time.deltaTime) < INTERACTION_ANIMATION_DURATION)
         {
@@ -295,11 +303,18 @@ public class HUDScreen : UIScreen
             SetSize(interactionBackground, size, size);
             SetFontSize(interactionText, Mathf.Lerp(0, INTERACTION_BUTTON_FONT_SIZE, percentage));
 
+            for (int i = 0; i < interactableRenderers.Length; i++)
+            {
+                propertyBlock[i].SetFloat("_EffectBlend", percentage);
+                interactableRenderers[i].SetPropertyBlock(propertyBlock[i]);
+            }
+
             yield return null;
         }
 
         ShowInteraction();
     }
+
 
     private IEnumerator HideInteractionButton()
     {
