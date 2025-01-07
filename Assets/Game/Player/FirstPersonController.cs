@@ -4,10 +4,10 @@ using UnityEngine.Events;
 
 public class FirstPersonController : MonoBehaviour
 {
-    private const float WALK_SPEED = 6f;
-    private const float SPRINT_SPEED = 10f;
+    private const float WALK_SPEED = 5f;
+    private const float SPRINT_SPEED = 7.5f;
     private const float JUMP_FORCE = 7f;
-    private const float ACCELERATION = 7f;
+    private const float ACCELERATION = 7.5f;
     private const float CAPSULE_HEIGHT = 1f;
     private const float CAPSULE_RADIUS = 0.5f;
     private const float CAPSULE_MARGIN = 0.6f;
