@@ -55,6 +55,12 @@ public class Cannon : MonoBehaviour, IUpgradeable
     [SerializeField] private AudioSource audioShortSource;
     [SerializeField] private AudioSource audioLongSource;
 
+    [SerializeField] private AudioSource audioMaxSource;
+    [SerializeField] private AudioClip audioMaxClip;
+
+    private bool maxOncePitch;
+    private bool maxOnceYaw;
+
     private Vector3 localRotation, barrelRotation;
 
     private bool firstReload;
@@ -68,6 +74,8 @@ public class Cannon : MonoBehaviour, IUpgradeable
         player = GameObject.FindWithTag("Player");
         ChangePitchTowards(0);
         ChangeYawTowards(0);
+        maxOncePitch = true;
+        maxOnceYaw = true;
     }
 
     private void OnEnable()
@@ -85,6 +93,19 @@ public class Cannon : MonoBehaviour, IUpgradeable
     {
         barrelRotation.x = Mathf.Clamp(barrelRotation.x + (-_pitch * PITCH_ROTATION_SPEED * Time.deltaTime), -MAX_PITCH, MAX_PITCH);
         barrel.localRotation = Quaternion.Euler(barrelRotation + new Vector3(PITCH_OFFSET, 0, 0));
+        if (barrelRotation.x == MAX_PITCH || barrelRotation.x == -MAX_PITCH)
+        {
+            if (maxOncePitch == true)
+            {
+                maxOncePitch = false;
+                audioMaxSource.pitch = Random.Range(0.6f, 1.2f);
+                audioMaxSource.PlayOneShot(audioMaxClip);
+            }
+        }
+        else
+        {
+            maxOncePitch = true;
+        }
     }
 
     public void ChangePitchTowards(float _pitch)
@@ -97,6 +118,19 @@ public class Cannon : MonoBehaviour, IUpgradeable
     {
         localRotation.y = Mathf.Clamp(localRotation.y + (_yaw * YAW_ROTATION_SPEED * Time.deltaTime), -MAX_YAW, MAX_YAW);
         mount.localRotation = Quaternion.Euler(localRotation);
+        if (localRotation.y == MAX_YAW || localRotation.y == -MAX_YAW)
+        {
+            if (maxOnceYaw == true)
+            {
+                maxOnceYaw = false;
+                audioMaxSource.pitch = Random.Range(0.6f, 1.2f);
+                audioMaxSource.PlayOneShot(audioMaxClip);
+            }
+        }
+        else
+        {
+            maxOnceYaw = true;
+        }
     }
 
     public void ChangeYawTowards(float _yaw)
