@@ -127,7 +127,7 @@ MonoBehaviour:
   audioReloadSource: {fileID: 1198445798081274420}
   audioShortSource: {fileID: 3628561578245768446}
   audioLongSource: {fileID: 6800442452430181587}
-  audioMaxSource: {fileID: 7783703025332665017}
+  audioMaxSource: {fileID: 7400091652969497500}
   audioMaxClip: {fileID: 8300000, guid: 88d181be89241e64e91e2d67bd99d80a, type: 3}
 --- !u!82 &1198445798081274420
 AudioSource:
