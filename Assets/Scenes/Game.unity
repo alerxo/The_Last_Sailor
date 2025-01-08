@@ -487,6 +487,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5225935696343536862, guid: f51ea5723a15ad847a804a2747c38ad9, type: 3}
+      propertyPath: m_TagString
+      value: BoatCollisionTag
+      objectReference: {fileID: 0}
     - target: {fileID: 5300996134505596827, guid: f51ea5723a15ad847a804a2747c38ad9, type: 3}
       propertyPath: m_Name
       value: Environment
