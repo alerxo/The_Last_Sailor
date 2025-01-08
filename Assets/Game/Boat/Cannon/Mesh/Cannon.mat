@@ -198,7 +198,7 @@ Material:
     - _DoubleSidedNormalMode: 1
     - _DstBlend: 0
     - _DstBlend2: 0
-    - _EffectBlend: 1
+    - _EffectBlend: 0
     - _EmissionStrength: 0
     - _EmissionStrengthMultiplier: 25
     - _EmissiveColorMode: 1
