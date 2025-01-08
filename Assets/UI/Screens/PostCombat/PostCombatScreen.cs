@@ -85,7 +85,7 @@ public class PostCombatScreen : UIScreen
         ResourceManager.Instance.AddResource(resourceGain);
         float resourceEnd = resourceStart + resourceGain;
 
-        StartCoroutine(ShowPostCombatScreen(resourceStart, resourceEnd));
+        StartCoroutine(ShowPostCombatScreen(resourceStart, resourceEnd, _result == BattleResult.Defeat));
         UIManager.DisableTab(background);
     }
 
@@ -293,32 +293,29 @@ public class PostCombatScreen : UIScreen
         SceneManager.LoadScene("Game");
     }
 
-    public IEnumerator ShowPostCombatScreen(float _startResource, float _endResource)
+    public IEnumerator ShowPostCombatScreen(float _startResource, float _endResource, bool _isDeathScreen)
     {
         HideAnimatedItems();
-
         yield return new WaitForSeconds(0.25f);
 
         yield return AnimateBorderWidth(background, 0.1f, 0, 5);
         yield return AnimateWidth(background, 1f, 0, 1000);
-
         yield return new WaitForSeconds(0.75f);
 
         yield return AnimateHeight(content, 0.7f, 0, 700);
-
         yield return new WaitForSeconds(0.25f);
 
         yield return AnimateScrollviewScrollDown(resultColumns, playerColumnItems, enemyColumnItems, 0.25f);
-
         yield return new WaitForSeconds(0.6f);
 
         yield return AnimateScrollviewScrollUp(resultColumns, 1f);
-
         yield return new WaitForSeconds(0.25f);
 
-        yield return AnimateNumber(resourceCount, 1.5f, _startResource, _endResource);
-
-        yield return new WaitForSeconds(0.25f);
+        if (!_isDeathScreen)
+        {
+            yield return AnimateNumber(resourceCount, 1.5f, _startResource, _endResource);
+            yield return new WaitForSeconds(0.25f);
+        }
 
         foreach (ScrollView scrollView in resultColumns)
         {
