@@ -21,6 +21,9 @@ public class HUDScreen : UIScreen
 
     #region HUD
 
+    private IInteractable currentInteractable;
+    private const float INTERACTION_SHADER_FADE = 0.2f;
+
     private Box admiralContainer;
     private Label admiralText;
     private VisualElement admiralIconContainer;
@@ -145,6 +148,13 @@ public class HUDScreen : UIScreen
 
         if (_interactable == null)
         {
+            if (currentInteractable != null)
+            {
+                StopCoroutine(HideInteractionShader(currentInteractable.GetRenderers));
+                StartCoroutine(HideInteractionShader(currentInteractable.GetRenderers));
+                currentInteractable = null;
+            }
+
             StopCoroutine(ShowInteractionButton());
             StopCoroutine(HideInteractionButton());
             StartCoroutine(HideInteractionButton());
@@ -152,6 +162,10 @@ public class HUDScreen : UIScreen
 
         else
         {
+            currentInteractable = _interactable;
+            StopCoroutine(HideInteractionShader(currentInteractable.GetRenderers));
+            ShowInteractionShader(currentInteractable.GetRenderers);
+
             StopCoroutine(ShowInteractionButton());
             StopCoroutine(HideInteractionButton());
             StartCoroutine(ShowInteractionButton());
@@ -282,10 +296,56 @@ public class HUDScreen : UIScreen
         interactionBackground.Add(interactionText);
     }
 
+    private void ShowInteractionShader(Renderer[] _interactableRenderers)
+    {
+        for (int i = 0; i < _interactableRenderers.Length; i++)
+        {
+            if (_interactableRenderers[i] != null)
+            {
+                MaterialPropertyBlock propertyBlock = new();
+                _interactableRenderers[i].GetPropertyBlock(propertyBlock);
+                propertyBlock.SetFloat("_EffectBlend", 1);
+                _interactableRenderers[i].SetPropertyBlock(propertyBlock);
+            }
+
+            else
+            {
+                Debug.LogWarning("Null interaction shader renderer");
+            }
+        }
+    }
+
+    private IEnumerator HideInteractionShader(Renderer[] _interactableRenderers)
+    {
+        float duration = 0;
+
+        while ((duration += Time.deltaTime) < INTERACTION_SHADER_FADE)
+        {
+            float percentage = duration / INTERACTION_SHADER_FADE;
+
+            for (int i = 0; i < _interactableRenderers.Length; i++)
+            {
+                if (_interactableRenderers[i] != null)
+                {
+                    MaterialPropertyBlock propertyBlock = new();
+                    _interactableRenderers[i].GetPropertyBlock(propertyBlock);
+                    propertyBlock.SetFloat("_EffectBlend", 1 - percentage);
+                    _interactableRenderers[i].SetPropertyBlock(propertyBlock);
+                }
+
+                else
+                {
+                    Debug.LogWarning("Null interaction shader renderer");
+                }
+            }
+
+            yield return null;
+        }
+    }
+
     private IEnumerator ShowInteractionButton()
     {
         HideInteraction();
-
         float duration = 0;
 
         while ((duration += Time.deltaTime) < INTERACTION_ANIMATION_DURATION)

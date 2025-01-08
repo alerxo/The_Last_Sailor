@@ -1,4 +1,4 @@
-using NUnit.Framework.Internal.Commands;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ThrottlePlayerController : MonoBehaviour, IInteractable
@@ -6,6 +6,9 @@ public class ThrottlePlayerController : MonoBehaviour, IInteractable
     public Vector3 Position => transform.position + transform.TransformVector(new(0, 0, 2));
     public bool CanInteract => true;
     public Transform Transform => transform;
+    public Renderer[] GetRenderers => renderers;
+    private Renderer[] renderers;
+    [SerializeField] private Transform[] throttleMeshes;
 
     [SerializeField] private Transform cameraTarget;
     [SerializeField] private AudioSource throttleAudioSource;
@@ -21,8 +24,21 @@ public class ThrottlePlayerController : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-        Boat = GetComponentInParent<Boat>();
+        List<Renderer> list = new();
 
+        foreach (Transform t in throttleMeshes)
+        {
+            list.AddRange(t.GetComponentsInChildren<Renderer>());
+        }
+
+        foreach(Renderer renderer in GetComponentInParent<Throttle>().GetComponentsInChildren<Renderer>(true))
+        {
+            list.Add(renderer);
+        }
+
+        renderers = list.ToArray();
+
+        Boat = GetComponentInParent<Boat>();
         input = new InputSystem_Actions();
 
         FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
