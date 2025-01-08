@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Office : MonoBehaviour, IInteractable
@@ -6,8 +7,21 @@ public class Office : MonoBehaviour, IInteractable
     public Vector3 Position => transform.position;
     public bool CanInteract => PlayerBoatController.Instance.AdmiralController.Enemy == null;
 
+    [SerializeField] private Transform[] deskMeshes;
+    public Renderer[] GetRenderers => renderers;
+    private Renderer[] renderers;
+
     private void Awake()
     {
+        List<Renderer> list = new();
+
+        foreach(Transform t in deskMeshes)
+        {
+            list.AddRange(t.GetComponentsInChildren<Renderer>());
+        }
+
+        renderers = list.ToArray();
+
         CombatManager.OnAdmiralInCombatChanged += CombatManager_OnAdmiralInCombatChanged;
     }
 

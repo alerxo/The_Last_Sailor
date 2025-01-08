@@ -10,6 +10,8 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
     public Vector3 Position => transform.position + transform.TransformVector(new(0, 0, -0.85f)); // kamera offset
     public bool CanInteract => true;
     public Transform Transform => transform;
+    public Renderer[] GetRenderers => renderers;
+    private Renderer[] renderers;
 
     private InputSystem_Actions input;
     private Boat Boat;
@@ -26,6 +28,8 @@ public class SteeringWheelPlayerController : MonoBehaviour, IInteractable
 
     private void Awake()
     {
+        renderers = GetComponentInParent<SteeringWheel>().GetComponentsInChildren<Renderer>(true);
+
         Boat = GetComponentInParent<Boat>();
         player = FindFirstObjectByType<FirstPersonController>();
 

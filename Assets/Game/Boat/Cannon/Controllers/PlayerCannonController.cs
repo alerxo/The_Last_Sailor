@@ -5,20 +5,24 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
 {
     private const float ROTATION_SPEED = 1f;
     private const float MOUSE_SPEED = 0.7f;
-
+     
     [Tooltip("Target for the cannon camera")]
     [SerializeField] private Transform cameraTarget;
 
     public Vector3 Position => transform.position + transform.TransformVector(new(0, 0, -2));
     public bool CanInteract => cannon.State == CannonState.Ready;
     public Transform Transform => transform;
+    public Renderer[] GetRenderers => renderers;
+    private Renderer[] renderers;
 
     private InputSystem_Actions input;
     private Cannon cannon;
 
     private void Awake()
     {
-        cannon = GetComponentInParent<Cannon>();
+        cannon = GetComponent<Cannon>();
+
+        renderers = cannon.GetComponentsInChildren<Renderer>(true);
 
         input = new();
         input.Player.CannonFire.performed += CannonFire_performed;

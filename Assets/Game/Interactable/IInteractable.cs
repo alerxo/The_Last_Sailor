@@ -6,4 +6,6 @@ public interface IInteractable
     public Transform Transform { get; }
     public Vector3 Position { get; }
     public bool CanInteract { get; }
+
+    public Renderer[] GetRenderers { get; }
 }
