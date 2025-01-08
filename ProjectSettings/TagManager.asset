@@ -16,6 +16,8 @@ TagManager:
   - FormationCamera
   - FormationCameraTarget
   - BoatCollisionTag
+  - CannonBallEasterEgg
+
   layers:
   - Default
   - TransparentFX

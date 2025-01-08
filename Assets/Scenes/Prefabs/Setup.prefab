@@ -172,7 +172,7 @@ MonoBehaviour:
     FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 0.1
-    FarClipPlane: 5000
+    FarClipPlane: 10000
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -211,14 +211,14 @@ MonoBehaviour:
   Radius: 10
   Orbits:
     Top:
-      Radius: 8
-      Height: 40
+      Radius: 9.7
+      Height: 29
     Center:
       Radius: 35
-      Height: 25
+      Height: 7.6
     Bottom:
-      Radius: 35
-      Height: 10
+      Radius: 31
+      Height: -27
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
