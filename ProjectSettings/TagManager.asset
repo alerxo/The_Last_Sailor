@@ -15,8 +15,8 @@ TagManager:
   - SteeringWheelCameraTarget
   - FormationCamera
   - FormationCameraTarget
-  - BoatCollisionTag
   - CannonBallEasterEgg
+  - BoatCollisionTag
 
   layers:
   - Default
