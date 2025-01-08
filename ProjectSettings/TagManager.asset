@@ -15,6 +15,7 @@ TagManager:
   - SteeringWheelCameraTarget
   - FormationCamera
   - FormationCameraTarget
+  - CannonBallEasterEgg
   layers:
   - Default
   - TransparentFX

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
@@ -231,7 +232,25 @@ public class FirstPersonController : MonoBehaviour
             TimeGroundedInSeconds = 0;
         }
     }
+    bool spawnedWillson = false;
+    private void OnTriggerEnter(Collider col)
+    {
+        if(!spawnedWillson)
+        {
+            if(col.tag=="CannonBallEasterEgg")
+            {
+                col.GetComponent<CannonBallEasterEgg>().SpawnCannonBallEasterEgg();
+            }
+        }
+        
+        
+    }
+
+
+
+
 }
+
 
 public enum PlayerState
 {
