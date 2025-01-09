@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,6 +16,9 @@ public class TutorialScreen : UIScreen
 
     private VisualElement inputContainer;
     private VisualElement menuContainer;
+
+    private Box tutorialBorder;
+    private VisualElement commandContainer, formationContainer;
 
     private InputSystem_Actions input;
 
@@ -126,10 +130,21 @@ public class TutorialScreen : UIScreen
         container.Add(description);
     }
 
-    public void CreateFormationsTutorial()
+    public void SetCommandContainer(VisualElement _command)
+    {
+        commandContainer = _command;
+    }
+
+    public void SetFormationsContainer(VisualElement _formation)
+    {
+        formationContainer = _formation;
+    }
+
+    public void CreateFirstFormationsTutorial()
     {
         PlayerBoatController.Instance.AdmiralController.SetCommandForSubordinates(Command.Follow);
 
+        RemoveTutorialBorder();
         menuContainer.Clear();
 
         Box background = new();
@@ -144,21 +159,131 @@ public class TutorialScreen : UIScreen
         SetFontSize(header, 40);
         background.Add(header);
 
-        CreateMenuDescription(background, "This is the formation view, here you can get an overview of your fleet's formation.");
-        CreateMenuDescription(background, "You can change what formation your fleet should use with the formation preset buttons that are placed right next to the follow command button.");
-        CreateMenuDescription(background, "You can edit a formation preset by drag and dropping waypoints. Select a waypoint with the left mouse button, move the cursor, and release the left mouse button.");
+        CreateMenuDescription(background, "This is the formation view, here you can get an overview of your fleet's formation and give commmands and formations.");
+
+        Button continueButton = new(() => CreateSecondFormationsTutorial());
+        continueButton.AddToClassList("main-button");
+        continueButton.AddToClassList("tutorial-menu-button");
+        continueButton.pickingMode = PickingMode.Position;
+        SetMargin(continueButton, 30, 0, 0, 0);
+        SetPadding(continueButton, 0, 0, 30, 30);
+        SetFontSize(continueButton, 27);
+        SetBorderWidthRadius(continueButton, 3, 7);
+        continueButton.text = "Continue";
+        continueButton.SetEnabled(false);
+        background.Add(continueButton);
+
+        StartCoroutine(EnableContinueButton(continueButton));
+    }
+
+    public void CreateSecondFormationsTutorial()
+    {
+        RemoveTutorialBorder();
+        menuContainer.Clear();
+
+        Box background = new();
+        background.AddToClassList("tutorial-menu-background");
+        SetWidth(background, 500);
+        SetBorderRadius(background, 10);
+        menuContainer.Add(background);
+
+        Label header = new("Commands");
+        header.AddToClassList("tutorial-menu-header");
+        SetMargin(header, 0, 30, 0, 0);
+        SetFontSize(header, 40);
+        background.Add(header);
+
+        CreateMenuDescription(background, "You can change what command your fleet should follow with the command buttons.");
+        CreateTutorialBorder(commandContainer);
+
+        Button continueButton = new(() => CreateThirdFormationsTutorial());
+        continueButton.AddToClassList("main-button");
+        continueButton.AddToClassList("tutorial-menu-button");
+        continueButton.pickingMode = PickingMode.Position;
+        SetMargin(continueButton, 30, 0, 0, 0);
+        SetPadding(continueButton, 0, 0, 30, 30);
+        SetFontSize(continueButton, 27);
+        SetBorderWidthRadius(continueButton, 3, 7);
+        continueButton.text = "Continue";
+        continueButton.SetEnabled(false);
+        background.Add(continueButton);
+
+        StartCoroutine(EnableContinueButton(continueButton));
+    }
+
+    public void CreateThirdFormationsTutorial()
+    {
+        RemoveTutorialBorder();
+        menuContainer.Clear();
+
+        Box background = new();
+        background.AddToClassList("tutorial-menu-background");
+        SetWidth(background, 500);
+        SetBorderRadius(background, 10);
+        menuContainer.Add(background);
+
+        Label header = new("Formations");
+        header.AddToClassList("tutorial-menu-header");
+        SetMargin(header, 0, 30, 0, 0);
+        SetFontSize(header, 40);
+        background.Add(header);
+
+        CreateMenuDescription(background, "You can change what formation your fleet shouldby with formation preset buttons.");
+        CreateTutorialBorder(formationContainer);
+
+        Button continueButton = new(() => CreateFourthFormationsTutorial());
+        continueButton.AddToClassList("main-button");
+        continueButton.AddToClassList("tutorial-menu-button");
+        continueButton.pickingMode = PickingMode.Position;
+        SetMargin(continueButton, 30, 0, 0, 0);
+        SetPadding(continueButton, 0, 0, 30, 30);
+        SetFontSize(continueButton, 27);
+        SetBorderWidthRadius(continueButton, 3, 7);
+        continueButton.text = "Continue";
+        continueButton.SetEnabled(false);
+        background.Add(continueButton);
+
+        StartCoroutine(EnableContinueButton(continueButton));
+    }
+    public void CreateFourthFormationsTutorial()
+    {
+        RemoveTutorialBorder();
+        menuContainer.Clear();
+
+        Box background = new();
+        background.AddToClassList("tutorial-menu-background");
+        SetWidth(background, 500);
+        SetBorderRadius(background, 10);
+        menuContainer.Add(background);
+
+        Label header = new("Fleet Waypoints");
+        header.AddToClassList("tutorial-menu-header");
+        SetMargin(header, 0, 30, 0, 0);
+        SetFontSize(header, 40);
+        background.Add(header);
+
+        CreateMenuDescription(background, "You can edit a formation preset by drag and dropping ship waypoints. Select a waypoint with the left mouse button, move the cursor, and release the left mouse button.");
         CreateMenuDescription(background, "You can cancel moving a waypoint with the right mouse button.");
 
-        Button hide = new(() => OnHideMenu(TutorialType.FormationsMenu));
-        hide.AddToClassList("main-button");
-        hide.AddToClassList("tutorial-menu-button");
-        hide.pickingMode = PickingMode.Position;
-        SetMargin(hide, 30, 0, 0, 0);
-        SetPadding(hide, 0, 0, 30, 30);
-        SetFontSize(hide, 27);
-        SetBorderWidthRadius(hide, 3, 7);
-        hide.text = "Hide this";
-        background.Add(hide);
+        Button continueButton = new(() => OnHideMenu(TutorialType.FormationsMenu));
+        continueButton.AddToClassList("main-button");
+        continueButton.AddToClassList("tutorial-menu-button");
+        continueButton.pickingMode = PickingMode.Position;
+        SetMargin(continueButton, 30, 0, 0, 0);
+        SetPadding(continueButton, 0, 0, 30, 30);
+        SetFontSize(continueButton, 27);
+        SetBorderWidthRadius(continueButton, 3, 7);
+        continueButton.text = "Continue";
+        continueButton.SetEnabled(false);
+        background.Add(continueButton);
+
+        StartCoroutine(EnableContinueButton(continueButton));
+    }
+
+    private IEnumerator EnableContinueButton(Button _button)
+    {
+        yield return new WaitForSeconds(3);
+        _button.SetEnabled(true);
     }
 
     private void OnHideMenu(TutorialType _type)
@@ -171,8 +296,27 @@ public class TutorialScreen : UIScreen
     {
         Label label = new(_text);
         label.AddToClassList("tutorial-menu-description");
-        SetFontSize(label, 18);
+        SetFontSize(label, 22);
         _parent.Add(label);
+    }
+
+    private void CreateTutorialBorder(VisualElement _parent)
+    {
+        RemoveTutorialBorder();
+
+        tutorialBorder = new();
+        tutorialBorder.AddToClassList("tutorial-menu-border");
+        SetBorderWidthRadius(tutorialBorder, 10, 20);
+        _parent.Add(tutorialBorder);
+    }
+
+    private void RemoveTutorialBorder()
+    {
+        if (tutorialBorder != null)
+        {
+            tutorialBorder.RemoveFromHierarchy();
+            tutorialBorder = null;
+        }
     }
 
     public void ShowMenuTooltip(TutorialType _type)
@@ -182,7 +326,7 @@ public class TutorialScreen : UIScreen
         switch (_type)
         {
             case TutorialType.FormationsMenu:
-                CreateFormationsTutorial();
+                CreateFirstFormationsTutorial();
                 break;
 
             default:
@@ -263,6 +407,8 @@ public class TutorialScreen : UIScreen
 
     private void Hide()
     {
+        RemoveTutorialBorder();
+
         current.Clear();
         menuContainer.Clear();
         inputContainer.Clear();

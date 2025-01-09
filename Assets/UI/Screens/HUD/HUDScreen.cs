@@ -524,6 +524,7 @@ public class HUDScreen : UIScreen
     {
         VisualElement container = new();
         container.AddToClassList("command-container");
+        SetMargin(container, 0, 50, 50, 0);
         container.pickingMode = PickingMode.Ignore;
         Root.Add(container);
 
@@ -534,9 +535,11 @@ public class HUDScreen : UIScreen
     {
         commandContainer = new();
         commandContainer.AddToClassList("command-button-container");
-        SetMargin(commandContainer, 0, 50, 50, 0);
+        SetMargin(commandContainer, 0, 0, 0, 0);
         commandContainer.pickingMode = PickingMode.Ignore;
         _container.Add(commandContainer);
+
+        TutorialScreen.Instance.SetCommandContainer(commandContainer);
 
         VisualElement followWaitContainer = new();
         followWaitContainer.AddToClassList("command-follow-wait-container");
@@ -546,6 +549,7 @@ public class HUDScreen : UIScreen
         CreateFormationButtonContainer(followWaitContainer);
 
         VisualElement followWaitButtons = CreateButtonBackground(followWaitContainer);
+        SetMargin(followWaitButtons, 0, 0, 0, 25);
         CreateButton(followWaitButtons, "1", $"{Command.Follow}", "Ships in fleet will follow the\nplayer in given formation", Command.Follow);
         CreateButton(followWaitButtons, "2", $"{Command.Wait}", "Ships in fleet will wait at\ncurrent position in given formation ", Command.Wait);
 
@@ -606,12 +610,13 @@ public class HUDScreen : UIScreen
     {
         formationContainer = new();
         formationContainer.AddToClassList("command-formation-container");
-        SetMargin(formationContainer, 0, 0, 25, 0);
         _parent.Add(formationContainer);
 
         CreateFormationButton(formationContainer, "Line [-]", Formation.Line);
         CreateFormationButton(formationContainer, "Spearhead [>]", Formation.Spearhead);
         CreateFormationButton(formationContainer, "Ring [O]", Formation.Ring);
+
+        TutorialScreen.Instance.SetFormationsContainer(formationContainer);
     }
 
     private void CreateFormationButton(VisualElement _parent, string _text, Formation _formation)
@@ -754,6 +759,7 @@ public class HUDScreen : UIScreen
         Label header = new("Objectives");
         header.AddToClassList("objective-header");
         SetFontSize(header, 40);
+        SetMargin(header, 0, 25, 0, 0);
         objectiveBackground.Add(header);
     }
 
@@ -865,7 +871,7 @@ public class HUDScreen : UIScreen
                 return "Eliminate the enemy fleet";
 
             case ObjectiveType.ShootCannon:
-                return "Shoot one of the cannons at the enemy";
+                return "Shoot a cannon at the enemy ship";
 
             case ObjectiveType.FindAndEliminateRemaining:
                 return "Eliminate the remaining enemy fleets";
