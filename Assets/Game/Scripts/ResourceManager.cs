@@ -10,7 +10,7 @@ public class ResourceManager : MonoBehaviour
 
     public const int UPGRADE_COST = 10;
 
-    private const int GAIN_PER_ENEMY_SUNK = 20;
+    private const int GAIN_PER_ENEMY_SUNK = 15;
     private const int COST_FOR_BUILD = 10;
     private const int REPAIR_COST = 5;
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.VFX;
 
 public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 {
@@ -45,6 +46,8 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
     public float UpgradeIncrease => 0.25f;
     public float GetUpgradeValue => MaxHealth + (MaxHealth * ((int)UpgradeTier * UpgradeIncrease));
 
+    [SerializeField] private VisualEffect[] damageEffects;
+
     public virtual void Awake()
     {
         Engine = GetComponentInChildren<Engine>();
@@ -80,6 +83,13 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         {
             OnDamaged?.Invoke();
         }
+
+        int count = Mathf.FloorToInt(Mathf.Lerp(damageEffects.Length, 0, Health / MaxHealth));
+
+        for (int i = 0; i < count; i++)
+        {
+            damageEffects[i].Play();
+        }
     }
 
     public void SetHealth(float _value)
@@ -94,11 +104,10 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         burningAudioSource.loop = true;
         burningAudioSource.Play();
 
-        foreach(ParticleSystem particle in DeathExplosion.GetComponentsInChildren<ParticleSystem>())
+        foreach (ParticleSystem particle in DeathExplosion.GetComponentsInChildren<ParticleSystem>())
         {
             particle.Play();
         }
-
     }
 
     public int GetPercentageDurability()
@@ -241,6 +250,13 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
     {
         Health = GetUpgradeValue;
         RigidBody.centerOfMass = defaultCOM;
+
+        damageEffects = damageEffects.ToList().OrderBy((n) => UnityEngine.Random.value).ToArray();
+
+        foreach (VisualEffect effect in damageEffects)
+        {
+            effect.Stop();
+        }
     }
 
     public void ResetUpgrades()
