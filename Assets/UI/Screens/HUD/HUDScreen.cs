@@ -61,6 +61,9 @@ public class HUDScreen : UIScreen
     public readonly Dictionary<ObjectiveType, VisualElement> CurrentObjectives = new();
     public readonly List<ObjectiveType> CompletedObjectives = new();
 
+    private readonly Queue<VisualElement> objectivesToAdd = new();
+    private bool isAddingObjective = false;
+
     [SerializeField] private Texture2D checkIcon;
 
     #endregion
@@ -641,6 +644,11 @@ public class HUDScreen : UIScreen
 
     private void RunObjectiveState()
     {
+        if (!isAddingObjective && objectivesToAdd.Count > 0 && UIManager.Instance.State == UIState.HUD)
+        {
+            StartCoroutine(AddObjectiveAnimation(objectivesToAdd.Dequeue()));
+        }
+
         switch (ObjectiveState)
         {
             case CommandObjectiveState.Visible:
@@ -759,7 +767,7 @@ public class HUDScreen : UIScreen
         Label header = new("Objectives");
         header.AddToClassList("objective-header");
         SetFontSize(header, 40);
-        SetMargin(header, 0, 25, 0, 0);
+        SetMargin(header, 0, 17, 0, 0);
         objectiveBackground.Add(header);
     }
 
@@ -781,7 +789,7 @@ public class HUDScreen : UIScreen
         {
             VisualElement objective = CreateObjective(objectiveBackground, type);
             CurrentObjectives.Add(type, objective);
-            StartCoroutine(AddAnimation(objective));
+            objectivesToAdd.Enqueue(objective);
         }
 
         ShowObjective();
@@ -790,16 +798,18 @@ public class HUDScreen : UIScreen
     private VisualElement CreateObjective(VisualElement _parent, ObjectiveType _type)
     {
         VisualElement container = new();
+        container.SetEnabled(false);
+        container.AddToClassList("objective-item-first");
         container.AddToClassList("objective-item");
         SetWidth(container, 300);
-        SetPadding(container, 0, 0, 10, 10);
+        SetPadding(container, 7, 7, 7, 7);
         SetBorderRadius(container, 10);
         _parent.Add(container);
 
         Box mark = new();
         mark.AddToClassList("objective-mark");
         SetSize(mark, 26, 26);
-        SetMargin(mark, 4, 0, 0, 4);
+        SetMargin(mark, 5, 0, 0, 4);
         SetBorderWidth(mark, 3);
         container.Add(mark);
 
@@ -811,11 +821,22 @@ public class HUDScreen : UIScreen
         return container;
     }
 
-    public IEnumerator AddAnimation(VisualElement _target)
+    public IEnumerator AddObjectiveAnimation(VisualElement _target)
     {
-        yield return new WaitForSeconds(5);
+        isAddingObjective = true;
+
+        yield return new WaitForSeconds(0.5f);
+
+        _target.SetEnabled(true);
+
+        yield return new WaitForSeconds(3);
+
+        _target.RemoveFromClassList("objective-item-first");
+        _target.AddToClassList("objective-item-second");
 
         _target.SetEnabled(false);
+
+        isAddingObjective = false;
     }
 
     public void CompleteObjective(params ObjectiveType[] _types)
@@ -834,13 +855,13 @@ public class HUDScreen : UIScreen
 
         foreach (ObjectiveType type in toRemove)
         {
-            StartCoroutine(RemoveAnimation(CurrentObjectives[type]));
+            StartCoroutine(RemoveObjectiveAnimation(CurrentObjectives[type]));
             CurrentObjectives.Remove(type);
             OnObjectiveCompleted(type);
         }
     }
 
-    private IEnumerator RemoveAnimation(VisualElement _target)
+    private IEnumerator RemoveObjectiveAnimation(VisualElement _target)
     {
         Image image = new();
         image.AddToClassList("objective-mark-check");

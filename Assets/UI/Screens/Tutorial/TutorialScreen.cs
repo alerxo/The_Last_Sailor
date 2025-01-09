@@ -145,7 +145,7 @@ public class TutorialScreen : UIScreen
     {
         PlayerBoatController.Instance.AdmiralController.SetCommandForSubordinates(Command.Follow);
 
-        CreateFormationTutorial("Formation view", "This is the formation view, here you can get an overview of your fleet's formation and give commmands and formations.", CreateSecondFormationsTutorial);
+        CreateFormationTutorial("Formation view", "This is the formation view, here you can get an overview of your fleet and give commmands and formations.", CreateSecondFormationsTutorial);
     }
 
     public void CreateSecondFormationsTutorial()
@@ -159,7 +159,7 @@ public class TutorialScreen : UIScreen
     public void CreateThirdFormationsTutorial()
     {
         CreateFormationTutorial("Fleet Formations",
-            "You can change what formation your fleet shouldby with formation preset buttons.",
+            "You can change what formation your fleet should use by with formation preset buttons.",
             CreateFourthFormationsTutorial,
             formationContainer);
     }
@@ -224,7 +224,7 @@ public class TutorialScreen : UIScreen
 
     private void CreateMenuDescription(VisualElement _parent, string _text)
     {
-        Label label = new(_text.Replace(". ", ".\n"));
+        Label label = new(_text.Replace(". ", ".\n\n"));
         label.AddToClassList("tutorial-menu-description");
         SetFontSize(label, 22);
         _parent.Add(label);

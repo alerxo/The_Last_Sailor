@@ -180,18 +180,31 @@
 	background-color: rgba(20, 20, 20, 0.9);
 
 	translate: -250% 0;
+	scale: 1.5;
 
-	transition-property: translate, background-color;
-    transition-duration: 500ms;
+	transition-property: scale, translate, background-color;
+    transition-duration: 250ms;
 	transition-timing-function: ease-in-out;
 }
 
-.objective-item:disabled {
+.objective-item-first:disabled {
+	opacity: 1;
+
+	scale: 0;
+
+	transition-property: scale, translate, background-color;
+    transition-duration: 250ms;
+	transition-timing-function: ease-in-out;
+}
+
+.objective-item-second:disabled {
 	background-color: rgba(20, 20, 20, 0);
 	opacity: 1;
-	translate: 0% 0;
 
-	transition-property: translate, background-color;
+	translate: 0% 0;
+	scale: 1;
+
+	transition-property: scale, translate, background-color;
     transition-duration: 500ms;
 	transition-timing-function: ease-in-out;
 }
