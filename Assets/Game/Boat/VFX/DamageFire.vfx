@@ -1477,7 +1477,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Vector, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"vector":{"x":-0.10000000149011612,"y":0.10000000149011612,"z":-0.10000000149011612}}'
+      m_SerializableObject: '{"vector":{"x":-0.4000000059604645,"y":0.10000000149011612,"z":-0.4000000059604645}}'
     m_Space: 1
   m_Property:
     name: A
@@ -1647,7 +1647,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Vector, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"vector":{"x":0.10000000149011612,"y":0.6000000238418579,"z":0.10000000149011612}}'
+      m_SerializableObject: '{"vector":{"x":0.4000000059604645,"y":0.20000000298023225,"z":0.4000000059604645}}'
     m_Space: 0
   m_Property:
     name: B
@@ -2479,7 +2479,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 1
+      m_SerializableObject: 1.5
     m_Space: -1
   m_Property:
     name: Intensity
@@ -3614,7 +3614,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Vector, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"vector":{"x":-0.10000000149011612,"y":0.20000000298023225,"z":-0.10000000149011612}}'
+      m_SerializableObject: '{"vector":{"x":-0.5,"y":0.20000000298023225,"z":-0.5}}'
     m_Space: 1
   m_Property:
     name: A
@@ -3784,7 +3784,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Vector, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"vector":{"x":0.10000000149011612,"y":1.0,"z":0.10000000149011612}}'
+      m_SerializableObject: '{"vector":{"x":0.5,"y":1.0,"z":0.5}}'
     m_Space: 0
   m_Property:
     name: B
@@ -4795,7 +4795,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 1
+      m_SerializableObject: 2
     m_Space: -1
   m_Property:
     name: Intensity
@@ -5706,7 +5706,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.AnimationCurve, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"frames":[{"time":0.0,"value":0.0,"inTangent":0.047197360545396808,"outTangent":0.047197360545396808,"tangentMode":0,"leftTangentMode":0,"rightTangentMode":0,"broken":false},{"time":0.48567140102386477,"value":0.12412981688976288,"inTangent":0.794853925704956,"outTangent":0.794853925704956,"tangentMode":0,"leftTangentMode":0,"rightTangentMode":0,"broken":false},{"time":1.0,"value":0.00004466809332370758,"inTangent":-2.7695820331573488,"outTangent":-2.7695820331573488,"tangentMode":0,"leftTangentMode":0,"rightTangentMode":0,"broken":false}],"preWrapMode":8,"postWrapMode":8,"version":1}'
+      m_SerializableObject: '{"frames":[{"time":0.0,"value":0.0,"inTangent":-0.06220473349094391,"outTangent":-0.06220473349094391,"tangentMode":0,"leftTangentMode":0,"rightTangentMode":0,"broken":false},{"time":0.586307942867279,"value":0.7748225331306458,"inTangent":-0.04188970848917961,"outTangent":-0.04188970848917961,"tangentMode":0,"leftTangentMode":0,"rightTangentMode":0,"broken":false},{"time":1.0,"value":0.00004466809332370758,"inTangent":-4.35429048538208,"outTangent":-4.35429048538208,"tangentMode":0,"leftTangentMode":0,"rightTangentMode":0,"broken":false}],"preWrapMode":8,"postWrapMode":8,"version":1}'
     m_Space: -1
   m_Property:
     name: Alpha
@@ -6310,7 +6310,7 @@ MonoBehaviour:
   - {fileID: 114350483966675299}
   - {fileID: 114350483966675332}
   dataType: 0
-  capacity: 15
+  capacity: 30
   stripCapacity: 1
   particlePerStripCount: 128
   needsComputeBounds: 0
@@ -8340,7 +8340,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 1
+      m_SerializableObject: 2
     m_Space: -1
   m_Property:
     name: Rate
@@ -8748,7 +8748,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 1.4
+      m_SerializableObject: 1.2
     m_Space: -1
   m_Property:
     name: A
@@ -8782,7 +8782,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 1.5
+      m_SerializableObject: 1.8
     m_Space: -1
   m_Property:
     name: B
@@ -8879,7 +8879,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 2.4
+      m_SerializableObject: 2.7
     m_Space: -1
   m_Property:
     name: A
@@ -8913,7 +8913,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 2.6
+      m_SerializableObject: 3.5
     m_Space: -1
   m_Property:
     name: B
@@ -9240,7 +9240,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Position, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"position":{"x":-0.20000000298023225,"y":-0.20000000298023225,"z":-0.20000000298023225}}'
+      m_SerializableObject: '{"position":{"x":-0.30000001192092898,"y":-0.10000000149011612,"z":-0.30000001192092898}}'
     m_Space: 0
   m_Property:
     name: A
@@ -9410,7 +9410,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.Position, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"position":{"x":0.20000000298023225,"y":0.20000000298023225,"z":0.20000000298023225}}'
+      m_SerializableObject: '{"position":{"x":0.30000001192092898,"y":0.10000000149011612,"z":0.30000001192092898}}'
     m_Space: 0
   m_Property:
     name: B
