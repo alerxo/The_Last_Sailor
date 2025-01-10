@@ -12,8 +12,13 @@ public class TutorialScreen : UIScreen
 
     protected override List<UIState> ActiveStates => new() { UIState.HUD, UIState.Fleet, UIState.Formation };
 
-    private readonly List<TutorialType> ignore = new();
-    private readonly List<TutorialType> current = new();
+    private readonly List<TutorialType> ignoreTypes = new();
+    private readonly List<TutorialType> newTypes = new() { TutorialType.Player, TutorialType.Steering, TutorialType.Throttle, TutorialType.Cannon, TutorialType.Command };
+    private readonly List<TutorialType> currentTypes = new();
+
+    private bool isCheckingIfCompletedInput = false;
+    private readonly List<string> completedInput = new();
+    private readonly Dictionary<KeyCode, TooltipControlScheme> currentInput = new();
 
     private VisualElement inputContainer;
     private VisualElement menuContainer;
@@ -30,7 +35,7 @@ public class TutorialScreen : UIScreen
 
         input = new();
         input.Player.HideTooltip.performed += HideTooltip_performed;
-        input.Player.Enable();
+        input.Player.HideTooltip.Enable();
 
         UIManager.OnStateChanged += UIManager_OnStateChanged;
     }
@@ -41,6 +46,14 @@ public class TutorialScreen : UIScreen
         input.Player.Disable();
 
         UIManager.OnStateChanged -= UIManager_OnStateChanged;
+    }
+
+    private void Update()
+    {
+        if (isCheckingIfCompletedInput)
+        {
+            CheckIfCompletedInput();
+        }
     }
 
     private void UIManager_OnStateChanged(UIState _state)
@@ -75,85 +88,22 @@ public class TutorialScreen : UIScreen
         Root.Add(menuContainer);
     }
 
-    private void CreateInputTooltips(List<Tooltip> _tooltips, bool _shouldCreateHide)
+    #region Menu
+
+    public void ShowMenuTooltip(TutorialType _type)
     {
-        inputContainer.Clear();
+        if (ignoreTypes.Contains(_type)) return;
 
-        VisualElement inputBackground = new();
-        inputBackground.AddToClassList("tutorial-input-background");
-        SetMargin(inputBackground, 0, 50, 40, 0);
-        inputContainer.Add(inputBackground);
-
-        foreach (Tooltip tooltip in _tooltips)
+        switch (_type)
         {
-            CreateInputTooltip(inputBackground, tooltip);
+            case TutorialType.FormationsMenu:
+                CreateFirstFormationsTutorial();
+                break;
+
+            default:
+                Debug.LogError("Default");
+                break;
         }
-
-        if (_shouldCreateHide)
-        {
-            CreateInputTooltip(inputBackground, new Tooltip("Hide Input UI", new TooltipInput("Z")));
-            StartCoroutine(AnimateInputTooltip(inputBackground));
-        }
-    }
-
-    private void CreateInputTooltip(VisualElement _parent, Tooltip _tooltip)
-    {
-        VisualElement container = new();
-        container.AddToClassList("tutorial-input-item");
-        SetMargin(container, 0, 0, 10, 10);
-        SetBorderRadius(container, 5);
-        _parent.Add(container);
-
-        for (int i = 0; i < _tooltip.Controls.Length; i++)
-        {
-            for (int j = 0; j < _tooltip.Controls[i].Keys.Length; j++)
-            {
-                Label inputLabel = new(_tooltip.Controls[i].Keys[j]);
-                inputLabel.AddToClassList("tutorial-input-item-input");
-                SetMargin(inputLabel, 0, 0, j == 0 ? 0 : 3, 3);
-                SetPadding(inputLabel, 0, 0, 10, 10);
-                SetBorderWidthRadius(inputLabel, 3, 5);
-                SetFontSize(inputLabel, 20);
-                container.Add(inputLabel);
-            }
-
-            if (i + 1 < _tooltip.Controls.Length)
-            {
-                Label alternative = new("or");
-                alternative.AddToClassList("tutorial-input-item-description");
-                SetFontSize(alternative, 18);
-                container.Add(alternative);
-            }
-        }
-
-        Label description = new(_tooltip.Description);
-        description.AddToClassList("tutorial-input-item-description");
-        SetFontSize(description, 18);
-        container.Add(description);
-    }
-
-    private IEnumerator AnimateInputTooltip(VisualElement _target)
-    {
-        _target.visible = false;
-        _target.SetEnabled(false);
-
-        yield return new WaitForSeconds(1);
-
-        _target.visible = true;
-
-        yield return new WaitForSeconds(3);
-
-        //_target.SetEnabled(true);
-    }
-
-    public void SetCommandContainer(VisualElement _command)
-    {
-        commandContainer = _command;
-    }
-
-    public void SetFormationsContainer(VisualElement _formation)
-    {
-        formationContainer = _formation;
     }
 
     public void CreateFirstFormationsTutorial()
@@ -234,7 +184,7 @@ public class TutorialScreen : UIScreen
     private void OnHideMenu(TutorialType _type)
     {
         menuContainer.Clear();
-        ignore.Add(_type);
+        ignoreTypes.Add(_type);
     }
 
     private void CreateMenuDescription(VisualElement _parent, string _text)
@@ -268,21 +218,19 @@ public class TutorialScreen : UIScreen
         }
     }
 
-    public void ShowMenuTooltip(TutorialType _type)
+    public void SetCommandContainer(VisualElement _command)
     {
-        if (ignore.Contains(_type)) return;
-
-        switch (_type)
-        {
-            case TutorialType.FormationsMenu:
-                CreateFirstFormationsTutorial();
-                break;
-
-            default:
-                Debug.LogError("Default");
-                break;
-        }
+        commandContainer = _command;
     }
+
+    public void SetFormationsContainer(VisualElement _formation)
+    {
+        formationContainer = _formation;
+    }
+
+    #endregion
+
+    #region Input
 
     public void ShowInputTooltip(params TutorialType[] _types)
     {
@@ -290,44 +238,186 @@ public class TutorialScreen : UIScreen
 
         foreach (TutorialType type in _types)
         {
-            if (!ignore.Contains(type))
+            if (!ignoreTypes.Contains(type))
             {
-                types.AddRange(GetInputTooltipText(type));
+                types.Add(new Tooltip(type, GetTooltipControls(type)));
             }
         }
 
         if (types.Count > 0)
         {
-            current.Clear();
-            current.AddRange(_types);
-            CreateInputTooltips(types, !current.Contains(TutorialType.Fleet) && !current.Contains(TutorialType.Formations));
+            currentTypes.Clear();
+            currentTypes.AddRange(_types);
+            CreateInputTooltips(types);
         }
     }
 
-    private Tooltip[] GetInputTooltipText(TutorialType _type)
+    private void CreateInputTooltips(List<Tooltip> _tooltips)
+    {
+        CheckIfCompletedInput();
+        inputContainer.Clear();
+        currentInput.Clear();
+
+        VisualElement inputBackground = new();
+        inputBackground.AddToClassList("tutorial-input-background");
+        SetMargin(inputBackground, 0, 50, 40, 0);
+        inputContainer.Add(inputBackground);
+
+        bool isAnimating = false;
+
+        foreach (Tooltip tooltip in _tooltips)
+        {
+            foreach (TooltipControlScheme controlScheme in tooltip.Controls)
+            {
+                TooltipControlScheme current = controlScheme;
+                current.Type = tooltip.Type;
+                current.visualElement = CreateInputControl(inputBackground, current);
+
+                foreach (TooltipInput input in current.Controls)
+                {
+                    foreach (TooltipKey key in input.Keys)
+                    {
+                        currentInput[key.Key] = current;
+                    }
+                }
+
+                if (completedInput.Contains(current.GetID()))
+                {
+                    current.visualElement.style.opacity = 0.5f;
+                }
+
+                if (newTypes.Contains(tooltip.Type))
+                {
+                    StartCoroutine(AnimateInputControl(current.visualElement));
+                }
+            }
+
+            if (newTypes.Contains(tooltip.Type))
+            {
+                newTypes.Remove(tooltip.Type);
+                isAnimating = true;
+            }
+        }
+
+        if (!currentTypes.Contains(TutorialType.Fleet) && !currentTypes.Contains(TutorialType.Formations))
+        {
+            VisualElement control = CreateInputControl(inputBackground, new TooltipControlScheme("Hide Input UI", new TooltipInput(new TooltipKey(KeyCode.Z, "Z"))));
+
+            if (isAnimating)
+            {
+                StartCoroutine(AnimateInputControl(control));
+            }
+        }
+
+        StartCoroutine(PauseCheckingInput());
+    }
+
+    private IEnumerator PauseCheckingInput()
+    {
+        isCheckingIfCompletedInput = false;
+
+        yield return new WaitForSeconds(0.1f);
+
+        isCheckingIfCompletedInput = true;
+    }
+
+    private VisualElement CreateInputControl(VisualElement _parent, TooltipControlScheme _tooltip)
+    {
+        VisualElement container = new();
+        container.AddToClassList("tutorial-input-item");
+        SetMargin(container, 0, 0, 10, 10);
+        SetBorderRadius(container, 5);
+        _parent.Add(container);
+
+        for (int i = 0; i < _tooltip.Controls.Length; i++)
+        {
+            for (int j = 0; j < _tooltip.Controls[i].Keys.Length; j++)
+            {
+                Label inputLabel = new(_tooltip.Controls[i].Keys[j].Name);
+                inputLabel.AddToClassList("tutorial-input-item-input");
+                SetMargin(inputLabel, 0, 0, j == 0 ? 0 : 3, 3);
+                SetPadding(inputLabel, 0, 0, 10, 10);
+                SetBorderWidthRadius(inputLabel, 3, 5);
+                SetFontSize(inputLabel, 20);
+                container.Add(inputLabel);
+            }
+
+            if (i + 1 < _tooltip.Controls.Length)
+            {
+                Label alternative = new("or");
+                alternative.AddToClassList("tutorial-input-item-description");
+                SetFontSize(alternative, 18);
+                container.Add(alternative);
+            }
+        }
+
+        Label description = new(_tooltip.Description);
+        description.AddToClassList("tutorial-input-item-description");
+        SetFontSize(description, 18);
+        container.Add(description);
+
+        return container;
+    }
+
+    private IEnumerator AnimateInputControl(VisualElement _target)
+    {
+        yield return new WaitForSeconds(1f);
+
+        _target.SetEnabled(false);
+
+        yield return new WaitForSeconds(0.25f);
+
+        _target.SetEnabled(true);
+    }
+
+    private TooltipControlScheme[] GetTooltipControls(TutorialType _type)
     {
         switch (_type)
         {
             case TutorialType.Player:
-                return new Tooltip[] { new("Walk", new TooltipInput("W", "A", "S", "D")), new("Sprint", new TooltipInput("LShift")), new("Jump", new TooltipInput("SPACE")), new("Interact", new TooltipInput("E")), new("Objective", new TooltipInput("TAB")) };
+                return new TooltipControlScheme[] {
+                    new("Walk", new TooltipInput(new TooltipKey(KeyCode.W, "W"), new TooltipKey(KeyCode.A, "A"), new TooltipKey(KeyCode.S, "S"), new TooltipKey(KeyCode.D, "D"))),
+                    new("Sprint", new TooltipInput(new TooltipKey(KeyCode.LeftShift, "LShift"))),
+                    new("Jump", new TooltipInput(new TooltipKey(KeyCode.Space, "Space"))),
+                    new("Interact", new TooltipInput(new TooltipKey(KeyCode.E, "E"))) };
 
             case TutorialType.Steering:
-                return new Tooltip[] { new("Steer", new TooltipInput("A", "D")), new("Camera view", new TooltipInput("C")), new("Exit", new TooltipInput("E"), new TooltipInput("ESC")) };
+                return new TooltipControlScheme[] {
+                    new("Steer", new TooltipInput(new TooltipKey(KeyCode.A, "A"), new TooltipKey(KeyCode.D, "D"))),
+                    new("Camera view", new TooltipInput(new TooltipKey(KeyCode.C, "C"))),
+                    new("Exit", new TooltipInput(new TooltipKey(KeyCode.E, "E")),
+                    new TooltipInput(new TooltipKey(KeyCode.Escape, "Esc"))) };
 
             case TutorialType.Throttle:
-                return new Tooltip[] { new("Throttle", new TooltipInput("A", "D")), new("Exit", new TooltipInput("E"), new TooltipInput("ESC")) };
+                return new TooltipControlScheme[] {
+                    new("Throttle", new TooltipInput(new TooltipKey(KeyCode.A, "A"), new TooltipKey(KeyCode.D, "D"))),
+                    new("Exit", new TooltipInput(new TooltipKey(KeyCode.E, "E"), new TooltipKey(KeyCode.Escape, "Esc"))) };
 
             case TutorialType.Cannon:
-                return new Tooltip[] { new("Aim", new TooltipInput("W", "A", "S", "D")), new("Fire", new TooltipInput("LMB")), new("Exit", new TooltipInput("E"), new TooltipInput("ESC")) };
+                return new TooltipControlScheme[] {
+                    new("Aim", new TooltipInput(new TooltipKey(KeyCode.W, "W"), new TooltipKey(KeyCode.A, "A"), new TooltipKey(KeyCode.S, "S"), new TooltipKey(KeyCode.D, "D"))),
+                    new("Fire", new TooltipInput(new TooltipKey(KeyCode.Mouse0, "LMB"))),
+                    new("Exit", new TooltipInput(new TooltipKey(KeyCode.E, "E"), new TooltipKey(KeyCode.Escape, "Esc"))) };
 
             case TutorialType.Command:
-                return new Tooltip[] { new("Show Current", new TooltipInput("TAB")), new("Fleet follow", new TooltipInput("1")), new("Fleet wait", new TooltipInput("2")), new("Fleet charge", new TooltipInput("3")), new("Formation view", new TooltipInput("4")) };
+                return new TooltipControlScheme[] {
+                    new("Fleet follow", new TooltipInput(new TooltipKey(KeyCode.Alpha1, "1"))),
+                    new("Fleet wait", new TooltipInput(new TooltipKey(KeyCode.Alpha2, "2"))),
+                    new("Fleet charge", new TooltipInput(new TooltipKey(KeyCode.Alpha3, "3"))),
+                    new("Formation view", new TooltipInput(new TooltipKey(KeyCode.Alpha4, "4"))) };
 
             case TutorialType.Formations:
-                return new Tooltip[] { new("Move Camera", new TooltipInput("W", "A", "S", "D")), new("Zoom Camera", new TooltipInput("Scroll")), new("Fleet follow", new TooltipInput("1")), new("Fleet wait", new TooltipInput("2")), new("Fleet charge", new TooltipInput("3")), new("Exit", new TooltipInput("ESC", "4")) };
+                return new TooltipControlScheme[] {
+                    new("Move Camera", new TooltipInput(new TooltipKey("W"), new TooltipKey("A"), new TooltipKey("S"), new TooltipKey("D"))),
+                    new("Zoom Camera", new TooltipInput(new TooltipKey("Scroll"))),
+                    new("Fleet follow", new TooltipInput(new TooltipKey("1"))),
+                    new("Fleet wait", new TooltipInput(new TooltipKey("2"))),
+                    new("Fleet charge", new TooltipInput(new TooltipKey("3"))),
+                    new("Exit", new TooltipInput(new TooltipKey("4"), new TooltipKey("Esc"))) };
 
             case TutorialType.Fleet:
-                return new Tooltip[] { new("Exit", new TooltipInput("ESC", "E")) };
+                return new TooltipControlScheme[] {
+                    new("Exit", new TooltipInput(new TooltipKey("E"), new TooltipKey("Esc"))) };
 
             default:
                 Debug.LogError("Default");
@@ -335,9 +425,23 @@ public class TutorialScreen : UIScreen
         }
     }
 
+    #endregion
+
+    private void CheckIfCompletedInput()
+    {
+        foreach (KeyValuePair<KeyCode, TooltipControlScheme> controlScheme in currentInput)
+        {
+            if (Input.GetKeyDown(controlScheme.Key))
+            {
+                completedInput.Add(controlScheme.Value.GetID());
+                controlScheme.Value.visualElement.style.opacity = 0.5f;
+            }
+        }
+    }
+
     public void HideTutorial(params TutorialType[] _type)
     {
-        if (current.Any((t) => _type.ToList().Contains(t)))
+        if (currentTypes.Any((t) => _type.ToList().Contains(t)))
         {
             Hide();
         }
@@ -345,49 +449,93 @@ public class TutorialScreen : UIScreen
 
     private void HideTooltip_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        if (current.Contains(TutorialType.Fleet) || current.Contains(TutorialType.Formations)) return;
+        if (currentTypes.Contains(TutorialType.Fleet) || currentTypes.Contains(TutorialType.Formations)) return;
 
-        if (current.Count > 0)
+        if (currentTypes.Count > 0)
         {
-            ignore.AddRange(current);
+            ignoreTypes.AddRange(currentTypes);
             Hide();
         }
     }
 
     private void Hide()
     {
-        RemoveTutorialBorder();
+        CheckIfCompletedInput();
 
-        current.Clear();
+        currentTypes.Clear();
         menuContainer.Clear();
         inputContainer.Clear();
+        currentInput.Clear();
+
+        RemoveTutorialBorder();
     }
 
     private struct Tooltip
     {
-        public TooltipInput[] Controls;
-        public string Description;
+        public TutorialType Type;
+        public TooltipControlScheme[] Controls;
 
-        public Tooltip(string description, params TooltipInput[] _controls)
+        public Tooltip(TutorialType _type, TooltipControlScheme[] _controls)
+        {
+            Type = _type;
+            Controls = _controls;
+        }
+    }
+
+    private struct TooltipControlScheme
+    {
+        public TooltipInput[] Controls;
+        public TutorialType Type;
+        public string Description;
+        public VisualElement visualElement;
+
+        public TooltipControlScheme(string description, params TooltipInput[] _controls)
         {
             Controls = _controls;
             Description = description;
+            visualElement = null;
+            Type = TutorialType.None;
+        }
+
+        public readonly string GetID()
+        {
+            return $"{Type}{Description}";
         }
     }
 
     private struct TooltipInput
     {
-        public string[] Keys;
+        public TooltipKey[] Keys;
 
-        public TooltipInput(params string[] _keys)
+        public TooltipInput(params TooltipKey[] _keys)
         {
             Keys = _keys;
+        }
+    }
+
+    private struct TooltipKey
+    {
+        public KeyCode Key;
+        public string Name;
+
+        public TooltipKey(KeyCode _key, string _name)
+        {
+            Key = _key;
+            Name = _name;
+        }
+
+        public TooltipKey(string _name)
+        {
+            Key = KeyCode.None;
+            Name = _name;
         }
     }
 }
 
 public enum TutorialType
 {
+    None,
+
     Player,
     Steering,
     Throttle,

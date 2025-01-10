@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -50,11 +51,10 @@ public class TitleScreen : UIScreen
         _parent.Add(button);
     }
 
-    private static void OnPlay()
+    private void OnPlay()
     {
         UIManager.Instance.SetState(UIState.HUD);
         CameraManager.Instance.SetState(CameraState.Player);
         FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
-        HUDScreen.Instance.AddObjective(ObjectiveType.Engine);
     }
 }

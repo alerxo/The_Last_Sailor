@@ -166,6 +166,18 @@
 	border-width: 0px;
 
 	background-color: rgba(20, 20, 20, 0.7);
+
+	transition-property: opacity;
+    transition-duration: 1000ms;
+	transition-timing-function: ease-in-out;
+}
+
+.objective-background:disabled {
+	opacity: 0;
+
+	transition-property: opacity;
+    transition-duration: 500ms;
+	transition-timing-function: ease-in-out;
 }
 
 .objective-header {
