@@ -105,7 +105,7 @@ public class CombatManager : MonoBehaviour
 
     private void CalmState()
     {
-        if (UIManager.Instance.State == UIState.Fleet || UIManager.Instance.State == UIState.Formation)
+        if (UIManager.Instance.GetState() == UIState.Fleet || UIManager.Instance.GetState() == UIState.Formation)
         {
             stateTimer = CALM_DURATION;
         }
@@ -138,7 +138,7 @@ public class CombatManager : MonoBehaviour
 
     public bool CanEnterCombat()
     {
-        return UIManager.Instance.State != UIState.Fleet && UIManager.Instance.State != UIState.Formation && State == CombatManagerState.PreCombat;
+        return UIManager.Instance.GetState() != UIState.Fleet && UIManager.Instance.GetState() != UIState.Formation && State == CombatManagerState.PreCombat;
     }
 
     private void CombatState()

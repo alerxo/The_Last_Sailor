@@ -31,7 +31,7 @@ public abstract class UIScreen : MonoBehaviour
 
     private void UIManager_OnStateChanged(UIState _state)
     {
-        Root.style.display = ActiveStates.Contains(_state) ? DisplayStyle.Flex : DisplayStyle.None;
+        Root.style.display = ActiveStates.Contains(UIManager.Instance.GetState(true)) ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
     protected void SetMargin(VisualElement _target, float _value)

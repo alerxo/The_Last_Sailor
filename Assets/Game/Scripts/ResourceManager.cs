@@ -16,12 +16,28 @@ public class ResourceManager : MonoBehaviour
 
     private static readonly int[] subodinateUpgradeCosts = { 0, 10, 30, 50, 50 };
 
-    public float Amount { get; private set; } = 100f;
+    public float Amount { get; private set; } = 0f;
+
+    private InputSystem_Actions input;
 
     private void Awake()
     {
         Assert.IsNull(Instance);
         Instance = this;
+
+        input = new();
+        input.Player.AddResource.performed += AddResource_performed;
+        input.Player.Enable();
+    }
+
+    private void OnDestroy()
+    {
+        input.Player.AddResource.performed -= AddResource_performed;
+    }
+
+    private void AddResource_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
+    {
+        AddResource(100);
     }
 
     public void AddResource(float _amount)

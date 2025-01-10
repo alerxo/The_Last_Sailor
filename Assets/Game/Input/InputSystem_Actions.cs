@@ -179,6 +179,24 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleUI"",
+                    ""type"": ""Button"",
+                    ""id"": ""a12f064d-ffb9-48b2-9d54-1f4e3e02b78d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AddResource"",
+                    ""type"": ""Button"",
+                    ""id"": ""c03b1f0d-5ea1-49d6-8ae6-c703078e0df7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -586,6 +604,28 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""HideTooltip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""33dd3035-34f3-4c24-ad1f-70c35b9a6828"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0bc368ff-8033-446c-b220-d2de9ad79d97"",
+                    ""path"": ""<Keyboard>/f2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddResource"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1190,6 +1230,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_EnterFormationView = m_Player.FindAction("EnterFormationView", throwIfNotFound: true);
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
         m_Player_HideTooltip = m_Player.FindAction("HideTooltip", throwIfNotFound: true);
+        m_Player_ToggleUI = m_Player.FindAction("ToggleUI", throwIfNotFound: true);
+        m_Player_AddResource = m_Player.FindAction("AddResource", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1286,6 +1328,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_EnterFormationView;
     private readonly InputAction m_Player_Escape;
     private readonly InputAction m_Player_HideTooltip;
+    private readonly InputAction m_Player_ToggleUI;
+    private readonly InputAction m_Player_AddResource;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1307,6 +1351,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @EnterFormationView => m_Wrapper.m_Player_EnterFormationView;
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
         public InputAction @HideTooltip => m_Wrapper.m_Player_HideTooltip;
+        public InputAction @ToggleUI => m_Wrapper.m_Player_ToggleUI;
+        public InputAction @AddResource => m_Wrapper.m_Player_AddResource;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1367,6 +1413,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @HideTooltip.started += instance.OnHideTooltip;
             @HideTooltip.performed += instance.OnHideTooltip;
             @HideTooltip.canceled += instance.OnHideTooltip;
+            @ToggleUI.started += instance.OnToggleUI;
+            @ToggleUI.performed += instance.OnToggleUI;
+            @ToggleUI.canceled += instance.OnToggleUI;
+            @AddResource.started += instance.OnAddResource;
+            @AddResource.performed += instance.OnAddResource;
+            @AddResource.canceled += instance.OnAddResource;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1422,6 +1474,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @HideTooltip.started -= instance.OnHideTooltip;
             @HideTooltip.performed -= instance.OnHideTooltip;
             @HideTooltip.canceled -= instance.OnHideTooltip;
+            @ToggleUI.started -= instance.OnToggleUI;
+            @ToggleUI.performed -= instance.OnToggleUI;
+            @ToggleUI.canceled -= instance.OnToggleUI;
+            @AddResource.started -= instance.OnAddResource;
+            @AddResource.performed -= instance.OnAddResource;
+            @AddResource.canceled -= instance.OnAddResource;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1621,6 +1679,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnEnterFormationView(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
         void OnHideTooltip(InputAction.CallbackContext context);
+        void OnToggleUI(InputAction.CallbackContext context);
+        void OnAddResource(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

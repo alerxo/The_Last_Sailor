@@ -32,7 +32,7 @@ public class Office : MonoBehaviour, IInteractable
 
     private void CombatManager_OnAdmiralInCombatChanged(Admiral _admiral)
     {
-        if (_admiral != null && UIManager.Instance.State == UIState.Fleet)
+        if (_admiral != null && UIManager.Instance.GetState() == UIState.Fleet)
         {
             UIManager.Instance.SetState(UIState.HUD);
             CameraManager.Instance.SetState(CameraState.Player);

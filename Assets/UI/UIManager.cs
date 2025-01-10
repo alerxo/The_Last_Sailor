@@ -14,7 +14,9 @@ public class UIManager : MonoBehaviour
     public static event UnityAction OnUIButtonHovered;
     public static void InvokeOnUIButtonHovered() => OnUIButtonHovered?.Invoke();
 
-    public UIState State { get; private set; } = UIState.TitleScreen;
+    private readonly List<UIState> hiddenCursorStates = new() { UIState.None, UIState.HUD };
+
+    private UIState State = UIState.TitleScreen;
     private readonly List<UIState> pauseScreens = new() { UIState.Pause, UIState.Options };
     private UIState optionsReturnState;
     private bool isInTitleScreen = true;
@@ -24,6 +26,7 @@ public class UIManager : MonoBehaviour
     private const float UIScreenBaseHeight = 1080f;
 
     private InputSystem_Actions input;
+    private UIState toggleUIState = UIState.None;
 
     private void Awake()
     {
@@ -35,11 +38,15 @@ public class UIManager : MonoBehaviour
         input = new();
         input.Player.Escape.performed += Escape_performed;
         input.Player.Tab.performed += Tab_performed;
+        input.Player.ToggleUI.performed += ToggleUI_performed;
         input.Player.Enable();
     }
 
     private void OnDestroy()
     {
+        input.Player.Escape.performed -= Escape_performed;
+        input.Player.Tab.performed -= Tab_performed;
+        input.Player.ToggleUI.performed -= ToggleUI_performed;
         input.Player.Disable();
     }
 
@@ -51,7 +58,7 @@ public class UIManager : MonoBehaviour
             DisableTab(screen.Root);
         }
 
-        SetState(UIState.TitleScreen);
+        SetState(UIState.TitleScreen, true);
     }
 
     public static void DisableTab(VisualElement _target)
@@ -81,7 +88,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowCommandView()
     {
-        if (State != UIState.Formation)
+        if (GetState() != UIState.Formation)
         {
             HUDScreen.Instance.ShowCommand();
         }
@@ -98,20 +105,49 @@ public class UIManager : MonoBehaviour
         SetState(optionsReturnState);
     }
 
-    public void SetState(UIState _state)
+    private void ToggleUI_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
+        UIState current = State;
+        State = toggleUIState;
+        toggleUIState = current;
+
+        Time.timeScale = (!isInTitleScreen && pauseScreens.Contains(GetState())) ? 0 : 1;
+        UnityEngine.Cursor.lockState = !hiddenCursorStates.Contains(GetState()) ? CursorLockMode.None : CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = !hiddenCursorStates.Contains(GetState());
+
+        OnStateChanged?.Invoke(GetState());
+    }
+
+    public void SetState(UIState _state, bool _isForceMode = false)
+    {
+        if (State == UIState.None)
+        {
+            UnityEngine.Cursor.lockState = !hiddenCursorStates.Contains(_state) ? CursorLockMode.None : CursorLockMode.Locked;
+            UnityEngine.Cursor.visible = !hiddenCursorStates.Contains(_state);
+            Time.timeScale = (!isInTitleScreen && pauseScreens.Contains(_state)) ? 0 : 1;
+
+            toggleUIState = _state;
+            OnStateChanged?.Invoke(_state);
+
+            return;
+        }
+
         if (_state != UIState.TitleScreen && !pauseScreens.Contains(_state))
         {
             isInTitleScreen = false;
         }
 
+        UnityEngine.Cursor.lockState = !hiddenCursorStates.Contains(_state) ? CursorLockMode.None : CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = !hiddenCursorStates.Contains(_state);
         Time.timeScale = (!isInTitleScreen && pauseScreens.Contains(_state)) ? 0 : 1;
 
         State = _state;
-        OnStateChanged?.Invoke(State);
+        OnStateChanged?.Invoke(_state);
+    }
 
-        UnityEngine.Cursor.lockState = State != UIState.HUD ? CursorLockMode.None : CursorLockMode.Locked;
-        UnityEngine.Cursor.visible = State != UIState.HUD;
+    public UIState GetState(bool _isForceMode = false)
+    {
+        return State == UIState.None && !_isForceMode ? toggleUIState : State;
     }
 
     private void Escape_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
@@ -131,7 +167,7 @@ public class UIManager : MonoBehaviour
                 return;
         }
 
-        switch (State)
+        switch (GetState())
         {
             case UIState.HUD when HUDScreen.Instance.CommandState != CommandObjectiveState.Hidden:
                 HUDScreen.Instance.ForceHideCommand();
@@ -160,6 +196,7 @@ public class UIManager : MonoBehaviour
 
 public enum UIState
 {
+    None,
     TitleScreen,
     HUD,
     Pause,

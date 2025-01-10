@@ -102,7 +102,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void TryEnableInput()
     {
-        if (UIManager.Instance.State == UIState.HUD && State == PlayerState.FirstPerson)
+        if (UIManager.Instance.GetState() == UIState.HUD && State == PlayerState.FirstPerson)
         {
             input.Player.Enable();
 
