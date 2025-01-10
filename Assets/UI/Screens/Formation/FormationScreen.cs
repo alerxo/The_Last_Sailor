@@ -207,7 +207,6 @@ public class FormationScreen : UIScreen
         public AIBoatController BoatController;
         public MeshRenderer Highlight;
         public MeshRenderer WayPoint;
-        public MeshRenderer WayPointMove;
         public Transform Trail;
         public Vector3? WayPointMovePosition;
 

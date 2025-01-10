@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.Rendering.DebugUI;
 
 public abstract class UIScreen : MonoBehaviour
 {
@@ -246,5 +247,20 @@ public abstract class UIScreen : MonoBehaviour
         }
 
         _target.style.opacity = _end;
+    }
+
+    protected IEnumerator AnimateScale(VisualElement _target, float _duration, float _start, float _end)
+    {
+        float timer = 0;
+
+        while ((timer += Time.unscaledDeltaTime) < _duration)
+        {
+            float value = Mathf.Lerp(_start, _end, timer / _duration);
+
+            _target.style.scale = new StyleScale(new Scale(new Vector2(value, value)));
+            yield return null;
+        }
+
+        _target.style.scale = new StyleScale(new Scale(Vector2.one));
     }
 }

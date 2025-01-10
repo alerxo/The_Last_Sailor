@@ -1,0 +1,26 @@
+.unity-base-slider__drag-container {
+	align-items: flex-start;
+}
+
+.unity-base-slider__input {
+	flex-grow: 0;
+	width: 100%;
+}
+
+.unity-base-slider {
+	margin: 0px;
+}
+
+.unity-base-slider__tracker {
+	border-width: 0px;
+
+	background-color: #e3e3e3;
+}
+
+.unity-base-slider__dragger {
+	width: 10%;
+	border-width: 1px;
+
+	border-color: rgba(40, 40, 40, 1);
+	background-color: rgba(240, 240, 240, 1);
+}

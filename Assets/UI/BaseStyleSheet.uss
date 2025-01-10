@@ -1,0 +1,19 @@
+.unity-base-dropdown__container-inner {
+	border-width: 3px;
+	border-radius: 7px;
+
+	background-color: rgba(40, 40, 40, 1);
+	border-color: rgba(240, 240, 240, 1);
+}
+
+.unity-base-dropdown__item {
+	color: rgba(240, 240, 240, 1);
+}
+
+.unity-base-dropdown__item-content {
+	align-items: center;
+}
+
+.unity-base-dropdown__checkmark {
+	padding: 7px;
+}

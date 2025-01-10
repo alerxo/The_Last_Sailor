@@ -18,6 +18,20 @@
 	flex-direction: row;
 
 	background-color: rgba(0, 0, 0, 0.9);
+
+	transition-property: scale, translate, background-color;
+    transition-duration: 250ms;
+	transition-timing-function: ease-in-out;
+}
+
+.tutorial-input-item:disabled {	
+	opacity: 1;
+	background-color: rgba(0, 0, 0, 1);
+	scale: 1.2;
+
+	transition-property: scale, translate, background-color;
+    transition-duration: 250ms;
+	transition-timing-function: ease-in-out;
 }
 
 .tutorial-input-item-input {

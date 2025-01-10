@@ -7,10 +7,12 @@
 
 .post-combat-background {
 	overflow: hidden;
-	background-color: rgba(250, 250, 250, 0.2);
+	background-color: rgba(20, 20, 20, 0.7);
+	border-color: rgba(240, 240, 240, 1);
 }
 
 .post-combat-header { 
+	color: rgba(240, 240, 240, 1);
 	-unity-text-align: middle-center;
 }
 
@@ -31,6 +33,7 @@
 	padding: 0px;
 
 	-unity-text-align: middle-center;
+	color: rgba(240, 240, 240, 1);
 }
 
 /* Column */
@@ -44,6 +47,7 @@
 	height: 70%;
 
 	background-color: rgba(0, 0, 0, 0);
+	border-color: rgba(240, 240, 240, 1);
 }
 
 .post-combat-column {
@@ -57,6 +61,8 @@
 
 .post-combat-column-header {
 	align-self: center;
+
+	color: rgba(240, 240, 240, 1);
 }
 
 .post-combat-row-container {
@@ -68,7 +74,7 @@
 	justify-content: space-between;
 	align-items: center;
 
-	border-bottom-color: black;
+	border-bottom-color: rgba(240, 240, 240, 1);
 
 	transition-property: scale;
     transition-duration: 200ms;
@@ -83,7 +89,9 @@
 	transition-timing-function: ease-in-out;
 }
 
-.post-combat-row-desciption { }
+.post-combat-row-desciption { 
+	color: rgba(240, 240, 240, 1);
+}
 
 /* Navigation */
 
@@ -91,7 +99,9 @@
 	flex-direction: row;
 }
 
-.post-combat-navigation-button { }
+.post-combat-navigation-button { 
+	border-color: rgba(40, 40, 40, 1);
+}
 
 /* Scroll view */
 

@@ -53,15 +53,17 @@ public class HUDScreen : UIScreen
     #region Objective
 
     public CommandObjectiveState ObjectiveState { get; private set; } = CommandObjectiveState.Hidden;
-    private float objectiveStateTimer = 0;
-    private const float OBJECTIVE_TIME_SHOWING = 5f;
-    private const float OBJECTIVE_TIME_FADING = 3f;
 
     private Box objectiveBackground;
     public readonly Dictionary<ObjectiveType, VisualElement> CurrentObjectives = new();
     public readonly List<ObjectiveType> CompletedObjectives = new();
 
+    private readonly Queue<VisualElement> objectivesToAdd = new();
+    private bool isAddingObjective = false;
+
     [SerializeField] private Texture2D checkIcon;
+
+    private InputSystem_Actions input;
 
     #endregion
 
@@ -69,6 +71,10 @@ public class HUDScreen : UIScreen
     {
         Assert.IsNull(Instance);
         Instance = this;
+
+        input = new();
+        input.Player.Move.Enable();
+        input.Player.Move.performed += Move_performed;
 
         UIManager.OnStateChanged += UIManager_OnStateChanged;
         InteractionCollider.OnInteractableChanged += InteractionCollider_OnInteractableChanged;
@@ -87,6 +93,9 @@ public class HUDScreen : UIScreen
 
     private void OnDestroy()
     {
+        input.Disable();
+        input.Player.Move.performed -= Move_performed;
+
         UIManager.OnStateChanged -= UIManager_OnStateChanged;
         InteractionCollider.OnInteractableChanged -= InteractionCollider_OnInteractableChanged;
         CombatManager.OnAdmiralInCombatChanged -= CombatManager_OnAdmiralInCombatChanged;
@@ -641,14 +650,15 @@ public class HUDScreen : UIScreen
 
     private void RunObjectiveState()
     {
+        if (!isAddingObjective && objectivesToAdd.Count > 0 && UIManager.Instance.GetState() == UIState.HUD)
+        {
+            StartCoroutine(AddObjectiveAnimation(objectivesToAdd.Dequeue()));
+        }
+
         switch (ObjectiveState)
         {
             case CommandObjectiveState.Visible:
                 ObjectiveShowingState();
-                break;
-
-            case CommandObjectiveState.Fading:
-                ObjectiveFadingState();
                 break;
 
             case CommandObjectiveState.Hidden:
@@ -659,45 +669,28 @@ public class HUDScreen : UIScreen
 
     public void ShowObjective()
     {
-        objectiveStateTimer = OBJECTIVE_TIME_SHOWING;
         ObjectiveState = CommandObjectiveState.Visible;
         SetObjectiveBackgroundState();
     }
 
     private void ObjectiveShowingState()
     {
-        float step = CurrentObjectives.Count == 1 && CurrentObjectives.ContainsKey(ObjectiveType.FindAndEliminateRemaining) ? Time.deltaTime : 0;
-
-        if ((objectiveStateTimer -= step) <= 0)
+        if (objectiveBackground != null && !objectiveBackground.enabledSelf)
         {
-            objectiveStateTimer = OBJECTIVE_TIME_FADING;
-            ObjectiveState = CommandObjectiveState.Fading;
+            objectiveBackground.SetEnabled(true);
         }
 
-        else if (objectiveBackground != null)
-        {
-            objectiveBackground.style.opacity = 1;
-        }
-    }
-
-    private void ObjectiveFadingState()
-    {
-        if ((objectiveStateTimer -= Time.deltaTime) <= 0)
+        if (CurrentObjectives.Count == 0 || (CurrentObjectives.Count == 1 && CurrentObjectives.ContainsKey(ObjectiveType.FindAndEliminateRemaining)))
         {
             ObjectiveState = CommandObjectiveState.Hidden;
-        }
-
-        else if (objectiveBackground != null)
-        {
-            objectiveBackground.style.opacity = objectiveStateTimer / OBJECTIVE_TIME_FADING;
         }
     }
 
     private void ObjectiveHiddenState()
     {
-        if (objectiveBackground != null)
+        if (objectiveBackground != null && objectiveBackground.enabledSelf)
         {
-            objectiveBackground.style.opacity = 0;
+            objectiveBackground.SetEnabled(false);
         }
     }
 
@@ -738,6 +731,19 @@ public class HUDScreen : UIScreen
         }
     }
 
+    private void Move_performed(InputAction.CallbackContext _obj)
+    {
+        input.Player.Move.Disable();
+        StartCoroutine(AddEngineObjective());
+    }
+
+    private IEnumerator AddEngineObjective()
+    {
+        yield return new WaitForSeconds(1);
+
+        AddObjective(ObjectiveType.Engine);
+    }
+
     private void FleetScreen_OnBoatBuilt()
     {
         AddObjective(ObjectiveType.ChangeCommand, ObjectiveType.ChangeFormation);
@@ -759,7 +765,7 @@ public class HUDScreen : UIScreen
         Label header = new("Objectives");
         header.AddToClassList("objective-header");
         SetFontSize(header, 40);
-        SetMargin(header, 0, 25, 0, 0);
+        SetMargin(header, 0, 17, 0, 0);
         objectiveBackground.Add(header);
     }
 
@@ -781,7 +787,7 @@ public class HUDScreen : UIScreen
         {
             VisualElement objective = CreateObjective(objectiveBackground, type);
             CurrentObjectives.Add(type, objective);
-            StartCoroutine(AddAnimation(objective));
+            objectivesToAdd.Enqueue(objective);
         }
 
         ShowObjective();
@@ -790,16 +796,18 @@ public class HUDScreen : UIScreen
     private VisualElement CreateObjective(VisualElement _parent, ObjectiveType _type)
     {
         VisualElement container = new();
+        container.SetEnabled(false);
+        container.AddToClassList("objective-item-first");
         container.AddToClassList("objective-item");
         SetWidth(container, 300);
-        SetPadding(container, 0, 0, 10, 10);
+        SetPadding(container, 7, 7, 7, 7);
         SetBorderRadius(container, 10);
         _parent.Add(container);
 
         Box mark = new();
         mark.AddToClassList("objective-mark");
         SetSize(mark, 26, 26);
-        SetMargin(mark, 4, 0, 0, 4);
+        SetMargin(mark, 5, 0, 0, 4);
         SetBorderWidth(mark, 3);
         container.Add(mark);
 
@@ -811,11 +819,22 @@ public class HUDScreen : UIScreen
         return container;
     }
 
-    public IEnumerator AddAnimation(VisualElement _target)
+    public IEnumerator AddObjectiveAnimation(VisualElement _target)
     {
-        yield return new WaitForSeconds(5);
+        isAddingObjective = true;
+
+        yield return new WaitForSeconds(1f);
+
+        _target.SetEnabled(true);
+
+        yield return new WaitForSeconds(3);
+
+        _target.RemoveFromClassList("objective-item-first");
+        _target.AddToClassList("objective-item-second");
 
         _target.SetEnabled(false);
+
+        isAddingObjective = false;
     }
 
     public void CompleteObjective(params ObjectiveType[] _types)
@@ -834,13 +853,13 @@ public class HUDScreen : UIScreen
 
         foreach (ObjectiveType type in toRemove)
         {
-            StartCoroutine(RemoveAnimation(CurrentObjectives[type]));
+            StartCoroutine(RemoveObjectiveAnimation(CurrentObjectives[type]));
             CurrentObjectives.Remove(type);
             OnObjectiveCompleted(type);
         }
     }
 
-    private IEnumerator RemoveAnimation(VisualElement _target)
+    private IEnumerator RemoveObjectiveAnimation(VisualElement _target)
     {
         Image image = new();
         image.AddToClassList("objective-mark-check");
