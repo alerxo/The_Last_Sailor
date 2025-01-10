@@ -49,7 +49,7 @@ public class PlayerCommandController : MonoBehaviour
 
     private void TryEnableInput()
     {
-        if (activeUIStates.Contains(UIManager.Instance.State) && activePlayerStates.Contains(FirstPersonController.Instance.State))
+        if (activeUIStates.Contains(UIManager.Instance.GetState()) && activePlayerStates.Contains(FirstPersonController.Instance.State))
         {
             input.Player.Enable();
         }
@@ -89,7 +89,7 @@ public class PlayerCommandController : MonoBehaviour
 
     private void EnterFormationView_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
-        if (CanInspectFleet() && UIManager.Instance.State != UIState.Formation)
+        if (CanInspectFleet() && UIManager.Instance.GetState() != UIState.Formation)
         {
             UIManager.Instance.EnterFormationView();
         }

@@ -401,7 +401,7 @@ public class HUDScreen : UIScreen
 
     private void RunCommandState()
     {
-        if (UIManager.Instance.State == UIState.Formation)
+        if (UIManager.Instance.GetState() == UIState.Formation)
         {
             ShowCommand();
         }
@@ -481,7 +481,7 @@ public class HUDScreen : UIScreen
     {
         if (commandContainer == null) return;
 
-        formationContainer.SetEnabled(UIManager.Instance.State == UIState.Formation && PlayerBoatController.Instance.AdmiralController.Command != Command.Charge);
+        formationContainer.SetEnabled(UIManager.Instance.GetState() == UIState.Formation && PlayerBoatController.Instance.AdmiralController.Command != Command.Charge);
 
         foreach (Formation formation in formationButtons.Keys)
         {
@@ -632,7 +632,7 @@ public class HUDScreen : UIScreen
         SetFontSize(button, 30);
         button.pickingMode = PickingMode.Position;
         button.text = _text;
-        button.SetEnabled(UIManager.Instance.State == UIState.Formation && PlayerBoatController.Instance.AdmiralController.Command != Command.Charge);
+        button.SetEnabled(UIManager.Instance.GetState() == UIState.Formation && PlayerBoatController.Instance.AdmiralController.Command != Command.Charge);
         _parent.Add(button);
 
         formationButtons[_formation] = button;
@@ -946,7 +946,7 @@ public class HUDScreen : UIScreen
     {
         if (objectiveBackground != null)
         {
-            objectiveBackground.visible = UIManager.Instance.State == UIState.HUD && (CurrentObjectives.Count + CompletedObjectives.Count) > 0;
+            objectiveBackground.visible = UIManager.Instance.GetState() == UIState.HUD && (CurrentObjectives.Count + CompletedObjectives.Count) > 0;
         }
     }
 

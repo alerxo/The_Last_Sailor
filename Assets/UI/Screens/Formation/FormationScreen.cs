@@ -64,7 +64,7 @@ public class FormationScreen : UIScreen
 
     private void Update()
     {
-        if (UIManager.Instance.State == UIState.Formation)
+        if (UIManager.Instance.GetState() == UIState.Formation)
         {
             playerHighlight.transform.position = GetPositionAboveWater(PlayerBoatController.Instance.transform.position);
 
