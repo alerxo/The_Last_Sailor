@@ -75,7 +75,7 @@ public class TutorialScreen : UIScreen
         Root.Add(menuContainer);
     }
 
-    private void CreateInputTooltips(List<Tooltip> _tooltips, bool shouldCreateHide)
+    private void CreateInputTooltips(List<Tooltip> _tooltips, bool _shouldCreateHide)
     {
         inputContainer.Clear();
 
@@ -89,9 +89,10 @@ public class TutorialScreen : UIScreen
             CreateInputTooltip(inputBackground, tooltip);
         }
 
-        if (shouldCreateHide)
+        if (_shouldCreateHide)
         {
-            CreateInputTooltip(inputBackground, new Tooltip("Hide this", new TooltipInput("Z")));
+            CreateInputTooltip(inputBackground, new Tooltip("Hide Input UI", new TooltipInput("Z")));
+            StartCoroutine(AnimateInputTooltip(inputBackground));
         }
     }
 
@@ -129,6 +130,20 @@ public class TutorialScreen : UIScreen
         description.AddToClassList("tutorial-input-item-description");
         SetFontSize(description, 18);
         container.Add(description);
+    }
+
+    private IEnumerator AnimateInputTooltip(VisualElement _target)
+    {
+        _target.visible = false;
+        _target.SetEnabled(false);
+
+        yield return new WaitForSeconds(1);
+
+        _target.visible = true;
+
+        yield return new WaitForSeconds(3);
+
+        //_target.SetEnabled(true);
     }
 
     public void SetCommandContainer(VisualElement _command)
