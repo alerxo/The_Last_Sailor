@@ -18,27 +18,35 @@ public class ResourceManager : MonoBehaviour
 
     public float Amount { get; private set; } = 0f;
 
+#if UNITY_EDITOR
     private InputSystem_Actions input;
+#endif
 
     private void Awake()
     {
         Assert.IsNull(Instance);
         Instance = this;
 
+#if UNITY_EDITOR
         input = new();
         input.Player.AddResource.performed += AddResource_performed;
         input.Player.Enable();
+#endif
     }
 
     private void OnDestroy()
     {
+#if UNITY_EDITOR
         input.Player.AddResource.performed -= AddResource_performed;
+#endif
     }
 
+#if UNITY_EDITOR
     private void AddResource_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
         AddResource(100);
     }
+#endif
 
     public void AddResource(float _amount)
     {
