@@ -18,14 +18,15 @@ public class PauseScreen : UIScreen
 
         VisualElement background = new();
         background.AddToClassList("pause-background");
+        SetSize(background, 600, 600);
         SetPadding(background, 100, 100, 150, 150);
         background.style.backgroundImage = backgroundImage;
         container.Add(background);
 
         Label header = new("PAUSED");
         header.AddToClassList("pause-header");
-        SetMargin(header, 0, 50, 0, 0);
-        SetFontSize(header, 50);
+        SetMargin(header, 0, 60, 0, 0);
+        SetFontSize(header, 55);
         background.Add(header);
 
         VisualElement buttons = new();
@@ -42,7 +43,7 @@ public class PauseScreen : UIScreen
         Button button = new(_action);
         button.AddToClassList("pause-button");
         SetMargin(button, 7, 0, 0, 0);
-        SetFontSize(button, 35);
+        SetFontSize(button, 38);
         button.text = _text;
         button.clicked += UIManager.InvokeOnUIButtonClicked;
         button.RegisterCallback<MouseEnterEvent>(evt => UIManager.InvokeOnUIButtonHovered());
