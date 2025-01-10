@@ -12,7 +12,7 @@ public class OnCollisionAudioScript : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("BoatCollisionTag")) 
         {
-            if (collision.rigidbody.linearVelocity != Vector3.zero && !audioSource.isPlaying)
+            if (collision.relativeVelocity.magnitude > 4 && !audioSource.isPlaying)
             {
                 audioSource.transform.position = collision.contacts[0].point;
                 audioSource.pitch = Random.Range(0.6f, 1.0f);
