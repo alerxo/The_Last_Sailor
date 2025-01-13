@@ -10,8 +10,24 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 686801256702438833, guid: 36d34af1c18546c4ba86fa3252786f21, type: 3}
       propertyPath: m_Name
-      value: PF_AIBoat Variant
+      value: PF_AIBoat_Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3102794855979396664, guid: 36d34af1c18546c4ba86fa3252786f21, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 21a92dc29c9bb6345a326bf535309553, type: 2}
+    - target: {fileID: 4416302713148490880, guid: 36d34af1c18546c4ba86fa3252786f21, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: caf427847715c7446b414fab31353232, type: 2}
+    - target: {fileID: 4991621686617600056, guid: 36d34af1c18546c4ba86fa3252786f21, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: caf427847715c7446b414fab31353232, type: 2}
+    - target: {fileID: 6997415639217954739, guid: 36d34af1c18546c4ba86fa3252786f21, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 21a92dc29c9bb6345a326bf535309553, type: 2}
     - target: {fileID: 7573212441424928559, guid: 36d34af1c18546c4ba86fa3252786f21, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
