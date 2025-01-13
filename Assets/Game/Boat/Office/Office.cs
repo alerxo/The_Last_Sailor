@@ -5,7 +5,7 @@ public class Office : MonoBehaviour, IInteractable
 {
     public Transform Transform => transform;
     public Vector3 Position => transform.position;
-    public bool CanInteract => PlayerBoatController.Instance.AdmiralController.Enemy == null;
+    public bool CanInteract => true;
 
     [SerializeField] private Transform[] deskMeshes;
     public Renderer[] GetRenderers => renderers;
@@ -21,23 +21,6 @@ public class Office : MonoBehaviour, IInteractable
         }
 
         renderers = list.ToArray();
-
-        CombatManager.OnAdmiralInCombatChanged += CombatManager_OnAdmiralInCombatChanged;
-    }
-
-    private void OnDestroy()
-    {
-        CombatManager.OnAdmiralInCombatChanged -= CombatManager_OnAdmiralInCombatChanged;
-    }
-
-    private void CombatManager_OnAdmiralInCombatChanged(Admiral _admiral)
-    {
-        if (_admiral != null && UIManager.Instance.GetState() == UIState.Fleet)
-        {
-            UIManager.Instance.SetState(UIState.HUD);
-            CameraManager.Instance.SetState(CameraState.Player);
-            FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
-        }
     }
 
     public void Interact()

@@ -124,7 +124,7 @@ public class TutorialScreen : UIScreen
     public void CreateThirdFormationsTutorial()
     {
         CreateFormationTutorial("Fleet Formations",
-            "You can change what formation your fleet should use by with formation preset buttons.",
+            "You can change what formation your fleet should use with formation preset buttons.",
             CreateFourthFormationsTutorial,
             formationContainer);
     }
@@ -263,14 +263,15 @@ public class TutorialScreen : UIScreen
         SetMargin(inputBackground, 0, 50, 40, 0);
         inputContainer.Add(inputBackground);
 
-        bool isAnimating = false;
-
         foreach (Tooltip tooltip in _tooltips)
         {
             foreach (TooltipControlScheme controlScheme in tooltip.Controls)
             {
                 TooltipControlScheme current = controlScheme;
                 current.Type = tooltip.Type;
+
+                if (completedInput.Contains(current.GetID())) continue;
+
                 current.visualElement = CreateInputControl(inputBackground, current);
 
                 foreach (TooltipInput input in current.Controls)
@@ -279,11 +280,6 @@ public class TutorialScreen : UIScreen
                     {
                         currentInput[key.Key] = current;
                     }
-                }
-
-                if (completedInput.Contains(current.GetID()))
-                {
-                    current.visualElement.style.opacity = 0.5f;
                 }
 
                 if (newTypes.Contains(tooltip.Type))
@@ -295,17 +291,6 @@ public class TutorialScreen : UIScreen
             if (newTypes.Contains(tooltip.Type))
             {
                 newTypes.Remove(tooltip.Type);
-                isAnimating = true;
-            }
-        }
-
-        if (!currentTypes.Contains(TutorialType.Fleet) && !currentTypes.Contains(TutorialType.Formations))
-        {
-            VisualElement control = CreateInputControl(inputBackground, new TooltipControlScheme("Hide Input UI", new TooltipInput(new TooltipKey(KeyCode.Z, "Z"))));
-
-            if (isAnimating)
-            {
-                StartCoroutine(AnimateInputControl(control));
             }
         }
 
@@ -335,10 +320,10 @@ public class TutorialScreen : UIScreen
             {
                 Label inputLabel = new(_tooltip.Controls[i].Keys[j].Name);
                 inputLabel.AddToClassList("tutorial-input-item-input");
-                SetMargin(inputLabel, 0, 0, j == 0 ? 0 : 3, 3);
-                SetPadding(inputLabel, 0, 0, 10, 10);
-                SetBorderWidthRadius(inputLabel, 3, 5);
-                SetFontSize(inputLabel, 20);
+                SetMargin(inputLabel, 0, 0, j == 0 ? 0 : 4, 4);
+                SetPadding(inputLabel, 0, 0, 12, 12);
+                SetBorderWidthRadius(inputLabel, 4, 7);
+                SetFontSize(inputLabel, 26);
                 container.Add(inputLabel);
             }
 
@@ -346,7 +331,7 @@ public class TutorialScreen : UIScreen
             {
                 Label alternative = new("or");
                 alternative.AddToClassList("tutorial-input-item-description");
-                SetFontSize(alternative, 18);
+                SetFontSize(alternative, 22);
                 container.Add(alternative);
             }
         }
@@ -431,12 +416,25 @@ public class TutorialScreen : UIScreen
     {
         foreach (KeyValuePair<KeyCode, TooltipControlScheme> controlScheme in currentInput)
         {
+            if (completedInput.Contains(controlScheme.Value.GetID())) continue;
+
             if (Input.GetKeyDown(controlScheme.Key))
             {
                 completedInput.Add(controlScheme.Value.GetID());
-                controlScheme.Value.visualElement.style.opacity = 0.5f;
+                StartCoroutine(CompleteInput(controlScheme.Value.visualElement));
             }
         }
+    }
+
+    private IEnumerator CompleteInput(VisualElement _target)
+    {
+        yield return AnimateOpacity(_target, 0.75f, 1, 0);
+
+        float start = _target.resolvedStyle.width;
+
+        yield return AnimateWidth(_target, 0.2f, start, 0);
+
+        _target.RemoveFromHierarchy();
     }
 
     public void HideTutorial(params TutorialType[] _type)
