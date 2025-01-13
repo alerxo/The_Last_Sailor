@@ -85,6 +85,7 @@ public class BirdFormation : MonoBehaviour
         Destroy(gameObject, 10);
         foreach (Transform bird in birds)
         {
+            if(bird!=null)
             bird.GetComponent<Bird>().die();
         }
     }
