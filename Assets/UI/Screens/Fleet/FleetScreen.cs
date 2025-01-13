@@ -28,8 +28,17 @@ public class FleetScreen : UIScreen
     {
         if (container != null && _state == UIState.Fleet)
         {
-            currentIndex = 0;
-            Draw();
+            if (PlayerBoatController.Instance.AdmiralController.Enemy == null)
+            {
+                currentIndex = 0;
+                Draw();
+            }
+
+            else
+            {
+                DrawPopup();
+                CameraManager.Instance.SetFleetCamera(PlayerBoatController.Instance.Boat.transform);
+            }
         }
     }
 
@@ -38,6 +47,42 @@ public class FleetScreen : UIScreen
         container = new();
         container.AddToClassList("fleet-container");
         Root.Add(container);
+    }
+
+    private void DrawPopup()
+    {
+        container.Clear();
+
+        VisualElement popupContainer = new();
+        popupContainer.AddToClassList("fleet-popup-container");
+        container.Add(popupContainer);
+
+        Box background = new();
+        background.AddToClassList("fleet-popup-background");
+        SetBorderWidthRadius(background, 5, 10);
+        SetPadding(background, 50);
+        popupContainer.Add(background);
+
+        Label label = new("Unable to enter fleet view during combat!");
+        label.AddToClassList("fleet-popup-text");
+        SetFontSize(label, 30);
+        SetMargin(label, 0, 50, 0, 0);
+        background.Add(label);
+
+        Button button = new(OnPopupExit);
+        button.AddToClassList("fleet-popup-button");
+        SetBorderWidthRadius(button, 3, 7);
+        SetPadding(button, 10, 10, 50, 50);
+        SetFontSize(button, 36);
+        button.text = "Exit";
+        background.Add(button);
+    }
+
+    private void OnPopupExit()
+    {
+        UIManager.Instance.SetState(UIState.HUD);
+        CameraManager.Instance.SetState(CameraState.Player);
+        FirstPersonController.Instance.SetState(PlayerState.FirstPerson);
     }
 
     private void Draw()
