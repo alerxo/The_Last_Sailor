@@ -36,17 +36,17 @@ public class VideoQualityManager : MonoBehaviour
 
     private void SetLow()
     {
-        
+        QualitySettings.SetQualityLevel(2);
     }
 
-    private void SetMedium()
+    private void SetMedium()// behövs inte
     {
         
     }
 
     private void SetHigh()
     {
-        
+        QualitySettings.SetQualityLevel(0);
     }
 }
 
