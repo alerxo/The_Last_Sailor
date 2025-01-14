@@ -227,6 +227,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5373058309783363086, guid: dfd273af92562ef45aacd76808bb4c77, type: 3}
+      propertyPath: playerInputAxisController
+      value: 
+      objectReference: {fileID: 2127792255}
+    - target: {fileID: 5373058309783363086, guid: dfd273af92562ef45aacd76808bb4c77, type: 3}
+      propertyPath: steeringWheelInputAxisController
+      value: 
+      objectReference: {fileID: 1704993402}
     - target: {fileID: 6333142702820368640, guid: dfd273af92562ef45aacd76808bb4c77, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -276,6 +284,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfd273af92562ef45aacd76808bb4c77, type: 3}
+--- !u!114 &1704993402 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1020956718735848292, guid: 210fa0c2aa11f4e41bee6f9e7de45a73, type: 3}
+  m_PrefabInstance: {fileID: 2087162781}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89875cdc57c54474a8a74efd9b2a3b5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2013410473
 GameObject:
   m_ObjectHideFlags: 1
@@ -496,6 +515,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f51ea5723a15ad847a804a2747c38ad9, type: 3}
+--- !u!114 &2127792255 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 208495915549282453, guid: 210fa0c2aa11f4e41bee6f9e7de45a73, type: 3}
+  m_PrefabInstance: {fileID: 2087162781}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89875cdc57c54474a8a74efd9b2a3b5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

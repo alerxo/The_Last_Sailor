@@ -11,6 +11,11 @@ public class VideoQualityManager : MonoBehaviour
     {
         Assert.IsNull(Instance);
         Instance = this;
+
+        if (PlayerPrefs.HasKey("VideoQuality"))
+        {
+            SetVideoQuality((VideoQuality)PlayerPrefs.GetInt("VideoQuality"));
+        }
     }
 
     public void SetVideoQuality(VideoQuality _videoQuality)
@@ -28,6 +33,8 @@ public class VideoQualityManager : MonoBehaviour
                 break;
 
         }
+
+        PlayerPrefs.SetInt("VideoQuality", (int)VideoQuality);
     }
 
     private void SetLow()

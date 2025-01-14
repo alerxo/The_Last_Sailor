@@ -40,14 +40,19 @@ public class OptionsScreen : UIScreen
         optionsContainer.horizontalScroller.RemoveFromHierarchy();
         background.Add(optionsContainer);
 
+        CreateCategoryHeader(optionsContainer, "Mouse Sensitivity");
+        CreateSlider(optionsContainer, "First Person", MouseSensitivityManager.Instance.PlayerMouseSensitivity, 0.1f, 2f, (f) => MouseSensitivityManager.Instance.SetPlayerMouseSensitivty(f));
+        CreateSlider(optionsContainer, "Steering Wheel", MouseSensitivityManager.Instance.SteeringWheelMouseSensitivity, 0.1f, 2f, (f) => MouseSensitivityManager.Instance.SetSteeringWheelMouseSensitivty(f));
+        CreateSlider(optionsContainer, "Cannon", MouseSensitivityManager.Instance.CannonMouseSensitivity, 0.1f, 2f, (f) => MouseSensitivityManager.Instance.SetCannonMouseSensitivty(f));
+
         CreateCategoryHeader(optionsContainer, "Video");
         CreateDropDown(optionsContainer, "Quality", new List<string>() { "High", "Low" }, (int)VideoQualityManager.Instance.VideoQuality, (i) => VideoQualityManager.Instance.SetVideoQuality((VideoQuality)i));
 
         CreateCategoryHeader(optionsContainer, "Volume");
-        CreateSlider(optionsContainer, "Master", SoundSettingsManager.Instance.GetMasterVolume(), (f) => SoundSettingsManager.Instance.SetMasterVolume(f));
-        CreateSlider(optionsContainer, "Music", SoundSettingsManager.Instance.GetMusicVolume(), (f) => SoundSettingsManager.Instance.SetMusicVolume(f));
-        CreateSlider(optionsContainer, "Sound Effects", SoundSettingsManager.Instance.GetSFXVolume(), (f) => SoundSettingsManager.Instance.SetSFXVolume(f));
-        CreateSlider(optionsContainer, "Ambience", SoundSettingsManager.Instance.GetAmbianceVolume(), (f) => SoundSettingsManager.Instance.SetAmbianceVolume(f));
+        CreateSlider(optionsContainer, "Master", SoundSettingsManager.Instance.GetMasterVolume(), 0, 100, (f) => SoundSettingsManager.Instance.SetMasterVolume(f));
+        CreateSlider(optionsContainer, "Music", SoundSettingsManager.Instance.GetMusicVolume(), 0, 100, (f) => SoundSettingsManager.Instance.SetMusicVolume(f));
+        CreateSlider(optionsContainer, "Sound Effects", SoundSettingsManager.Instance.GetSFXVolume(), 0, 100, (f) => SoundSettingsManager.Instance.SetSFXVolume(f));
+        CreateSlider(optionsContainer, "Ambience", SoundSettingsManager.Instance.GetAmbianceVolume(), 0, 100, (f) => SoundSettingsManager.Instance.SetAmbianceVolume(f));
     }
 
     private void CreateCategoryHeader(VisualElement _parent, string _header)
@@ -97,7 +102,7 @@ public class OptionsScreen : UIScreen
         container.Add(dropdownField);
     }
 
-    private void CreateSlider(VisualElement _parent, string _name, float _current, Action<float> _onSet)
+    private void CreateSlider(VisualElement _parent, string _name, float _current, float _min, float _max, Action<float> _onSet)
     {
         VisualElement container = CreateItem(_parent);
 
@@ -107,7 +112,7 @@ public class OptionsScreen : UIScreen
         sliderContainer.AddToClassList("options-item-slider-container");
         container.Add(sliderContainer);
 
-        Slider slider = new(0f, 100f, SliderDirection.Horizontal);
+        Slider slider = new(_min, _max, SliderDirection.Horizontal);
         slider.styleSheets.Add(sliderStyleSheet);
         slider.AddToClassList("options-item-slider");
         slider.SetValueWithoutNotify(_current);
