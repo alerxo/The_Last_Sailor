@@ -85,7 +85,7 @@ public class CombatManager : MonoBehaviour
     {
         int size = GetEnemyFleetSize();
         Vector3 origin = GetSpawnPosition(size);
-        Quaternion rotation = Quaternion.Euler(0, Random.Range(-180f, 180f), 0);
+        Quaternion rotation = Quaternion.LookRotation((player.transform.position - origin).normalized);
 
         AIBoatController admiralBoat = ObjectPoolManager.Instance.Spawn<AIBoatController>(origin, rotation);
         Enemy = admiralBoat.PromoteToAdmiral();
