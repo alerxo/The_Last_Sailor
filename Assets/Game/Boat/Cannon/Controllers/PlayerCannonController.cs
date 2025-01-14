@@ -5,7 +5,7 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
 {
     private const float ROTATION_SPEED = 1f;
     private const float MOUSE_SPEED = 0.7f;
-     
+
     [Tooltip("Target for the cannon camera")]
     [SerializeField] private Transform cameraTarget;
 
@@ -39,7 +39,7 @@ public class PlayerCannonController : MonoBehaviour, IInteractable
     private void Update()
     {
         Vector2 keyboardMovement = input.Player.Move.ReadValue<Vector2>();
-        Vector2 mouseMovement = input.Player.Look.ReadValue<Vector2>() / 100f * MOUSE_SPEED;
+        Vector2 mouseMovement = input.Player.Look.ReadValue<Vector2>() / 100f * MOUSE_SPEED * MouseSensitivityManager.Instance.CannonMouseSensitivity;
         Vector2 movement = keyboardMovement.magnitude != 0 ? keyboardMovement : mouseMovement;
 
         if (movement.x != 0)
