@@ -68,14 +68,6 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         SetDefault();
     }
 
-    private void Start()
-    {
-        foreach (VisualEffect v in damageEffects)
-        {
-            v.Play();
-        }
-    }
-
     public void Damage(float _damage)
     {
         audioSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
