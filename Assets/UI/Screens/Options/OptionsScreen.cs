@@ -41,7 +41,7 @@ public class OptionsScreen : UIScreen
         background.Add(optionsContainer);
 
         CreateCategoryHeader(optionsContainer, "Video");
-        CreateDropDown(optionsContainer, "Quality", new List<string>() { "Low", "Medium", "High" }, (int)VideoQualityManager.Instance.VideoQuality, (i) => VideoQualityManager.Instance.SetVideoQuality((VideoQuality)i));
+        CreateDropDown(optionsContainer, "Quality", new List<string>() { "High", "Low" }, (int)VideoQualityManager.Instance.VideoQuality, (i) => VideoQualityManager.Instance.SetVideoQuality((VideoQuality)i));
 
         CreateCategoryHeader(optionsContainer, "Volume");
         CreateSlider(optionsContainer, "Master", SoundSettingsManager.Instance.GetMasterVolume(), (f) => SoundSettingsManager.Instance.SetMasterVolume(f));

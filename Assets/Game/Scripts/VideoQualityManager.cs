@@ -5,7 +5,7 @@ public class VideoQualityManager : MonoBehaviour
 {
     public static VideoQualityManager Instance { get; private set; }
 
-    public VideoQuality VideoQuality { get; private set; }
+    public VideoQuality VideoQuality { get; private set; } = VideoQuality.High;
 
     private void Awake()
     {
@@ -23,10 +23,6 @@ public class VideoQualityManager : MonoBehaviour
                 SetLow();
                 break;
 
-            case VideoQuality.Medium:
-                SetMedium();
-                break;
-
             case VideoQuality.High:
                 SetHigh();
                 break;
@@ -39,11 +35,6 @@ public class VideoQualityManager : MonoBehaviour
         QualitySettings.SetQualityLevel(2);
     }
 
-    private void SetMedium()// behövs inte
-    {
-        
-    }
-
     private void SetHigh()
     {
         QualitySettings.SetQualityLevel(0);
@@ -52,7 +43,6 @@ public class VideoQualityManager : MonoBehaviour
 
 public enum VideoQuality
 {
+    High,
     Low,
-    Medium,
-    High
 }
