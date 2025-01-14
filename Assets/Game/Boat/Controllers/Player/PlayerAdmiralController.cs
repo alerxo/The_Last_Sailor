@@ -37,11 +37,6 @@ public class PlayerAdmiralController : Admiral
     public void BuildBoat()
     {
         Quaternion rotation = transform.rotation;
-        Vector3 direction = rotation.eulerAngles;
-        direction.x = 0;
-        direction.z = 0;
-        rotation = Quaternion.Euler(direction);
-
         Vector3 formationPosition = GetNextSubordinateForrmationPosition();
         Vector3 position = GetAvaliablePosition(formationPosition, rotation.eulerAngles);
         position.y = transform.position.y;

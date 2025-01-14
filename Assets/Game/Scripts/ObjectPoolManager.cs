@@ -36,7 +36,7 @@ public class ObjectPoolManager : MonoBehaviour
             t.transform.SetParent(_parent);
         }
 
-        if (TryGetComponent(out Rigidbody rigidbody))
+        if (t.TryGetComponent(out Rigidbody rigidbody))
         {
             rigidbody.position = _position;
             rigidbody.rotation = _rotation;
