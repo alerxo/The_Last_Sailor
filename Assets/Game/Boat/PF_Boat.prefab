@@ -5929,6 +5929,16 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 738370905021211525, guid: 335d07d1620662f419584b9419157ccf, type: 3}
   m_PrefabInstance: {fileID: 3027248502534501267}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &2413901602447096515 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 827840783800076624, guid: 335d07d1620662f419584b9419157ccf, type: 3}
+  m_PrefabInstance: {fileID: 3027248502534501267}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5886144634928549351 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8911844257620967028, guid: 335d07d1620662f419584b9419157ccf, type: 3}
+  m_PrefabInstance: {fileID: 3027248502534501267}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4424927075330351638
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5985,6 +5995,14 @@ PrefabInstance:
       propertyPath: paddleWheel
       value: 
       objectReference: {fileID: 2323235171285012502}
+    - target: {fileID: 8160458022112652082, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
+      propertyPath: paddleWheelLeft
+      value: 
+      objectReference: {fileID: 5886144634928549351}
+    - target: {fileID: 8160458022112652082, guid: e16b5a5e307ae5d4eaf5cc8e23f47210, type: 3}
+      propertyPath: paddleWheelRight
+      value: 
+      objectReference: {fileID: 2413901602447096515}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
