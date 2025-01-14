@@ -46,10 +46,13 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
     public float UpgradeIncrease => 0.25f;
     public float GetUpgradeValue => MaxHealth + (MaxHealth * ((int)UpgradeTier * UpgradeIncrease));
 
-    [SerializeField] private VisualEffect[] damageEffects;
+    [SerializeField] private Transform damageEffetcsParent;
+    private VisualEffect[] damageEffects;
 
     public virtual void Awake()
     {
+        damageEffects = damageEffetcsParent.GetComponentsInChildren<VisualEffect>();
+
         Engine = GetComponentInChildren<Engine>();
         Buoyancy = GetComponent<Buoyancy>();
         RigidBody = GetComponent<Rigidbody>();
@@ -63,6 +66,14 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
         ResetUpgrades();
         SetDefault();
+    }
+
+    private void Start()
+    {
+        foreach (VisualEffect v in damageEffects)
+        {
+            v.Play();
+        }
     }
 
     public void Damage(float _damage)

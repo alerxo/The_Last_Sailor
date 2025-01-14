@@ -950,7 +950,18 @@ public class HUDScreen : UIScreen
         switch (_type)
         {
             case ObjectiveType.Engine:
-                AddObjective(ObjectiveType.Steer);
+
+                if (CompletedObjectives.Contains(ObjectiveType.Steer))
+                {
+                    AddObjective(ObjectiveType.FindFirstEnemy);
+                    CombatManager.Instance.EnableSpawning();
+                }
+
+                else
+                {
+                    AddObjective(ObjectiveType.Steer);
+                }
+
                 break;
 
             case ObjectiveType.Steer:
