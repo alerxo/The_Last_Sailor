@@ -75,7 +75,7 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
         if (Mathf.Clamp(Health -= _damage, 0, MaxHealth) <= 0)
         {
             PlayDeathExplosion(); // Flyttade dina ljud till metoden, ta bort detta när du har läst Jacob. /V
-
+            // call bird system
             OnDestroyed?.Invoke();
         }
 

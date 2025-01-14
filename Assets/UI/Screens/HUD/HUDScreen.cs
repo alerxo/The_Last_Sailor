@@ -861,14 +861,21 @@ public class HUDScreen : UIScreen
 
     private IEnumerator RemoveObjectiveAnimation(VisualElement _target)
     {
+        yield return new WaitForSeconds(0.5f);
+
         Image image = new();
         image.AddToClassList("objective-mark-check");
         image.image = checkIcon;
         _target.ElementAt(0).Add(image);
 
-        yield return new WaitForSeconds(5);
+        yield return AnimateScale(image, 0.3f, 0, 4);
+        yield return AnimateScale(image, 0.2f, 4, 1);
+
+        yield return new WaitForSeconds(4);
 
         yield return AnimateOpacity(_target, 3, 1, 0);
+
+        yield return AnimateHeight(_target, 0.2f, _target.resolvedStyle.height, 0);
 
         _target.RemoveFromHierarchy();
     }
