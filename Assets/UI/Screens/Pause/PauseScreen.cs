@@ -25,7 +25,7 @@ public class PauseScreen : UIScreen
 
         Label header = new("PAUSED");
         header.AddToClassList("pause-header");
-        SetMargin(header, 0, 60, 0, 0);
+        SetMargin(header, 0, 35, 0, 0);
         SetFontSize(header, 55);
         background.Add(header);
 
@@ -35,6 +35,7 @@ public class PauseScreen : UIScreen
 
         CreateButton(buttons, "-Resume-", () => UIManager.Instance.SetState(UIState.HUD));
         CreateButton(buttons, "-Options-", () => UIManager.Instance.SetStateOptions(UIState.Pause));
+        CreateButton(buttons, "-Controls-", () => UIManager.Instance.SetStateControls(UIState.Pause));
         CreateButton(buttons, "-Main Menu-", OnMainMenu);
     }
 

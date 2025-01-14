@@ -35,6 +35,7 @@ public class TitleScreen : UIScreen
 
         CreateButton(buttons, "-Play-", OnPlay);
         CreateButton(buttons, "-Options-", () => UIManager.Instance.SetStateOptions(UIState.TitleScreen));
+        CreateButton(buttons, "-Controls-", () => UIManager.Instance.SetStateControls(UIState.TitleScreen));
         CreateButton(buttons, "-Quit-", () => Application.Quit());
     }
 

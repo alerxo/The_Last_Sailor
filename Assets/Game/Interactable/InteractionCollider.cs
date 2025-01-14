@@ -6,6 +6,8 @@ public class InteractionCollider : MonoBehaviour
 {
     public static event UnityAction<IInteractable> OnInteractableChanged;
 
+    private static readonly List<UIState> activeStates = new() { UIState.HUD, UIState.Fleet };
+
     private const int LOOK_ANGLE = 90;
     private readonly List<IInteractable> interactablesInRange = new();
     private IInteractable current;
@@ -22,6 +24,7 @@ public class InteractionCollider : MonoBehaviour
         input.Player.Interact.performed += Interact_performed;
 
         FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
+        UIManager.OnStateChanged += UIManager_OnStateChanged;
     }
 
     private void OnDestroy()
@@ -29,7 +32,8 @@ public class InteractionCollider : MonoBehaviour
         input.Player.Disable();
         input.Player.Interact.performed -= Interact_performed;
 
-        FirstPersonController.OnPlayerStateChanged += FirstPersonController_OnPlayerStateChanged;
+        FirstPersonController.OnPlayerStateChanged -= FirstPersonController_OnPlayerStateChanged;
+        UIManager.OnStateChanged -= UIManager_OnStateChanged;
     }
 
     private void Update()
@@ -125,9 +129,19 @@ public class InteractionCollider : MonoBehaviour
         }
     }
 
+    private void UIManager_OnStateChanged(UIState state)
+    {
+        TryEnable();
+    }
+
     private void FirstPersonController_OnPlayerStateChanged(PlayerState _state)
     {
-        if (_state != PlayerState.Inactive) input.Player.Enable();
+        TryEnable();
+    }
+
+    private void TryEnable()
+    {
+        if (FirstPersonController.Instance.State != PlayerState.Inactive && activeStates.Contains(UIManager.Instance.GetState())) input.Player.Enable();
         else input.Player.Disable();
     }
 }

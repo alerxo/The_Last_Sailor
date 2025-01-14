@@ -37,6 +37,7 @@ public class ResourceManager : MonoBehaviour
     private void OnDestroy()
     {
 #if UNITY_EDITOR
+        input.Disable();
         input.Player.AddResource.performed -= AddResource_performed;
 #endif
     }

@@ -1,17 +1,17 @@
-using System;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class OptionsScreen : UIScreen
+public class ControlsScreen : UIScreen
 {
-    protected override List<UIState> ActiveStates => new() { UIState.Options };
+    protected override List<UIState> ActiveStates => new() { UIState.Controls };
 
     [SerializeField] private Texture2D backgroundImage;
-    [SerializeField] private StyleSheet sliderStyleSheet, scrollViewStyleSheet;
+    [SerializeField] private StyleSheet scrollViewStyleSheet;
 
     public override void Generate()
-    {
+    { 
         VisualElement container = new();
         container.AddToClassList("options-container");
         Root.Add(container);
@@ -40,14 +40,34 @@ public class OptionsScreen : UIScreen
         optionsContainer.horizontalScroller.RemoveFromHierarchy();
         background.Add(optionsContainer);
 
-        CreateCategoryHeader(optionsContainer, "Video");
-        CreateDropDown(optionsContainer, "Quality", new List<string>() { "Low", "Medium", "High" }, (int)VideoQualityManager.Instance.VideoQuality, (i) => VideoQualityManager.Instance.SetVideoQuality((VideoQuality)i));
+        CreateCategoryHeader(optionsContainer, "General");
+        CreateControl(optionsContainer, "Pause", "Esc");
+        CreateControl(optionsContainer, "Go Back", "Esc");
+        CreateControl(optionsContainer, "Show Objective", "Tab");
 
-        CreateCategoryHeader(optionsContainer, "Volume");
-        CreateSlider(optionsContainer, "Master", SoundSettingsManager.Instance.GetMasterVolume(), (f) => SoundSettingsManager.Instance.SetMasterVolume(f));
-        CreateSlider(optionsContainer, "Music", SoundSettingsManager.Instance.GetMusicVolume(), (f) => SoundSettingsManager.Instance.SetMusicVolume(f));
-        CreateSlider(optionsContainer, "Sound Effects", SoundSettingsManager.Instance.GetSFXVolume(), (f) => SoundSettingsManager.Instance.SetSFXVolume(f));
-        CreateSlider(optionsContainer, "Ambience", SoundSettingsManager.Instance.GetAmbianceVolume(), (f) => SoundSettingsManager.Instance.SetAmbianceVolume(f));
+        CreateCategoryHeader(optionsContainer, "Movement");
+        CreateControl(optionsContainer, "Walk", "W", "A", "S", "D");
+        CreateControl(optionsContainer, "Jump", "Space");
+        CreateControl(optionsContainer, "Sprint", "LShift");
+
+        CreateCategoryHeader(optionsContainer, "Interactions");
+        CreateControl(optionsContainer, "Interact", "E");
+        CreateControl(optionsContainer, "Exit Interaction", "E");
+        CreateControl(optionsContainer, "Aim Cannon", "W", "A", "S", "D");
+        CreateControl(optionsContainer, "Shoot Cannon", "LMB");
+        CreateControl(optionsContainer, "Move Throttle", "A", "D");
+        CreateControl(optionsContainer, "Turn Steering Wheel", "A", "D");
+        CreateControl(optionsContainer, "Steering Camera", "C");
+
+        CreateCategoryHeader(optionsContainer, "Fleet Commands");
+        CreateControl(optionsContainer, "Fleet Follow Command", "1");
+        CreateControl(optionsContainer, "Fleet Wait Command", "2");
+        CreateControl(optionsContainer, "Fleet Charge Command", "3");
+
+        CreateCategoryHeader(optionsContainer, "Formation View");
+        CreateControl(optionsContainer, "Enter Formation View", "4");
+        CreateControl(optionsContainer, "Move Fleet Camera", "W", "A", "S", "D");
+        CreateControl(optionsContainer, "Zoom Fleet Camera", "Scroll");
     }
 
     private void CreateCategoryHeader(VisualElement _parent, string _header)
@@ -85,33 +105,24 @@ public class OptionsScreen : UIScreen
         _parent.Add(label);
     }
 
-    private void CreateDropDown(VisualElement _parent, string _name, List<string> _choices, int _current, Action<int> _onSet)
+    private void CreateControl(VisualElement _parent, string _name, params string[] _controlScheme)
     {
         VisualElement container = CreateItem(_parent);
 
         CreateItemLabel(container, _name);
 
-        DropdownField dropdownField = new(_choices, _current);
-        dropdownField.AddToClassList("options-item-dropdown");
-        dropdownField.RegisterValueChangedCallback((e) => _onSet(_choices.IndexOf(e.newValue)));
-        container.Add(dropdownField);
-    }
+        VisualElement controls = new();
+        controls.AddToClassList("options-item-control-container");
+        container.Add(controls);
 
-    private void CreateSlider(VisualElement _parent, string _name, float _current, Action<float> _onSet)
-    {
-        VisualElement container = CreateItem(_parent);
-
-        CreateItemLabel(container, _name);
-
-        VisualElement sliderContainer = new();
-        sliderContainer.AddToClassList("options-item-slider-container");
-        container.Add(sliderContainer);
-
-        Slider slider = new(0f, 100f, SliderDirection.Horizontal);
-        slider.styleSheets.Add(sliderStyleSheet);
-        slider.AddToClassList("options-item-slider");
-        slider.SetValueWithoutNotify(_current);
-        slider.RegisterValueChangedCallback(evt => _onSet(evt.newValue));
-        sliderContainer.Add(slider);
+        foreach (string control in _controlScheme)
+        {
+            Label inputLabel = new(control);
+            inputLabel.AddToClassList("options-item-control");
+            SetPadding(inputLabel, 0, 0, 10, 10);
+            SetBorderWidthRadius(inputLabel, 3, 5);
+            SetFontSize(inputLabel, 20);
+            controls.Add(inputLabel);
+        }
     }
 }
