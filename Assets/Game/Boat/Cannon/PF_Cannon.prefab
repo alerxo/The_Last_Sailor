@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5561453162842683808}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: ExplosionPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -743,7 +743,7 @@ GameObject:
   - component: {fileID: 7502080398133115492}
   - component: {fileID: 838025317353491392}
   - component: {fileID: 4570842284228066383}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Barrel_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -886,7 +886,7 @@ GameObject:
   - component: {fileID: 7653989999041488132}
   - component: {fileID: 3518959521026451038}
   - component: {fileID: 580612362583856393}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mount_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -991,7 +991,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4699530071793064676}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: CameraTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1064,6 +1064,30 @@ PrefabInstance:
     - target: {fileID: 1650834019400630882, guid: fca90066402d9e5448656a9e73d63d5c, type: 3}
       propertyPath: m_Name
       value: PF_CannonFire
+      objectReference: {fileID: 0}
+    - target: {fileID: 1650834019400630882, guid: fca90066402d9e5448656a9e73d63d5c, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3015489136941904906, guid: fca90066402d9e5448656a9e73d63d5c, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3788045190741361061, guid: fca90066402d9e5448656a9e73d63d5c, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5631138551861089191, guid: fca90066402d9e5448656a9e73d63d5c, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6097199456581053844, guid: fca90066402d9e5448656a9e73d63d5c, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9070540288656406298, guid: fca90066402d9e5448656a9e73d63d5c, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
