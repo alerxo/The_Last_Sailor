@@ -17,21 +17,9 @@ public class MouseSensitivityManager : MonoBehaviour
         Assert.IsNull(Instance);
         Instance = this;
 
-        if (PlayerPrefs.HasKey("PlayerMouseSensitivity"))
-        {
-            SetPlayerMouseSensitivty(PlayerPrefs.GetFloat("PlayerMouseSensitivity"));
-        }
-
-        if (PlayerPrefs.HasKey("SteeringWheelMouseSensitivity"))
-        {
-            SetSteeringWheelMouseSensitivty(PlayerPrefs.GetFloat("SteeringWheelMouseSensitivity"));
-        }
-
-
-        if (PlayerPrefs.HasKey("CannonMouseSensitivity"))
-        {
-            SetCannonMouseSensitivty(PlayerPrefs.GetFloat("CannonMouseSensitivity"));
-        }
+        SetPlayerMouseSensitivty(PlayerPrefs.HasKey("PlayerMouseSensitivity") ? PlayerPrefs.GetFloat("PlayerMouseSensitivity") : 1);
+        SetSteeringWheelMouseSensitivty(PlayerPrefs.HasKey("SteeringWheelMouseSensitivity") ? PlayerPrefs.GetFloat("SteeringWheelMouseSensitivity") : 1);
+        SetCannonMouseSensitivty(PlayerPrefs.HasKey("CannonMouseSensitivity") ? PlayerPrefs.GetFloat("CannonMouseSensitivity") : 1);
     }
 
     public void SetPlayerMouseSensitivty(float _value)

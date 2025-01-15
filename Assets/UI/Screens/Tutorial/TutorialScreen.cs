@@ -375,8 +375,8 @@ public class TutorialScreen : UIScreen
 
             case TutorialType.Throttle:
                 return new TooltipControlScheme[] {
-                    new("Accelerate", new TooltipInput(new TooltipKey(KeyCode.A, "A"))),
-                    new("Decelerate", new TooltipInput(new TooltipKey(KeyCode.D, "D"))),
+                    new("Decelerate", new TooltipInput(new TooltipKey(KeyCode.A, "A"))),
+                    new("Accelerate", new TooltipInput(new TooltipKey(KeyCode.D, "D"))),
                     new("Exit", new TooltipInput(new TooltipKey(KeyCode.E, "E")), new TooltipInput(new TooltipKey(KeyCode.Escape, "Esc"))) };
 
             case TutorialType.Cannon:

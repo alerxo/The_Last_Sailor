@@ -24,7 +24,7 @@ public class ObjectPoolManager : MonoBehaviour
 
     public T Spawn<T>(Vector3 _position, Quaternion _rotation, Transform _parent = null) where T : MonoBehaviour
     {
-        T t = Instantiate(prefabs.Find((m) => m is T), _position, _rotation, parent) as T;
+        T t = Instantiate(prefabs.Find((m) => m is T), _position, _rotation, _parent == null ? parent : _parent) as T;
 
         return t;
     }
