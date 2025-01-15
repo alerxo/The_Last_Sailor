@@ -84,7 +84,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GroundLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 8
   isDebugMode: 0
 --- !u!114 &-7069472595334228414
 MonoBehaviour:
