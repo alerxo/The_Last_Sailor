@@ -12,11 +12,14 @@ public class CombatManager : MonoBehaviour
 
     public CombatManagerState State { get; private set; } = CombatManagerState.None;
     private float stateTimer = 0;
-    private const float CALM_DURATION = 10f;
+    private const float CALM_DURATION_BASE = 10f;
+    private const float CALM_DURATION_PER_SHIP = 2f;
+    private float GetCalmStateTimer => CALM_DURATION_BASE + (CALM_DURATION_PER_SHIP * Enemy.Subordinates.Count);
 
     public const float RING_OF_FIRE_SIZE = 750f;
-    private const float RING_OF_FIRE_BUFFER_SIZE_PER_SHIP = 100f;
-    private const float DE_SPAWN_SIZE = RING_OF_FIRE_BUFFER_SIZE_PER_SHIP * 20;
+    private const float RING_OF_FIRE_BUFFER_BASE = 100f;
+    private const float RING_OF_FIRE_BUFFER_PER_SHIP = 100f;
+    private const float DE_SPAWN_SIZE = 500 + RING_OF_FIRE_BUFFER_BASE + RING_OF_FIRE_BUFFER_PER_SHIP * 16;
 
     public static readonly int[] ENEMY_FLEET_SIZES = { 0, 0, 1, 2, 3, 5, 7, 9, 12, 16 };
     public int Round { get; private set; } = 0;
@@ -67,7 +70,7 @@ public class CombatManager : MonoBehaviour
         StartCoroutine(SpawnTimer());
 
         Round++;
-        stateTimer = CALM_DURATION;
+        stateTimer = GetCalmStateTimer;
         State = CombatManagerState.Calm;
     }
 
@@ -84,10 +87,11 @@ public class CombatManager : MonoBehaviour
     private IEnumerator SpawnTimer()
     {
         int size = GetEnemyFleetSize();
-        Vector3 origin = GetSpawnPosition(size);
+        Vector3 origin = BuoyancyManager.Instance.GetPointOnWater(GetSpawnPosition(size));
         Quaternion rotation = Quaternion.LookRotation((player.transform.position - origin).normalized);
 
         AIBoatController admiralBoat = ObjectPoolManager.Instance.Spawn<AIBoatController>(origin, rotation);
+        admiralBoat.LerpSize();
         Enemy = admiralBoat.PromoteToAdmiral();
         Enemy.GetRandomFormation();
 
@@ -107,7 +111,10 @@ public class CombatManager : MonoBehaviour
     {
         if (UIManager.Instance.GetState() == UIState.Fleet || UIManager.Instance.GetState() == UIState.Formation)
         {
-            stateTimer = CALM_DURATION;
+            if (stateTimer < CALM_DURATION_BASE)
+            {
+                stateTimer = CALM_DURATION_BASE;
+            }
         }
 
         if ((stateTimer -= Time.deltaTime) <= 0)
@@ -121,7 +128,11 @@ public class CombatManager : MonoBehaviour
     {
         if (!CanEnterCombat())
         {
-            stateTimer = CALM_DURATION;
+            if (stateTimer < CALM_DURATION_BASE)
+            {
+                stateTimer = CALM_DURATION_BASE;
+            }
+
             State = CombatManagerState.Calm;
         }
 
@@ -250,7 +261,7 @@ public class CombatManager : MonoBehaviour
 
     public static Vector3 GetClosestPositionOutSideRingOfFire(Vector3 position)
     {
-        return PlayerBoatController.Instance.transform.position + ((position - PlayerBoatController.Instance.transform.position).normalized * GetRingOfFireWithBuffer(1));
+        return PlayerBoatController.Instance.transform.position + ((position - PlayerBoatController.Instance.transform.position).normalized * GetRingOfFireWithBuffer(0));
     }
 
     public static float GetRingOfFireSize()
@@ -260,7 +271,7 @@ public class CombatManager : MonoBehaviour
 
     public static float GetRingOfFireWithBuffer(int _fleetSize)
     {
-        return RING_OF_FIRE_SIZE + (RING_OF_FIRE_BUFFER_SIZE_PER_SHIP * _fleetSize);
+        return RING_OF_FIRE_SIZE + RING_OF_FIRE_BUFFER_BASE + (RING_OF_FIRE_BUFFER_PER_SHIP * _fleetSize);
     }
 
     public static float GetMapSize()

@@ -38,8 +38,7 @@ public class PlayerAdmiralController : Admiral
     {
         Quaternion rotation = transform.rotation;
         Vector3 formationPosition = GetNextSubordinateForrmationPosition();
-        Vector3 position = GetAvaliablePosition(formationPosition, rotation.eulerAngles);
-        position.y = transform.position.y;
+        Vector3 position = BuoyancyManager.Instance.GetPointOnWater(GetAvaliablePosition(formationPosition, rotation.eulerAngles));
 
         AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController_Allied>(position, rotation).GetComponent<AIBoatController>();
         subordinate.Boat.SetName(GetSubordinateName());

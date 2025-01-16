@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ public class AIBoatController : MonoBehaviour
 
     private float destructionTimer;
     private const float DESTRUCTION_COOLDOWN = 1f;
+
+    [SerializeField] private Transform[] modelParents;
 
 #if UNITY_EDITOR
     public bool IsDebugMode;
@@ -336,6 +339,32 @@ public class AIBoatController : MonoBehaviour
     public void SetSpeed(float _speed)
     {
         Speed = _speed;
+    }
+
+    public void LerpSize()
+    {
+        StartCoroutine(LerpSizeTimer());
+    }
+
+    private IEnumerator LerpSizeTimer()
+    {
+        float duration = 0;
+        float time = 1;
+
+        while ((duration += Time.deltaTime) < time)
+        {
+            foreach (Transform t in modelParents)
+            {
+                t.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, duration / time);
+            }
+
+            yield return null;
+        }
+
+        foreach (Transform t in modelParents)
+        {
+            t.localScale = Vector3.one;
+        }
     }
 
     private void DebugDrawTrail()
