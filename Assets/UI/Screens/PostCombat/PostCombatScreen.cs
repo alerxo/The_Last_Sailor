@@ -11,7 +11,7 @@ public class PostCombatScreen : UIScreen
 
     protected override List<UIState> ActiveStates => new() { UIState.PostCombat };
 
-    [SerializeField] private Texture2D boatIcon, sunkIcon;
+    [SerializeField] private Texture2D boatIcon, sunkIcon, resourceIcon;
 
     private Box background;
     private VisualElement content;
@@ -131,10 +131,11 @@ public class PostCombatScreen : UIScreen
         SetMargin(resourceContainer, 0, 30, 0, 0);
         _parent.Add(resourceContainer);
 
-        Label label = new("Resources: ");
-        label.AddToClassList("post-combat-resource-label");
-        SetFontSize(label, 30);
-        resourceContainer.Add(label);
+        Image image = new();
+        SetSize(image, 64, 64);
+        SetMargin(image, 0, 0, 0, 10);
+        image.image = resourceIcon;
+        resourceContainer.Add(image);
 
         resourceCount = new(ResourceManager.Instance.Amount.ToString());
         resourceCount.AddToClassList("post-combat-resource-label");
@@ -319,6 +320,8 @@ public class PostCombatScreen : UIScreen
         yield return AnimateScrollviewScrollUp(resultColumns, 1f);
         yield return new WaitForSeconds(0.25f);
 
+        yield return AnimateOpacity(resourceCount.parent, 0.5f, 0f, 1f);
+
         if (!_isDeathScreen)
         {
             yield return AnimateNumber(resourceCount, 1.5f, _startResource, _endResource);
@@ -336,6 +339,7 @@ public class PostCombatScreen : UIScreen
         SetBorderWidth(background, 0);
         SetWidth(background, 0);
         SetHeight(content, 0);
+        SetOpacity(resourceCount.parent, 0);
 
         for (int i = 0; i < Mathf.Max(playerColumnItems.Count, enemyColumnItems.Count); i++)
         {

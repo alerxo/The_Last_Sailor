@@ -141,6 +141,7 @@ MonoBehaviour:
   - {fileID: 7433441132597879392, guid: c4051bc603be1db49a73c760ab51061c, type: 3}
   boatIcon: {fileID: 2800000, guid: 67f906db3ff1633438932f97c6992e1e, type: 3}
   sunkIcon: {fileID: 2800000, guid: 670e9ec0974221440944f09e30d8001b, type: 3}
+  resourceIcon: {fileID: 2800000, guid: aa6d5b38ca39d004ba7ee8abf9b9e7f7, type: 3}
 --- !u!1 &1804052033946792704
 GameObject:
   m_ObjectHideFlags: 0
