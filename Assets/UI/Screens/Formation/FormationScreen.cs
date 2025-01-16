@@ -171,7 +171,7 @@ public class FormationScreen : UIScreen
         if (_state == UIState.Formation)
         {
             input.Player.Enable();
-            playerShipHighlight.gameObject.SetActive(true);
+            playerShipHighlight.SetActive(true);
 
             foreach (CommandItem item in commandItems.Values)
             {
@@ -182,7 +182,7 @@ public class FormationScreen : UIScreen
         else
         {
             input.Player.Disable();
-            playerShipHighlight.gameObject.SetActive(false);
+            playerShipHighlight.SetActive(false);
 
             foreach (CommandItem item in commandItems.Values)
             {

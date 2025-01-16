@@ -62,7 +62,15 @@ public class AICannonController : MonoBehaviour
 
         if (state == AICannonControllerState.Shooting)
         {
-            FireAtTarget();
+            if (!owner.CanFireCannon())
+            {
+                state = AICannonControllerState.Aiming;
+            }
+
+            else
+            {
+                FireAtTarget();
+            }
         }
     }
 
@@ -179,7 +187,7 @@ public class AICannonController : MonoBehaviour
 
     private void CheckIfCanFire()
     {
-        if (cannon.State == CannonState.Ready && IsPredictedHitEnemy())
+        if (cannon.State == CannonState.Ready && IsPredictedHitEnemy() && owner.CanFireCannon())
         {
             SetState(AICannonControllerState.Shooting);
         }
@@ -203,6 +211,7 @@ public class AICannonController : MonoBehaviour
     private void FireAtTarget()
     {
         cannon.Fire(owner.Boat.CannonballOwner);
+        owner.CannonWasFired();
     }
 
     private void SetState(AICannonControllerState _state)
