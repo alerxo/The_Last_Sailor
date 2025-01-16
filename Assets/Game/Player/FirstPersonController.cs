@@ -10,8 +10,8 @@ public class FirstPersonController : MonoBehaviour
     private const float JUMP_FORCE = 7f;
     private const float ACCELERATION = 7.5f;
     private const float CAPSULE_HEIGHT = 1f;
-    private const float CAPSULE_RADIUS = 0.5f;
-    private const float CAPSULE_MARGIN = 0.6f;
+    private const float CAPSULE_RADIUS = 0.4f;
+    private const float CAPSULE_MARGIN = 0.5f;
 
     public static FirstPersonController Instance { get; private set; }
 
