@@ -11,6 +11,8 @@ public class PostCombatScreen : UIScreen
 
     protected override List<UIState> ActiveStates => new() { UIState.PostCombat };
 
+    [SerializeField] private Texture2D boatIcon, sunkIcon;
+
     private Box background;
     private VisualElement content;
     private Label resourceCount;
@@ -223,6 +225,12 @@ public class PostCombatScreen : UIScreen
         SetPadding(container, 0, 4, 0, 0);
         container.style.borderBottomWidth = GetScaledValue(2);
         _parent.Add(container);
+
+        Image image = new();
+        SetSize(image, 32, 32);
+        SetMargin(image, 0, 0, 0, 10);
+        image.image = _boat.IsSunk ? sunkIcon : boatIcon;
+        container.Add(image);
 
         Label description = new($"{_boat.Name}: {(_boat.IsSunk ? "Sunk" : $"Durability {_boat.GetPercentageDurability()}%")}");
         description.AddToClassList("post-combat-row-desciption");

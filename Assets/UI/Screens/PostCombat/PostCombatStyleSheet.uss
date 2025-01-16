@@ -71,7 +71,6 @@
 
 .post-combat-row {
 	flex-direction: row;
-	justify-content: space-between;
 	align-items: center;
 
 	border-bottom-color: rgba(240, 240, 240, 1);
