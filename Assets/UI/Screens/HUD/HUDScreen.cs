@@ -15,7 +15,6 @@ public class HUDScreen : UIScreen
     private const float INTERACTION_ANIMATION_DURATION = 0.1f;
 
     [SerializeField] private InputActionReference interactionAsset;
-    [SerializeField] private Texture2D enemyIcon;
 
     protected override List<UIState> ActiveStates => new() { UIState.HUD, UIState.Formation };
 
@@ -26,13 +25,11 @@ public class HUDScreen : UIScreen
 
     private Box admiralContainer;
     private Label admiralText;
-    private VisualElement admiralIconContainer;
 
     private Box interactionBackground;
     private Label interactionText;
 
     private Coroutine currentInteractionButtonCoroutine;
-    private Coroutine currentShaderCoroutine;
 
     #endregion
 
@@ -186,14 +183,7 @@ public class HUDScreen : UIScreen
 
         if (_admiral != null)
         {
-            admiralText.text = $"{(CombatManager.Instance.Round <= CombatManager.ENEMY_FLEET_SIZES.Length ? $"({CombatManager.Instance.Round}/{CombatManager.ENEMY_FLEET_SIZES.Length})   " : "")}{_admiral.Name}";
-
-            admiralIconContainer.Clear();
-
-            for (int i = 0; i < CombatManager.Instance.GetDifficulty(); i++)
-            {
-                CreateAdmiralIcon();
-            }
+            admiralText.text = $"{(CombatManager.Instance.Round <= CombatManager.ENEMY_FLEET_SIZES.Length ? $"({CombatManager.Instance.Round}/{CombatManager.ENEMY_FLEET_SIZES.Length})      " : "")}{_admiral.Name}";
 
             StopCoroutine(ShowAdmiralContainer());
             StartCoroutine(ShowAdmiralContainer());
@@ -246,19 +236,6 @@ public class HUDScreen : UIScreen
         SetPadding(admiralText, 10);
         SetFontSize(admiralText, 50);
         admiralContainer.Add(admiralText);
-
-        admiralIconContainer = new();
-        admiralIconContainer.AddToClassList("hud-admiral-icon-container");
-        admiralContainer.Add(admiralIconContainer);
-    }
-
-    private void CreateAdmiralIcon()
-    {
-        Image image = new();
-        image.AddToClassList("hud-admiral-icon");
-        SetSize(image, 64, 64);
-        image.image = enemyIcon;
-        admiralIconContainer.Add(image);
     }
 
     private IEnumerator ShowAdmiralContainer()

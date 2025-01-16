@@ -278,11 +278,6 @@ public class CombatManager : MonoBehaviour
     {
         return RING_OF_FIRE_SIZE + DE_SPAWN_SIZE;
     }
-
-    public int GetDifficulty()
-    {
-        return Mathf.RoundToInt(Mathf.Lerp(0, 5, (float)Round / ENEMY_FLEET_SIZES.Length));
-    }
 }
 
 public enum CombatManagerState
