@@ -12,14 +12,15 @@ public class CombatManager : MonoBehaviour
 
     public CombatManagerState State { get; private set; } = CombatManagerState.None;
     private float stateTimer = 0;
-    private const float CALM_DURATION_BASE = 10f;
-    private const float CALM_DURATION_PER_SHIP = 2f;
-    private float GetCalmStateTimer => CALM_DURATION_BASE + (CALM_DURATION_PER_SHIP * Enemy.Subordinates.Count);
+
+    private const float CALM_DURATION_BASE = 30f;
+    private const float CALM_DURATION_PER_ROUND = 3f;
+    private float GetCalmStateTimer => CALM_DURATION_BASE + (CALM_DURATION_PER_ROUND * Mathf.Clamp(Round, 0, 10));
 
     public const float RING_OF_FIRE_SIZE = 750f;
-    private const float RING_OF_FIRE_BUFFER_BASE = 100f;
-    private const float RING_OF_FIRE_BUFFER_PER_SHIP = 100f;
-    private const float DE_SPAWN_SIZE = 500 + RING_OF_FIRE_BUFFER_BASE + RING_OF_FIRE_BUFFER_PER_SHIP * 16;
+    private const float RING_OF_FIRE_BUFFER_BASE = 500f;
+    private const float RING_OF_FIRE_BUFFER_PER_ROUND = 125f;
+    private const float DE_SPAWN_BUFFER_BASE = 500f;
 
     public static readonly int[] ENEMY_FLEET_SIZES = { 0, 0, 1, 2, 3, 5, 7, 9, 12, 16 };
     public static readonly int[] ROUND_RESOURCE_WORTH = { 15, 15, 25, 35, 50, 55, 75, 80, 95, 125 };
@@ -251,19 +252,19 @@ public class CombatManager : MonoBehaviour
         return PlayerBoatController.Instance.transform.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * Random.Range(0, GetRingOfFireSize());
     }
 
-    public static Vector3 GetPositionOutSideRingOfFire()
+    public Vector3 GetPositionOutSideRingOfFire()
     {
-        return PlayerBoatController.Instance.transform.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * Random.Range(GetRingOfFireSize(), GetRingOfFireWithBuffer(1));
+        return PlayerBoatController.Instance.transform.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * Random.Range(GetRingOfFireSize(), GetRingOfFireWithBuffer());
     }
 
-    public static Vector3 GetSpawnPosition(int _fleetSize)
+    public Vector3 GetSpawnPosition(int _fleetSize)
     {
-        return PlayerBoatController.Instance.transform.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * GetRingOfFireWithBuffer(_fleetSize);
+        return PlayerBoatController.Instance.transform.position + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized * GetRingOfFireWithBuffer();
     }
 
-    public static Vector3 GetClosestPositionOutSideRingOfFire(Vector3 position)
+    public Vector3 GetClosestPositionOutSideRingOfFire(Vector3 position)
     {
-        return PlayerBoatController.Instance.transform.position + ((position - PlayerBoatController.Instance.transform.position).normalized * GetRingOfFireWithBuffer(0));
+        return PlayerBoatController.Instance.transform.position + ((position - PlayerBoatController.Instance.transform.position).normalized * GetRingOfFireWithBuffer());
     }
 
     public static float GetRingOfFireSize()
@@ -271,14 +272,14 @@ public class CombatManager : MonoBehaviour
         return RING_OF_FIRE_SIZE;
     }
 
-    public static float GetRingOfFireWithBuffer(int _fleetSize)
+    public float GetRingOfFireWithBuffer()
     {
-        return RING_OF_FIRE_SIZE + RING_OF_FIRE_BUFFER_BASE + (RING_OF_FIRE_BUFFER_PER_SHIP * _fleetSize);
+        return RING_OF_FIRE_SIZE + RING_OF_FIRE_BUFFER_BASE + (RING_OF_FIRE_BUFFER_PER_ROUND * Mathf.Clamp(Round, 0, 10));
     }
 
     public static float GetMapSize()
     {
-        return RING_OF_FIRE_SIZE + DE_SPAWN_SIZE;
+        return RING_OF_FIRE_SIZE + RING_OF_FIRE_BUFFER_BASE + (RING_OF_FIRE_BUFFER_PER_ROUND * 10) + DE_SPAWN_BUFFER_BASE;
     }
 
     public int GetRoundResourceWorth()

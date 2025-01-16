@@ -750,7 +750,23 @@ public class HUDScreen : UIScreen
     {
         yield return new WaitForSeconds(1);
 
-        AddObjective(ObjectiveType.Engine);
+        if (CompletedObjectives.Contains(ObjectiveType.Engine))
+        {
+            if (CompletedObjectives.Contains(ObjectiveType.Steer))
+            {
+                AddObjective(ObjectiveType.FindFirstEnemy);
+            }
+
+            else
+            {
+                AddObjective(ObjectiveType.Steer);
+            }
+        }
+
+        else
+        {
+            AddObjective(ObjectiveType.Engine);
+        }
     }
 
     private void FleetScreen_OnBoatBuilt()
