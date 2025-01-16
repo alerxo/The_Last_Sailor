@@ -18,6 +18,7 @@ TagManager:
   - CannonBallEasterEgg
   - BoatCollisionTag
   - BirdController
+  - FormationHighlightCanRotate
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - CommandWaypoint
   - 
   - 
   - 

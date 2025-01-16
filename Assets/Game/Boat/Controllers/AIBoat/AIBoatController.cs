@@ -24,8 +24,12 @@ public class AIBoatController : MonoBehaviour
     public float Speed { get; private set; } = 1f;
     public float Distance { get; private set; }
 
-    private float destructionTimer;
     private const float DESTRUCTION_COOLDOWN = 1f;
+    private float destructionTimer;
+
+    private const float CANNON_FIRE_COOLDOWN_MIN = 0.1f;
+    private const float CANNON_FIRE_COOLDOWN_MAX = 0.2f;
+    private float cannonFireTimer;
 
     [SerializeField] private Transform[] modelParents;
 
@@ -38,6 +42,8 @@ public class AIBoatController : MonoBehaviour
         Boat = GetComponent<Boat>();
 
         Boat.OnDestroyed += Boat_OnDestroyed;
+
+        cannonFireTimer = Random.Range(CANNON_FIRE_COOLDOWN_MIN, CANNON_FIRE_COOLDOWN_MAX);
     }
 
     public void OnEnable()
@@ -58,6 +64,12 @@ public class AIBoatController : MonoBehaviour
                 SetDistance();
                 UpdateTrail();
                 DebugDrawTrail();
+
+                if (!CanFireCannon())
+                {
+                    cannonFireTimer -= Time.deltaTime;
+                }
+
                 break;
 
             case AIBoatControllerState.PendingDestruction:
@@ -66,6 +78,16 @@ public class AIBoatController : MonoBehaviour
         }
 
         Boat.Engine.SetOverCharge(Admiral != null && Admiral.Enemy != null ? 1f : 1.2f);
+    }
+
+    public void CannonWasFired()
+    {
+        cannonFireTimer = Random.Range(CANNON_FIRE_COOLDOWN_MIN, CANNON_FIRE_COOLDOWN_MAX);
+    }
+
+    public bool CanFireCannon()
+    {
+        return cannonFireTimer <= 0f;
     }
 
     private void SetDistance()

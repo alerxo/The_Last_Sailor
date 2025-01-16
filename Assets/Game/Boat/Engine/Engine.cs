@@ -60,8 +60,8 @@ public class Engine : MonoBehaviour
         {
             float rudderEffectOnRotation = rudder * RUDDER_EFFECT_ON_PADDLEWHEEL_ROTATION;
 
-            paddleWheelLeft.Rotate(new Vector3((throttle + rudderEffectOnRotation) * PADDLE_WHEEL_SPEED * Time.fixedDeltaTime, 0, 0));
-            paddleWheelRight.Rotate(new Vector3((throttle - rudderEffectOnRotation) * PADDLE_WHEEL_SPEED * Time.fixedDeltaTime, 0, 0));
+            paddleWheelLeft.Rotate(new Vector3((throttle - rudderEffectOnRotation) * PADDLE_WHEEL_SPEED * Time.fixedDeltaTime, 0, 0));
+            paddleWheelRight.Rotate(new Vector3((throttle + rudderEffectOnRotation) * PADDLE_WHEEL_SPEED * Time.fixedDeltaTime, 0, 0));
 
             TryPlayerPaddleWheelAudio();
         }

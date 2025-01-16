@@ -525,9 +525,10 @@ MonoBehaviour:
   - {fileID: 7433441132597879392, guid: 7c836e0d43f512242b27bb1bf67a03e1, type: 3}
   wayPointLayer:
     serializedVersion: 2
-    m_Bits: 2048
-  highlightPrefab: {fileID: 7516447183933808321, guid: fc899b563287cda4d883798a1be3ba68, type: 3}
-  wayPointPrefab: {fileID: 8057175062765386483, guid: 20cd7be6f2578a8459a77240d908b76f, type: 3}
+    m_Bits: 256
+  highlightPrefab: {fileID: 95853735626721899, guid: fc899b563287cda4d883798a1be3ba68, type: 3}
+  wayPointPrefab: {fileID: 1359898356135836435, guid: 20cd7be6f2578a8459a77240d908b76f, type: 3}
+  holdOriginPrefab: {fileID: 3942401595145526577, guid: 8c10e42fb460d7e468ac576e7422b4ca, type: 3}
   trailPrefab: {fileID: 4243916727641695407, guid: ae898597b4bdfe443857bb2b5ecf5dc6, type: 3}
   playerMaterial: {fileID: 2100000, guid: 21096fbf65900a24f9c90eddefe37c98, type: 2}
   formationMaterial: {fileID: 2100000, guid: c70c4388fc85a9342a32a2773c38a706, type: 2}
@@ -605,9 +606,9 @@ MonoBehaviour:
   followMaterial: {fileID: 2100000, guid: c70c4388fc85a9342a32a2773c38a706, type: 2}
   waitMaterial: {fileID: 2100000, guid: 2c2710f778f23864ea7dea495cbea82b, type: 2}
   chargeMaterial: {fileID: 2100000, guid: 0a30b26b4199edd41b760cce99531a48, type: 2}
-  lineIcon: {fileID: 2800000, guid: fc7a175705a4026429debf066b240697, type: 3}
-  arrowIcon: {fileID: 2800000, guid: 36a55638cdd7caf4580defd78b0452d4, type: 3}
-  circleIcon: {fileID: 2800000, guid: f7013d7ba1ee5c541ac655a2b5911079, type: 3}
+  lineIcon: {fileID: 2800000, guid: e50429b34bc9f7543be6ccd46118b9d0, type: 3}
+  arrowIcon: {fileID: 2800000, guid: 211ed13ea0baf4d41ac0f568259e0fc9, type: 3}
+  circleIcon: {fileID: 2800000, guid: eb1a9b28623d1c649a18ba551806ec85, type: 3}
   checkIcon: {fileID: 2800000, guid: b1bfce64ae04f8d47bfa87d549f310d1, type: 3}
 --- !u!1 &7905694198376354994
 GameObject:

@@ -11,7 +11,7 @@ public partial class AdmiralMoveOutsideRingOfFire : Action
     [SerializeReference] public BlackboardVariable<EnemyAdmiralController> Agent;
     protected override Status OnStart()
     {
-        Agent.Value.SetDestination(CombatManager.GetPositionOutSideRingOfFire());
+        Agent.Value.SetDestination(CombatManager.Instance.GetPositionOutSideRingOfFire());
 
         return Status.Success;
     }
