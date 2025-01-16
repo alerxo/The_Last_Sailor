@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class SeagullAmbiance : MonoBehaviour
 {
@@ -15,9 +16,11 @@ public class SeagullAmbiance : MonoBehaviour
 
     bool allowedPlay;
 
+    Transform playerT;
     private void Awake()
     {
         UIManager.OnStateChanged += UImanager_OnUIStateChange;
+        playerT = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     private void OnDestroy()
@@ -47,7 +50,11 @@ public class SeagullAmbiance : MonoBehaviour
 
     void Update()
     {
-        PlayAmbiance();
+        float dittBalanseradeSeaGullVärde = 150;
+        if (Vector3.Distance(playerT.position, transform.position) < dittBalanseradeSeaGullVärde)
+        {
+            PlayAmbiance();
+        }
     }
     public void PlayAmbiance()
     {
