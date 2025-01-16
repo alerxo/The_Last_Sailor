@@ -67,6 +67,11 @@ MonoBehaviour:
   styleSheets:
   - {fileID: 7433441132597879392, guid: 70606d5d2321ebe4c8d2b8ac80ee0bf0, type: 3}
   - {fileID: 7433441132597879392, guid: b399a1ffdd82ca446b3dae53de4ee274, type: 3}
+  resourceIcon: {fileID: 2800000, guid: aa6d5b38ca39d004ba7ee8abf9b9e7f7, type: 3}
+  upgradeIcon: {fileID: 2800000, guid: 18576388f66cfc14a8f524d305644cba, type: 3}
+  repairIcon: {fileID: 2800000, guid: 6f8dc1f86c131ed48b87ccc456742855, type: 3}
+  boatIcon: {fileID: 2800000, guid: 67f906db3ff1633438932f97c6992e1e, type: 3}
+  buildIcon: {fileID: 2800000, guid: c37ee00a43942414c80a6acc443dc7d9, type: 3}
 --- !u!1 &1663788973374749519
 GameObject:
   m_ObjectHideFlags: 0
