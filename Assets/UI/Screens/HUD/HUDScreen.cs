@@ -42,6 +42,7 @@ public class HUDScreen : UIScreen
 
     private PlayerAdmiralController admiralController;
     [SerializeField] private Material followMaterial, waitMaterial, chargeMaterial;
+    [SerializeField] private Texture2D lineIcon, arrowIcon, circleIcon;
 
     private VisualElement commandContainer;
     private readonly Dictionary<Command, Button> commandButtons = new();
@@ -620,25 +621,34 @@ public class HUDScreen : UIScreen
         formationContainer.AddToClassList("command-formation-container");
         _parent.Add(formationContainer);
 
-        CreateFormationButton(formationContainer, "Line [-]", Formation.Line);
-        CreateFormationButton(formationContainer, "Spearhead [>]", Formation.Spearhead);
-        CreateFormationButton(formationContainer, "Ring [O]", Formation.Ring);
+        CreateFormationButton(formationContainer, "Line", lineIcon, Formation.Line);
+        CreateFormationButton(formationContainer, "Spearhead", arrowIcon, Formation.Spearhead);
+        CreateFormationButton(formationContainer, "Ring", circleIcon, Formation.Ring);
 
         TutorialScreen.Instance.SetFormationsContainer(formationContainer);
     }
 
-    private void CreateFormationButton(VisualElement _parent, string _text, Formation _formation)
+    private void CreateFormationButton(VisualElement _parent, string _text, Texture2D _icon, Formation _formation)
     {
         Button button = new(() => PlayerBoatController.Instance.AdmiralController.SetDefaultFormation(_formation));
         button.AddToClassList("main-button");
         button.AddToClassList("command-formation-button");
-        SetSize(button, 256, 48);
+        SetSize(button, 256, 80);
+        SetPadding(button, 0, 0, 20, 5);
         SetBorderWidthRadius(button, 3, 7);
-        SetFontSize(button, 30);
         button.pickingMode = PickingMode.Position;
-        button.text = _text;
         button.SetEnabled(UIManager.Instance.GetState() == UIState.Formation && PlayerBoatController.Instance.AdmiralController.Command != Command.Charge);
         _parent.Add(button);
+
+        Label label = new(_text);
+        button.AddToClassList("command-formation-button-label");
+        SetFontSize(label, 28);
+        button.Add(label);
+
+        Image image = new();
+        SetSize(image, 64, 64);
+        image.image = _icon;
+        button.Add(image);
 
         formationButtons[_formation] = button;
     }

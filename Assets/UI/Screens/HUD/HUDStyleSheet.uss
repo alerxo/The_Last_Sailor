@@ -91,7 +91,12 @@
 }
 
 .command-formation-button { 
-	border-color: black;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+	border-color: rgba(240, 240, 240, 1);
+	background-color: rgba(40, 40, 40, 0.7);
 
 	transition-property: scale;
 	transition-duration: 50ms;
@@ -104,6 +109,10 @@
 	transition-property: scale;
     transition-duration: 50ms;
 	transition-timing-function: ease-in-out;
+}
+
+.command-formation-button-label {
+	color: rgba(240, 240, 240, 1);
 }
 
 .command-button { }
