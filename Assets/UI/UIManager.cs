@@ -17,8 +17,8 @@ public class UIManager : MonoBehaviour
     private readonly List<UIState> hiddenCursorStates = new() { UIState.None, UIState.HUD };
 
     private UIState State = UIState.TitleScreen;
-    private readonly List<UIState> pauseScreens = new() { UIState.Pause, UIState.Options };
-    private UIState optionsReturnState;
+    private readonly List<UIState> pauseScreens = new() { UIState.Pause, UIState.Options, UIState.Controls };
+    private UIState optionsReturnState, controlsReturnState;
     private bool isInTitleScreen = true;
 
     public static float UIScale = 1f;
@@ -105,6 +105,17 @@ public class UIManager : MonoBehaviour
         SetState(optionsReturnState);
     }
 
+    public void SetStateControls(UIState _returnState)
+    {
+        controlsReturnState = _returnState;
+        SetState(UIState.Controls);
+    }
+
+    public void ReturnFromControls()
+    {
+        SetState(controlsReturnState);
+    }
+
     private void ToggleUI_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
         UIState current = State;
@@ -177,6 +188,10 @@ public class UIManager : MonoBehaviour
                 ReturnFromOptions();
                 return;
 
+            case UIState.Controls:
+                ReturnFromControls();
+                return;
+
             case UIState.HUD:
                 SetState(UIState.Pause);
                 return;
@@ -201,6 +216,7 @@ public enum UIState
     HUD,
     Pause,
     Options,
+    Controls,
     PostCombat,
     Fleet,
     Formation

@@ -43,21 +43,16 @@
 	border-radius: 100%;
 	border-width: 0px;
 
-	background-color: rgba(200, 200, 200, 0.7);
+	background-color: rgba(40, 40, 40, 0.7);
+	border-color: rgba(240, 240, 240, 1);
 }
 
 .hud-interaction-text { 
 	margin: 0px;
 	padding: 0px;
 
-	color: #2b2b2b;
+	color: rgba(240, 240, 240, 1);
 }
-
-.hud-exit-interaction-background {
-	background-color: rgba(200, 200, 200, 0.4);
-}
-
-.hud-exit-interaction-text { }
 
 /* Command */
 

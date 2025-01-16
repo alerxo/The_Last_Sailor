@@ -265,20 +265,20 @@ public class TutorialScreen : UIScreen
 
         foreach (Tooltip tooltip in _tooltips)
         {
-            foreach (TooltipControlScheme controlScheme in tooltip.Controls)
+            foreach (TooltipControlScheme controlScheme in tooltip.ControlSchemes)
             {
                 TooltipControlScheme current = controlScheme;
                 current.Type = tooltip.Type;
 
                 if (completedInput.Contains(current.GetID())) continue;
 
-                current.visualElement = CreateInputControl(inputBackground, current);
+                current.visualElement = CreateInputControlSchemeItem(inputBackground, current);
 
-                foreach (TooltipInput input in current.Controls)
+                foreach (TooltipInput input in current.Inputs)
                 {
                     foreach (TooltipKey key in input.Keys)
                     {
-                        currentInput[key.Key] = current;
+                        currentInput[key.Code] = current;
                     }
                 }
 
@@ -306,7 +306,7 @@ public class TutorialScreen : UIScreen
         isCheckingIfCompletedInput = true;
     }
 
-    private VisualElement CreateInputControl(VisualElement _parent, TooltipControlScheme _tooltip)
+    private VisualElement CreateInputControlSchemeItem(VisualElement _parent, TooltipControlScheme _controlScheme)
     {
         VisualElement container = new();
         container.AddToClassList("tutorial-input-item");
@@ -314,11 +314,11 @@ public class TutorialScreen : UIScreen
         SetBorderRadius(container, 5);
         _parent.Add(container);
 
-        for (int i = 0; i < _tooltip.Controls.Length; i++)
+        for (int i = 0; i < _controlScheme.Inputs.Length; i++)
         {
-            for (int j = 0; j < _tooltip.Controls[i].Keys.Length; j++)
+            for (int j = 0; j < _controlScheme.Inputs[i].Keys.Length; j++)
             {
-                Label inputLabel = new(_tooltip.Controls[i].Keys[j].Name);
+                Label inputLabel = new(_controlScheme.Inputs[i].Keys[j].Name);
                 inputLabel.AddToClassList("tutorial-input-item-input");
                 SetMargin(inputLabel, 0, 0, j == 0 ? 0 : 4, 4);
                 SetPadding(inputLabel, 0, 0, 12, 12);
@@ -327,7 +327,7 @@ public class TutorialScreen : UIScreen
                 container.Add(inputLabel);
             }
 
-            if (i + 1 < _tooltip.Controls.Length)
+            if (i + 1 < _controlScheme.Inputs.Length)
             {
                 Label alternative = new("or");
                 alternative.AddToClassList("tutorial-input-item-description");
@@ -336,7 +336,7 @@ public class TutorialScreen : UIScreen
             }
         }
 
-        Label description = new(_tooltip.Description);
+        Label description = new(_controlScheme.Description);
         description.AddToClassList("tutorial-input-item-description");
         SetFontSize(description, 18);
         container.Add(description);
@@ -368,21 +368,22 @@ public class TutorialScreen : UIScreen
 
             case TutorialType.Steering:
                 return new TooltipControlScheme[] {
-                    new("Steer", new TooltipInput(new TooltipKey(KeyCode.A, "A"), new TooltipKey(KeyCode.D, "D"))),
+                    new("Turn Left", new TooltipInput(new TooltipKey(KeyCode.A, "A"))),
+                    new("Turn Right", new TooltipInput(new TooltipKey(KeyCode.D, "D"))),
                     new("Camera view", new TooltipInput(new TooltipKey(KeyCode.C, "C"))),
-                    new("Exit", new TooltipInput(new TooltipKey(KeyCode.E, "E")),
-                    new TooltipInput(new TooltipKey(KeyCode.Escape, "Esc"))) };
+                    new("Exit", new TooltipInput(new TooltipKey(KeyCode.E, "E")), new TooltipInput(new TooltipKey(KeyCode.Escape, "Esc"))) };
 
             case TutorialType.Throttle:
                 return new TooltipControlScheme[] {
-                    new("Throttle", new TooltipInput(new TooltipKey(KeyCode.A, "A"), new TooltipKey(KeyCode.D, "D"))),
-                    new("Exit", new TooltipInput(new TooltipKey(KeyCode.E, "E"), new TooltipKey(KeyCode.Escape, "Esc"))) };
+                    new("Decelerate", new TooltipInput(new TooltipKey(KeyCode.A, "A"))),
+                    new("Accelerate", new TooltipInput(new TooltipKey(KeyCode.D, "D"))),
+                    new("Exit", new TooltipInput(new TooltipKey(KeyCode.E, "E")), new TooltipInput(new TooltipKey(KeyCode.Escape, "Esc"))) };
 
             case TutorialType.Cannon:
                 return new TooltipControlScheme[] {
                     new("Aim", new TooltipInput(new TooltipKey(KeyCode.W, "W"), new TooltipKey(KeyCode.A, "A"), new TooltipKey(KeyCode.S, "S"), new TooltipKey(KeyCode.D, "D"))),
                     new("Fire", new TooltipInput(new TooltipKey(KeyCode.Mouse0, "LMB"))),
-                    new("Exit", new TooltipInput(new TooltipKey(KeyCode.E, "E"), new TooltipKey(KeyCode.Escape, "Esc"))) };
+                    new("Exit", new TooltipInput(new TooltipKey(KeyCode.E, "E")), new TooltipInput(new TooltipKey(KeyCode.Escape, "Esc"))) };
 
             case TutorialType.Command:
                 return new TooltipControlScheme[] {
@@ -398,11 +399,11 @@ public class TutorialScreen : UIScreen
                     new("Fleet follow", new TooltipInput(new TooltipKey("1"))),
                     new("Fleet wait", new TooltipInput(new TooltipKey("2"))),
                     new("Fleet charge", new TooltipInput(new TooltipKey("3"))),
-                    new("Exit", new TooltipInput(new TooltipKey("4"), new TooltipKey("Esc"))) };
+                    new("Exit", new TooltipInput(new TooltipKey(KeyCode.E, "E")), new TooltipInput(new TooltipKey(KeyCode.Escape, "Esc"))) };
 
             case TutorialType.Fleet:
                 return new TooltipControlScheme[] {
-                    new("Exit", new TooltipInput(new TooltipKey("E"), new TooltipKey("Esc"))) };
+                    new("Exit", new TooltipInput(new TooltipKey(KeyCode.E, "E")), new TooltipInput(new TooltipKey(KeyCode.Escape, "Esc"))) };
 
             default:
                 Debug.LogError("Default");
@@ -471,25 +472,25 @@ public class TutorialScreen : UIScreen
     private struct Tooltip
     {
         public TutorialType Type;
-        public TooltipControlScheme[] Controls;
+        public TooltipControlScheme[] ControlSchemes;
 
         public Tooltip(TutorialType _type, TooltipControlScheme[] _controls)
         {
             Type = _type;
-            Controls = _controls;
+            ControlSchemes = _controls;
         }
     }
 
     private struct TooltipControlScheme
     {
-        public TooltipInput[] Controls;
+        public TooltipInput[] Inputs;
         public TutorialType Type;
         public string Description;
         public VisualElement visualElement;
 
         public TooltipControlScheme(string description, params TooltipInput[] _controls)
         {
-            Controls = _controls;
+            Inputs = _controls;
             Description = description;
             visualElement = null;
             Type = TutorialType.None;
@@ -513,18 +514,18 @@ public class TutorialScreen : UIScreen
 
     private struct TooltipKey
     {
-        public KeyCode Key;
+        public KeyCode Code;
         public string Name;
 
         public TooltipKey(KeyCode _key, string _name)
         {
-            Key = _key;
+            Code = _key;
             Name = _name;
         }
 
         public TooltipKey(string _name)
         {
-            Key = KeyCode.None;
+            Code = KeyCode.None;
             Name = _name;
         }
     }

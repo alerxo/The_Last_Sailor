@@ -34,46 +34,25 @@ public class OptionsScreen : UIScreen
         optionsContainer.styleSheets.Add(scrollViewStyleSheet);
         optionsContainer.AddToClassList("options-item-container");
         SetBorderWidthRadius(optionsContainer, 3, 7);
-        SetPadding(optionsContainer, 0, 0, 5, 0);
+        SetPadding(optionsContainer, 0, 0, 10, 0);
         optionsContainer.verticalScroller.highButton.RemoveFromHierarchy();
         optionsContainer.verticalScroller.lowButton.RemoveFromHierarchy();
         optionsContainer.horizontalScroller.RemoveFromHierarchy();
         background.Add(optionsContainer);
 
+        CreateCategoryHeader(optionsContainer, "Mouse Sensitivity");
+        CreateSlider(optionsContainer, "First Person", MouseSensitivityManager.Instance.PlayerMouseSensitivity, 0.1f, 2f, (f) => MouseSensitivityManager.Instance.SetPlayerMouseSensitivty(f));
+        CreateSlider(optionsContainer, "Steering Wheel", MouseSensitivityManager.Instance.SteeringWheelMouseSensitivity, 0.1f, 2f, (f) => MouseSensitivityManager.Instance.SetSteeringWheelMouseSensitivty(f));
+        CreateSlider(optionsContainer, "Cannon", MouseSensitivityManager.Instance.CannonMouseSensitivity, 0.1f, 2f, (f) => MouseSensitivityManager.Instance.SetCannonMouseSensitivty(f));
+
         CreateCategoryHeader(optionsContainer, "Video");
-        CreateDropDown(optionsContainer, "Quality", new List<string>() { "Low", "Medium", "High" }, (int)VideoQualityManager.Instance.VideoQuality, (i) => VideoQualityManager.Instance.SetVideoQuality((VideoQuality)i));
+        CreateDropDown(optionsContainer, "Quality", new List<string>() { "High", "Low" }, (int)VideoQualityManager.Instance.VideoQuality, (i) => VideoQualityManager.Instance.SetVideoQuality((VideoQuality)i));
 
         CreateCategoryHeader(optionsContainer, "Volume");
-        CreateSlider(optionsContainer, "Master", SoundSettingsManager.Instance.GetMasterVolume(), (f) => SoundSettingsManager.Instance.SetMasterVolume(f));
-        CreateSlider(optionsContainer, "Music", SoundSettingsManager.Instance.GetMusicVolume(), (f) => SoundSettingsManager.Instance.SetMusicVolume(f));
-        CreateSlider(optionsContainer, "Sound Effects", SoundSettingsManager.Instance.GetSFXVolume(), (f) => SoundSettingsManager.Instance.SetSFXVolume(f));
-        CreateSlider(optionsContainer, "Ambience", SoundSettingsManager.Instance.GetAmbianceVolume(), (f) => SoundSettingsManager.Instance.SetAmbianceVolume(f));
-
-        CreateCategoryHeader(optionsContainer, "Controls");
-        CreateControl(optionsContainer, "Pause", false, "Esc");
-        CreateControl(optionsContainer, "Go Back", false, "Esc");
-        CreateControl(optionsContainer, "Show Objective", true, "Tab");
-
-        CreateControl(optionsContainer, "Walk", false, "W", "A", "S", "D");
-        CreateControl(optionsContainer, "Jump", false, "Space");
-        CreateControl(optionsContainer, "Sprint", true,  "LShift");
-
-        CreateControl(optionsContainer, "Interact", false, "E");
-        CreateControl(optionsContainer, "Exit Interaction", false, "E");
-        CreateControl(optionsContainer, "Aim Cannon", false, "W", "A", "S", "D");
-        CreateControl(optionsContainer, "Shoot Cannon", true, "LMB");
-
-        CreateControl(optionsContainer, "Throttle", false, "A", "D");
-        CreateControl(optionsContainer, "Steering Wheel", false, "A", "D");
-        CreateControl(optionsContainer, "Steering Camera", true, "C");
-
-        CreateControl(optionsContainer, "Fleet Follow Command", false, "1");
-        CreateControl(optionsContainer, "Fleet Wait Command", false, "2");
-        CreateControl(optionsContainer, "Fleet Charge Command", false, "3");
-        CreateControl(optionsContainer, "Enter Fleet View", true, "4");
-
-        CreateControl(optionsContainer, "Move Fleet Camera", false, "W", "A", "S", "D");
-        CreateControl(optionsContainer, "Zoom Fleet Camera", true, "Scroll");
+        CreateSlider(optionsContainer, "Master", SoundSettingsManager.Instance.GetMasterVolume(), 0, 100, (f) => SoundSettingsManager.Instance.SetMasterVolume(f));
+        CreateSlider(optionsContainer, "Music", SoundSettingsManager.Instance.GetMusicVolume(), 0, 100, (f) => SoundSettingsManager.Instance.SetMusicVolume(f));
+        CreateSlider(optionsContainer, "Sound Effects", SoundSettingsManager.Instance.GetSFXVolume(), 0, 100, (f) => SoundSettingsManager.Instance.SetSFXVolume(f));
+        CreateSlider(optionsContainer, "Ambience", SoundSettingsManager.Instance.GetAmbianceVolume(), 0, 100, (f) => SoundSettingsManager.Instance.SetAmbianceVolume(f));
     }
 
     private void CreateCategoryHeader(VisualElement _parent, string _header)
@@ -123,7 +102,7 @@ public class OptionsScreen : UIScreen
         container.Add(dropdownField);
     }
 
-    private void CreateSlider(VisualElement _parent, string _name, float _current, Action<float> _onSet)
+    private void CreateSlider(VisualElement _parent, string _name, float _current, float _min, float _max, Action<float> _onSet)
     {
         VisualElement container = CreateItem(_parent);
 
@@ -133,37 +112,11 @@ public class OptionsScreen : UIScreen
         sliderContainer.AddToClassList("options-item-slider-container");
         container.Add(sliderContainer);
 
-        Slider slider = new(0f, 100f, SliderDirection.Horizontal);
+        Slider slider = new(_min, _max, SliderDirection.Horizontal);
         slider.styleSheets.Add(sliderStyleSheet);
         slider.AddToClassList("options-item-slider");
         slider.SetValueWithoutNotify(_current);
         slider.RegisterValueChangedCallback(evt => _onSet(evt.newValue));
         sliderContainer.Add(slider);
-    }
-
-    private void CreateControl(VisualElement _parent, string _name, bool _isLast, params string[] _controlScheme)
-    {
-        VisualElement container = CreateItem(_parent);
-
-        if (_isLast)
-        {
-            SetMargin(container, 0, 25, 0, 0);
-        }
-
-        CreateItemLabel(container, _name);
-
-        VisualElement controls = new();
-        controls.AddToClassList("options-item-control-container");
-        container.Add(controls);
-
-        foreach (string control in _controlScheme)
-        {
-            Label inputLabel = new(control);
-            inputLabel.AddToClassList("options-item-control");
-            SetPadding(inputLabel, 0, 0, 10, 10);
-            SetBorderWidthRadius(inputLabel, 3, 5);
-            SetFontSize(inputLabel, 20);
-            controls.Add(inputLabel);
-        }
     }
 }

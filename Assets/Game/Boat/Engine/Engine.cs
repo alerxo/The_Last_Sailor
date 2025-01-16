@@ -7,10 +7,11 @@ public class Engine : MonoBehaviour
     private const float RUDDER_ACCELERATION = 0.9f;
     private const float TURN_RADIUS = 2f;
     private const float RUDDER_PASSIVE_TORQUE = 30000f;
-    private const float PADDLE_WHEEL_SPEED = 0.0015f * POWER;
+    private const float PADDLE_WHEEL_SPEED = 0.0012f * POWER;
+    private const float RUDDER_EFFECT_ON_PADDLEWHEEL_ROTATION = 0.1f;
 
     [Tooltip("The rotating paddlewheel")]
-    [SerializeField] private Transform paddleWheel;
+    [SerializeField] private Transform paddleWheelLeft, paddleWheelRight;
     [SerializeField] private AudioSource paddleAudioSource;
     [SerializeField] private AudioClip paddleAudioClip;
 
@@ -53,8 +54,14 @@ public class Engine : MonoBehaviour
         if (throttle > 0)
         {
             target.AddForceAtPosition(throttle * POWER * OverCharge * transform.forward, transform.position, ForceMode.Force);
+        }
 
-            paddleWheel.Rotate(new Vector3(throttle * PADDLE_WHEEL_SPEED * Time.fixedDeltaTime, 0, 0));
+        if (throttle > 0 || rudder != 0)
+        {
+            float rudderEffectOnRotation = rudder * RUDDER_EFFECT_ON_PADDLEWHEEL_ROTATION;
+
+            paddleWheelLeft.Rotate(new Vector3((throttle + rudderEffectOnRotation) * PADDLE_WHEEL_SPEED * Time.fixedDeltaTime, 0, 0));
+            paddleWheelRight.Rotate(new Vector3((throttle - rudderEffectOnRotation) * PADDLE_WHEEL_SPEED * Time.fixedDeltaTime, 0, 0));
 
             TryPlayerPaddleWheelAudio();
         }
