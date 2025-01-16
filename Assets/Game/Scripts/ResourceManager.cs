@@ -8,11 +8,9 @@ public class ResourceManager : MonoBehaviour
 
     public static event UnityAction<float> OnResourceAmountChanged;
 
-    public const int UPGRADE_COST = 10;
-
-    private const int GAIN_PER_ENEMY_SUNK = 15;
-    private const int COST_FOR_BUILD = 10;
-    private const int REPAIR_COST = 5;
+    public const int UPGRADE_COST = 5;
+    private const int BUILD_NEW_BOAT_COST = 10;
+    private const int MAX_REPAIR_COST = 5;
 
     private static readonly int[] subodinateUpgradeCosts = { 0, 10, 30, 50, 50 };
 
@@ -57,14 +55,14 @@ public class ResourceManager : MonoBehaviour
 
     public float GetEnemyFleetWorth()
     {
-        return CombatManager.Instance.Enemy.Fleet.Count * GAIN_PER_ENEMY_SUNK;
+        return CombatManager.Instance.GetRoundResourceWorth();
     }
 
     #region Repair
 
     public static int GetRepairCost(Boat _boat)
     {
-        return _boat.IsDamaged ? Mathf.FloorToInt(Mathf.Lerp(REPAIR_COST, 1, (float)_boat.GetPercentageDurability() / 100)) : 0;
+        return _boat.IsDamaged ? Mathf.FloorToInt(Mathf.Lerp(MAX_REPAIR_COST, 1, (float)_boat.GetPercentageDurability() / 100)) : 0;
     }
 
     public bool CanRepair(Boat _boat)
@@ -109,7 +107,7 @@ public class ResourceManager : MonoBehaviour
 
     public int GetBuildCost()
     {
-        return COST_FOR_BUILD;
+        return BUILD_NEW_BOAT_COST;
     }
 
     public bool CanBuild()
@@ -120,7 +118,7 @@ public class ResourceManager : MonoBehaviour
     public void BuildPlayerBoat()
     {
         PlayerBoatController.Instance.AdmiralController.BuildBoat();
-        AddResource(-COST_FOR_BUILD);
+        AddResource(-BUILD_NEW_BOAT_COST);
     }
 
     #endregion

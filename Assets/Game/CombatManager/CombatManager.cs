@@ -22,6 +22,8 @@ public class CombatManager : MonoBehaviour
     private const float DE_SPAWN_SIZE = 500 + RING_OF_FIRE_BUFFER_BASE + RING_OF_FIRE_BUFFER_PER_SHIP * 16;
 
     public static readonly int[] ENEMY_FLEET_SIZES = { 0, 0, 1, 2, 3, 5, 7, 9, 12, 16 };
+    public static readonly int[] ROUND_RESOURCE_WORTH = { 15, 15, 25, 35, 50, 55, 75, 80, 95, 125 };
+
     public int Round { get; private set; } = 0;
 
     private PlayerBoatController player;
@@ -277,6 +279,11 @@ public class CombatManager : MonoBehaviour
     public static float GetMapSize()
     {
         return RING_OF_FIRE_SIZE + DE_SPAWN_SIZE;
+    }
+
+    public int GetRoundResourceWorth()
+    {
+        return ROUND_RESOURCE_WORTH[Mathf.Clamp(Round, 0, 10)];
     }
 }
 
