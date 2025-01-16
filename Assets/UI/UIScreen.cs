@@ -111,6 +111,10 @@ public abstract class UIScreen : MonoBehaviour
     {
         _target.style.fontSize = GetScaledValue(_value);
     }
+    protected void SetOpacity(VisualElement _target, float _value)
+    {
+        _target.style.opacity = _value;
+    }
 
     protected float GetScaledValue(float _value)
     {
