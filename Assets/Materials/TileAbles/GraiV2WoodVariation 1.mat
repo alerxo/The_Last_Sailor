@@ -171,9 +171,9 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
-    - _DarkenEffect: 0.749
+    - _DarkenEffect: 0.603
     - _DarkerVarianceBlend: 1
-    - _DarkerVarianceSaturation: 1.207
+    - _DarkerVarianceSaturation: 1.068
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 1
     - _DetailNormalScale: 1
