@@ -22,7 +22,7 @@ public class AICannonController : MonoBehaviour
     private const float PREDICTION_COOLDOWN = 0.1f;
 
     private const float MAX_ACCURACY_DISTANCE = 500f;
-    private const float MAX_ACCURACY = 3f;
+    private const float MAX_ACCURACY = 10f;
     private const float MIN_ACCURACY = 1f;
     private float accuracy;
 
