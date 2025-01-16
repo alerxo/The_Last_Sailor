@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1304222455834577700, guid: 36d34af1c18546c4ba86fa3252786f21, type: 3}
       propertyPath: IsDebugMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3102794855979396664, guid: 36d34af1c18546c4ba86fa3252786f21, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

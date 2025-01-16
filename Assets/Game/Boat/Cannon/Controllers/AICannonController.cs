@@ -21,13 +21,10 @@ public class AICannonController : MonoBehaviour
     private float predictionTimer;
     private const float PREDICTION_COOLDOWN = 0.1f;
 
-    private Vector3 currentAimOffset;
-    private const float MAX_AIM_OFFSET = 100f;
-    private const float MIN_AIM_OFFSET = 25f;
-    private const float MAX_DISTANCE_AIM_OFFSET = 300f;
-    private const float MIN_DISTANCE_AIM_OFFSET = 75f;
-    private const float ZERO_IN_SPEED = 0.8f;
-    private float aimOffset;
+    private const float MAX_ACCURACY_DISTANCE = 500f;
+    private const float MAX_ACCURACY = 3f;
+    private const float MIN_ACCURACY = 1f;
+    private float accuracy;
 
     private void Awake()
     {
@@ -58,7 +55,7 @@ public class AICannonController : MonoBehaviour
 #if UNITY_EDITOR
             if (owner.IsDebugMode && target != null)
             {
-                cannon.DebugDrawTrajectory(target, predictedTargetPosition);
+                cannon.DebugDrawTrajectory(target, predictedTargetPosition, accuracy);
             }
 #endif
         }
@@ -66,7 +63,6 @@ public class AICannonController : MonoBehaviour
         if (state == AICannonControllerState.Shooting)
         {
             FireAtTarget();
-            ZeroInAimOffset();
         }
     }
 
@@ -106,9 +102,13 @@ public class AICannonController : MonoBehaviour
         if (newTarget != target)
         {
             target = newTarget;
-            aimOffset = MAX_AIM_OFFSET;
             GetNewAimOffset();
         }
+    }
+
+    private void GetNewAimOffset()
+    {
+        accuracy = MAX_ACCURACY;
     }
 
     private void CheckIfValidTarget()
@@ -123,18 +123,12 @@ public class AICannonController : MonoBehaviour
     {
         if ((predictionTimer += Time.deltaTime) < PREDICTION_COOLDOWN) return;
 
+        accuracy = Mathf.Lerp(MIN_ACCURACY, MAX_ACCURACY, Vector3.Distance(transform.position, target.transform.position) / MAX_ACCURACY_DISTANCE);
+
         predictionTimer = 0f;
 
-        predictedTargetPosition = GetPredictedPosition(target) + currentAimOffset;
-        predictedTrajectory = cannon.GetHitPrediction(GetObstacles(), target, predictedTargetPosition);
-    }
-
-    private void GetNewAimOffset()
-    {
-        if (target == null) return;
-
-        float t = Mathf.Clamp(Vector3.Distance(transform.position, target.transform.position) - MIN_DISTANCE_AIM_OFFSET, MIN_AIM_OFFSET, MAX_DISTANCE_AIM_OFFSET);
-        currentAimOffset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)) * Mathf.Lerp(0, Random.Range(0f, aimOffset), t);
+        predictedTargetPosition = GetPredictedPosition(target);
+        predictedTrajectory = cannon.GetHitPrediction(GetObstacles(), target, predictedTargetPosition, accuracy);
     }
 
     private List<Vector3> GetObstacles()
@@ -173,18 +167,9 @@ public class AICannonController : MonoBehaviour
 
     private void RotatePitch()
     {
-        if (IsPredictedHitEnemy())
-        {
-            float difference = predictedTargetPosition.y - predictedTrajectory.Point.y;
-            cannon.ChangePitch(difference);
-        }
-
-        else
-        {
-            float distance = Vector3.Distance(cannonTransform.position, predictedTargetPosition);
-            float difference = 1 - Mathf.Clamp(Vector3.Distance(cannonTransform.position, predictedTrajectory.Point) / distance, 0, 2);
-            cannon.ChangePitch(difference);
-        }
+        float distance = Vector3.Distance(cannonTransform.position, predictedTargetPosition);
+        float difference = 1 - Mathf.Clamp(Vector3.Distance(cannonTransform.position, predictedTrajectory.Point) / distance, 0, 2);
+        cannon.ChangePitch(difference);
     }
 
     private void RotateYaw()
@@ -218,12 +203,6 @@ public class AICannonController : MonoBehaviour
     private void FireAtTarget()
     {
         cannon.Fire(owner.Boat.CannonballOwner);
-    }
-
-    private void ZeroInAimOffset()
-    {
-        aimOffset = Mathf.Clamp(aimOffset * ZERO_IN_SPEED, 0, 1);
-        GetNewAimOffset();
     }
 
     private void SetState(AICannonControllerState _state)
