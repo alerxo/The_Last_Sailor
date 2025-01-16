@@ -1,4 +1,4 @@
- using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -150,7 +150,7 @@ public class Cannon : MonoBehaviour, IUpgradeable
             particleSystem.Play();
         }
 
-        if(Vector3.Distance(this.transform.position, player.transform.position) <= maxShortRangeSoundBarrier) 
+        if (Vector3.Distance(this.transform.position, player.transform.position) <= maxShortRangeSoundBarrier)
         {
             audioLongSource.pitch = Random.Range(0.9f, 1.1f);
             audioShortSource.PlayOneShot(fireShortClip);
@@ -206,7 +206,7 @@ public class Cannon : MonoBehaviour, IUpgradeable
         barrelRenderer.SetPropertyBlock(propertyBlock);
     }
 
-    public CannonPrediction GetHitPrediction(List<Vector3> _obstacles, Boat _target, Vector3 _predictedPosition)
+    public CannonPrediction GetHitPrediction(List<Vector3> _obstacles, Boat _target, Vector3 _predictedPosition, float _accuracy)
     {
         Vector3 directon = -barrel.up;
         Vector3 startPosition = explosionPoint.position;
@@ -220,7 +220,7 @@ public class Cannon : MonoBehaviour, IUpgradeable
         Vector3 nextPosition;
         float overlap;
 
-        Bounds target = new(_predictedPosition + new Vector3(0, BOAT_HEIGHT_OFFSET, 0), new Vector3(BOAT_WIDTH, BOAT_HEIGHT, BOAT_LENGTH));
+        Bounds target = new(_predictedPosition + new Vector3(0, BOAT_HEIGHT_OFFSET, 0), new Vector3(BOAT_WIDTH, BOAT_HEIGHT, BOAT_LENGTH) * _accuracy);
         Bounds[] obstacles = new Bounds[_obstacles.Count];
 
         for (int i = 0; i < _obstacles.Count; i++)
@@ -280,7 +280,7 @@ public class Cannon : MonoBehaviour, IUpgradeable
     }
 
 #if UNITY_EDITOR
-    public void DebugDrawTrajectory(Boat _target, Vector3 _predictedPosition)
+    public void DebugDrawTrajectory(Boat _target, Vector3 _predictedPosition, float _accuracy)
     {
         Vector3 directon = -barrel.up;
         Vector3 startPosition = explosionPoint.position;
@@ -293,7 +293,7 @@ public class Cannon : MonoBehaviour, IUpgradeable
         Vector3 position = startPosition;
         Vector3 nextPosition;
 
-        Bounds bounds = new(_predictedPosition + new Vector3(0, BOAT_HEIGHT_OFFSET, 0), new Vector3(BOAT_WIDTH, BOAT_HEIGHT, BOAT_LENGTH));
+        Bounds bounds = new(_predictedPosition + new Vector3(0, BOAT_HEIGHT_OFFSET, 0), new Vector3(BOAT_WIDTH, BOAT_HEIGHT, BOAT_LENGTH) * _accuracy);
 
         DebugUtil.DrawBox(bounds.center, _target.transform.rotation, bounds.size, Color.red, Time.deltaTime);
 

@@ -209,4 +209,24 @@ public class BuoyancyManager : MonoBehaviour
             highQuality.Remove(_buoyancy);
         }
     }
+
+    public Vector3 GetPointOnWater(Vector3 _target)
+    {
+        if(waterSurface == null)
+        {
+            return _target;
+        }
+
+        WaterSearchParameters searchParameters = new();
+        WaterSearchResult searchResult = new();
+
+        searchParameters.startPositionWS = searchResult.candidateLocationWS;
+        searchParameters.targetPositionWS = _target;
+        searchParameters.error = 0.01f;
+        searchParameters.maxIterations = 8;
+
+        waterSurface.ProjectPointOnWaterSurface(searchParameters, out searchResult);
+
+        return searchResult.projectedPositionWS;
+    }
 }

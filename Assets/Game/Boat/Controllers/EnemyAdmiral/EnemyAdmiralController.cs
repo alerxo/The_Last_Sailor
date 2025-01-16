@@ -29,10 +29,10 @@ public class EnemyAdmiralController : Admiral
 
     public void SpawnSubordinate(Vector3 _formation, Quaternion _rotation)
     {
-        Vector3 position = transform.position + transform.TransformVector(_formation);
-        position.y = transform.position.y;
-
+        Vector3 position = BuoyancyManager.Instance.GetPointOnWater(transform.position + transform.TransformVector(_formation));
+;
         AIBoatController subordinate = ObjectPoolManager.Instance.Spawn<AIBoatController>(position, _rotation);
+        subordinate.LerpSize();
         AddSubordinate(subordinate.Boat);
         subordinate.Boat.SetName(GetSubordinateName());
         subordinate.SetFormationPosition(_formation);

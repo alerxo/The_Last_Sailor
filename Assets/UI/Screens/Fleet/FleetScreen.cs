@@ -11,6 +11,8 @@ public class FleetScreen : UIScreen
     public static event UnityAction OnBoatRepaired;
     protected override List<UIState> ActiveStates => new() { UIState.Fleet };
 
+    [SerializeField] private Texture2D resourceIcon, upgradeIcon, repairIcon, boatIcon, buildIcon;
+
     private VisualElement container;
     private int currentIndex;
 
@@ -99,13 +101,23 @@ public class FleetScreen : UIScreen
         currentContainer.AddToClassList("fleet-current-container");
         _parent.Add(currentContainer);
 
-        Label resourceLabel = new($"Resources: {ResourceManager.Instance.Amount}");
+        VisualElement resourceRow = new();
+        resourceRow.AddToClassList("fleet-current-resource-row");
+        SetMargin(resourceRow, 25, 0, 0, 0);
+        SetPadding(resourceRow, 6, 6, 30, 30);
+        SetBorderRadius(resourceRow, 10);
+        currentContainer.Add(resourceRow);
+
+        Image image = new();
+        SetSize(image, 64, 64);
+        SetMargin(image, 0, 0, 0, 10);
+        image.image = resourceIcon;
+        resourceRow.Add(image);
+
+        Label resourceLabel = new($"{ResourceManager.Instance.Amount}");
         resourceLabel.AddToClassList("fleet-current-resource-label");
-        SetMargin(resourceLabel, 25, 0, 0, 0);
         SetFontSize(resourceLabel, 40);
-        SetPadding(resourceLabel, 6, 6, 30, 30);
-        SetBorderRadius(resourceLabel, 10);
-        currentContainer.Add(resourceLabel);
+        resourceRow.Add(resourceLabel);
 
         VisualElement menuContainer = new();
         menuContainer.AddToClassList("fleet-current-menu-container");
@@ -177,7 +189,8 @@ public class FleetScreen : UIScreen
 
         Label healthLabel = new($"[{_boat.GetPercentageDurability()}% HP]");
         healthLabel.AddToClassList("fleet-current-header");
-        SetFontSize(healthLabel, 25);
+        SetFontSize(healthLabel, 22);
+        SetMargin(header, 0, 0, 12, 8);
         container.Add(healthLabel);
 
         if (_boat.IsDamaged)
@@ -186,13 +199,21 @@ public class FleetScreen : UIScreen
             button.AddToClassList("main-button");
             button.AddToClassList("fleet-current-repair-button");
             SetBorderWidthRadius(button, 3, 7);
-            SetFontSize(button, 26);
-            SetPadding(button, 0, 0, 10, 10);
-            button.text = $"Repair";
+            SetPadding(button, 10);
             button.SetEnabled(_boat.IsDamaged && ResourceManager.Instance.CanRepair(_boat));
             container.Add(button);
 
-            CreateUpgradeCostLabel(button, ResourceManager.GetRepairCost(_boat));
+            Label label = new($"Repair");
+            label.AddToClassList("fleet-current-repair-label");
+            SetFontSize(label, 22);
+            button.Add(label);
+
+            Image image = new();
+            SetSize(image, 32, 32);
+            image.image = repairIcon;
+            button.Add(image);
+
+            CreateUpgradeCostLabel(button, 19, ResourceManager.GetRepairCost(_boat));
         }
     }
 
@@ -230,14 +251,22 @@ public class FleetScreen : UIScreen
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-current-upgrade-button");
         SetBorderWidthRadius(button, 0, 10);
-        SetFontSize(button, 22);
-        button.text = _boat.IsUpgradeMaxed(_type) ? "MAXED" : $"+ {_boat.GetUpgradeIncreasePercentage(_type)}% {_boat.GetModifierDescription(_type)}";
         button.SetEnabled(_boat.CanUpgrade(_type));
         container.Add(button);
 
+        Label label = new(_boat.IsUpgradeMaxed(_type) ? "MAXED" : $"+ {_boat.GetUpgradeIncreasePercentage(_type)}% {_boat.GetModifierDescription(_type)}");
+        label.AddToClassList("fleet-current-upgrade-label");
+        SetFontSize(label, 22);
+        button.Add(label);
+
+        Image image = new();
+        SetSize(image, 32, 32);
+        image.image = upgradeIcon;
+        button.Add(image);
+
         if (!_boat.IsUpgradeMaxed(_type))
         {
-            CreateUpgradeCostLabel(button, ResourceManager.GetUpgradeCost());
+            CreateUpgradeCostLabel(button, 19, ResourceManager.GetUpgradeCost());
         }
     }
 
@@ -267,13 +296,22 @@ public class FleetScreen : UIScreen
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-repair-all");
         SetMargin(button, 0, 0, 10, 0);
+        SetPadding(button, 10);
         SetBorderWidthRadius(button, 5, 10);
-        SetFontSize(button, 25);
-        button.text = $"Repair All";
         button.SetEnabled(ResourceManager.Instance.CanRepairAll());
         _parent.Add(button);
 
-        CreateUpgradeCostLabel(button, ResourceManager.GetRepairAllCost());
+        Label label = new($"Repair All");
+        label.AddToClassList("fleet-repair-all-label");
+        SetFontSize(label, 25);
+        button.Add(label);
+
+        Image image = new();
+        SetSize(image, 50, 50);
+        image.image = repairIcon;
+        button.Add(image);
+
+        CreateUpgradeCostLabel(button, 22, ResourceManager.GetRepairAllCost());
     }
 
     private void OnRepairAll()
@@ -308,9 +346,17 @@ public class FleetScreen : UIScreen
         button.AddToClassList("fleet-boat-list-item");
         SetMargin(button, 5, 5, 10, 10);
         SetBorderWidthRadius(button, 0, 10);
-        SetFontSize(button, 25);
-        button.text = $"{_boat.Name} [{_boat.GetPercentageDurability()}% HP]";
         _parent.Add(button);
+
+        Image image = new();
+        SetSize(image, 32, 32);
+        image.image = boatIcon;
+        button.Add(image);
+
+        Label label = new($"{_boat.Name} [{_boat.GetPercentageDurability()}% HP]");
+        label.AddToClassList("fleet-boat-list-item-label");
+        SetFontSize(label, 25);
+        button.Add(label);
 
         return button;
     }
@@ -343,13 +389,21 @@ public class FleetScreen : UIScreen
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-build-button");
         SetBorderWidthRadius(button, 0, 10);
-        SetFontSize(button, 25);
         SetMargin(button, 0, 20, 0, 0);
-        button.text = "Build New Boat";
         button.SetEnabled(ResourceManager.Instance.CanBuild() && PlayerBoatController.Instance.AdmiralController.CanBuild);
         _parent.Add(button);
 
-        CreateUpgradeCostLabel(button, ResourceManager.Instance.GetBuildCost());
+        Label label = new($"Build New Boat");
+        label.AddToClassList("fleet-build-button-label");
+        SetFontSize(label, 25);
+        button.Add(label);
+
+        Image image = new();
+        SetSize(image, 32, 32);
+        image.image = buildIcon;
+        button.Add(image);
+
+        CreateUpgradeCostLabel(button, 19, ResourceManager.Instance.GetBuildCost());
     }
 
     private void OnBuild()
@@ -367,15 +421,23 @@ public class FleetScreen : UIScreen
         button.AddToClassList("main-button");
         button.AddToClassList("fleet-upgrade-fleet-cap-button");
         SetBorderWidthRadius(button, 0, 10);
-        SetFontSize(button, 22);
         SetMargin(button, 0, 20, 0, 0);
-        button.text = _admiral.SuborinateUpgradeIndex < PlayerAdmiralController.MAX_SUBORDINATE_UPGRADE ? $"+ {_admiral.GetSubordinateCapIncrease} Fleet Size" : "MAXED";
         button.SetEnabled(_admiral.CanUpgradeSubodinateCap);
         _parent.Add(button);
 
+        Label label = new(_admiral.SuborinateUpgradeIndex < PlayerAdmiralController.MAX_SUBORDINATE_UPGRADE ? $"+ {_admiral.GetSubordinateCapIncrease} Fleet Size" : "MAXED");
+        label.AddToClassList("fleet-upgrade-fleet-cap-label");
+        SetFontSize(label, 22);
+        button.Add(label);
+
+        Image image = new();
+        SetSize(image, 32, 32);
+        image.image = upgradeIcon;
+        button.Add(image);
+
         if (_admiral.SuborinateUpgradeIndex < PlayerAdmiralController.MAX_SUBORDINATE_UPGRADE)
         {
-            CreateUpgradeCostLabel(button, _admiral.GetSubordinateUpgradeCost);
+            CreateUpgradeCostLabel(button, 19, _admiral.GetSubordinateUpgradeCost);
         }
     }
 
@@ -386,13 +448,27 @@ public class FleetScreen : UIScreen
         Draw();
     }
 
-    private void CreateUpgradeCostLabel(VisualElement _parent, int _cost)
+    private void CreateUpgradeCostLabel(VisualElement _parent, int _size, int _cost)
     {
-        Label label = new($"-{_cost} R");
+        VisualElement wrapper = new();
+        wrapper.AddToClassList("fleet-upgrade-cost-wrapper");
+        _parent.Add(wrapper);
+
+        VisualElement background = new();
+        background.AddToClassList("fleet-upgrade-cost-background");
+        SetPadding(background, 3, 3, 20, 20);
+        SetBorderRadius(background, 10);
+        wrapper.Add(background);    
+
+        Image image = new();
+        SetSize(image, _size, _size);
+        SetMargin(image, 0, 0, 0, 5);
+        image.image = resourceIcon;
+        background.Add(image);
+
+        Label label = new($"-{_cost}");
         label.AddToClassList("fleet-upgrade-cost-label");
-        SetFontSize(label, 20);
-        SetPadding(label, 3, 3, 20, 20);
-        SetBorderRadius(label, 10);
-        _parent.Add(label);
+        SetFontSize(label, _size);
+        background.Add(label);
     }
 }
