@@ -26,11 +26,15 @@ public class ObjectPoolManager : MonoBehaviour
     {
         T t = Instantiate(prefabs.Find((m) => m is T), _position, _rotation, _parent == null ? parent : _parent) as T;
 
+        t.gameObject.SetActive(true);
+
         return t;
     }
 
     public void Release<T>(T _t) where T : MonoBehaviour
     {
+        _t.gameObject.SetActive(false);
+
         Destroy(_t);
     }
 
