@@ -11,7 +11,7 @@ public partial class MoveToClosestPositionOutsideRingOfFireAction : Action
     [SerializeReference] public BlackboardVariable<EnemyAdmiralController> Agent;
     protected override Status OnStart()
     {
-        Agent.Value.SetDestination(CombatManager.GetClosestPositionOutSideRingOfFire(Agent.Value.transform.position));
+        Agent.Value.SetDestination(CombatManager.Instance.GetClosestPositionOutSideRingOfFire(Agent.Value.transform.position));
 
         return Status.Success;
     }

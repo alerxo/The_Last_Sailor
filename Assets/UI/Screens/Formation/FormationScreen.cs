@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.UIElements;
 
 public class FormationScreen : UIScreen
@@ -11,17 +12,19 @@ public class FormationScreen : UIScreen
     private const float Y_POSITION_FOR_HIGHLIGHTS = 7f;
     [SerializeField] private LayerMask wayPointLayer;
 
-    [SerializeField] private MeshRenderer highlightPrefab, wayPointPrefab;
+    [SerializeField] private GameObject highlightPrefab, wayPointPrefab, holdOriginPrefab;
     [SerializeField] private Transform trailPrefab;
     [SerializeField] private Material playerMaterial, formationMaterial, holdMaterial, chargeMaterial;
 
-    private MeshRenderer playerHighlight;
+    private GameObject playerShipHighlight, holdOrigin;
     private readonly Dictionary<AIBoatController, CommandItem> commandItems = new();
 
     private InputSystem_Actions input;
     public static bool IsHoverinfBoatList { get; private set; }
     private readonly List<CommandItem> SelectedWayPoints = new();
     private Vector3 wayPointMoveOrigin;
+
+    private const int HIGHLIGHT_ROTATION_SPEED = 20;
 
     private void Awake()
     {
@@ -34,9 +37,23 @@ public class FormationScreen : UIScreen
         input.Player.WayPointSelect.canceled += WayPointSelect_canceled;
         input.Player.WayPointDeselect.performed += WayPointDeselect_performed;
 
-        playerHighlight = Instantiate(highlightPrefab, transform);
-        playerHighlight.material = playerMaterial;
-        playerHighlight.gameObject.SetActive(false);
+        playerShipHighlight = Instantiate(highlightPrefab, transform);
+
+        foreach (MeshRenderer meshRenderer in playerShipHighlight.GetComponentsInChildren<MeshRenderer>())
+        {
+            meshRenderer.material = playerMaterial;
+        }
+
+        playerShipHighlight.SetActive(false);
+
+        holdOrigin = Instantiate(holdOriginPrefab, transform);
+
+        foreach (MeshRenderer meshRenderer in holdOrigin.GetComponentsInChildren<MeshRenderer>())
+        {
+            meshRenderer.material = holdMaterial;
+        }
+
+        holdOrigin.SetActive(false);
     }
 
     private void Start()
@@ -66,7 +83,7 @@ public class FormationScreen : UIScreen
     {
         if (UIManager.Instance.GetState() == UIState.Formation)
         {
-            playerHighlight.transform.position = GetPositionAboveWater(PlayerBoatController.Instance.transform.position);
+            playerShipHighlight.transform.position = GetPositionAboveWater(PlayerBoatController.Instance.transform.position);
 
             foreach (CommandItem item in commandItems.Values)
             {
@@ -154,7 +171,7 @@ public class FormationScreen : UIScreen
         if (_state == UIState.Formation)
         {
             input.Player.Enable();
-            playerHighlight.gameObject.SetActive(true);
+            playerShipHighlight.SetActive(true);
 
             foreach (CommandItem item in commandItems.Values)
             {
@@ -165,7 +182,7 @@ public class FormationScreen : UIScreen
         else
         {
             input.Player.Disable();
-            playerHighlight.gameObject.SetActive(false);
+            playerShipHighlight.SetActive(false);
 
             foreach (CommandItem item in commandItems.Values)
             {
@@ -205,15 +222,16 @@ public class FormationScreen : UIScreen
     private class CommandItem
     {
         public AIBoatController BoatController;
-        public MeshRenderer Highlight;
-        public MeshRenderer WayPoint;
+        public GameObject Highlight;
+        public GameObject WayPoint;
         public Transform Trail;
         public Vector3? WayPointMovePosition;
 
         private const float TRAIL_SPEED = 170f;
+
         public bool IsTrailMoving { get; private set; } = false;
 
-        public CommandItem(AIBoatController _boatController, MeshRenderer _highlight, MeshRenderer _wayPoint, Transform _trail)
+        public CommandItem(AIBoatController _boatController, GameObject _highlight, GameObject _wayPoint, Transform _trail)
         {
             BoatController = _boatController;
             Highlight = _highlight;
@@ -262,22 +280,47 @@ public class FormationScreen : UIScreen
 
         private void SetMaterial(Material _material)
         {
-            if (_material != Highlight.material)
+            if (_material != Highlight.GetComponentInChildren<MeshRenderer>().material)
             {
-                Highlight.material = _material;
-                WayPoint.material = _material;
+                foreach (MeshRenderer meshRenderer in Highlight.GetComponentsInChildren<MeshRenderer>())
+                {
+                    meshRenderer.material = _material;
+                }
+
+                foreach (MeshRenderer meshRenderer in WayPoint.GetComponentsInChildren<MeshRenderer>())
+                {
+                    meshRenderer.material = _material;
+                }
             }
         }
 
         private void SetHighlightPosition()
         {
             Highlight.transform.position = GetPositionAboveWater(BoatController.transform.position);
+
+            foreach (MeshRenderer meshRenderer in Highlight.GetComponentsInChildren<MeshRenderer>())
+            {
+                if (meshRenderer.CompareTag("FormationHighlightCanRotate"))
+                {
+                    meshRenderer.transform.Rotate(new Vector3(0, 0, HIGHLIGHT_ROTATION_SPEED) * Time.deltaTime);
+                }
+            }
+
             ShowHighlight();
         }
 
         private void SetWaypointPositionAtFormation()
         {
             WayPoint.transform.position = GetPositionAboveWater(BoatController.GetPositionRelativeToAdmiral(BoatController.FormationPosition.Value + (WayPointMovePosition ?? Vector3.zero)));
+
+            foreach (MeshRenderer meshRenderer in WayPoint.GetComponentsInChildren<MeshRenderer>())
+            {
+                if (meshRenderer.CompareTag("FormationHighlightCanRotate"))
+                {
+                    meshRenderer.transform.Rotate(new Vector3(0, 0, HIGHLIGHT_ROTATION_SPEED) * Time.deltaTime);
+                }
+            }
+
             ShowWayPoint();
         }
 
@@ -289,19 +332,19 @@ public class FormationScreen : UIScreen
 
         private void ShowHighlight()
         {
-            Highlight.gameObject.SetActive(true);
+            Highlight.SetActive(true);
         }
 
         private void ShowWayPoint()
         {
             WayPoint.transform.localScale = WayPointMovePosition.HasValue ? Vector3.one * 1.5f : Vector3.one;
-            WayPoint.gameObject.SetActive(true);
+            WayPoint.SetActive(true);
             Trail.gameObject.SetActive(true);
         }
 
         private void HideWaypoint()
         {
-            WayPoint.gameObject.SetActive(false);
+            WayPoint.SetActive(false);
             Trail.gameObject.SetActive(false);
         }
 
@@ -350,22 +393,22 @@ public class FormationScreen : UIScreen
 
         public void Activate()
         {
-            WayPoint.gameObject.SetActive(true);
+            WayPoint.SetActive(true);
             Trail.gameObject.SetActive(true);
-            Highlight.gameObject.SetActive(true);
+            Highlight.SetActive(true);
         }
 
         public void Deactivate()
         {
-            WayPoint.gameObject.SetActive(false);
+            WayPoint.SetActive(false);
             Trail.gameObject.SetActive(false);
-            Highlight.gameObject.SetActive(false);
+            Highlight.SetActive(false);
             StopMoveTrail();
         }
 
         public void Dispose()
         {
-            Destroy(WayPoint.gameObject);
+            Destroy(WayPoint);
             Destroy(Trail.gameObject);
         }
     }
