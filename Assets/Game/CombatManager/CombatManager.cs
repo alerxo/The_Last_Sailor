@@ -95,8 +95,6 @@ public class CombatManager : MonoBehaviour
 
         AIBoatController admiralBoat = ObjectPoolManager.Instance.Spawn<AIBoatController>(origin, rotation);
 
-        Debug.Log(Vector3.Distance(player.transform.position, admiralBoat.transform.position));
-
         admiralBoat.LerpSize();
         Enemy = admiralBoat.PromoteToAdmiral();
         Enemy.GetRandomFormation();
