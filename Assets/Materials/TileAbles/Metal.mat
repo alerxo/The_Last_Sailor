@@ -25,7 +25,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Metal
   m_Shader: {fileID: 4800000, guid: 6e4ae4064600d784cac1e41a9e6f2e59, type: 3}
-  m_Parent: {fileID: 2100000, guid: b6ad3fb66e6d22e439c2a7a75703742a, type: 2}
+  m_Parent: {fileID: 2100000, guid: 8b699208df6a347419045bc6c373dac8, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _DISABLE_SSR_TRANSPARENT
@@ -36,7 +36,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2225
   stringTagMap: {}
   disabledShaderPasses:
   - TransparentDepthPrepass
@@ -68,6 +68,14 @@ Material:
     m_Floats:
     - _SmoothnessRemapMax: 0.68007755
     - _SmoothnessRemapMin: 0
+    - _StencilRefDepth: 8
+    - _StencilRefGBuffer: 10
+    - _StencilRefMV: 40
+    - _StencilWriteMask: 6
+    - _StencilWriteMaskDepth: 9
+    - _StencilWriteMaskGBuffer: 15
+    - _StencilWriteMaskMV: 41
+    - _ZTestDepthEqualForOpaque: 3
     m_Colors:
     - _BaseColor: {r: 0.9056604, g: 0.9056604, b: 0.9056604, a: 1}
     - _Color: {r: 0.9056604, g: 0.9056604, b: 0.9056604, a: 1}
