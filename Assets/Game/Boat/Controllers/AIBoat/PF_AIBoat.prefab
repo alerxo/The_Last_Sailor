@@ -1064,7 +1064,6 @@ MonoBehaviour:
   - {fileID: 7168352752804050128}
   modelParents:
   - {fileID: 2071710798806788287}
-  - {fileID: 3456446333578256555}
   - {fileID: 1786606038435237099}
   - {fileID: 1786606038435237099}
   - {fileID: 5033739930535895891}
@@ -1220,11 +1219,6 @@ Transform:
 --- !u!4 &3403332715897642827 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5642691754997240486, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
-  m_PrefabInstance: {fileID: 7022747151728479725}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &3456446333578256555 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5657098320083660102, guid: 5a4d8f63f8dffcc4c9017cec72b8226c, type: 3}
   m_PrefabInstance: {fileID: 7022747151728479725}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &4659793805286063072 stripped
