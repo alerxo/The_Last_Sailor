@@ -42,6 +42,10 @@ public class AmbianceMultipleSoundScript : MonoBehaviour
         {
             allowedPlay = false;
         }
+        else if (state == UIState.Controls)
+        {
+            allowedPlay = false;
+        }
         else
         {
             allowedPlay = true;

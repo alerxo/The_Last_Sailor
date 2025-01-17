@@ -112,6 +112,11 @@ public class MusicScript : MonoBehaviour
             turnOffMusic = true;
             turnOffBattleMusic = true;
         }
+        if (state == UIState.Controls)
+        {
+            turnOffMusic = true;
+            turnOffBattleMusic = true;
+        }
         if (state == UIState.PostCombat)
         {
             turnOffBattleMusic = true;
