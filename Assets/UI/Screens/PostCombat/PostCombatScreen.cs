@@ -304,7 +304,8 @@ public class PostCombatScreen : UIScreen
 
     public IEnumerator ShowPostCombatScreen(float _startResource, float _endResource, bool _isDeathScreen)
     {
-        HideAnimatedItems();
+        HideAnimatedItems(_isDeathScreen);
+
         yield return new WaitForSeconds(0.25f);
 
         yield return AnimateBorderWidth(background, 0.1f, 0, 5);
@@ -334,12 +335,16 @@ public class PostCombatScreen : UIScreen
         }
     }
 
-    private void HideAnimatedItems()
+    private void HideAnimatedItems(bool _isDeathScreen)
     {
         SetBorderWidth(background, 0);
         SetWidth(background, 0);
         SetHeight(content, 0);
-        SetOpacity(resourceCount.parent, 0);
+
+        if (!_isDeathScreen)
+        {
+            SetOpacity(resourceCount.parent, 0);
+        }
 
         for (int i = 0; i < Mathf.Max(playerColumnItems.Count, enemyColumnItems.Count); i++)
         {
