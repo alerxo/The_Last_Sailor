@@ -336,6 +336,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pf_VFormation
       objectReference: {fileID: 0}
+    - target: {fileID: 6546243007425086702, guid: 802487ae8f36cba4b9d9272a9900ff3e, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 6184463538722268689, guid: 66c6f0a10661eb14aa9bd0a22312aaa8, type: 2}
     - target: {fileID: 6854167124984765103, guid: 802487ae8f36cba4b9d9272a9900ff3e, type: 3}
       propertyPath: shouldItDieAfterSpawn
       value: 1

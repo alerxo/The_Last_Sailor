@@ -31,6 +31,9 @@ public class CameraManager : MonoBehaviour
 
     private FirstPersonController player;
 
+    private int frameCount = 0;
+    private bool canStart = true;
+
     private void Awake()
     {
         Assert.IsNull(Instance);
@@ -40,7 +43,6 @@ public class CameraManager : MonoBehaviour
         input.Player.Enable();
 
         AssignCameras();
-        StartCoroutine(StartCameraTransition());
 
         cinemachineBasicMultiChannelPerlins = FindObjectsByType<CinemachineBasicMultiChannelPerlin>(FindObjectsSortMode.None);
         cinemachineInputAxisControllers = FindObjectsByType<CinemachineInputAxisController>(FindObjectsSortMode.None);
@@ -78,13 +80,6 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    private IEnumerator StartCameraTransition()
-    {
-        yield return new WaitForSeconds(1);
-
-        SetState(CameraState.MainMenu);
-    }
-
     private void Start()
     {
         player = FirstPersonController.Instance;
@@ -99,6 +94,12 @@ public class CameraManager : MonoBehaviour
 
     private void Update()
     {
+        if (canStart && frameCount++ > 5)
+        {
+            canStart = false;
+            StartCoroutine(StartCameraTransition());
+        }
+
         switch (State)
         {
             case CameraState.Formation:
@@ -106,6 +107,15 @@ public class CameraManager : MonoBehaviour
                 SetFormationCameraPosition();
                 break;
         }
+    }
+
+    private IEnumerator StartCameraTransition()
+    {
+        startCamera.enabled = true;
+
+        yield return new WaitForSeconds(1);
+
+        SetState(CameraState.MainMenu);
     }
 
     public void SetInteractionCamera(Transform _target, IInteractable interactable)
