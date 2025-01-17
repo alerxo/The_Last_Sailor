@@ -3,20 +3,20 @@ using UnityEngine;
 
 public class RemoveMeshRenderer : MonoBehaviour
 {
-    MeshRenderer[] mr;
-    bool toggled = false;
+    private MeshRenderer[] mr;
+    private bool toggled = false;
+
     void Start()
     {
         mr = GetComponentsInChildren<MeshRenderer>();
-
-        
-        
     }
+
+#if UNITY_EDITOR
     void LateUpdate()
     {
-        if(Input.GetKeyDown("p"))
+        if (Input.GetKeyDown(KeyCode.F3))
         {
-            if(toggled)
+            if (toggled)
             {
                 toggled = false;
             }
@@ -24,9 +24,10 @@ public class RemoveMeshRenderer : MonoBehaviour
             {
                 toggled = true;
             }
-            
+
         }
-        if(toggled)
+
+        if (toggled)
         {
             foreach (MeshRenderer m in mr)
             {
@@ -35,8 +36,9 @@ public class RemoveMeshRenderer : MonoBehaviour
             }
 
         }
+
         else
-        {  
+        {
             foreach (MeshRenderer m in mr)
             {
                 m.enabled = false;
@@ -44,5 +46,5 @@ public class RemoveMeshRenderer : MonoBehaviour
             }
         }
     }
-
+#endif
 }
