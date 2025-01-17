@@ -9,6 +9,11 @@ public class RemoveMeshRenderer : MonoBehaviour
     void Start()
     {
         mr = GetComponentsInChildren<MeshRenderer>();
+
+        foreach (MeshRenderer m in mr)
+        {
+            m.enabled = false;
+        }
     }
 
 #if UNITY_EDITOR
