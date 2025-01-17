@@ -10,16 +10,37 @@ public class TitleScreen : UIScreen
 
     [SerializeField] private Texture2D backgroundImage;
 
+    private VisualElement background;
+
+    private void Awake()
+    {
+        CameraManager.OnStateChanged += CameraManager_OnStateChanged;
+    }
+
+    private void OnDestroy()
+    {
+        CameraManager.OnStateChanged -= CameraManager_OnStateChanged;
+    }
+
+    private void CameraManager_OnStateChanged(CameraState _old, CameraState _new)
+    {
+        if (_old == CameraState.None && _new == CameraState.MainMenu)
+        {
+            background.SetEnabled(true);
+        }
+    }
+
     public override void Generate()
     {
         VisualElement container = new();
         container.AddToClassList("title-screen-container");
         Root.Add(container);
 
-        VisualElement background = new();
+        background = new();
         background.AddToClassList("title-screen-background");
         SetMargin(background, 125, 0, 100, 0);
         SetPadding(background, 100, 100, 130, 130);
+        background.SetEnabled(false);
         background.style.backgroundImage = backgroundImage;
         container.Add(background);
 
