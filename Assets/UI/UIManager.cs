@@ -26,6 +26,7 @@ public class UIManager : MonoBehaviour
     private const float UIScreenBaseHeight = 1080f;
 
     private InputSystem_Actions input;
+
     private UIState toggleUIState = UIState.None;
 
     private void Awake()
@@ -38,7 +39,9 @@ public class UIManager : MonoBehaviour
         input = new();
         input.Player.Escape.performed += Escape_performed;
         input.Player.Tab.performed += Tab_performed;
+#if UNITY_EDITOR
         input.Player.ToggleUI.performed += ToggleUI_performed;
+#endif
         input.Player.Enable();
     }
 
@@ -46,7 +49,9 @@ public class UIManager : MonoBehaviour
     {
         input.Player.Escape.performed -= Escape_performed;
         input.Player.Tab.performed -= Tab_performed;
+#if UNITY_EDITOR
         input.Player.ToggleUI.performed -= ToggleUI_performed;
+#endif
         input.Player.Disable();
     }
 
@@ -116,6 +121,8 @@ public class UIManager : MonoBehaviour
         SetState(controlsReturnState);
     }
 
+#if UNITY_EDITOR
+
     private void ToggleUI_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
         UIState current = State;
@@ -128,6 +135,8 @@ public class UIManager : MonoBehaviour
 
         OnStateChanged?.Invoke(GetState());
     }
+
+#endif
 
     public void SetState(UIState _state, bool _isForceMode = false)
     {
