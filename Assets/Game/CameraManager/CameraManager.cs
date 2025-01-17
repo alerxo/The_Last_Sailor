@@ -7,8 +7,8 @@ using UnityEngine.Events;
 public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance { get; private set; }
-    public static event UnityAction<CameraState> OnStateChanged;
-    public CameraState State { get; private set; }
+    public static event UnityAction<CameraState, CameraState> OnStateChanged;
+    public CameraState State { get; private set; } = CameraState.None;
 
     private InputSystem_Actions input;
 
@@ -18,6 +18,7 @@ public class CameraManager : MonoBehaviour
     private const float COMMAND_MOVEMENT_SPEED = 150;
     private Vector3 commandCameraMovement;
 
+    private CinemachineCamera startCamera;
     private CinemachineCamera mainMenuCamera;
     public CinemachineCamera PlayerCamera { get; private set; }
     private CinemachineCamera steeringWheelCamera;
@@ -39,6 +40,7 @@ public class CameraManager : MonoBehaviour
         input.Player.Enable();
 
         AssignCameras();
+        StartCoroutine(StartCameraTransition());
 
         cinemachineBasicMultiChannelPerlins = FindObjectsByType<CinemachineBasicMultiChannelPerlin>(FindObjectsSortMode.None);
         cinemachineInputAxisControllers = FindObjectsByType<CinemachineInputAxisController>(FindObjectsSortMode.None);
@@ -48,6 +50,7 @@ public class CameraManager : MonoBehaviour
 
     private void AssignCameras()
     {
+        startCamera = GameObject.FindWithTag("StartCamera").GetComponent<CinemachineCamera>();
         mainMenuCamera = GameObject.FindWithTag("MainMenuCamera").GetComponent<CinemachineCamera>();
 
         PlayerCamera = GameObject.FindWithTag("PlayerCamera").GetComponent<CinemachineCamera>();
@@ -75,9 +78,15 @@ public class CameraManager : MonoBehaviour
         }
     }
 
+    private IEnumerator StartCameraTransition()
+    {
+        yield return new WaitForSeconds(1);
+
+        SetState(CameraState.MainMenu);
+    }
+
     private void Start()
     {
-        SetState(CameraState.MainMenu);
         player = FirstPersonController.Instance;
     }
 
@@ -232,14 +241,16 @@ public class CameraManager : MonoBehaviour
             GetNextFormationCamera();
         }
 
+        startCamera.enabled = false;
         mainMenuCamera.enabled = _state == CameraState.MainMenu;
         PlayerCamera.enabled = _state == CameraState.Player;
         steeringWheelCamera.enabled = _state == CameraState.SteeringWheel;
         interactionCamera.enabled = _state == CameraState.Interaction;
 
+        CameraState old = State;
         State = _state;
 
-        OnStateChanged?.Invoke(State);
+        OnStateChanged?.Invoke(old, State);
     }
 
     public void ShakeCamera(float _amplitude, float _frequency, float _time, float _windUp)
@@ -324,6 +335,7 @@ public class CameraManager : MonoBehaviour
 
 public enum CameraState
 {
+    None,
     MainMenu,
     Player,
     SteeringWheel,
