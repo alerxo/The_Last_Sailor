@@ -36,7 +36,7 @@ public class CreditsScreen : UIScreen
         Root.Add(container);
 
         scrollView = new();
-        scrollView.AddToClassList("options-item-container");
+        scrollView.AddToClassList("credits-item-container");
         scrollView.RegisterCallback<WheelEvent>((e) => e.StopPropagation(), TrickleDown.TrickleDown);
         scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
         scrollView.horizontalScroller.RemoveFromHierarchy();
@@ -55,7 +55,7 @@ public class CreditsScreen : UIScreen
     private void CreateBuffer()
     {
         VisualElement buffer = new();
-        buffer.AddToClassList("options-buffer");
+        buffer.AddToClassList("credits-buffer");
         SetHeight(buffer, 1080f);
         scrollView.Add(buffer);
     }
@@ -83,6 +83,8 @@ public class CreditsScreen : UIScreen
             SetWidth(label, 300);
             container.Add(label);
         }
+
+        scrollView.parent.SetEnabled(false);
     }
 
     private IEnumerator CreditScroll()
@@ -90,6 +92,8 @@ public class CreditsScreen : UIScreen
         float timer = 0;
         const float bufferDuration = 1;
         const float mainDuration = 30;
+
+        scrollView.parent.SetEnabled(true);
 
         scrollView.verticalScroller.value = scrollView.verticalScroller.lowValue;
 
@@ -99,6 +103,7 @@ public class CreditsScreen : UIScreen
             {
                 scrollView.verticalScroller.value = scrollView.verticalScroller.highValue;
                 UIManager.Instance.SetState(UIState.TitleScreen);
+                scrollView.parent.SetEnabled(false);
 
                 yield break;
             }
@@ -114,6 +119,7 @@ public class CreditsScreen : UIScreen
             {
                 scrollView.verticalScroller.value = scrollView.verticalScroller.highValue;
                 UIManager.Instance.SetState(UIState.TitleScreen);
+                scrollView.parent.SetEnabled(false);
 
                 yield break;
             }
@@ -133,6 +139,7 @@ public class CreditsScreen : UIScreen
             {
                 scrollView.verticalScroller.value = scrollView.verticalScroller.highValue;
                 UIManager.Instance.SetState(UIState.TitleScreen);
+                scrollView.parent.SetEnabled(false);
 
                 yield break;
             }
@@ -141,5 +148,6 @@ public class CreditsScreen : UIScreen
         }
 
         UIManager.Instance.SetState(UIState.TitleScreen);
+        scrollView.parent.SetEnabled(false);
     }
 }
