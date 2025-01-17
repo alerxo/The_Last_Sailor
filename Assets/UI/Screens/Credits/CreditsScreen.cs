@@ -37,6 +37,7 @@ public class CreditsScreen : UIScreen
 
         scrollView = new();
         scrollView.AddToClassList("options-item-container");
+        scrollView.RegisterCallback<WheelEvent>((e) => e.StopPropagation(), TrickleDown.TrickleDown);
         scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
         scrollView.horizontalScroller.RemoveFromHierarchy();
         container.Add(scrollView);

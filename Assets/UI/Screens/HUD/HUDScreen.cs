@@ -9,16 +9,20 @@ public class HUDScreen : UIScreen
 {
     public static HUDScreen Instance { get; private set; }
 
-    private const float ADMIRAL_BACKGROUND_WIDTH = 800f;
-    private const float INTERACTION_BUTTON_SIZE = 100f;
-    private const float INTERACTION_BUTTON_FONT_SIZE = 60;
-    private const float INTERACTION_ANIMATION_DURATION = 0.1f;
-
     [SerializeField] private InputActionReference interactionAsset;
 
     protected override List<UIState> ActiveStates => new() { UIState.HUD, UIState.Formation };
 
     #region HUD
+
+    private const float ADMIRAL_BACKGROUND_WIDTH = 800f;
+    private const float INTERACTION_BUTTON_SIZE = 100f;
+    private const float INTERACTION_BUTTON_FONT_SIZE = 60;
+
+    private InteractionButtonState interactionButtonState = InteractionButtonState.Hidden;
+    private float interactionButtonStateTimer = 0f;
+    private const float INTERACTION_BUFFER_DURATION = 1f;
+    private const float INTERACTION_ANIMATION_DURATION = 0.10f;
 
     private IInteractable currentInteractable;
     private const float INTERACTION_SHADER_FADE = 0.15f;
@@ -28,8 +32,6 @@ public class HUDScreen : UIScreen
 
     private Box interactionBackground;
     private Label interactionText;
-
-    private Coroutine currentInteractionButtonCoroutine;
 
     #endregion
 
@@ -114,6 +116,7 @@ public class HUDScreen : UIScreen
     {
         RunCommandState();
         RunObjectiveState();
+        RunHUDState();
     }
 
     private void CombatManager_OnAdmiralInCombatChanged(Admiral _admiral)
@@ -152,16 +155,99 @@ public class HUDScreen : UIScreen
 
     #region HUD
 
+    private void RunHUDState()
+    {
+        switch (interactionButtonState)
+        {
+            case InteractionButtonState.Hidden:
+
+                if (currentInteractable != null)
+                {
+                    interactionButtonStateTimer = 0;
+                    interactionButtonState = InteractionButtonState.PreShow;
+                }
+
+                break;
+
+            case InteractionButtonState.PreShow:
+
+                if (currentInteractable == null)
+                {
+                    interactionButtonState = InteractionButtonState.Hidden;
+                }
+
+                else if ((interactionButtonStateTimer += Time.deltaTime) > INTERACTION_BUFFER_DURATION)
+                {
+                    interactionButtonStateTimer = 0;
+                    interactionButtonState = InteractionButtonState.AnimatingShow;
+                }
+
+                break;
+
+            case InteractionButtonState.AnimatingShow:
+
+                if (currentInteractable == null)
+                {
+                    interactionButtonStateTimer = INTERACTION_ANIMATION_DURATION - interactionButtonStateTimer;
+                    interactionButtonState = InteractionButtonState.AnimationHide;
+                }
+
+                else if ((interactionButtonStateTimer += Time.deltaTime) < INTERACTION_ANIMATION_DURATION)
+                {
+                    float percentage = interactionButtonStateTimer / INTERACTION_ANIMATION_DURATION;
+                    float size = Mathf.Lerp(0, INTERACTION_BUTTON_SIZE, percentage);
+                    SetSize(interactionBackground, size, size);
+                    SetFontSize(interactionText, Mathf.Lerp(0, INTERACTION_BUTTON_FONT_SIZE, percentage));
+                }
+
+                else
+                {
+                    ShowInteraction();
+                    interactionButtonState = InteractionButtonState.Showing;
+                }
+
+                break;
+
+            case InteractionButtonState.Showing:
+
+                if (currentInteractable == null)
+                {
+                    interactionButtonStateTimer = 0;
+                    interactionButtonState = InteractionButtonState.AnimationHide;
+                }
+
+                break;
+
+            case InteractionButtonState.AnimationHide:
+
+                if (currentInteractable != null)
+                {
+                    interactionButtonStateTimer = INTERACTION_ANIMATION_DURATION - interactionButtonStateTimer;
+                    interactionButtonState = InteractionButtonState.AnimatingShow;
+                }
+
+                else if ((interactionButtonStateTimer += Time.deltaTime) < INTERACTION_ANIMATION_DURATION)
+                {
+                    float percentage = interactionButtonStateTimer / INTERACTION_ANIMATION_DURATION;
+                    float size = Mathf.Lerp(INTERACTION_BUTTON_SIZE, 0, percentage);
+                    SetSize(interactionBackground, size, size);
+                    SetFontSize(interactionText, Mathf.Lerp(INTERACTION_BUTTON_FONT_SIZE, 0, percentage));
+                }
+
+                else
+                {
+                    HideInteraction();
+                    interactionButtonStateTimer = 0;
+                    interactionButtonState = InteractionButtonState.Hidden;
+                }
+
+                break;
+        }
+    }
+
     private void InteractionCollider_OnInteractableChanged(IInteractable _interactable)
     {
         if (interactionBackground == null) return;
-
-        if (currentInteractionButtonCoroutine != null)
-        {
-            StopCoroutine(currentInteractionButtonCoroutine);
-        }
-
-        currentInteractionButtonCoroutine = _interactable == null ? StartCoroutine(HideInteractionButton()) : StartCoroutine(ShowInteractionButton());
 
         if (currentInteractable != null)
         {
@@ -219,6 +305,7 @@ public class HUDScreen : UIScreen
 
         HideAdmiral();
         HideInteraction();
+
         return container;
     }
 
@@ -348,45 +435,6 @@ public class HUDScreen : UIScreen
                 Debug.LogWarning("Null interaction shader renderer");
             }
         }
-    }
-
-    private IEnumerator ShowInteractionButton()
-    {
-        HideInteraction();
-        float duration = 0;
-
-        yield return new WaitForSeconds(1);
-
-        while ((duration += Time.deltaTime) < INTERACTION_ANIMATION_DURATION)
-        {
-            float percentage = duration / INTERACTION_ANIMATION_DURATION;
-            float size = Mathf.Lerp(0, INTERACTION_BUTTON_SIZE, percentage);
-            SetSize(interactionBackground, size, size);
-            SetFontSize(interactionText, Mathf.Lerp(0, INTERACTION_BUTTON_FONT_SIZE, percentage));
-
-            yield return null;
-        }
-
-        ShowInteraction();
-    }
-
-    private IEnumerator HideInteractionButton()
-    {
-        ShowInteraction();
-
-        float duration = 0;
-
-        while ((duration += Time.deltaTime) < INTERACTION_ANIMATION_DURATION)
-        {
-            float percentage = duration / INTERACTION_ANIMATION_DURATION;
-            float size = Mathf.Lerp(INTERACTION_BUTTON_SIZE, 0, percentage);
-            SetSize(interactionBackground, size, size);
-            SetFontSize(interactionText, Mathf.Lerp(INTERACTION_BUTTON_FONT_SIZE, 0, percentage));
-
-            yield return null;
-        }
-
-        HideInteraction();
     }
 
     private void ShowInteraction()
@@ -1016,4 +1064,13 @@ public enum ObjectiveType
 
     ChangeCommand,
     ChangeFormation,
+}
+
+public enum InteractionButtonState
+{
+    Hidden,
+    PreShow,
+    AnimatingShow,
+    Showing,
+    AnimationHide,
 }
