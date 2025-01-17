@@ -19,13 +19,13 @@ public class TitleScreen : UIScreen
         VisualElement background = new();
         background.AddToClassList("title-screen-background");
         SetMargin(background, 125, 0, 100, 0);
-        SetPadding(background, 100);
+        SetPadding(background, 100, 100, 130, 130);
         background.style.backgroundImage = backgroundImage;
         container.Add(background);
 
         Label title = new("The Last Sailor");
         title.AddToClassList("title-screen-title");
-        SetMargin(title, 0, 50, 0, 0);
+        SetMargin(title, 0, 30, 0, 0);
         SetFontSize(title, 60);
         background.Add(title);
 
@@ -36,6 +36,7 @@ public class TitleScreen : UIScreen
         CreateButton(buttons, "-Play-", OnPlay);
         CreateButton(buttons, "-Options-", () => UIManager.Instance.SetStateOptions(UIState.TitleScreen));
         CreateButton(buttons, "-Controls-", () => UIManager.Instance.SetStateControls(UIState.TitleScreen));
+        CreateButton(buttons, "-Credits-", () => UIManager.Instance.SetState(UIState.Credits));
         CreateButton(buttons, "-Quit-", () => Application.Quit());
     }
 
@@ -44,8 +45,8 @@ public class TitleScreen : UIScreen
         Button button = new(_action);
         button.AddToClassList("main-button");
         button.AddToClassList("title-screen-button");
-        SetMargin(button, 7, 0, 0, 0);
-        SetFontSize(button, 35);
+        SetMargin(button, 4, 0, 0, 0);
+        SetFontSize(button, 32);
         button.text = _text;
         button.clicked += UIManager.InvokeOnUIButtonClicked;
         button.RegisterCallback<MouseEnterEvent>(evt => UIManager.InvokeOnUIButtonHovered());

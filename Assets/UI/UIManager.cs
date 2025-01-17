@@ -143,7 +143,7 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        if (_state != UIState.TitleScreen && !pauseScreens.Contains(_state))
+        if (_state != UIState.TitleScreen && _state != UIState.Credits && !pauseScreens.Contains(_state))
         {
             isInTitleScreen = false;
         }
@@ -219,5 +219,6 @@ public enum UIState
     Controls,
     PostCombat,
     Fleet,
-    Formation
+    Formation,
+    Credits
 }

@@ -23,7 +23,7 @@ public class ControlsScreen : UIScreen
         background.style.backgroundImage = backgroundImage;
         container.Add(background);
 
-        Button returnButton = new(() => UIManager.Instance.ReturnFromOptions());
+        Button returnButton = new(() => UIManager.Instance.ReturnFromControls());
         returnButton.AddToClassList("options-return-button");
         SetMargin(returnButton, 7, 25, 0, 0);
         SetFontSize(returnButton, 35);
