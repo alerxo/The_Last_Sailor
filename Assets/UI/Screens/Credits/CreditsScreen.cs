@@ -44,10 +44,16 @@ public class CreditsScreen : UIScreen
 
         CreateBuffer();
 
-        CreateCredit(scrollView, "Programmer", "Alexander Robinson");
-        CreateCredit(scrollView, "UI & UX Designer", "Alexander Robinson");
-        CreateCredit(scrollView, "3D Artist", "Viktor Eriksson");
-        CreateCredit(scrollView, "Sound Designer", "Jacob Nordenvall");
+        CreateCredit(scrollView, "Alexander Robinson", "www.alexanderrobinson.se", "Programmer", "UI & UX Designer");
+        CreateCredit(scrollView, "Viktor Eriksson", "ArtStation: viktor_eriksson", "www.artstation.com/viktor_eriksson", "3D-Artist", "Most VFX", "Minor Systems");
+        CreateCredit(scrollView, "Jacob Nordenvall", "jacobnordenvall.wixsite.com/jacobnordenvall", "Sound Designer", "2D-Artist");
+
+        VisualElement buffer = new();
+        buffer.AddToClassList("credits-buffer");
+        SetHeight(buffer, 300f);
+        scrollView.Add(buffer);
+
+        CreateLicenseCredit(scrollView, "Music", "Outrigger by Matthewmikemusic from Pixelbay Content License");
 
         CreateBuffer();
     }
@@ -81,6 +87,33 @@ public class CreditsScreen : UIScreen
             SetFontSize(label, 40);
             SetMargin(label, 0, 10, 0, 0);
             SetWidth(label, 300);
+            container.Add(label);
+        }
+
+        scrollView.parent.SetEnabled(false);
+    }
+
+    private void CreateLicenseCredit(VisualElement _parent, string _header, params string[] _content)
+    {
+        VisualElement container = new();
+        container.AddToClassList("credits-item");
+        SetMargin(container, 20, 20, 0, 0);
+        _parent.Add(container);
+
+        Label header = new(_header);
+        header.AddToClassList("credit-item-header");
+        SetFontSize(header, 60);
+        SetMargin(header, 0, 10, 0, 0);
+        SetWidth(header, 400);
+        container.Add(header);
+
+        foreach (string credit in _content)
+        {
+            Label label = new(credit);
+            label.AddToClassList("credit-item-text");
+            SetFontSize(label, 40);
+            SetMargin(label, 0, 10, 0, 0);
+            SetWidth(label, 800);
             container.Add(label);
         }
 
