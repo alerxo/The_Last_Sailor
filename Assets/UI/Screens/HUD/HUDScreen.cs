@@ -9,7 +9,7 @@ public class HUDScreen : UIScreen
 {
     public static HUDScreen Instance { get; private set; }
 
-    private const float ADMIRAL_BACKGROUND_WIDTH = 1000f;
+    private const float ADMIRAL_BACKGROUND_WIDTH = 800f;
     private const float INTERACTION_BUTTON_SIZE = 100f;
     private const float INTERACTION_BUTTON_FONT_SIZE = 60;
     private const float INTERACTION_ANIMATION_DURATION = 0.1f;
@@ -748,7 +748,7 @@ public class HUDScreen : UIScreen
 
     private IEnumerator AddEngineObjective()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
 
         if (CompletedObjectives.Contains(ObjectiveType.Engine))
         {

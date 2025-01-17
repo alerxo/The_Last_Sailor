@@ -45,7 +45,7 @@ public class TitleScreen : UIScreen
         Button button = new(_action);
         button.AddToClassList("main-button");
         button.AddToClassList("title-screen-button");
-        SetMargin(button, 4, 0, 0, 0);
+        SetMargin(button, 2, 0, 0, 0);
         SetFontSize(button, 32);
         button.text = _text;
         button.clicked += UIManager.InvokeOnUIButtonClicked;
