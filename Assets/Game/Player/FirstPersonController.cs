@@ -218,6 +218,12 @@ public class FirstPersonController : MonoBehaviour
 
     private void Jump_performed(UnityEngine.InputSystem.InputAction.CallbackContext _obj)
     {
+        if (IsGrounded)
+        {
+            Rigidbody.AddRelativeForce(0, JUMP_FORCE, 0, ForceMode.VelocityChange);
+            TimeGroundedInSeconds = 0;
+        }
+
 #if UNITY_EDITOR
         if (isDebugMode)
         {
@@ -225,25 +231,19 @@ public class FirstPersonController : MonoBehaviour
             TimeGroundedInSeconds = 0;
         }
 #endif
-
-        if (IsGrounded)
-        {
-            Rigidbody.AddRelativeForce(0, JUMP_FORCE, 0, ForceMode.VelocityChange);
-            TimeGroundedInSeconds = 0;
-        }
     }
     bool spawnedWillson = false;
     private void OnTriggerEnter(Collider col)
     {
-        if(!spawnedWillson)
+        if (!spawnedWillson)
         {
-            if(col.tag=="CannonBallEasterEgg")
+            if (col.tag == "CannonBallEasterEgg")
             {
                 col.GetComponent<CannonBallEasterEgg>().SpawnCannonBallEasterEgg();
             }
         }
-        
-        
+
+
     }
 
 

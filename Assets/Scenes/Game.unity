@@ -466,6 +466,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1146915597592130441, guid: f51ea5723a15ad847a804a2747c38ad9, type: 3}
+      propertyPath: ripplesChaos
+      value: 0.88
+      objectReference: {fileID: 0}
     - target: {fileID: 3260705750193719497, guid: f51ea5723a15ad847a804a2747c38ad9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

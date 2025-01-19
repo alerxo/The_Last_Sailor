@@ -1395,7 +1395,7 @@ GameObject:
   - component: {fileID: 76462270942638929}
   - component: {fileID: 5737072593404377772}
   m_Layer: 8
-  m_Name: FoamTest
+  m_Name: Foam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2787,7 +2787,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5886173075675580987}
   m_Layer: 8
-  m_Name: COM
+  m_Name: COM (Center Of Mass)
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0

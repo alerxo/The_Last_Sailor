@@ -28,6 +28,18 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: caf427847715c7446b414fab31353232, type: 2}
+    - target: {fileID: 6603585430340007401, guid: 36d34af1c18546c4ba86fa3252786f21, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.x
+      value: 0.4433962
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603585430340007401, guid: 36d34af1c18546c4ba86fa3252786f21, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.y
+      value: 0.38274294
+      objectReference: {fileID: 0}
+    - target: {fileID: 6603585430340007401, guid: 36d34af1c18546c4ba86fa3252786f21, type: 3}
+      propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.z
+      value: 0.38274294
+      objectReference: {fileID: 0}
     - target: {fileID: 6668880205273363920, guid: 36d34af1c18546c4ba86fa3252786f21, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 

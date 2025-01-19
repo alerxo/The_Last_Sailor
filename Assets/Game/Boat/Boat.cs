@@ -30,8 +30,9 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
     private Vector3 defaultCOM;
     public string Name { get; private set; }
     public float Health { get; private set; }
-    public bool IsDamaged => Health < MaxHealth;
+    public bool IsDamaged => Health < GetUpgradeValue;
     public bool IsSunk => Health <= 0;
+    bool hasDiedThisLife = false;
 
     public CannonballOwner CannonballOwner => cannonballOwner;
     private CannonballOwner cannonballOwner;
@@ -51,6 +52,8 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     public virtual void Awake()
     {
+        hasDiedThisLife = false;
+
         damageEffects = damageEffetcsParent.GetComponentsInChildren<VisualEffect>();
 
         Engine = GetComponentInChildren<Engine>();
@@ -77,9 +80,12 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
         if (Mathf.Clamp(Health -= _damage, 0, MaxHealth) <= 0)
         {
-            PlayDeathExplosion(); // Flyttade dina ljud till metoden, ta bort detta när du har läst Jacob. /V
-            // call bird system
+            if(!hasDiedThisLife)
+            {
+                PlayDeathExplosion();
+            }      
             OnDestroyed?.Invoke();
+            
         }
 
         else
@@ -102,18 +108,24 @@ public class Boat : MonoBehaviour, IDamageable, IUpgradeable
 
     private void PlayDeathExplosion()
     {
+        hasDiedThisLife = true;
+
         destroyedAudioSource.PlayOneShot(explodeSound);
         burningAudioSource.clip = fireSound;
         burningAudioSource.loop = true;
         burningAudioSource.Play();
 
+
+        int debugCounter = 0;
         foreach (ParticleSystem particle in DeathExplosion.GetComponentsInChildren<ParticleSystem>())
         {
             particle.Play();
+            debugCounter++;
         }
+        print(transform + "Particle count: " + debugCounter);
     }
 
-    public int GetPercentageDurability()
+     public int GetPercentageDurability()
     {
         return (int)(Health / GetUpgradeValue * 100);
     }
