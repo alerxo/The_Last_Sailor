@@ -53,7 +53,7 @@ public class CreditsScreen : UIScreen
         SetHeight(buffer, 300f);
         scrollView.Add(buffer);
 
-        CreateLicenseCredit(scrollView, "Music", "Outrigger by Matthewmikemusic", "From Pixelbay Content License", " ", " ", 
+        CreateLicenseCredit(scrollView, "Music", "Outrigger by Matthewmikemusic", "From Pixelbay", "Pixelbay Content License", " ", " ", 
             "Corsairs by StudioKolomna", "From Uppbeat:https://uppbeat.io/t/studiokolomna/corsairs" , "License code: GHAIY0KGPIACXFGU"
             );
         VisualElement smallBuffer = new();
@@ -64,7 +64,7 @@ public class CreditsScreen : UIScreen
         CreateLicenseCredit(scrollView, "Sounds", "Flag flaps in the wind by Epic Stock media", "From Upbeats:https://uppbeat.io/sfx/flag-flaps-in-the-wind/8907/24172", " ", "",
             "Sizzle by CHEATman115", "Creative common 0 license", "", "",
             "Steam engine by SamsterBirdies", "Creative common 0 license", "", "",
-            "Metal footsteps by Mypantsfelldown", "From Pixelbay Content License", "Pixelbay Content License", "", "",
+            "Metal footsteps by Mypantsfelldown", "From Pixelbay", "Pixelbay Content License", "", "",
             "Rolling metal Barrel by Mateusz_Chenc", "Creative common 0 license", "", "",
             "big thud2 by Reitanna", "Creative common 0 license", "", "",
             "Thud4 by Yummy9987", "Creative common 0 license", "", "",
@@ -75,22 +75,22 @@ public class CreditsScreen : UIScreen
             "Seagulls Short by Lydmakeren", "Creative common 0 license", "", "",
             "Ship Bell two chimes by Sojan", "Creative common 0 license", "", "",
             "Jingle Lose__00 by LittleRobotSoundFactory", "Attribution 4.0", "", "",
-            "Coin And Money Bag 1 by Floraphobic", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Newspaper Foley 4 by Floraphobic", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Pleasant Violin Notification 8 by Floraphobic", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Pleasant Violin Notification 10 by Floraphobic", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Metal Hit 91 by Floraphobic", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Metal Hit 94 by Floraphobic", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Metal Hit 95 by Floraphobic", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Rope Tighten Knot 4 by Floraphobic", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Rope Tighten Knot 5 by Floraphobic", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Rope Tighten Knot 6 by Floraphobic", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Rope Tighten Knot 9 by Floraphobic", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Exploding Building 1 by Floraphobic", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Fog horn 2 by Floraphobic", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "camp fire 1 by LazyChillZone", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Explosion Sound Effect 1 by Cyberware-Ochestra", "From Pixelbay Content License", "Pixelbay Content License", "", "",
-            "Horror Scary Metal Screech by Imagine_impossible", "From Pixelbay Content License", "Pixelbay Content License"
+            "Coin And Money Bag 1 by Floraphobic", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Newspaper Foley 4 by Floraphobic", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Pleasant Violin Notification 8 by Floraphobic", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Pleasant Violin Notification 10 by Floraphobic", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Metal Hit 91 by Floraphobic", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Metal Hit 94 by Floraphobic", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Metal Hit 95 by Floraphobic", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Rope Tighten Knot 4 by Floraphobic", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Rope Tighten Knot 5 by Floraphobic", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Rope Tighten Knot 6 by Floraphobic", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Rope Tighten Knot 9 by Floraphobic", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Exploding Building 1 by Floraphobic", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Fog horn 2 by Floraphobic", "From Pixelbay", "Pixelbay Content License", "", "",
+            "camp fire 1 by LazyChillZone", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Explosion Sound Effect 1 by Cyberware-Ochestra", "From Pixelbay", "Pixelbay Content License", "", "",
+            "Horror Scary Metal Screech by Imagine_impossible", "From Pixelbay", "Pixelbay Content License"
             );
         CreateBuffer();
     }
